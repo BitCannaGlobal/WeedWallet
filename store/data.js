@@ -1,5 +1,4 @@
 import axios from 'axios'
-import DataSource from '~/libs/api'
 import cosmosConfig from '~/cosmos.config'
 
 export const state = () => ({
@@ -43,9 +42,6 @@ export const mutations = {
 }
 
 export const actions = {
-  init({ commit }) {
-    commit('setApi', new DataSource(this.$axios, cosmosConfig))
-  },
   // this is never awaited in the code
   async refresh({ dispatch, state }, address) {
     const calls = [
