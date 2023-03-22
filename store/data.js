@@ -46,7 +46,7 @@ export const actions = {
   // this is never awaited in the code
   async refresh({ dispatch, state }, address) {
     const calls = [
-      dispatch('setSdkVersion'),
+      dispatch('getSdkVersion'),
       dispatch('getWalletInfo', address),
       dispatch('getDelegations', address),
       dispatch('getPriceNow'),
@@ -67,7 +67,6 @@ export const actions = {
   },
   async getSdkVersion({ commit, state }) {
     const getSdk =  await axios(cosmosConfig[state.chainId].apiURL + '/cosmos/base/tendermint/v1beta1/node_info')
-    console.log(getSdk.data.application_version.cosmos_sdk_version)
     commit('setSdkVersion', getSdk.data.application_version.cosmos_sdk_version)
   },
 
