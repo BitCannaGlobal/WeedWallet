@@ -20,6 +20,7 @@ export const state = () => ({
   api: undefined,
   priceNow: '',
   aprNow: '',
+  sdkVersion: '',
   totalBonded: '',
   validatorDetails: ''
 })
@@ -45,7 +46,7 @@ export const actions = {
   // this is never awaited in the code
   async refresh({ dispatch, state }, address) {
     const calls = [
-      dispatch('getMyGroup', address),
+      dispatch('setSdkVersion'),
       dispatch('getWalletInfo', address),
       dispatch('getDelegations', address),
       dispatch('getPriceNow'),
@@ -63,7 +64,11 @@ export const actions = {
   async getApr({ commit, state }) {
     const getApr =  await axios('https://graphql.bitcanna.io/api/rest/price/apr')
     commit('setAprNow', Number (getApr.data.cmc_supply_apr[0].apr).toFixed(1))
-
+  },
+  async getSdkVersion({ commit, state }) {
+    const getSdk =  await axios(cosmosConfig[state.chainId].apiURL + '/cosmos/base/tendermint/v1beta1/node_info')
+    console.log(getSdk.data.application_version.cosmos_sdk_version)
+    commit('setSdkVersion', getSdk.data.application_version.cosmos_sdk_version)
   },
 
   async getWalletInfo({ commit, state }, address) {

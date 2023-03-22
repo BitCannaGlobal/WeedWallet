@@ -87,7 +87,9 @@
               </v-list-item-content>
             </v-list-item>
           </v-list>
+
           <v-footer class="justify-center pl-0"  fixed  >
+
           <v-icon
             class="heart"
             color="green darken-2"
@@ -110,6 +112,70 @@
           {{ accounts[0].address }}
         </v-chip>
       <v-spacer></v-spacer>
+
+        <v-menu
+          v-model="menu"
+          :close-on-content-click="false"
+          :nudge-width="200"
+          offset-x
+
+        >
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              color="#00b786"
+              dark
+              v-bind="attrs"
+              v-on="on"
+            >
+              V{{ version }}
+            </v-btn>
+          </template>
+
+          <v-card class="accent">
+            <v-list class="accent">
+              <v-list-item>
+                <v-list-item-avatar>
+                  <img
+                    src="http://192.168.1.20:4200/logo-bcna.png"
+                    alt="John"
+                  >
+                </v-list-item-avatar>
+
+                <v-list-item-content>
+                  <v-list-item-title>WeedWallet</v-list-item-title>
+                  <v-list-item-subtitle>V{{ version }}</v-list-item-subtitle>
+                </v-list-item-content>
+              </v-list-item>
+            </v-list>
+
+            <v-divider></v-divider>
+
+            <v-simple-table>
+              <template v-slot:default>
+                <tbody class="accent">
+                  <tr>
+                    <td>RPC</td>
+                    <td>{{ cosmosConfig[0].rpcURL }}</td>
+                  </tr>
+                  <tr>
+                    <td>API</td>
+                    <td>{{ cosmosConfig[0].apiURL }}</td>
+                  </tr>
+                  <tr>
+                    <td>SDK</td>
+                    <td>{{ sdkVersion }}</td>
+                  </tr>
+
+                </tbody>
+              </template>
+            </v-simple-table>
+
+
+            <v-card-actions>
+              <v-spacer></v-spacer>
+            </v-card-actions>
+          </v-card>
+        </v-menu>
     </v-app-bar>
     <v-main>
       <v-container
@@ -126,6 +192,9 @@
 import { mapState } from 'vuex'
 import axios from 'axios'
 import cosmosConfig from '~/cosmos.config'
+import pjson from '~/package'
+
+
 
   export default {
     data: () => ({
@@ -133,6 +202,9 @@ import cosmosConfig from '~/cosmos.config'
       drawer: null,
       right: true,
       rightDrawer: false,
+      cosmosConfig: cosmosConfig,
+      version: pjson.version,
+      menu: false,
       links: [
         ['mdi-chevron-right', 'Portfolio', '/'],
         ['mdi-chevron-right', 'Earn', '/earn'],
@@ -147,15 +219,15 @@ import cosmosConfig from '~/cosmos.config'
     }),
   computed: {
     ...mapState('keplr', [`accounts`, `initialized`, `error`, `logged`, `logout`]),
-    ...mapState('data', [`chainId`, 'blockNow']),
+    ...mapState('data', [`chainId`, 'blockNow', 'sdkVersion']),
   },
   async mounted() {
-
-    this.$store.dispatch('data/init')
     this.$store.dispatch('data/getBlockNow')
+    this.$store.dispatch('data/getSdkVersion')
     setInterval(async () => {
       this.$store.dispatch('data/getBlockNow')
     }, 5000);
+
 
 
     window.addEventListener("keplr_keystorechange", async () => {
