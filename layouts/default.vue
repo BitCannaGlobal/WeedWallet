@@ -136,7 +136,7 @@
               <v-list-item>
                 <v-list-item-avatar>
                   <img
-                    src="http://192.168.1.20:4200/logo-bcna.png"
+                    src="https://pbs.twimg.com/profile_images/1455116847024586757/T9o06sNM_400x400.png"
                     alt="John"
                   >
                 </v-list-item-avatar>
