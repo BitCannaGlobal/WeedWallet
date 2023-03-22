@@ -89,7 +89,7 @@
                     <tbody>
                       <tr>
                         <td>Available</td>
-                        <td>{{ (balances / 1000000) }} {{ cosmosConfig[chainId].coinLookup.viewDenom }}</td>
+                        <td>{{ (balances / 1000000).toFixed(2) }} {{ cosmosConfig[chainId].coinLookup.viewDenom }}</td>
                       </tr>
                       <tr>
                         <td>Delegated</td>
@@ -101,7 +101,7 @@
                       </tr>
                       <tr>
                         <td>Staking Reward</td>
-                        <td>{{ (rewards.amount / 1000000).toFixed(4) }} {{ cosmosConfig[chainId].coinLookup.viewDenom }}</td>
+                        <td>{{ (rewards.amount / 1000000).toFixed(2) }} {{ cosmosConfig[chainId].coinLookup.viewDenom }}</td>
                       </tr>
 
                     </tbody>
@@ -189,7 +189,7 @@
                        </td>
                       <td> {{ item.validatorName }} </td>
                       <td>{{ item.share / 1000000 }} {{ cosmosConfig[0].coinLookup.viewDenom }}</td>
-                      <td>{{ item.reward }} {{ cosmosConfig[0].coinLookup.viewDenom }}</td>
+                      <td>{{ (item.reward) }} {{ cosmosConfig[0].coinLookup.viewDenom }}</td>
                       <td>
                         <v-btn
                           class="ma-2"

@@ -56,7 +56,7 @@
                 </h4>
               </v-card-title>
               <v-card-text class="text-right text-h5">
-                {{ totalBonded }}
+                {{ (totalBonded / 1000000).toFixed(2)}}
               </v-card-text>
             </v-card>
           </v-col>

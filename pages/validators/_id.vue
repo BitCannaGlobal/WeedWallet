@@ -7,7 +7,7 @@
         <v-list-item>
           <v-list-item-avatar size="100">
             <img
-              src="https://raw.githubusercontent.com/cosmostation/chainlist/main/chain/bitcanna/moniker/bcnavaloper1ttkg00prt6w9a9zsgh9ywvftmqm22n4z5xezma.png"
+              src="https://pbs.twimg.com/profile_images/1455116847024586757/T9o06sNM_400x400.png"
               alt="John">
           </v-list-item-avatar>
           <v-list-item-content>
@@ -107,7 +107,7 @@
             <v-card-title class="headline">
               <!--<v-icon class="mr-2">mdi-wallet-outline</v-icon> Wallet amount-->
               <h4 class="icon">
-                <img src="icon/wallet.png" />
+                <!--<img src="icon/wallet.png" />-->
                 &ensp; My Delegation
               </h4>
             </v-card-title>
@@ -120,7 +120,7 @@
           <v-card class="accent">
             <v-card-title class="headline">
             <h4 class="icon">
-              <img src="icon/tokens.png" />
+              <!--<img src="icon/tokens.png" />-->
               &ensp; My Undelegate
             </h4>
             </v-card-title>
@@ -175,7 +175,7 @@
             <v-card-title class="headline">
               <!--<v-icon class="mr-2">mdi-wallet-outline</v-icon> Wallet amount-->
               <h4 class="icon">
-                <img src="icon/wallet.png" />
+                <!--<img src="icon/wallet.png" />-->
                 &ensp; My Delegation historical
               </h4>
             </v-card-title>
@@ -218,7 +218,7 @@
           <v-card class="accent" min-height="400">
             <v-card-title class="headline">
             <h4 class="icon">
-              <img src="icon/tokens.png" />
+              <!--<img src="icon/tokens.png" />-->
               &ensp; My Undelegate historical
             </h4>
             </v-card-title>
