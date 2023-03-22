@@ -27,7 +27,7 @@
         <v-list-item-avatar>
           <v-img
             alt="bcna"
-            src="uctq7aeh_400x400.png"
+            src="https://pbs.twimg.com/profile_images/1498228570862219266/uctq7aeh_400x400.png"
           ></v-img>
         </v-list-item-avatar>
         <v-list-item-content>
