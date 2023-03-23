@@ -156,7 +156,7 @@
                   </v-list-item-content>
                 </v-list-item><br />-->
 
-              <v-col class="text-right"  v-if="proposalData.proposal.status === 'PROPOSAL_STATUS_VOTING_PERIOD'">
+             <!-- <v-col class="text-right"  v-if="proposalData.proposal.status === 'PROPOSAL_STATUS_VOTING_PERIOD'">-->
 
                 <SendProposalModal
                   :chainIdProps="config[chainId].coinLookup.addressPrefix"
@@ -164,7 +164,7 @@
                   :idProposal="id"
                   :cardsVote="cards"
                 />
-              </v-col>
+              <!--</v-col>-->
             </v-card-text>
           </v-card>
         </div>
