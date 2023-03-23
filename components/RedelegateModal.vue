@@ -63,23 +63,31 @@
                     >
                   </template>
                 </v-text-field>
-                <v-text-field
+                <!--<v-text-field
                   v-model="address"
                   label="Address from*"
                   :rules="addressRules"
                   required
                   outlined
                   dense
-                ></v-text-field>
-                <v-text-field
+                ></v-text-field>-->
+                <!--<v-text-field
                   v-model="addressTo"
                   label="Address to*"
                   :rules="addressRules"
                   required
                   outlined
                   dense
-                ></v-text-field>
-
+                ></v-text-field>-->
+        <v-select
+          v-model="addressTo"
+          item-text="name"
+          item-value="address"
+          :items="validatorList"
+          label="Redelegate to"
+          dense
+          outlined
+        ></v-select>
                 <v-text-field
                   v-model="memo"
                   label="Memo"
@@ -153,7 +161,7 @@ import {
       addressRules: [
         v => !!v || 'Address is required',
         v => v.startsWith(instance.chainIdProps.toLowerCase() + 'valoper') || 'Address must start with "' + instance.chainIdProps.toLowerCase() + 'valoper"',
-        v => bech32Validation(v) || 'Bad address (not bech32)',
+        //v => bech32Validation(v) || 'Bad address (not bech32)',
       ],
       amount: instance.amountRe,
       amountRules: [
@@ -164,17 +172,28 @@ import {
       memo: '',
       loading: false,
       loadingInput: false,
-      config: cosmosConfig
+      config: cosmosConfig,
+      validatorList: []
     }),
     computed: {
-      ...mapState('data', ['chainId', `balances`]),
+      ...mapState('data', ['chainId', `balances`, 'allValidators']),
       enableModal: function () {
         var isDeleg = false
         if (this.amountRe !== '0')
           isDeleg =  true
-
         return isDeleg
       }
+    },
+    async mounted () {
+      await this.$store.dispatch('data/getAllValidator')
+      let selectValidatorList = []
+      this.allValidators.forEach((item) => {
+        if (item.description.moniker !== this.validatorName) {
+          selectValidatorList.push({name: item.description.moniker, address: item.operator_address});
+        }
+      });
+      this.validatorList = selectValidatorList
+
     },
     methods: {
       getMax () {
@@ -216,7 +235,7 @@ import {
               ],
               gas: '300000', // Need more gas for redelegation!
             }
-            const MsgBeginRedelegate = defaultRegistryTypes[8][1] // MsgBeginRedelegate
+            const MsgBeginRedelegate = defaultRegistryTypes[16][1] // MsgBeginRedelegate
             const reDelegateMsg = {
               typeUrl: '/cosmos.staking.v1beta1.MsgBeginRedelegate',
               value: MsgBeginRedelegate.fromPartial({
@@ -226,7 +245,7 @@ import {
                 amount: amountFinal,
               }),
             }
-
+            console.log(reDelegateMsg)
             try {
 
               const result = await client.signAndBroadcast(accounts[0].address, [reDelegateMsg], fee, this.memo)
