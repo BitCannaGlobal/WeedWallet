@@ -1,13 +1,14 @@
 <template>
   <div v-if="loaded" class="p-2 border border-gray-500 mt-4">
 
-      <BarChart
+      <!--<BarChart
         :width="width"
         :height="height"
         :data="pricedata"
 
-      />
-
+      />-->
+<line-chart         :width="width"
+        :height="height" :data="pricedata"></line-chart>
   </div>
 </template>
 
@@ -18,7 +19,7 @@ export default {
   props: {
     chartId: {
       type: String,
-      default: 'doughnut-chart'
+      default: 'line-chart'
     },
     datasetIdKey: {
       type: String,
@@ -26,7 +27,7 @@ export default {
     },
     width: {
       type: Number,
-      default: 300
+      default: 100
     },
     height: {
       type: Number,
@@ -78,12 +79,13 @@ export default {
     full.data.prices.forEach((item) => {
 
       var dateFormat= new Date(item[0]);
+      
       let finalDate = dateFormat.getDate()+
           "/"+(dateFormat.getMonth()+1)+
-          "/"+dateFormat.getFullYear()+
-          " "+dateFormat.getHours()+
-          ":"+dateFormat.getMinutes()+
-          ":"+dateFormat.getSeconds()
+          "/"+dateFormat.getFullYear() 
+          //" "+dateFormat.getHours()+
+          //":"+dateFormat.getMinutes()+
+          //":"+dateFormat.getSeconds()
 
       copyItems.push(item[1]);
       copyDates.push(finalDate);
@@ -93,17 +95,15 @@ export default {
       datasets: [
         {
           label: 'Price $',
-          backgroundColor: '#0EA674',
-          borderColor: 'gray',
-          // data: [40, 39, 10, 40, 39, 80, 40]
-          // data: [{x: new Date(1673715781154).toLocaleDateString("en-US"), y: 20}, {x: new Date(1673719386839).toLocaleDateString("en-US"), y: 10}]
+          //backgroundColor: '#0EA674',
+          borderColor: '#0EA674',
           data: copyItems
         }
       ]
     }
     const options = {
       responsive: true,
-      maintainAspectRatio: false
+      maintainAspectRatio: true
     }
     this.pricedata = dataChart
     this.loaded = true
