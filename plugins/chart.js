@@ -17,6 +17,11 @@ Vue.component('line-chart', {
         legend: {
           display: false,
         },
+        elements: {
+          point:{
+            radius: 0
+          }
+        }        
       }),
     },
   },
@@ -73,7 +78,7 @@ Vue.component('Doughnut', {
         responsive: true,
         maintainAspectRatio: false,
         legend: {
-          display: true,
+          display: false,
         },
       }),
 

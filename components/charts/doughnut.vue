@@ -18,7 +18,7 @@ export default {
 
   props: {
     amount: {
-      type: String,
+      type: Number,
       default: '0'
     },
     totalDelegated: {
@@ -63,12 +63,17 @@ export default {
     chartData() {
       console.log(this.amount)
       return {
-        labels: ['Available', 'Reward', 'Delegated'],
+        labels: ['Available', 'Delegated', 'Reward', 'Undelegated'],
         datasets: [
           {
             label: 'test',
-            data: [this.amount / 1000000, this.rewardsDoughnut / 1000000, this.totalDelegated / 1000000 ],
-            backgroundColor: '007050',
+            data: [this.amount / 1000000, this.totalDelegated / 1000000, this.rewardsDoughnut / 1000000, 0 ],
+            backgroundColor: [
+              '#b3ffeb',
+              '#33ffc9',
+              '#00b383',
+              '#004d38'
+            ],
             borderColor: '#00b786',
             borderWidth: 2,
           },
