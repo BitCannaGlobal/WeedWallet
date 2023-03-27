@@ -6,9 +6,11 @@ export const state = () => ({
   chainId: 0,
   blockNow: '0',
   balances: [],
+  balancesPrice: '',
   delegations: '',
   totalDelegated: '',
   rewards: '',
+  totalUnbound: '',
   delegationsLoaded: false,
   proposal: [],
   chartProposalData: [],
@@ -72,8 +74,17 @@ export const actions = {
 
   async getWalletInfo({ commit, state }, address) {
     const accountInfo = await axios(cosmosConfig[state.chainId].apiURL + '/cosmos/bank/v1beta1/balances/' + address)
-    const foundAccountInfo = accountInfo.data.balances.find(element => element.denom === cosmosConfig[state.chainId].coinLookup.chainDenom);
+    let foundAccountInfo = accountInfo.data.balances.find(element => element.denom === cosmosConfig[state.chainId].coinLookup.chainDenom);
 
+    if (typeof foundAccountInfo === 'undefined') {
+      foundAccountInfo = {
+        denom: cosmosConfig[state.chainId].coinLookup.chainDenom,
+        amount: '0'
+      }
+    }
+
+    console.log(state.priceNow)
+    commit('setBalancesPrice', (foundAccountInfo?.amount / 1000000 * state.priceNow).toFixed(2))
     commit('setBalances', foundAccountInfo?.amount)
     return accountInfo
   },
@@ -107,6 +118,16 @@ export const actions = {
       totalDelegated += Number(foundDelegByValidator.delegation.shares)
     });
 
+    const getUnbound = await axios(cosmosConfig[state.chainId].apiURL + '/cosmos/staking/v1beta1/delegators/' + address + '/unbonding_delegations')
+    let sumUnbonding = 0;
+    for (let i = 0; i < getUnbound.data.unbonding_responses.length; i++) {
+      let item = getUnbound.data.unbonding_responses[i];    
+      for (let j = 0; j < item.entries.length; j++) {
+        sumUnbonding += Number(item.entries[j].balance);
+      }      
+    } 
+ 
+    commit('setTotalUnbound', (sumUnbonding / 1000000).toFixed(2))
     commit('setDelegations', copieRewards)
     commit('setRewards', foundMainDenom)
     commit('setTotalDelegated', String(totalDelegated))

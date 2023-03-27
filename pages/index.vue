@@ -29,7 +29,7 @@
               </h4>
             </v-card-title>
             <v-card-text class="text-right text-h5">
-             $ {{ ((balances / 1000000) * priceNow).toFixed(3) }}
+             $ {{ balancesPrice }}
             </v-card-text>
           </v-card>
         </v-col>
@@ -81,7 +81,12 @@
             <v-card-text>
               <v-row>
                 <v-col>
-                   <ChartsDoughnut :amount="Number(balances)" :rewardsDoughnut="rewards.amount" :totalDelegated="totalDelegated" />
+                   <ChartsDoughnut 
+                      :amount="Number(balances)" 
+                      :rewardsDoughnut="rewards.amount" 
+                      :totalDelegated="totalDelegated" 
+                      :totalUnbound="totalUnbound"
+                    />
                 </v-col>
                 <v-col>
                   <v-simple-table class="accent">
@@ -118,7 +123,7 @@
                             mdi-circle
                           </v-icon>                          
                           Unbonding</td>
-                        <td>0 {{ cosmosConfig[chainId].coinLookup.viewDenom }}</td>
+                        <td>{{ totalUnbound }} {{ cosmosConfig[chainId].coinLookup.viewDenom }}</td>
                       </tr>
                       <tr>
                         <td>
@@ -275,7 +280,7 @@ export default {
   }),
   computed: {
     ...mapState('keplr', [`accounts`, `initialized`, `error`, `logged`, `logout`]),
-    ...mapState('data', ['chainId', 'balances', 'rewards', 'delegations', 'priceNow', 'aprNow', 'totalDelegated']),
+    ...mapState('data', ['chainId', 'balances', 'rewards', 'delegations', 'priceNow', 'aprNow', 'totalDelegated', 'balancesPrice', 'totalUnbound']),
   },
   watch: {
 
@@ -288,13 +293,10 @@ export default {
       this.$router.push({path: "/login"})
       return
     }
-    await this.$store.dispatch('data/getWalletInfo', this.accounts[0].address)
-    await this.$store.dispatch('data/getDelegations', this.accounts[0].address)
-
     await this.$store.dispatch('data/getPriceNow')
     await this.$store.dispatch('data/getApr')
-
-
+    await this.$store.dispatch('data/getWalletInfo', this.accounts[0].address)
+    await this.$store.dispatch('data/getDelegations', this.accounts[0].address)
   },
   methods: {
 
