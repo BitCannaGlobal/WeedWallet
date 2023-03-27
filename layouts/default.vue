@@ -5,10 +5,10 @@
       app
       fixed
       class="accent"
-      v-if="logged"
+      v-if="pageNow !== '/login'"
     >
       <v-sheet class="accent pa-4">
-        <div>
+        <div v-if="logged">
         <v-avatar
           class="mb-2"
           size="64"
@@ -59,7 +59,7 @@
               </v-list-item-icon>
             </v-list-item>
           </v-list>
-          <v-list nav class="accent">
+<!--          <v-list nav class="accent">
             <v-list-item
               link
               v-if="!logged"
@@ -86,9 +86,9 @@
                 <v-list-item-title>Explorer</v-list-item-title>
               </v-list-item-content>
             </v-list-item>
-          </v-list>
+          </v-list>-->
 
-          <v-footer class="justify-center pl-0"  fixed  >
+          <v-footer class="justify-center pl-0" fixed>
 
           <v-icon
             class="heart"
@@ -205,6 +205,7 @@ import pjson from '~/package'
       cosmosConfig: cosmosConfig,
       version: pjson.version,
       menu: false,
+      pageNow: '',
       links: [
         ['mdi-chevron-right', 'Portfolio', '/'],
         ['mdi-chevron-right', 'Earn', '/earn'],
@@ -214,26 +215,33 @@ import pjson from '~/package'
         // ['mdi-account-multiple', 'Groups manager', '/groups'],
         ['mdi-chevron-right', 'Transactions', '/transactions'],
         ['mdi-chevron-right', 'Collectibles', '/collectibles'],
-        //['mdi-chevron-right', 'Create proposal', '/create-proposal'],
+        ['mdi-chevron-right', 'Create proposal', '/create-proposal'],
       ],
     }),
   computed: {
     ...mapState('keplr', [`accounts`, `initialized`, `error`, `logged`, `logout`]),
     ...mapState('data', [`chainId`, 'blockNow', 'sdkVersion']),
   },
+  watch: {
+    '$nuxt.$route.path': {
+      handler: function(page) {
+        this.pageNow = page
+      },
+      deep: true,
+      immediate: true
+    }
+  },
   async mounted() {
+
     this.$store.dispatch('data/getBlockNow')
     this.$store.dispatch('data/getSdkVersion')
     setInterval(async () => {
       this.$store.dispatch('data/getBlockNow')
     }, 5000);
 
-
-
     window.addEventListener("keplr_keystorechange", async () => {
       var payload = {'key1': cosmosConfig[0], 'key2': 0}
       await this.$store.dispatch('keplr/connectWallet', payload)
-      console.log('refresh addr: ' + this.accounts[0].address)
       await this.$store.dispatch('data/refresh', this.accounts[0].address)
     })
   },

@@ -81,26 +81,54 @@
             <v-card-text>
               <v-row>
                 <v-col>
-                   <ChartsDoughnut :amount="balances" :rewardsDoughnut="rewards.amount" :totalDelegated="totalDelegated" />
+                   <ChartsDoughnut :amount="Number(balances)" :rewardsDoughnut="rewards.amount" :totalDelegated="totalDelegated" />
                 </v-col>
                 <v-col>
                   <v-simple-table class="accent">
 
                     <tbody>
                       <tr>
-                        <td>Available</td>
+                        <td>
+                          <v-icon
+                            color="#b3ffeb"
+                            small
+                          >
+                            mdi-circle
+                          </v-icon>                      
+                          Available</td>
                         <td>{{ (balances / 1000000).toFixed(2) }} {{ cosmosConfig[chainId].coinLookup.viewDenom }}</td>
                       </tr>
                       <tr>
-                        <td>Delegated</td>
+                        <td>
+                          <v-icon
+                            color="#33ffc9"
+                            small
+                          >
+                            mdi-circle
+                          </v-icon>                            
+                          Delegated</td>
                         <td>{{ (totalDelegated /1000000) }} {{ cosmosConfig[chainId].coinLookup.viewDenom }}</td>
                       </tr>
                       <tr>
-                        <td>Unbonding</td>
+                        <td>
+                          <v-icon
+                            color="#00b383"
+                            small
+                          >
+                            mdi-circle
+                          </v-icon>                          
+                          Unbonding</td>
                         <td>0 {{ cosmosConfig[chainId].coinLookup.viewDenom }}</td>
                       </tr>
                       <tr>
-                        <td>Staking Reward</td>
+                        <td>
+                          <v-icon
+                            color="#004d38"
+                            small
+                          >
+                            mdi-circle
+                          </v-icon>                                              
+                          Staking Reward</td>
                         <td>{{ (rewards.amount / 1000000).toFixed(2) }} {{ cosmosConfig[chainId].coinLookup.viewDenom }}</td>
                       </tr>
 

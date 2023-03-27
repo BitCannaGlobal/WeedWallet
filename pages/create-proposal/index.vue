@@ -1,6 +1,106 @@
 <template>
-    <v-row justify="space-around">
 
+    <v-row justify="space-around">
+    <v-col>
+  <v-card>
+    <v-tabs
+      v-model="tab"
+ 
+      centered
+      dark
+      icons-and-text
+    >
+      <v-tabs-slider></v-tabs-slider>
+
+      <v-tab href="#tab-1">
+        V1beta1
+      </v-tab>
+
+      <v-tab href="#tab-2">
+        v1
+      </v-tab>
+ 
+    </v-tabs>
+
+    <v-tabs-items v-model="tab">
+      <v-tab-item value="tab-1" >
+        <v-card flat >
+          <v-card-text>
+          
+          
+ 
+      <v-card  class="accent justify-center" max-width="600">
+        <v-card-title>
+          <span class="text-h5">Create v1beta1 proposal</span>
+        </v-card-title>
+        <v-card-text>
+          <v-container>
+            <v-row>
+              <v-col
+                cols="12"
+                sm="12"
+              >
+                <v-select
+                  :items="items"
+                  label="Proposal type"
+                  required
+                ></v-select>
+              </v-col>            
+              <v-col
+                cols="12"
+                sm="6"
+                md="6"
+              >
+                <v-text-field
+                  label="Proposer"
+                  required
+                ></v-text-field>
+              </v-col>
+              <v-col
+                cols="12"
+                sm="6"
+                md="6"
+              >
+                <v-text-field
+                  label="initialDeposit" 
+                ></v-text-field>
+              </v-col>
+ 
+
+ 
+            </v-row>
+          </v-container>
+          <small>*indicates required field</small>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            color="blue darken-1"
+            text
+            @click="dialog = false"
+          >
+            Close
+          </v-btn>
+          <v-btn
+            color="blue darken-1"
+            text
+            @click="dialog = false"
+          >
+            Save
+          </v-btn>
+        </v-card-actions>
+      </v-card>  
+ 
+      
+      
+      
+      
+          </v-card-text>
+        </v-card>
+      </v-tab-item>
+      <v-tab-item value="tab-2">
+        <v-card flat>
+          <v-card-text>
       <v-col>
       <!--{{ infoGroupId }}-->
 
@@ -140,7 +240,14 @@
         </v-row>
 
 
-      </v-col>
+      </v-col>          
+          </v-card-text>
+        </v-card>
+      </v-tab-item>      
+    </v-tabs-items>
+  </v-card>
+  </v-col>
+
     </v-row>
 </template>
 <script>
@@ -168,14 +275,14 @@ export default {
     columnName:'id',
     isDescending:true,
     allPolicy: [],
-
+    tab: null,
     items: [
       'Text Proposal',
-      'Parameter Change Proposal',
-      'Software Upgrade Proposal',
-      'Cancel Software Upgrade Proposal',
-      'Community Pool Spend Proposal',
-      'Community Pool Spend Proposal With Deposit',
+      //'Parameter Change Proposal',
+      //'Software Upgrade Proposal',
+      //'Cancel Software Upgrade Proposal',
+      //'Community Pool Spend Proposal',
+      //'Community Pool Spend Proposal With Deposit',
       //'Create Validator',
       //'CosmWasm',
     ],

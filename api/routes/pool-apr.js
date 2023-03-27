@@ -29,7 +29,8 @@ router.get('/price', async function (req, res, next) {
   res.json(getPrice.data)
 })
 router.get('/market-chart', async function (req, res, next) {
-  const getMarket = await axios('https://api.coingecko.com/api/v3/coins/bitcanna/market_chart?vs_currency=usd&days=7')
+  // const getMarket = await axios('https://api.coingecko.com/api/v3/coins/bitcanna/market_chart?vs_currency=usd&days=14&interval=daily') // &interval=daily
+  const getMarket = await axios('https://api-osmosis.imperator.co/tokens/v2/historical/bcna/chart?tf=30')
   res.json(getMarket.data)
 })
 module.exports = router

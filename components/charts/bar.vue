@@ -1,13 +1,14 @@
 <template>
   <div v-if="loaded" class="p-2 border border-gray-500 mt-4">
 
-      <BarChart
+      <!--<BarChart
         :width="width"
         :height="height"
         :data="pricedata"
 
-      />
-
+      />-->
+<line-chart         :width="width"
+        :height="height" :data="pricedata"></line-chart>
   </div>
 </template>
 
@@ -18,7 +19,7 @@ export default {
   props: {
     chartId: {
       type: String,
-      default: 'doughnut-chart'
+      default: 'line-chart'
     },
     datasetIdKey: {
       type: String,
@@ -26,7 +27,7 @@ export default {
     },
     width: {
       type: Number,
-      default: 300
+      default: 100
     },
     height: {
       type: Number,
@@ -71,39 +72,51 @@ export default {
   async mounted () {
 
     // const full = await useFetch('https://api.coingecko.com/api/v3/coins/bitcanna/market_chart?vs_currency=usd&days=7') // &interval=daily
-    const full = await axios('https://api.coingecko.com/api/v3/coins/bitcanna/market_chart?vs_currency=usd&days=7')
-
+    // const full = await axios('https://api.coingecko.com/api/v3/coins/bitcanna/market_chart?vs_currency=usd&days=7&interval=daily')
+    const full = await axios('api/market-chart')
+    
     let copyItems = []
     let copyDates = []
-    full.data.prices.forEach((item) => {
+   /* full.data.prices.forEach((item) => {
 
       var dateFormat= new Date(item[0]);
-      let finalDate = dateFormat.getDate()+
+      
+      let finalDate = 
+          dateFormat.getDate()+
           "/"+(dateFormat.getMonth()+1)+
-          "/"+dateFormat.getFullYear()+
-          " "+dateFormat.getHours()+
-          ":"+dateFormat.getMinutes()+
-          ":"+dateFormat.getSeconds()
+          "/"+dateFormat.getFullYear() 
+          //" "+dateFormat.getHours()+
+          //":"+dateFormat.getMinutes()+
+          //":"+dateFormat.getSeconds()
 
       copyItems.push(item[1]);
       copyDates.push(finalDate);
-    })
+    }) */
+   full.data.forEach((item) => {
+    
+      var dateFormat= new Date(item.time  * 1000);
+      console.log(dateFormat)
+      let finalDate = 
+          dateFormat.getDate()+
+          "/"+(dateFormat.getMonth()+1)+
+          "/"+dateFormat.getFullYear()
+
+      copyItems.push(item.close);
+      copyDates.push(finalDate);
+    })     
     const dataChart =  {
       labels: copyDates,
       datasets: [
         {
-          label: 'Price $',
-          backgroundColor: '#0EA674',
-          borderColor: 'gray',
-          // data: [40, 39, 10, 40, 39, 80, 40]
-          // data: [{x: new Date(1673715781154).toLocaleDateString("en-US"), y: 20}, {x: new Date(1673719386839).toLocaleDateString("en-US"), y: 10}]
+          lineTension: 0.5,
+          borderColor: '#0EA674',
           data: copyItems
         }
       ]
     }
     const options = {
       responsive: true,
-      maintainAspectRatio: false
+      maintainAspectRatio: true
     }
     this.pricedata = dataChart
     this.loaded = true

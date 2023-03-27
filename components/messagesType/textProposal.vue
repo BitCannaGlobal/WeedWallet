@@ -81,7 +81,9 @@ const {
 const {
   TextProposal
 } = cosmos.gov.v1beta1;
-
+const {
+   MsgExecLegacyContent
+} = cosmos.gov.v1;
 
 
   export default {
@@ -119,25 +121,43 @@ const {
     },
     async mounted () {
       // console.log(cosmos.gov.v1beta1)
+      // console.log(cosmos.gov)
 
 
     },
     methods: {
       async checkMsg() {
-        console.log(TextProposal)
+
+        // const { send } = cosmos.gov.v1beta1.MessageComposer.withTypeUrl;
 
 
-        const test = TextProposal.encode(TextProposal.fromPartial({
-                  title: 'title test',
-                  description: 'description test'
-            })).finish()
-        const final = {
-          typeUrl: '/cosmos.gov.v1beta1.TextProposal',
-          value: test
-        }
-        console.log(final)
+          const { send } = cosmos.bank.v1beta1.MessageComposer.withTypeUrl;
+          /*const msgSend = send(
+              {
+                fromAddress: this.selectPolicy,
+                toAddress: this.toAddress,
+                amount:[{"denom": "ubcna","amount": this.amount}]
+              }
+          )  */
+          const convertAmount = Number(1).toFixed(2) * 1000000
+          const amount = {
+            denom: this.cosmosConfig[0].coinLookup.chainDenom,
+            amount: convertAmount.toString(),
+          }
+          const msgSend = send(
+              MsgSend.encode(MsgSend.fromPartial({
+                fromAddress: 'bcna1sw8xa00s68szlyvgp8l2fzqj95w5gjm5auc3le',
+                toAddress: 'bcna1sw8xa00s68szlyvgp8l2fzqj95w5gjm5auc3le',
+                amount:[amount]
+              })).finish()
+          )
 
-        await this.$store.dispatch('data/formatFinalMsgProp', final)
+          console.log(msgSend)
+
+
+        // console.log(final)
+
+        await this.$store.dispatch('data/formatFinalMsgProp', msgSend)
 
       },
     }

@@ -167,7 +167,7 @@ export const actions = {
     const allProposals = await axios(cosmosConfig[state.chainId].apiURL + '/cosmos/group/v1/votes_by_proposal/' + proposalId)
   },
 
-  async getAllValidator({ commit, state }, proposalId) {
+  async getAllValidator({ commit, state }) {
     const allVal = await axios(cosmosConfig[state.chainId].apiURL + '/cosmos/staking/v1beta1/validators')
     commit('setAllValidators', allVal.data.validators)
   },
