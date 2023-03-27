@@ -23,41 +23,49 @@
           <v-card class="accent">
             <v-card-title class="headline">
               <!--<v-icon class="mr-2">mdi-wallet-outline</v-icon> Wallet amount-->
+              <v-col class="mt-2">
+                <h4 class="icon">
+                  <img src="icon/wallet.png" />
+                  &ensp; Wallet value 
+                </h4>
+              </v-col>
+              <v-col class="text-right">
+                ${{ balancesPrice }}
+              </v-col>              
+            </v-card-title>
+ 
+          </v-card>
+        </v-col>
+        <v-col>
+          <v-card class="accent">
+            <v-card-title class="headline">
+              <v-col class="mt-2">
               <h4 class="icon">
-                <img src="icon/wallet.png" />
-                &ensp; Wallet value
+                <img src="icon/tokens.png" />
+                &ensp; BCNA price
               </h4>
-            </v-card-title>
-            <v-card-text class="text-right text-h5">
-             $ {{ balancesPrice }}
-            </v-card-text>
+            </v-col>
+            <v-col class="text-right">
+                ${{ priceNow }}
+            </v-col>               
+            </v-card-title> 
           </v-card>
         </v-col>
         <v-col>
+ 
           <v-card class="accent">
             <v-card-title class="headline">
-            <h4 class="icon">
-              <img src="icon/tokens.png" />
-              &ensp; BCNA price
-            </h4>
-            </v-card-title>
-            <v-card-text class="text-right text-h5">
-              $ {{ priceNow }}
-            </v-card-text>
-          </v-card>
-        </v-col>
-        <v-col>
-          <v-card class="accent">
-            <v-card-title class="headline">
-        <h4 class="icon">
-          <img src="icon/apr.png" />
-          &ensp; APR
-        </h4>
-            </v-card-title>
-            <v-card-text class="text-right text-h5">
-              {{ aprNow }} %
-            </v-card-text>
-          </v-card>
+              <v-col class="mt-2">
+              <h4 class="icon">
+                <img src="icon/apr.png" />
+                &ensp; APR
+              </h4>
+            </v-col>
+            <v-col class="text-right">
+              {{ aprNow }}%
+            </v-col>               
+            </v-card-title> 
+          </v-card>          
         </v-col>
       </v-row>
       </sequential-entrance>
