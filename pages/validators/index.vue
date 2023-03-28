@@ -23,41 +23,47 @@
           <v-col>
             <v-card class="accent">
               <v-card-title class="headline">
-                <!--<v-icon class="mr-2">mdi-wallet-outline</v-icon> Wallet amount-->
-                <h4 class="icon">
-                  <img src="icon/wallet.png" />
-                  &ensp; Wallet value
-                </h4>
+                <v-col class="mt-2">
+                  <h4 class="icon">
+                    <img src="icon/wallet.png" />
+                    &ensp; Wallet value
+                  </h4>
+                </v-col>
+                <v-col class="text-right">
+                  ${{ balancesPrice }}
+                </v-col>
+              </v-card-title> 
+            </v-card>
+          </v-col>
+          
+          <v-col>
+            <v-card class="accent">
+              <v-card-title class="headline">
+                <v-col class="mt-2">
+                  <h4 class="icon">
+                    <img src="icon/validator.png" />
+                    &ensp; Validators
+                  </h4>
+                </v-col>
+                <v-col class="text-right">
+                  {{ validators.length }}
+                </v-col>
               </v-card-title>
-              <v-card-text class="text-right text-h5">
-                $ {{ ((balances / 1000000) * priceNow).toFixed(3) }}
-              </v-card-text>
             </v-card>
           </v-col>
           <v-col>
             <v-card class="accent">
               <v-card-title class="headline">
-                <h4 class="icon">
-                  <img src="icon/validator.png" />
-                  &ensp; Validators
-                </h4>
+                <v-col class="mt-2">
+                  <h4 class="icon">
+                    <img src="icon/tokens.png" />
+                    &ensp; Total Bonded
+                  </h4>
+                </v-col>
+                <v-col class="text-right">
+                  {{ (totalBonded / 1000000).toFixed(2)}} BCNA
+                </v-col>
               </v-card-title>
-              <v-card-text class="text-right text-h5">
-                {{ validators.length }}
-              </v-card-text>
-            </v-card>
-          </v-col>
-          <v-col>
-            <v-card class="accent">
-              <v-card-title class="headline">
-                <h4 class="icon">
-                  <img src="icon/tokens.png" />
-                  &ensp; Total Bonded
-                </h4>
-              </v-card-title>
-              <v-card-text class="text-right text-h5">
-                {{ (totalBonded / 1000000).toFixed(2)}}
-              </v-card-text>
             </v-card>
           </v-col>
         </v-row>
@@ -95,7 +101,7 @@ export default {
   }),
   computed: {
     ...mapState('keplr', [`accounts`, `initialized`, `error`, `logged`, `logout`]),
-    ...mapState('data', ['chainId', 'balances', 'rewards', 'delegations', 'priceNow', 'totalBonded', 'validators']),
+    ...mapState('data', ['chainId', 'balances', 'rewards', 'delegations', 'priceNow', 'totalBonded', 'validators', 'balancesPrice']),
   },
   async mounted() {
 
