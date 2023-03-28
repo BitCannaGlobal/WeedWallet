@@ -77,7 +77,7 @@ export default {
               '#00b383',
               '#004d38'
             ],
-            borderColor: '#00b786',
+            //borderColor: '#00b786',
             borderWidth: 2,
           },
         ],

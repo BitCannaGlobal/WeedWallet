@@ -87,7 +87,7 @@
               <v-icon class="mr-2">mdi-wallet-outline</v-icon> Wallet distribution
             </v-card-title>
             <v-card-text>
-              <v-row>
+              <v-row align="center" justify="center">
                 <v-col>
                    <ChartsDoughnut 
                       :amount="Number(balances)" 

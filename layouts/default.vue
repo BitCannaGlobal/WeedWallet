@@ -297,5 +297,8 @@ import pjson from '~/package'
   /*opacity: 0;*/
   background: black !important;
 }
-
+/* Remove mouse over on table */
+.v-data-table__wrapper > table > tbody > tr:hover {
+  background: inherit !important;
+}
 </style>
