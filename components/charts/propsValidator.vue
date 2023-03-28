@@ -63,8 +63,11 @@ export default {
           {
             label: 'test',
             data: [this.totalVoted , (this.totalProps - this.totalVoted)],
-            backgroundColor: '007050',
-            borderColor: '#00b786',
+            backgroundColor: [
+               '#33ffc9',
+              '#00b383' 
+            ],
+            //borderColor: '#00b786',
             borderWidth: 2,
           },
         ],
