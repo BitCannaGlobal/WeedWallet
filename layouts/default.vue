@@ -216,6 +216,7 @@ import pjson from '~/package'
         ['mdi-chevron-right', 'Transactions', '/transactions'],
         ['mdi-chevron-right', 'Collectibles', '/collectibles'],
         ['mdi-chevron-right', 'Create proposal', '/create-proposal'],
+        ['mdi-chevron-right', 'Get bcna', '/get-bcna'],
       ],
     }),
   computed: {
