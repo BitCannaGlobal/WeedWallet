@@ -120,7 +120,7 @@
                             mdi-circle
                           </v-icon>                            
                           Delegated</td>
-                        <td>{{ (totalDelegated /1000000) }} {{ cosmosConfig[chainId].coinLookup.viewDenom }}</td>
+                        <td>{{ (totalDelegated /1000000).toFixed(2) }} {{ cosmosConfig[chainId].coinLookup.viewDenom }}</td>
                       </tr>
                       <tr>
                         <td>
