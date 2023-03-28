@@ -228,7 +228,12 @@
                           Online
                         </v-chip>
                        </td>
-                      <td> {{ item.validatorName }} </td>
+                      <td>
+                        <router-link :to="'/validators/'+item.op_address" class="linkFormat">
+                          <v-icon class="mr-2">mdi-shield-check</v-icon>                                               
+                          {{ item.validatorName }}
+                        </router-link> 
+                      </td>
                       <td>{{ item.share / 1000000 }} {{ cosmosConfig[0].coinLookup.viewDenom }}</td>
                       <td>{{ (item.reward) }} {{ cosmosConfig[0].coinLookup.viewDenom }}</td>
                       <td>
