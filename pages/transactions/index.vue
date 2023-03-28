@@ -153,6 +153,31 @@
                 </template>
               </v-simple-table>
             </template>
+            <template v-if="item.messageInfo.type === '/cosmos.gov.v1beta1.MsgVote'">
+              <v-simple-table class="accent">
+                <template v-slot:default>
+                  <thead>
+                    <tr>
+                      <th class="text-left">
+                        proposal_id
+                      </th>
+                      <th class="text-left">
+                        option
+                      </th>
+                      <th class="text-left">
+                        metadata
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>#{{ item.messageInfo.msgData.proposal_id }}</td> 
+                      <td>{{ item.messageInfo.msgData.option }}</td>
+                    </tr>
+                  </tbody>
+                </template>
+              </v-simple-table>
+            </template>            
             <template v-if="item.messageInfo.type === '/cosmos.group.v1.MsgVote'">
               <v-simple-table class="accent">
                 <template v-slot:default>
