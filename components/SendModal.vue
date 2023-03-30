@@ -52,7 +52,7 @@
                   outlined
                   dense
                   label="Amount*"
-                  :rules="(!loadingInput) ? amountRules : ''"
+                  :rules="amountRules"
                   type="text"
                 >
                   <template v-slot:append>
@@ -83,38 +83,7 @@
                   dense
                 ></v-text-field>
 
-                <v-chip
-                  class="pa-4 mr-2"
-                  color="grey"
-                  outlined
-                  label
-                >
-                  <v-icon left>
-                    mdi-server-plus
-                  </v-icon>
-                  Low
-                </v-chip>
-                <v-chip
-                  class="pa-4 mr-2"
-                  color="grey"
-                  outlined
-                  label
-                >
-                  <v-icon left>
-                    mdi-server-plus
-                  </v-icon>
-                  Average
-                </v-chip>
-                <v-chip
-                  class="pa-4"
-                  color="grey"
-                  outlined
-                  label
-                >
-                  <v-icon left>
-                    mdi-server-plus
-                  </v-icon>High
-                </v-chip>
+ 
               </v-col>
 
             </v-row>
@@ -209,8 +178,8 @@ import {
       amount: '',
       amountRules: [
         v => !!v || 'Amount is required',
-        //v => !isNaN(v) || 'Amount must be number',
-        //v => v <= instance.amountAvailable || 'Amount equal or above available amount (' + instance.amountAvailable + ')',
+        v => !isNaN(v) || 'Amount must be number',
+        v => v <= instance.amountAvailable || 'Amount equal or above available amount (' + instance.amountAvailable + ')',
       ],
       memo: '',
       loading: false,
