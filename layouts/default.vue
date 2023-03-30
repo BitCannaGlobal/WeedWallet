@@ -243,6 +243,7 @@ import pjson from '~/package'
       var payload = {'key1': cosmosConfig[0], 'key2': 0}
       await this.$store.dispatch('keplr/connectWallet', payload)
       await this.$store.dispatch('data/refresh', this.accounts[0].address)
+      await this.$store.dispatch('data/getAllBalances')
     })
   },
   methods: {

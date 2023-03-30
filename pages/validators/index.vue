@@ -30,7 +30,7 @@
                   </h4>
                 </v-col>
                 <v-col class="text-right">
-                  ${{ balancesPrice }}
+                  ${{ totalWalletPrice }}
                 </v-col>
               </v-card-title> 
             </v-card>
@@ -204,7 +204,7 @@ export default {
   }),
   computed: {
     ...mapState('keplr', [`accounts`, `initialized`, `error`, `logged`, `logout`]),
-    ...mapState('data', ['chainId', 'balances', 'rewards', 'delegations', 'priceNow', 'totalBonded', 'validators', 'balancesPrice']),
+    ...mapState('data', ['chainId', 'balances', 'rewards', 'delegations', 'priceNow', 'totalBonded', 'validators', 'balancesPrice', 'totalWalletPrice']),
   },
   async mounted() {
 

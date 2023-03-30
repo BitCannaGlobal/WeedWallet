@@ -30,7 +30,27 @@
                 </h4>
               </v-col>
               <v-col class="text-right">
-                ${{ balancesPrice }}
+                ${{ totalWalletPrice }} 
+                <v-tooltip top>
+                <template v-slot:activator="{ on, attrs }">
+ 
+                <v-icon 
+                  color="#00b786"
+                  v-bind="attrs"
+                  v-on="on"                
+                >
+                  mdi-information-slab-circle-outline
+                </v-icon>
+
+                </template>
+                <span>
+                  - Available<br />
+                  - Delegated<br />
+                  - Unbonding<br />
+                  - Reward<br />
+                </span>
+              </v-tooltip>                
+
               </v-col>              
             </v-card-title>
  
@@ -196,7 +216,7 @@ export default {
   }),
   computed: {
     ...mapState('keplr', [`accounts`, `initialized`, `error`, `logged`, `logout`]),
-    ...mapState('data', ['chainId', 'balances', 'rewards', 'delegations', 'priceNow', 'aprNow', 'totalDelegated', 'balancesPrice', 'totalUnbound']),
+    ...mapState('data', ['chainId', 'balances', 'rewards', 'delegations', 'priceNow', 'aprNow', 'totalDelegated', 'balancesPrice', 'totalUnbound', 'totalWalletPrice']),
   },
   watch: {
 
@@ -213,6 +233,8 @@ export default {
     await this.$store.dispatch('data/getApr')
     await this.$store.dispatch('data/getWalletInfo', this.accounts[0].address)
     await this.$store.dispatch('data/getDelegations', this.accounts[0].address)
+    await this.$store.dispatch('data/getAllBalances')
+    
   },
   methods: {
 

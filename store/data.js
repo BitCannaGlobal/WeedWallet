@@ -24,7 +24,9 @@ export const state = () => ({
   aprNow: '',
   sdkVersion: '',
   totalBonded: '',
-  validatorDetails: ''
+  validatorDetails: '',
+  totalWallet: '',
+  totalWalletPrice: ''
 })
 
 export const mutations = {
@@ -51,7 +53,7 @@ export const actions = {
       dispatch('getSdkVersion'),
       dispatch('getWalletInfo', address),
       dispatch('getDelegations', address),
-      dispatch('getPriceNow'),
+      dispatch('getPriceNow')
     ]
     await Promise.all(calls)
   },
@@ -133,7 +135,17 @@ export const actions = {
     commit('setTotalDelegated', String(totalDelegated))
     commit('setDelegationsLoaded', true)
   },
+  getAllBalances({ commit, state }) {
+    var sum = 
+      parseFloat(state.balances) + 
+      parseFloat(state.rewards.amount) + 
+      parseFloat(state.totalUnbound) +  
+      parseFloat(state.totalDelegated)
 
+    commit('setTotalWallet', sum)
+    commit('setTotalWalletPrice', ((sum /1000000) * state.priceNow).toFixed(2))
+
+  },
   async getSingleProposal({ commit, state }, proposalId) {
     const singleProposals = await axios(cosmosConfig[state.chainId].apiURL + '/cosmos/group/v1/proposal/' + proposalId)
     const allVotes = await axios(cosmosConfig[state.chainId].apiURL + '/cosmos/group/v1/votes_by_proposal/' + proposalId)
