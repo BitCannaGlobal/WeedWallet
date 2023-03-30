@@ -6,7 +6,7 @@
       md="8"
       lg="6"
     >
-      <v-card ref="form">
+      <v-card max-width="600" ref="form">
         <v-card-text>
           <v-container>
             <v-row>
@@ -91,6 +91,7 @@
                   outlined
                   :hint="amountWallet2"
                   persistent-hint
+                  disabled
                 >
                   <template v-slot:append>
                     <v-fade-transition leave-absolute>
@@ -118,7 +119,7 @@
               >
                 <v-select
                   v-model="select2"
-                  :items="allAssets"
+                  :items="allAssets2"
                   item-text="text"
                   label="Coin"
                   required
@@ -139,7 +140,7 @@
             </v-row>
           </v-container>
           <br /><br />
-            <v-simple-table>
+            <!--<v-simple-table>
               <template v-slot:default>
 
                 <tbody>
@@ -177,7 +178,7 @@
                   </tr>
                 </tbody>
               </template>
-            </v-simple-table>
+            </v-simple-table>-->
 
 
         </v-card-text>
@@ -216,8 +217,16 @@ import {
 	assertIsDeliverTxSuccess,
 	SigningStargateClient,
 } from '@cosmjs/stargate'
-import cosmosConfig from '~/cosmos.config'
-import { notifWaiting, notifError, notifSuccess } from '~/libs/notifications'
+import { osmosis } from 'osmojs';
+import {
+  osmoDenomToSymbol,
+  baseUnitsToDisplayUnits,
+  getPrices
+} from '@cosmology/core';
+import { chain, assets, asset_list, testnet, testnet_assets } from '@chain-registry/osmosis';
+
+import bech32 from 'bech32'
+import cosmosConfig from '~/cosmos.config' 
 
 export default {
   data: () => ({
@@ -225,13 +234,14 @@ export default {
       input2: '',
       externalContent: '',
       allAssets: [],
+      allAssets2: [{ text: 'BCNA', img: 'https://raw.githubusercontent.com/osmosis-labs/assetlists/main/images/bcna.svg' }],
       loading: true,
       reveal: false,
       switch1: true,
       amountWallet1: '',
       amountWallet2: '',
-      select: { text: 'BCNA', img: 'https://raw.githubusercontent.com/osmosis-labs/assetlists/main/images/bcna.svg' },
-      select2: { text: 'USDC', img: 'https://raw.githubusercontent.com/cosmos/chain-registry/master/axelar/images/usdc.svg' },
+      select: { text: 'USDC', img: 'https://raw.githubusercontent.com/cosmos/chain-registry/master/axelar/images/usdc.svg' },
+      select2: { text: 'BCNA', img: 'https://raw.githubusercontent.com/osmosis-labs/assetlists/main/images/bcna.svg' },
       actionIbcColor: '#1E1E1E',
       actionSwapColor: '#1E1E1E',
   }),
@@ -240,10 +250,16 @@ export default {
     ...mapState('data', ['chainId', 'balances', 'rewards', 'delegations', 'priceNow', 'aprNow', 'totalDelegated', 'balancesPrice', 'totalUnbound']),
   },
   watch: {
-    input1: function (val) {
-      //console.log(val)
-      this.amountWallet2 = 'Recevied ≈ ' + (val * 0.020) + ' USDC'
-      this.input2 = (val * 0.020)
+    input1: async function (val) {
+      
+      const tokenPrice = await axios('https://api-osmosis.imperator.co/tokens/v2/price/' + this.select.text)
+      const bncaPrice = await axios('https://api-osmosis.imperator.co/tokens/v2/price/BCNA')
+       
+      console.log(val * tokenPrice.data.price)
+      let tokenFiatAmount = (val * tokenPrice.data.price).toFixed(2)
+      let bcnaFiatAmount = (tokenFiatAmount / bncaPrice.data.price ).toFixed(2)
+      this.amountWallet2 = 'Recevied ≈ ' + bcnaFiatAmount + ' BCNA' + '  ($' + (bcnaFiatAmount * bncaPrice.data.price).toFixed(3) + ')'
+      this.input2 = bcnaFiatAmount
     }
   },
   async mounted () {
@@ -252,17 +268,48 @@ export default {
       this.$router.push({path: "/login"})
       return
     } 
+    // Osmosis part
+    const { createRPCQueryClient } = osmosis.ClientFactory;
+    const client = await createRPCQueryClient({ rpcEndpoint: 'https://osmosis-rpc.bitcanna.io' })
     
+    const decode = bech32.decode(this.accounts[0].address)
+    const osmoAddr = await bech32.encode('osmo', decode.words) 
+    const getAllBalance = await client.cosmos.bank.v1beta1.allBalances({ address: osmoAddr })
+ 
+    var allAssets = this.allAssets
+    getAllBalance.balances.forEach(async item => {      
+      if(!osmoDenomToSymbol(item.denom).startsWith('ibc/') 
+        && !osmoDenomToSymbol(item.denom).startsWith('gamm/') 
+        && osmoDenomToSymbol(item.denom) !== 'BCNA'
+      ) {        
+        const balance = await client.cosmos.bank.v1beta1.balance({ address: osmoAddr, denom: item.denom })
+        console.log(osmoDenomToSymbol(item.denom), balance)  
+ 
+        const found = asset_list.assets.find(element => element.symbol === osmoDenomToSymbol(item.denom));
+        
+        
+        const displayAmount = baseUnitsToDisplayUnits(osmoDenomToSymbol(item.denom), balance.balance.amount);
+        allAssets.push({ text: osmoDenomToSymbol(item.denom), img: found.logo_URIs.png, amount: displayAmount, coingecko_id: found.coingecko_id });
+        //console.log(found)
+      }
+    });
+    // const symbol = osmoDenomToSymbol(denomTest);
+    // const displayAmount = baseUnitsToDisplayUnits(symbol, balance);  
+    // console.log(symbol)
+
     var getWalletBcna = await axios(cosmosConfig[0].apiURL + '/cosmos/bank/v1beta1/balances/bcna13jawsn574rf3f0u5rhu7e8n6sayx5gkwgusz73');
-    //console.log(getWalletBcna.data.balances[0].amount)
-    this.amountWallet1 = 'Wallet value: ' + (getWalletBcna.data.balances[0].amount / 1000000).toFixed(2) + ' BCNA'
+    
+    const foundDefault = getAllBalance.balances.find(element => element.denom === 'ibc/D189335C6E4A68B513C10AB227BF1C1D38C746766278BA3EEB4FB14124F1D858');
+    console.log(foundDefault.amount)
+
+    this.amountWallet1 = 'Wallet value: ' + (foundDefault.amount / 1000000).toFixed(2) + ' USDC '
     this.amountWallet2 = 'Recevied ≈ '
 
-    var allAssets = this.allAssets
+    
     //console.log(cosmosConfig)
-    cosmosConfig.forEach(function(item){
+    /*cosmosConfig.forEach(function(item){
       allAssets.push({ text: item.coinLookup.viewDenom, img: item.coinLookup.icon });
-    });
+    }); */
 
     this.allAssets = allAssets
     this.loading = false
@@ -272,9 +319,13 @@ export default {
       console.log('Start!') 
     }, 
     setSelected(value) {
-      const foundLogo = cosmosConfig.find(element => element.coinLookup.viewDenom === value);
-      this.select = { text: value, img: foundLogo.coinLookup.icon }
-      console.log(foundLogo.coinLookup.icon)
+      
+      const foundLogo = this.allAssets.find(element => element.text === value);
+      console.log(foundLogo)
+      //const foundLogo = cosmosConfig.find(element => element.coinLookup.viewDenom === value);
+      this.select = { text: value, img: foundLogo.img, amount: foundLogo.amount, coingecko_id: foundLogo.coingecko_id }
+      this.amountWallet1 = 'Wallet value: ' + Number(foundLogo.amount).toFixed(2) + ' ' + value
+      //console.log(foundLogo.coinLookup.icon)
     },
     setSelected2(value) {
       const foundLogo = cosmosConfig.find(element => element.coinLookup.viewDenom === value);
