@@ -95,7 +95,6 @@ export default {
    full.data.forEach((item) => {
     
       var dateFormat= new Date(item.time  * 1000);
-      console.log(dateFormat)
       let finalDate = 
           dateFormat.getDate()+
           "/"+(dateFormat.getMonth()+1)+

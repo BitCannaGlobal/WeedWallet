@@ -64,7 +64,6 @@ export default {
   },
   computed: {
     chartData() {
-      console.log(this.amount)
       return {
         labels: ['Available', 'Delegated', 'Undelegated', 'Reward'],
         datasets: [
