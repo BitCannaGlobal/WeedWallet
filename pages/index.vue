@@ -3,6 +3,7 @@
   <v-row>
     <v-col
       cols="12"
+      
     >
       <sequential-entrance>
         <v-row justify="space-around">
@@ -18,14 +19,18 @@
         </v-row>
       </sequential-entrance>
       <sequential-entrance>
-      <v-row justify="space-around">
+      <v-row justify="space-around" class="data-row">
         <v-col>
           <v-card class="accent">
+            
             <v-card-title class="headline">
               <!--<v-icon class="mr-2">mdi-wallet-outline</v-icon> Wallet amount-->
               <v-col class="mt-2">
                 <h4 class="icon">
-                  <img src="icon/wallet.png" />
+                  <!-- <img src="icon/wallet.png" /> -->
+                  <v-img 
+                    src="icon/wallet.png"
+                  ></v-img>                  
                   &ensp; Wallet value 
                 </h4>
               </v-col>
@@ -286,5 +291,20 @@ export default {
 .icon {
   display: inline-flex;
   align-self: center;
+}
+@media (min-width: 300px) {
+  .data-row {
+    margin: 2 auto;
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
+@media (min-width: 1760px) {
+  .data-row {
+    display: flex;
+    justify-content: space-between;
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 </style>

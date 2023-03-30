@@ -19,7 +19,7 @@
         </v-col>
       </v-row>-->
 
-        <v-row justify="space-around">
+        <v-row justify="space-around"  class="data-row">
           <v-col>
             <v-card class="accent">
               <v-card-title class="headline">
@@ -229,5 +229,20 @@ export default {
 .icon {
   display: inline-flex;
   align-self: center;
+}
+@media (min-width: 300px) {
+  .data-row {
+    margin: 2 auto;
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
+@media (min-width: 1760px) {
+  .data-row {
+    display: flex;
+    justify-content: space-between;
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 </style>
