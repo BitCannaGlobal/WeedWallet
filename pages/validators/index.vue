@@ -70,6 +70,108 @@
 
 
       </sequential-entrance>
+ 
+      <sequential-entrance fromBottom>
+      <v-row justify="space-around">
+        <v-col>
+          <v-row class="mt-4 mb-2" justify="space-around">
+
+            <v-col class="text-h6 text-md-h5 text-lg-h4"> </v-col>
+            <v-col>
+
+            <UndelegateModal
+              class="text-right"
+              :chainIdProps="cosmosConfig[chainId].coinLookup.addressPrefix"
+              :amountAvailable="(balances / 1000000)"
+              :coinIcon="cosmosConfig[chainId].coinLookup.icon"
+              :selected="selected"
+            />
+            </v-col>
+          </v-row>
+        
+          <v-card class="accent">
+            <v-card-title class="headline">
+                <v-icon class="mr-2">mdi-wallet-outline</v-icon> Wallet delegations
+          </v-card-title>  
+            <v-card-text class="text-h5">
+
+              <v-simple-table class="accent">
+                <template v-slot:default>
+                  <thead>
+                    <tr>
+                      <th>
+                        Action
+                      </th>
+                      <th>
+                        Status
+                      </th>
+                      <th>
+                        Name
+                      </th>
+                      <th>
+                        Delegate
+                      </th>
+                      <th>
+                        Reward
+                      </th>
+                      <th>
+                      </th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    <tr
+                      v-for="item in delegations"
+                      :key="item.validatorName"
+                    >
+                      <td>
+                        <v-checkbox
+                          v-model="selected"
+                          :value="item.op_address"
+                          color="#00b786"
+                        ></v-checkbox>
+                      </td>
+                      <td>
+                        <v-chip
+                          v-if="item.status === 'BOND_STATUS_BONDED'"
+                          class="ma-2"
+                          color="#00b786"
+                          outlined
+                          label
+                        >
+                          <!--{{ item.status }}-->
+                          Online
+                        </v-chip>
+                       </td>
+                      <td>
+                        <router-link :to="'/validators/'+item.op_address" class="linkFormat">
+                          <v-icon class="mr-2">mdi-shield-check</v-icon>                                               
+                          {{ item.validatorName }}
+                        </router-link> 
+                      </td>
+                      <td>{{ item.share / 1000000 }} {{ cosmosConfig[0].coinLookup.viewDenom }}</td>
+                      <td>{{ (item.reward) }} {{ cosmosConfig[0].coinLookup.viewDenom }}</td>
+                      <td>
+                        <v-btn
+                          class="ma-2"
+                          color="#00b786"
+                          @click="getReward(item.op_address)"
+                        >
+                        <v-icon class="mr-2">mdi-download</v-icon> Claim
+                        </v-btn>
+                      </td>
+                    </tr>
+                  </tbody>
+                </template>
+              </v-simple-table>
+            </v-card-text>
+          </v-card>
+        </v-col>
+
+      </v-row>
+ 
+    </sequential-entrance>
+
       <sequential-entrance fromBottom>
         <v-row class="mt-4" justify="space-around">
           <v-col>
@@ -97,7 +199,8 @@ import { notifWaiting, notifError, notifSuccess } from '~/libs/notifications'
 
 export default {
   data: () => ({
-    cosmosConfig: cosmosConfig
+    cosmosConfig: cosmosConfig,
+    selected: []
   }),
   computed: {
     ...mapState('keplr', [`accounts`, `initialized`, `error`, `logged`, `logout`]),
