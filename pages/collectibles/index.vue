@@ -75,7 +75,7 @@
 
       <sequential-entrance>
         <v-row justify="space-around">
-          <v-col class="text-h6 text-md-h5 text-lg-h4">My Buddhead</v-col>
+          <v-col class="text-h6 text-md-h5 text-lg-h4">Buddhead</v-col>
           <v-col>
 
           </v-col>
