@@ -12,7 +12,8 @@
               </h4>
             </v-card-title>
             <v-card-text class="text-h5">
-
+    
+    <v-skeleton-loader v-if="firstLoad" :loading="loading" type="table"></v-skeleton-loader>
     <v-expansion-panels>
       <v-expansion-panel
 
@@ -114,7 +115,7 @@
                         From
                       </th>
                       <th class="text-left">
-                        To delegator
+                        To validator
                       </th>
                       <th class="text-left">
                         Amount
@@ -284,7 +285,9 @@ export default {
     totalVoted: '',
     rpcSender: [],
     rpcRecipient: [],
-    rpcAllTxs: []
+    rpcAllTxs: [],
+    loading: true,
+    firstLoad: true,    
   }),
   computed: {
     ...mapState('keplr', [`accounts`, 'logged']),
@@ -374,7 +377,8 @@ export default {
       const finalTxs = resultSender.data.tx_responses.concat(resultRecipient.data.tx_responses);
 
       this.rpcAllTxs = this.transactionsReducer(finalTxs)
-
+      this.loading = false
+      this.firstLoad = false
     }
   },
   methods: {
