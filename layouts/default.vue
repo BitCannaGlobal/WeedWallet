@@ -105,7 +105,7 @@
       My address:
 
 
-    <v-tooltip color="black" bottom>
+    <v-tooltip content-class='custom-tooltip' color="grey" bottom>
       <template v-slot:activator="{ on, attrs }">
         <v-chip
           class="ml-3"
@@ -323,5 +323,8 @@ import pjson from '~/package'
 /* Remove mouse over on table */
 .v-data-table__wrapper > table > tbody > tr:hover {
   background: inherit !important;
+}
+.custom-tooltip {
+    opacity: 1!important;
 }
 </style>
