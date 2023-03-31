@@ -160,6 +160,11 @@ import {
       return false
     }
   }
+  function countPlaces(num) {
+    var sep = String(23.32).match(/\D/)[0];
+    var b = String(num).split(sep);
+    return b[1]? b[1].length : 0;
+  }  
   export default {
     props: ['chainIdProps', 'amountAvailable', 'coinIcon'],
     data: (instance) => ({
@@ -179,6 +184,7 @@ import {
         v => !!v || 'Amount is required',
         v => !isNaN(v) || 'Amount must be number',
         v => v <= instance.amountAvailable || 'Amount equal or above available amount (' + instance.amountAvailable + ')',
+        v => countPlaces(v) < 7 || 'Bad decimal',
       ],
       memo: '',
       loading: false,
@@ -201,7 +207,7 @@ import {
       },
       test () {
         this.dialogStepper = true
-      },
+      }, 
       validate () {
         if (this.$refs.form.validate() === true) {
           (async () => {
