@@ -77,7 +77,7 @@ export default {
               '#004d38'
             ],
             //borderColor: '#00b786',
-            borderWidth: 2,
+            borderWidth: 0,
           },
         ],
       }
