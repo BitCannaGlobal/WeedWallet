@@ -137,7 +137,7 @@
 
 <script>
 import { mapState } from 'vuex'
-import { bech32 } from 'bech32'
+import bech32 from 'bech32'
 import { notifWaiting, notifError, notifSuccess } from '~/libs/notifications'
 import cosmosConfig from '~/cosmos.config'
 import {
@@ -147,8 +147,7 @@ import {
 
   function bech32Validation(address) {
     try {
-      const words = bech32.decode(address)
-      Buffer.from(bech32.fromWords(words.words)).toString(`hex`)
+      bech32.decode(address)
       return true
     } catch (error) {
       return false
@@ -173,7 +172,7 @@ import {
       addressRules: [
         v => !!v || 'Address is required',
         v => v.startsWith(instance.chainIdProps.toLowerCase()) || 'Address must start with "' + instance.chainIdProps.toLowerCase() + '"',
-        //v => bech32Validation(v) || 'Bad address (not bech32)',
+        v => bech32Validation(v) || 'Bad address (not bech32)',
       ],
       amount: '',
       amountRules: [
