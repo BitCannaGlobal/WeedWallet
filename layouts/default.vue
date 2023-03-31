@@ -103,14 +103,26 @@
     </v-navigation-drawer>
     <v-app-bar v-if="logged" app class="accent">
       My address:
+
+
+    <v-tooltip color="black" bottom>
+      <template v-slot:activator="{ on, attrs }">
         <v-chip
           class="ml-3"
           color="#00b786"
           outlined
           label
+          v-bind="attrs"
+          v-on="on" 
+          @click="copyAddr(accounts[0].address)"         
         >
           {{ accounts[0].address }}
         </v-chip>
+        
+      </template>
+      <span><qr-code class="mb-2 mt-2" :text="accounts[0].address"></qr-code></span>
+    </v-tooltip>
+    <span v-if="isCopied" class="ml-2">Address copied!</span>
       <v-spacer></v-spacer>
 
         <v-menu
@@ -183,6 +195,7 @@
         fluid
       >
         <Nuxt />
+        
       </v-container>
     </v-main>
   </v-app>
@@ -206,6 +219,7 @@ import pjson from '~/package'
       version: pjson.version,
       menu: false,
       pageNow: '',
+      isCopied: false,
       links: [
         ['mdi-chevron-right', 'Portfolio', '/'],
         ['mdi-chevron-right', 'Earn', '/earn'],
@@ -265,6 +279,14 @@ import pjson from '~/package'
     async refreshNow() {
       await this.$store.dispatch('data/refresh', this.accounts[0].address)
     },
+    async copyAddr(text) {
+      await this.$copyText(text);
+      this.isCopied = true
+      setTimeout(this.hideCopy, 4000);
+    },    
+    hideCopy() {
+      this.isCopied = false
+    },     
   }
   }
 </script>

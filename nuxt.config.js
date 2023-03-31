@@ -29,6 +29,7 @@ export default {
   plugins: [
     '@plugins/chart',
     '@plugins/entrance',
+    '@plugins/qrCode',
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -44,7 +45,7 @@ export default {
   modules: [
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
-
+    'nuxt-clipboard',
     [
       'vue-toastification/nuxt',
       {
@@ -70,7 +71,9 @@ export default {
     // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
     baseURL: '/',
   },
-
+  clipboard: {
+    autoSetContainer: true
+  },
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {
     customVariables: ['~/assets/variables.scss'],

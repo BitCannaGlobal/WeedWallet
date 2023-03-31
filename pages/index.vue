@@ -5,6 +5,7 @@
       cols="12"
       
     >
+    
       <sequential-entrance>
         <v-row justify="space-around">
           <v-col class="text-h6 text-md-h5 text-lg-h4">Wallet Statistics</v-col>
