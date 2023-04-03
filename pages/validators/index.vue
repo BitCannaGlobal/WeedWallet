@@ -196,6 +196,10 @@ import axios from 'axios'
 
 import cosmosConfig from '~/cosmos.config'
 import { notifWaiting, notifError, notifSuccess } from '~/libs/notifications'
+import {
+	assertIsDeliverTxSuccess,
+	SigningStargateClient,
+} from '@cosmjs/stargate'
 
 export default {
   data: () => ({
@@ -215,7 +219,42 @@ export default {
     }
   },
   methods: {
+    getReward(addrValidator) {
+      (async () => {
+          const chainId = cosmosConfig[this.chainId].chainId;
+          await window.keplr.enable(chainId);
+          const offlineSigner = await window.getOfflineSignerAuto(chainId);
 
+          const accounts = await offlineSigner.getAccounts();
+          const client = await SigningStargateClient.connectWithSigner(
+            cosmosConfig[this.chainId].rpcURL,
+            offlineSigner
+          )
+            const fee = {
+              amount: [
+                {
+                  denom: cosmosConfig[this.chainId].chainDenom,
+                  amount: '5000',
+                },
+              ],
+              gas: '200000',
+            }
+
+            var returnWaiting = notifWaiting(this.$toast)
+          try {
+            const result = await client.withdrawRewards(accounts[0].address, addrValidator, fee, '')
+            assertIsDeliverTxSuccess(result)
+            this.$toast.dismiss(returnWaiting);
+            notifSuccess(this.$toast, result.transactionHash)
+            await this.$store.dispatch('data/refresh', accounts[0].address)
+          } catch (error) {
+            console.error(error);
+
+            this.$toast.dismiss(returnWaiting);
+            notifError(this.$toast, error)
+          }
+      })();
+    },
   }
 }
 </script>
