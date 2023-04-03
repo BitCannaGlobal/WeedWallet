@@ -170,7 +170,10 @@
                           Staking Reward</td>
                         <td>{{ (rewards.amount / 1000000).toFixed(2) }} {{ cosmosConfig[chainId].coinLookup.viewDenom }}</td>
                       </tr>
-
+                      <tr>
+                        <td>Total BCNA</td>
+                        <td>{{ totalWallet }} {{ cosmosConfig[chainId].coinLookup.viewDenom }}</td>
+                      </tr>
                     </tbody>
                   </v-simple-table>
                 </v-col>
@@ -219,7 +222,7 @@ export default {
   }),
   computed: {
     ...mapState('keplr', [`accounts`, `initialized`, `error`, `logged`, `logout`]),
-    ...mapState('data', ['chainId', 'balances', 'rewards', 'delegations', 'priceNow', 'aprNow', 'totalDelegated', 'balancesPrice', 'totalUnbound', 'totalWalletPrice']),
+    ...mapState('data', ['chainId', 'balances', 'rewards', 'delegations', 'priceNow', 'aprNow', 'totalDelegated', 'balancesPrice', 'totalUnbound', 'totalWalletPrice', 'totalWallet']),
   },
   watch: {
 

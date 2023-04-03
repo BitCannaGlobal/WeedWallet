@@ -142,7 +142,7 @@ export const actions = {
       parseFloat(state.totalUnbound) +  
       parseFloat(state.totalDelegated)
 
-    commit('setTotalWallet', sum)
+    commit('setTotalWallet', (sum /1000000).toFixed(2))
     commit('setTotalWalletPrice', ((sum /1000000) * state.priceNow).toFixed(2))
 
   },
