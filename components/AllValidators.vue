@@ -35,14 +35,14 @@
               </router-link>
             </template>
 
-            <template #item.actions="{ item }">
+            <!-- <template #item.actions="{ item }">
                 <DelegateModal
                   :chainIdProps="cosmosConfig[chainId].coinLookup.addressPrefix"
                   :addressTo="item.op_address"
                   :validatorName="item.validatorName"
                   :balances="balances"
                 />
-            </template>
+            </template> -->
           </v-data-table>
         </div>
       </div>
