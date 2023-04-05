@@ -18,7 +18,7 @@
       <v-card class="accent">
         <v-card-title>
      
-          <span v-if="step1" class="text-h5">Send transaction</span>
+          <span v-if="step1" class="text-h5">Delegate to {{ validatorName }}</span>
           <span v-if="step2" class="text-h5">Check transaction </span>
           <span v-if="step3" class="text-h5">Wait from keplr</span>
           <span v-if="step4" class="text-h5">Transaction send!</span>
