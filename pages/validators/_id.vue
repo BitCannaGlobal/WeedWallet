@@ -33,7 +33,8 @@
                   v-if="logged"
                   :chainIdProps="cosmosConfig[chainId].coinLookup.addressPrefix"
                   :addressFrom="validatorAddr"
-                  :amountUn="myTotalDelegation"
+                  :amountUn="validatorDelegations / 1000000"
+                  :amountTotalUn="myTotalUnDelegation"                  
                   :validatorName="validatorDetails.description?.moniker"
                   :coinIcon="cosmosConfig[chainId].coinLookup.icon"
                 />
@@ -112,7 +113,7 @@
               </h4>
             </v-card-title>
             <v-card-text class="text-right text-h5">
-              {{ myTotalDelegation }} {{ cosmosConfig[chainId].coinLookup.viewDenom }}
+              {{ validatorDelegations / 1000000 }} {{ cosmosConfig[chainId].coinLookup.viewDenom }}
             </v-card-text>
           </v-card>
         </v-col>
@@ -291,7 +292,7 @@ export default {
   }),
   computed: {
     ...mapState('keplr', [`accounts`, 'logged']),
-    ...mapState('data', ['chainId', 'balances', 'rewards', 'delegations', 'priceNow', 'aprNow', 'totalDelegated', 'validatorDetails']),
+    ...mapState('data', ['chainId', 'balances', 'rewards', 'delegations', 'priceNow', 'aprNow', 'totalDelegated', 'validatorDetails', 'validatorDelegations']),
     validatorApr() {
       // const commission = this.validator.commission * 100 // this.validator.commission = 0.1
       // const finalApr = this.aprNow - commission
@@ -375,6 +376,8 @@ export default {
       this.myTotalUnDelegation = (sumUnDelegate / 1000000).toFixed(2)
 
     }
+
+    await this.$store.dispatch('data/getValidatorDelegation', { validatorAddr: this.validatorAddr, delegatorAddr: this.accounts[0].address}) 
   },
   methods: {
     async getTxDate(height) {

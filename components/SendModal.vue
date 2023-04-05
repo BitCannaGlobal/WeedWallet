@@ -298,7 +298,7 @@ import {
              
           const foundMsgType = defaultRegistryTypes.find(element => element[0] === '/cosmos.bank.v1beta1.MsgSend');
 
-          const convertAmount = this.amount * 1000000
+          const convertAmount = (this.amount * 1000000).toFixed(0)
           const amount = {
             denom: cosmosConfig[this.chainId].coinLookup.chainDenom,
             amount: convertAmount.toString(),
@@ -312,7 +312,7 @@ import {
                 amount: [amount],
             })
           }          
-           
+ 
           let gasEstimation = await client.simulate(this.accounts[0].address, [finalMsg], this.memo)
           let usedFee = calculateFee(
               Math.round(gasEstimation * cosmosConfig[this.chainId].feeMultiplier), 

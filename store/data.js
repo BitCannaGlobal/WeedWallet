@@ -26,7 +26,8 @@ export const state = () => ({
   totalBonded: '',
   validatorDetails: '',
   totalWallet: '',
-  totalWalletPrice: ''
+  totalWalletPrice: '',
+  validatorDelegations: ''
 })
 
 export const mutations = {
@@ -278,6 +279,13 @@ export const actions = {
 
     commit('setValidatorDetails', validatorDetails.data.validator)
   },
+  async getValidatorDelegation({ commit, state }, data) {
+    console.log(data)
+    const validatorDelegation = await axios(cosmosConfig[state.chainId].apiURL + '/cosmos/staking/v1beta1/validators/' + data.validatorAddr + '/delegations/' + data.delegatorAddr)
+    console.log(validatorDelegation.data.delegation_response.balance.amount)
+
+    commit('setValidatorDelegations', validatorDelegation.data.delegation_response.balance.amount) 
+  },    
   changeChaniId({ commit }, chainId) {
     commit('setChainId', chainId)
   },
