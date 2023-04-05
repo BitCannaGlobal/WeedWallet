@@ -273,22 +273,8 @@ import {
             )
              
           const foundMsgType = defaultRegistryTypes.find(element => element[0] === '/cosmos.staking.v1beta1.MsgDelegate');
-
-          /* const convertAmount = this.amount * 1000000
-          const amount = {
-            denom: cosmosConfig[this.chainId].coinLookup.chainDenom,
-            amount: convertAmount.toString(),
-          }
-
-          const finalMsg = {
-            typeUrl: foundMsgType[0],
-            value: foundMsgType[1].fromPartial({
-                fromAddress: this.accounts[0].address,
-                toAddress: this.address,
-                amount: [amount],
-            })
-          }    */    
-          const convertAmount = Number(this.amountFinal).toFixed(6) * 1000000
+ 
+          const convertAmount = (this.amount * 1000000).toFixed(0)
           const amount = {
             denom: cosmosConfig[this.chainId].coinLookup.chainDenom,
             amount: convertAmount.toString(),
