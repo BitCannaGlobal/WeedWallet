@@ -41,6 +41,7 @@
                 <template v-slot:activator="{ on, attrs }">
  
                 <v-icon 
+                  class="mt-n1"
                   color="#00b786"
                   v-bind="attrs"
                   v-on="on"                
