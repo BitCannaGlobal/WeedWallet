@@ -375,9 +375,10 @@ export default {
       this.unDelegateRpc = resultUnDelegate.txs.reverse()
       this.myTotalUnDelegation = (sumUnDelegate / 1000000).toFixed(2)
 
+      await this.$store.dispatch('data/getValidatorDelegation', { validatorAddr: this.validatorAddr, delegatorAddr: this.accounts[0].address}) 
     }
 
-    await this.$store.dispatch('data/getValidatorDelegation', { validatorAddr: this.validatorAddr, delegatorAddr: this.accounts[0].address}) 
+    
   },
   methods: {
     async getTxDate(height) {

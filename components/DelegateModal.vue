@@ -187,8 +187,6 @@
 
 <script>
 import { mapState } from 'vuex'
-import { bech32 } from 'bech32'
-import { notifWaiting, notifError, notifSuccess } from '~/libs/notifications'
 import cosmosConfig from '~/cosmos.config'
 import {
   defaultRegistryTypes,
@@ -198,22 +196,12 @@ import {
   calculateFee
 } from '@cosmjs/stargate'
 
-  function bech32Validation(address) {
-    try {
-      const words = bech32.decode(address)
-      // Buffer.from(bech32.fromWords(words.words)).toString(`hex`)
-      return true
-    } catch (error) {
-      return false
-    }
-  }
-  function prefixValidation(address) {
-    if (address && address.startsWith(this.network.addressPrefix)) {
-      return true
-    } else {
-      return false
-    }
-  }
+  function countPlaces(num) {
+    var sep = String(23.32).match(/\D/)[0];
+    var b = String(num).split(sep);
+    return b[1]? b[1].length : 0;
+  } 
+
   export default {
     props: ['chainIdProps', 'addressTo', 'validatorName', 'balances', 'chainName'],
     data: (instance) => ({
@@ -238,6 +226,7 @@ import {
         v => !!v || 'Amount is required',
         v => !isNaN(v) || 'Amount must be number',
         v => v <= (instance.balances / 1000000) || 'Amount must be above delegated amount (' + (instance.balances / 1000000) + ')',
+        v => countPlaces(v) < 7 || 'Bad decimal',
       ],
       amountToDelegate: '',
       memo: '',
@@ -336,8 +325,6 @@ import {
             try {
               const result = await client.delegateTokens(accounts[0].address, this.addressVal, amountFinal, 'auto', this.memo)
               assertIsDeliverTxSuccess(result)
-              // const result = await client.signAndBroadcast(accounts[0].address, [reDelegateMsg], fee, this.memo)
-              // assertIsBroadcastTxSuccess(result)
               this.step3 = false
               this.step4 = true
               this.loading = false

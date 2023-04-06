@@ -208,6 +208,12 @@ import {
   calculateFee
 } from '@cosmjs/stargate'
 
+  function countPlaces(num) {
+    var sep = String(23.32).match(/\D/)[0];
+    var b = String(num).split(sep);
+    return b[1]? b[1].length : 0;
+  }  
+
   export default {
     props: ['chainIdProps', 'addressFrom', 'amountUn', 'amountTotalUn', 'validatorName', 'coinIcon'],
     data: (instance) => ({
@@ -230,6 +236,7 @@ import {
         v => !!v || 'Amount is required',
         v => !isNaN(v) || 'Amount must be number',
         v => v <= instance.amountUn || 'Amount equal or above delegated amount (' + instance.amountUn + ')',
+        v => countPlaces(v) < 7 || 'Bad decimal',
       ],
       memo: '',
       loading: false,
@@ -333,15 +340,6 @@ import {
             const amountFinal = {
               denom: cosmosConfig[this.chainId].coinLookup.chainDenom,
               amount: convertAmount.toString(),
-            }
-            const fee = {
-              amount: [
-                {
-                  denom: cosmosConfig[this.chainId].coinLookup.chainDenom,
-                  amount: '5000',
-                },
-              ],
-              gas: '300000', // Need more gas for redelegation!
             }
 
             try {

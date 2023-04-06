@@ -190,7 +190,7 @@
             color="#00b786" 
             @click="validatestep2"
           >
-            Undelegate
+            Redelegate
           </v-btn>
         </v-card-actions>
       </v-card>
