@@ -10,7 +10,7 @@
 
     <sequential-entrance fromBottom>
     <v-row>
-      <v-col cols="12" md="4" sm="12" v-for="item in proposals" :key="item.id">
+      <v-col cols="12" md="4" sm="12" v-for="item in proposals.reverse()" :key="item.id">
           <v-card class="accent" :to="'proposals/'+item.id">
             <v-card-title class="headline">
 
@@ -23,9 +23,28 @@
                 <v-list-item-title class="subtitle-1 font-weight-bold">
                   Proposal #{{item.id}}
                 </v-list-item-title>
+                <v-spacer></v-spacer>
                 <v-list-item-subtitle v-if="item.status === 'PROPOSAL_STATUS_PASSED'">
-                  <v-chip color="#00b786" >Passed</v-chip>
+                  <v-chip color="#00b786">Passed</v-chip>
                 </v-list-item-subtitle>
+                <v-list-item-subtitle v-if="item.status === 'PROPOSAL_STATUS_REJECTED'">
+                  <v-chip color="red" >                  
+                    <v-icon class="mr-1">mdi-delete-forever</v-icon>
+                    Proposal Rejected
+                  </v-chip>
+                </v-list-item-subtitle>     
+                <v-list-item-subtitle v-if="item.status === 'PROPOSAL_STATUS_VOTING_PERIOD'">
+                  <v-chip color="primary" >                  
+                    <v-icon class="mr-1">mdi-alarm-check</v-icon>
+                    Voting Period
+                  </v-chip>
+                </v-list-item-subtitle>    
+                <v-list-item-subtitle v-if="item.status === 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
+                  <v-chip color="green" >                  
+                    <v-icon class="mr-1">mdi-cash-fast</v-icon>
+                    Deposit Period
+                  </v-chip>
+                </v-list-item-subtitle>                                             
               </v-list-item-content>
 
 
@@ -60,7 +79,7 @@
                 <v-chip v-for="msgType in item.messages" :key="item.id" label >{{ msgType.content?.title }}</v-chip>
 
               </v-chip-group>
-            <v-list-item two-line>
+            <!-- <v-list-item two-line>
               <v-list-item-content>
                 <v-list-item-title>
                   <v-progress-linear value="100" height="10" striped color="#00b786"></v-progress-linear>
@@ -70,7 +89,7 @@
                 </v-list-item-subtitle>
 
               </v-list-item-content>
-            </v-list-item>
+            </v-list-item> -->
             <v-card-actions class="pa-3">
 
 
