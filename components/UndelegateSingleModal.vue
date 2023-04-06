@@ -214,8 +214,7 @@ import {
       dialog: false,
       dislableSend: true,
       address: instance.addressFrom,
-      amount: '',
-      amountTotalUn: '',
+      amount: '', 
       step1: true,
       step2: false,
       step3: false,
@@ -289,7 +288,7 @@ import {
                   amount: amount,
               }),              
           };      
-          console.log(this.amountTotalUn)  
+ 
           let gasEstimation = await client.simulate(this.accounts[0].address, [finalMsg], this.memo)
             
           let usedFee = calculateFee(

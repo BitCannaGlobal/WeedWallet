@@ -42,7 +42,7 @@
                   v-if="logged"
                   :chainIdProps="cosmosConfig[chainId].coinLookup.addressPrefix"
                   :addressFrom="validatorAddr"
-                  :amountRe="myTotalDelegation"
+                  :amountRe="validatorDelegations / 1000000"
                   :validatorName="validatorDetails.description?.moniker"
                   :coinIcon="cosmosConfig[chainId].coinLookup.icon"
                 />
