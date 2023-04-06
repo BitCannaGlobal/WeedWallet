@@ -325,7 +325,7 @@ import {
             const client = await SigningStargateClient.connectWithSigner(
               cosmosConfig[this.chainId].rpcURL,
               offlineSigner,
-              { gasPrice: GasPrice.fromString('0.001' + cosmosConfig[this.chainId].coinLookup.chainDenom) }
+              { gasPrice: GasPrice.fromString(cosmosConfig[this.chainId].gasPrice + cosmosConfig[this.chainId].coinLookup.chainDenom) }
             )
             const convertAmount = Number(this.amountFinal) * 1000000
             const amountFinal = {

@@ -18,12 +18,14 @@
         </template>
 
 
-      <v-card>
+      <v-card class="accent">
         <v-card-title>
           <span v-if="step1" class="text-h5">Undelegate from {{ validatorName }}</span>
           <span v-if="step2" class="text-h5">Check transaction </span>
           <span v-if="step3" class="text-h5">Wait from keplr</span>
-          <span v-if="step4" class="text-h5">Transaction send!</span>          
+          <span v-if="step4" class="text-h5">Transaction send!</span>      
+          <v-spacer></v-spacer>
+          <v-icon class="mr-2" @click="dialog = false">mdi-close-circle</v-icon>                 
         </v-card-title>
         <v-card-text>
         <v-form
@@ -197,8 +199,6 @@
 
 <script>
 import { mapState } from 'vuex'
-import { bech32 } from 'bech32'
-import { notifWaiting, notifError, notifSuccess } from '~/libs/notifications'
 import cosmosConfig from '~/cosmos.config'
 import {
   defaultRegistryTypes,
@@ -208,29 +208,13 @@ import {
   calculateFee
 } from '@cosmjs/stargate'
 
-  function bech32Validation(address) {
-    try {
-      const words = bech32.decode(address)
-      Buffer.from(bech32.fromWords(words.words)).toString(`hex`)
-      return true
-    } catch (error) {
-      return false
-    }
-  }
-  function prefixValidation(address) {
-    if (address && address.startsWith(this.network.addressPrefix)) {
-      return true
-    } else {
-      return false
-    }
-  }
   export default {
     props: ['chainIdProps', 'addressFrom', 'amountUn', 'amountTotalUn', 'validatorName', 'coinIcon'],
     data: (instance) => ({
       dialog: false,
       dislableSend: true,
       address: instance.addressFrom,
-      amount: instance.amountUn,
+      amount: '',
       amountTotalUn: '',
       step1: true,
       step2: false,
@@ -285,7 +269,8 @@ import {
             const offlineSigner = await window.getOfflineSignerAuto(chainId);
             const client = await SigningStargateClient.connectWithSigner(
               cosmosConfig[this.chainId].rpcURL,
-              offlineSigner
+              offlineSigner,
+              { gasPrice: GasPrice.fromString(cosmosConfig[this.chainId].gasPrice + cosmosConfig[this.chainId].coinLookup.chainDenom) }
             )
              
           const foundMsgType = defaultRegistryTypes.find(element => element[0] === '/cosmos.staking.v1beta1.MsgUndelegate');
@@ -331,9 +316,9 @@ import {
       validatestep2 () {
         if (this.$refs.form.validate() === true) {
           (async () => {
-            // Send notification
-            var returnWaiting = notifWaiting(this.$toast)
             this.loading = true
+            this.step3 = true
+            this.step2 = false
 
             const chainId = cosmosConfig[this.chainId].chainId;
             await window.keplr.enable(chainId);
@@ -342,7 +327,8 @@ import {
 
             const client = await SigningStargateClient.connectWithSigner(
               cosmosConfig[this.chainId].rpcURL,
-              offlineSigner
+              offlineSigner,
+              { gasPrice: GasPrice.fromString(cosmosConfig[this.chainId].gasPrice + cosmosConfig[this.chainId].coinLookup.chainDenom) }
             )
             const convertAmount = Number(this.amount).toFixed(2) * 1000000
             const amountFinal = {
@@ -365,21 +351,20 @@ import {
                 accounts[0].address,
                 this.address,
                 amountFinal,
-                fee,
-                'Undelegate from Bitcanna WebWallet'
+                'auto',
+                this.memo
               )
               assertIsDeliverTxSuccess(result)
-              this.dialog = false
+              this.step3 = false
+              this.step4 = true
               this.loading = false
-              this.$toast.dismiss(returnWaiting);
-              // Send notification
-              notifSuccess(this.$toast, result.transactionHash)
               await this.$store.dispatch('data/refresh', accounts[0].address)
             } catch (error) {
-                console.error(error);
-                this.$toast.dismiss(returnWaiting);
-                notifError(this.$toast)
+                console.error(error)
+                this.eError = false
                 this.loading = false
+                this.step3 = false
+                this.step2 = true
             }
           })();
         }
