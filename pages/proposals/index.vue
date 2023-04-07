@@ -5,10 +5,103 @@
 <template>
 
   <div>
-
+    <v-card class="accent">
+    <v-card-title>
+      All proposals
+      <v-spacer></v-spacer>
+      <v-text-field
+        v-model="search"
+        append-icon="mdi-magnify"
+        label="Search"
+        single-line
+        hide-details
+      ></v-text-field>
+    </v-card-title>
+    <v-data-table
+    class="accent"
+      :headers="headers"
+      :items="proposals"
+      :search="search"
+    >
+    <template #item.content.title="{ item }">
+      <span v-if="item.content.title">
+      {{ item.content.title }} 
+      </span>    
+      <span v-else>
+      Bad title
+      </span>        
+    </template>       
+    <template #item.status="{ item }">
+        <td v-if="item.status === 'PROPOSAL_STATUS_PASSED'">              
+                <v-chip
+                  class="ma-2"
+                  color="green"
+                  text-color="white"
+                  label
+                >
+                  <v-icon class="mr-1">mdi-checkbox-marked-circle</v-icon>
+                  Proposal Passed 
+                </v-chip>              
+              </td>
+              <td v-if="item.status === 'PROPOSAL_STATUS_REJECTED'">
+                <v-chip
+                  class="ma-2"
+                  color="red"
+                  text-color="white"
+                  label
+                >
+                  <v-icon class="mr-1">mdi-delete-forever</v-icon>
+                  Proposal Rejected
+                </v-chip>                  
+              </td>
+              <td v-if="item.status === 'PROPOSAL_STATUS_VOTING_PERIOD'">
+                <!--{{ item.status }}-->
+                <v-chip
+                  class="ma-2"
+                  text-color="white"
+                  color="primary"
+                  label
+                >
+                  <v-icon class="mr-1">
+                    mdi-alarm-check
+                  </v-icon>
+                  Voting Period
+                </v-chip>              
+              </td>
+              <td v-if="item.status === 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
+                <!--{{ item.status }}-->
+                <v-chip
+                  class="ma-2"
+                  text-color="white" 
+                  label
+                >
+                  <v-icon class="mr-1">
+                    mdi-cash-fast
+                  </v-icon>
+                  Deposit Period
+                </v-chip>              
+              </td>        
+      </template>  
+      <template #item.voting_start_time="{ item }">
+        {{ item.voting_start_time | formatDate }}     
+      </template>        
+      <template #item.voting_end_time="{ item }">
+        {{ item.voting_end_time | formatDate }}     
+      </template>      
+      <template #item.myvote="{ item }">
+        <v-btn
+          class="ma-2"  
+          disabled
+        >
+          View my vote (soon)
+        </v-btn>
+      </template>  
+    </v-data-table>
+ 
+  </v-card>
     <!--{{ proposals }}-->
 
-    <sequential-entrance fromBottom>
+    <!-- <sequential-entrance fromBottom>
     <v-row>
       <v-col cols="12" md="4" sm="12" v-for="item in proposals.reverse()" :key="item.id">
           <v-card class="accent" :to="'proposals/'+item.id">
@@ -51,51 +144,11 @@
             </v-list-item>
           </v-card-title>
           <v-card-text class="text-right text-h5">
-
-              <!--<v-row class="mt-n5 ">
-                <v-col md="6">
-                  <v-card class="pa-2 ml-3 transparent" flat  tile>
-                    <v-avatar size="40" class="mr-n5">
-                      <img src="../../assets/images/users/1.jpg" alt="John">
-                    </v-avatar>
-                    <v-avatar size="40" class="mr-n5">
-                      <img src="../../assets/images/users/3.jpg" alt="John">
-                    </v-avatar>
-                    <v-avatar size="40" class="mr-n5">
-                      <img src="../../assets/images/users/4.jpg" alt="John">
-                    </v-avatar>
-                    <v-avatar size="40" class="mr-n5">
-                      <img src="../../assets/images/users/5.jpg" alt="John">
-                    </v-avatar>
-
-                    <v-avatar color="primary" dark class="mr-n5">
-                      <v-icon dark>person_add_alt_1</v-icon>
-                    </v-avatar>
-                  </v-card>
-                </v-col>
-
-              </v-row>-->
               <v-chip-group v-model="selection" color="#00b786" class="ml-3" column>
                 <v-chip v-for="msgType in item.messages" :key="item.id" label >{{ msgType.content?.title }}</v-chip>
-
               </v-chip-group>
-            <!-- <v-list-item two-line>
-              <v-list-item-content>
-                <v-list-item-title>
-                  <v-progress-linear value="100" height="10" striped color="#00b786"></v-progress-linear>
-                </v-list-item-title>
-                <v-list-item-subtitle class="white--text" >
-                100 % complet
-                </v-list-item-subtitle>
-
-              </v-list-item-content>
-            </v-list-item> -->
             <v-card-actions class="pa-3">
-
-
-              <!--{{ item.final_tally_result }}-->
             </v-card-actions>
-
           </v-card-text>
         </v-card>
       </v-col>
@@ -104,7 +157,7 @@
 
 
     </v-row>
-</sequential-entrance>
+</sequential-entrance> -->
   </div>
 
 </template>
@@ -119,61 +172,45 @@ import cosmosConfig from '~/cosmos.config'
         selection: 0,
         chip4: true,
         proposals: [],
-        items: [{
-          img: '12',
-          title: 'AWS',
-          color: 'error',
-          status: 'pending',
-          subtitle: 'Apple is Aliqua esse ipsum sint nulla Lorem',
-
-        }, {
-          img: '2',
-          title: 'Arsona',
-          color: 'success',
-          status: 'complete',
-          subtitle: 'AAliqua esse ipsum sint nulla',
-
-        }, {
-          img: '3',
-          title: 'Web Site',
-          color: 'success',
-          status: 'complete',
-          subtitle: ' proident elit eu officia. .',
-
-        }, {
-          img: '4',
-          title: 'In',
-          color: 'error',
-          status: 'pending',
-          subtitle: ' Culpa deserunt proident elit eu officia. .',
-
-        }, {
-          img: '5',
-          title: 'Objective',
-          color: 'error',
-          status: 'pending',
-          subtitle: ' Culpa deserunt proident elit eu officia. .',
-
-        }, {
-          img: '6',
-          title: 'Quasae',
-          color: 'error',
-          status: 'pending',
-          subtitle: 'Aliquip aliqua duis non sit. Culpa deserunt proident elit eu officia. .',
-
-        },  ]
+        search: '',
+        headers: [
+          { text: 'Id', value: 'proposal_id' },
+          {
+            text: 'Title',
+            align: 'start',
+            sortable: false,
+            value: 'content.title',
+          },
+          { text: 'Status', value: 'status' },
+          { text: 'Start time', value: 'voting_start_time' },
+          { text: 'End time', value: 'voting_end_time' }, 
+        ],   
       }
     },
   async mounted () {
     //https://lcd-devnet-6.bitcanna.io/cosmos/gov/v1/proposals
-    const allProposals = await axios(cosmosConfig[0].apiURL + `/cosmos/gov/v1/proposals`)
-    console.log(allProposals)
-    let setFinalPropos = this.proposals
+    const allProposals = await axios(cosmosConfig[0].apiURL + `/cosmos/gov/v1beta1/proposals`)
+    
+    let setFinalPropos = []
     allProposals.data.proposals.forEach((item) => {
       setFinalPropos.push(item);
     });
+    console.log(setFinalPropos)
+    this.proposals =  setFinalPropos.reverse()
   },
-
+  filters: {
+      formatDate: (dateStr) =>
+        Intl.DateTimeFormat("us-EN",
+          {
+            year: "numeric",
+            month: "numeric",
+            day: "numeric",
+            hour: "numeric",
+            minute: "numeric",
+            second: "numeric",
+            hour12: false
+          }).format(new Date(dateStr)),
+    }     
   }
 </script>
 
