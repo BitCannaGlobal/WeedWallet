@@ -82,11 +82,14 @@
                 </v-chip>              
               </td>        
       </template>  
+      <template #item.submit_time="{ item }">
+        {{ item.submit_time | formatDate }}     
+      </template>          
       <template #item.voting_start_time="{ item }">
-        {{ item.voting_start_time | formatDate }}     
+        <td v-if="item.status !== 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">{{ item.voting_start_time | formatDate }} </td>      
       </template>        
       <template #item.voting_end_time="{ item }">
-        {{ item.voting_end_time | formatDate }}     
+        <td v-if="item.status !== 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">{{ item.voting_end_time | formatDate }} </td>         
       </template>      
       <template #item.myvote="{ item }">
         <v-btn
@@ -182,6 +185,8 @@ import cosmosConfig from '~/cosmos.config'
             value: 'content.title',
           },
           { text: 'Status', value: 'status' },
+          
+          { text: 'Submit time', value: 'submit_time' },
           { text: 'Start time', value: 'voting_start_time' },
           { text: 'End time', value: 'voting_end_time' }, 
         ],   
