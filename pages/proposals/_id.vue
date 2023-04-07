@@ -33,14 +33,43 @@
 
   <v-row v-else justify="center" align="center">
 
-    <v-col cols="12" sm="8" md="10">
+    <v-col cols="12" lg="12" md="12" >
       <br />
-      <div class="row">
+      <div v-if="proposalData.proposal.status === 'PROPOSAL_STATUS_DEPOSIT_PERIOD'" class="flex-column align-center">
+      
+        <v-card class="accent" >
+        <v-card-title>
+          <span class="text-h5">Deposite </span>
+        </v-card-title>
+        <v-card-text>
+          <v-container>
+            <v-row>
+ 
+              <v-col >
+                <v-text-field v-model="initDeposit" outlined label="Initial Deposit (ubcna)" required></v-text-field>
+              </v-col>
+
+            </v-row>
+          </v-container>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+
+          <v-btn color="#00b786" @click="submitDeposit">
+            Submit deposit
+          </v-btn>
+        </v-card-actions>
+      </v-card>      
+      
+      </div>
+      <div v-else class="row">
         <div class="col-sm">
           <v-card class="accent" height="444">
             <v-card-title class="headline">
             </v-card-title>
-
+            <client-only>
+              <BarChart :data="chartData" />
+            </client-only>
             <v-card-text v-if="proposalLoaded === true && proposal.final_tally_result.yes != 0">
                <ProposalChart />
             </v-card-text>
@@ -169,7 +198,7 @@
           </v-card>
         </div>
       </div>
-      <div class="row">
+      <div class="row" v-if="proposalData.proposal.status !== 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
         <div class="col-sm">
           <v-card class="accent">
             <v-card-title class="headline">
@@ -199,6 +228,8 @@ import { DirectSecp256k1HdWallet } from '@cosmjs/proto-signing'
 import {
 	assertIsBroadcastTxSuccess,
 	SigningStargateClient,
+  defaultRegistryTypes,
+  GasPrice
 } from '@cosmjs/stargate'
 import cosmosConfig from '~/cosmos.config'
 
@@ -207,6 +238,7 @@ export default {
   data: () => ({
       loadedProposal: false,
       id: '',
+      initDeposit: 0,
       config: cosmosConfig,
       cards: [
         { title: 'Yes', src: 'https://cdn.vuetifyjs.com/images/cards/house.jpg', flex: 5 },
@@ -216,10 +248,67 @@ export default {
       ],
   }),
   computed: {
+    ...mapState('keplr', [`accounts`]),
     ...mapState('data', ['chainId', `balances`, 'proposal', 'proposalLoaded']),
-
+    chartData() {
+      return {
+        labels: ['Yes', 'No', 3, 4, 5],
+        datasets: [
+          {
+            label: '',
+            data: [2, 1, 16, 3, 2],
+            backgroundColor: 'rgba(20, 255, 0, 0.3)',
+            borderColor: 'rgba(100, 255, 0, 1)',
+            borderWidth: 2,
+          },
+        ],
+      }
+    },
   },
     methods: {
+      async submitDeposit () {
+        console.log('submitDeposit')
+ 
+
+
+          const chainId = cosmosConfig[this.chainId].chainId;
+          await window.keplr.enable(chainId);
+          const offlineSigner = await window.getOfflineSignerAuto(chainId);
+          const client = await SigningStargateClient.connectWithSigner(
+            cosmosConfig[this.chainId].rpcURL,
+            offlineSigner,
+            { gasPrice: GasPrice.fromString(0.25 + cosmosConfig[this.chainId].coinLookup.chainDenom) }
+          )
+             
+          const foundMsgType = defaultRegistryTypes.find(element => element[0] === '/cosmos.gov.v1beta1.MsgDeposit');
+
+          const convertAmount = (this.initDeposit * 1000000).toFixed(0)
+          const amount = {
+            denom: cosmosConfig[this.chainId].coinLookup.chainDenom,
+            amount: convertAmount.toString(),
+          }
+
+          const finalMsg = {
+            typeUrl: foundMsgType[0],
+            value: foundMsgType[1].fromPartial({
+                proposalId: 13,
+                depositor: this.accounts[0].address,
+                amount: [amount],
+            })
+          }     
+
+          console.log(finalMsg)
+            try {
+
+              const result = await client.signAndBroadcast(this.accounts[0].address, [finalMsg], 'auto', this.memo)
+              assertIsBroadcastTxSuccess(result)
+              console.log(result)
+ 
+            } catch (error) {
+              console.error(error)
+ 
+            }          
+      },
       validate () {
         if (this.$refs.form.validate() === true) {
           (async () => {

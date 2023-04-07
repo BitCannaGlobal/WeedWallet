@@ -61,7 +61,7 @@
                 <v-chip
                   class="ma-2"
                   text-color="white"
-                  color="primary"
+                  color="blue"
                   label
                 >
                   <v-icon class="mr-1">
