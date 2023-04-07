@@ -18,14 +18,16 @@
       ></v-text-field>
     </v-card-title>
     <v-data-table
-    class="accent"
+      class="accent"
       :headers="headers"
       :items="proposals"
       :search="search"
     >
     <template #item.content.title="{ item }">
       <span v-if="item.content.title">
-      {{ item.content.title }} 
+        <NuxtLink :to="'proposals/' + item.proposal_id">
+          {{ item.content.title }} 
+        </NuxtLink>
       </span>    
       <span v-else>
       Bad title
