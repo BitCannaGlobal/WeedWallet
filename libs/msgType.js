@@ -55,9 +55,19 @@ module.exports = {
           validator_address: msg.validator_address,
           amount: msg.amount.amount / 1000000
         }
+        break;                
+      case "/cosmos.gov.v1beta1.MsgSubmitProposal":
+          type = msg['@type']
+          typeReadable = 'Submit proposal'
+          color = '#8555de'
+          icon = 'Unknown.svg'
+          /* msgData = {
+            proposal_id: msg.proposal_id,
+            option: msg.option
+          }      */     
+          console.log(msg)
         break;
-                
-      case "/cosmos.gov.v1beta1.MsgVote":
+        case "/cosmos.gov.v1beta1.MsgVote":
           type = msg['@type']
           typeReadable = 'Vote'
           color = '#00b786'
@@ -67,7 +77,7 @@ module.exports = {
             option: msg.option
           }          
           console.log(msg)
-        break;
+        break;        
       case "/cosmos.staking.v1beta1.MsgBeginRedelegate":
         typeReadable = 'Redelegate'
         color = '#00b786'
