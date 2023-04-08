@@ -1,4 +1,5 @@
 <template>
+
   <p v-if="$fetchState.pending">
   <v-row justify="center" align="center">
 
@@ -14,7 +15,7 @@
                <br />
               <v-col cols="12">
                 <v-progress-linear
-                  color="#00fafa"
+                  color="#00b786"
                   indeterminate
                   rounded
                   height="20"
@@ -32,7 +33,69 @@
   <p v-else-if="$fetchState.error">Une erreur est survenue :(</p>
 
   <v-row v-else justify="center" align="center">
+ 
+    <v-col v-if="proposalData.proposal.status === 'PROPOSAL_STATUS_DEPOSIT_PERIOD'" cols="12" lg="6" md="6" class=" fill-height d-flex flex-column align-center">
+ 
+      <v-card class="accent" max-width="600">
+        <v-card-title>
+          <span class="text-h5">Deposite time</span>
+        </v-card-title>
+        <v-card-text>
+  
+          <ChartsProposalDeposite  
+            :total_deposit="proposalData.proposal.total_deposit[0].amount" 
+            :min_deposit="configDeposite.deposit_params.min_deposit[0].amount" 
+          />   
+           <br /> 
 
+                  <v-simple-table class="accent">
+
+                    <tbody>
+                      <tr>
+                        <td>
+                          <v-icon
+                            color="#b3ffeb"
+                            small
+                          >
+                            mdi-circle
+                          </v-icon>                      
+                          Minimum Deposit</td>
+                        <td>{{ configDeposite.deposit_params.min_deposit[0].amount / 1000000 }} {{ cosmosConfig[chainId].coinLookup.viewDenom }}</td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <v-icon
+                            color="#33ffc9"
+                            small
+                          >
+                            mdi-circle
+                          </v-icon>                            
+                          Total Deposit</td>
+                        <td>{{ proposalData.proposal.total_deposit[0].amount / 1000000 }} {{ cosmosConfig[chainId].coinLookup.viewDenom }}</td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <v-icon
+                            color="#00b383"
+                            small
+                          >
+                            mdi-circle
+                          </v-icon>                          
+                          Deposit Remaining</td>
+                        <td>{{ (configDeposite.deposit_params.min_deposit[0].amount - proposalData.proposal.total_deposit[0].amount) / 1000000 }} {{ cosmosConfig[chainId].coinLookup.viewDenom }}</td>
+                      </tr>
+ 
+                    </tbody>
+                  </v-simple-table>
+
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+ 
+        </v-card-actions>
+      </v-card>
+    </v-col>
+  
     <v-col cols="12" lg="12" md="12" >
       <br />
       <div v-if="proposalData.proposal.status === 'PROPOSAL_STATUS_DEPOSIT_PERIOD'" class="flex-column align-center">
@@ -188,8 +251,8 @@
              <!-- <v-col class="text-right"  v-if="proposalData.proposal.status === 'PROPOSAL_STATUS_VOTING_PERIOD'">-->
 
                 <SendProposalModal
-                  :chainIdProps="config[chainId].coinLookup.addressPrefix"
-                  :coinIcon="config[chainId].coinLookup.icon"
+                  :chainIdProps="cosmosConfig[chainId].coinLookup.addressPrefix"
+                  :coinIcon="cosmosConfig[chainId].coinLookup.icon"
                   :idProposal="id"
                   :cardsVote="cards"
                 />
@@ -239,7 +302,8 @@ export default {
       loadedProposal: false,
       id: '',
       initDeposit: 0,
-      config: cosmosConfig,
+      configDeposite: '',
+      cosmosConfig: cosmosConfig,
       cards: [
         { title: 'Yes', src: 'https://cdn.vuetifyjs.com/images/cards/house.jpg', flex: 5 },
         { title: 'No', src: 'https://cdn.vuetifyjs.com/images/cards/road.jpg', flex: 5 },
@@ -268,8 +332,8 @@ export default {
     methods: {
       async submitDeposit () {
         console.log('submitDeposit')
- 
-
+  
+        console.log(this.$route.params.id)
 
           const chainId = cosmosConfig[this.chainId].chainId;
           await window.keplr.enable(chainId);
@@ -291,7 +355,7 @@ export default {
           const finalMsg = {
             typeUrl: foundMsgType[0],
             value: foundMsgType[1].fromPartial({
-                proposalId: 13,
+                proposalId: this.$route.params.id,
                 depositor: this.accounts[0].address,
                 amount: [amount],
             })
@@ -369,6 +433,11 @@ export default {
     //await this.$store.dispatch('keplr/checkLogin')
     //console.log(this.$route.params.id)
     this.id = this.$route.params.id
+
+    this.configDeposite = await fetch(
+      cosmosConfig[this.chainId].apiURL + `/cosmos/gov/v1beta1/params/deposit`
+    ).then(res => res.json())
+    console.log(this.configDeposite)   
   }
 }
 </script>

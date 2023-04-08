@@ -293,6 +293,7 @@ import pjson from '~/package'
 <style>
 .v-application {
     background-color: black !important;
+    background-repeat: repeat-y;
 }
 .test {
     background-color: black !important;
@@ -327,4 +328,5 @@ import pjson from '~/package'
 .custom-tooltip {
     opacity: 1!important;
 }
+
 </style>

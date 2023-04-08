@@ -1,5 +1,5 @@
 <template>
-  <v-row align="center" justify="center" style="height:100vh" dense>
+  <v-row align="center" justify="center"  dense>
     <v-col cols="12" lg="6" md="6" class=" fill-height d-flex flex-column align-center">
       <v-alert
       v-if="isSend"
@@ -13,14 +13,14 @@
     </v-alert>
       <v-card class="accent" max-width="600">
         <v-card-title>
-          <span class="text-h5">Create text proposal (v1beta)</span>
+          <span class="text-h5">Create BitCanna proposal (v1beta)</span>
         </v-card-title>
         <v-card-text>
           <v-container>
             <v-row>
-             <!--  <v-col cols="12" sm="12">
-                <v-select :items="items" label="Proposal type" required></v-select>
-              </v-col> -->
+             <v-col cols="12" sm="12">
+                <v-select v-model="propType" :items="items" label="Proposal type" required outlined></v-select>
+              </v-col>
               <v-col cols="12" sm="12">
                 <v-text-field
                   v-model="propTitle"
@@ -38,14 +38,85 @@
                   required
                 ></v-textarea>
               </v-col>
-              <v-col cols="12" sm="6" md="6">
-                <v-text-field v-model="proposer" outlined label="Proposer" required></v-text-field>
-              </v-col>
-              <v-col cols="12" sm="6" md="6">
+              
+              <v-col cols="12" sm="12" md="12">
                 <v-text-field v-model="initDeposit" outlined label="Initial Deposit (ubcna)" required></v-text-field>
+              </v-col>   
+
+              <v-col v-if="propType === 'Community Pool Spend Proposal'" cols="12" sm="6" md="6">
+                <v-text-field v-model="amountSpend" outlined label="Amount spend" required></v-text-field>
               </v-col>
+              <v-col v-if="propType === 'Community Pool Spend Proposal'"  cols="12" sm="6" md="6">
+                <v-text-field v-model="receivingAddress" outlined label="Receiving address" required></v-text-field>
+              </v-col>              
+              <!-- <v-col cols="12" sm="6" md="6">
+                <v-text-field v-model="proposer" outlined label="Proposer" required></v-text-field>
+              </v-col> -->
+
+              
+              <v-col v-if="propType === 'Software Upgrade Proposal'" cols="12" sm="6" md="6">
+                <v-text-field v-model="upgradeName" outlined label="Upgrade Name" required></v-text-field>
+              </v-col>
+              <v-col v-if="propType === 'Software Upgrade Proposal'"  cols="12" sm="6" md="6">
+                <v-text-field v-model="upgradeHeight" outlined label="Upgrade Height" required></v-text-field>
+              </v-col>
+              <v-col v-if="propType === 'Software Upgrade Proposal'"  cols="12" sm="12" md="12">
+                <v-text-field v-model="upgradeInfo" outlined label="Upgrade Info" required></v-text-field>
+              </v-col>   
+              
+              
+              <v-col v-if="propType === 'Parameter Change Proposal'" cols="12" sm="4" md="4">
+                <v-text-field v-model="amountSpend" outlined label="Subspace" required></v-text-field>
+              </v-col>
+              <v-col v-if="propType === 'Parameter Change Proposal'"  cols="12" sm="4" md="4">
+                <v-text-field v-model="receivingAddress" outlined label="Key" required></v-text-field>
+              </v-col> 
+              <v-col v-if="propType === 'Parameter Change Proposal'"  cols="12" sm="4" md="4">
+                <v-text-field v-model="receivingAddress" outlined label="Value" required></v-text-field>
+              </v-col>              
+
+
+
+    
 
             </v-row>
+            <span
+              v-if="propType === 'Parameter Change Proposal'"
+              v-for="(textField, i) in textFields"
+              :key="i"  
+            >
+              <!-- <v-text-field
+              :label="textField.label1"
+              v-model="textField.value1"
+              ></v-text-field>
+
+              <v-text-field
+              :label="textField.label2"
+              v-model="textField.value2"
+              ></v-text-field> -->
+              <v-row>
+                <v-col v-if="propType === 'Parameter Change Proposal'" cols="12" >
+                  <v-btn @click="remove(i)" class="error">
+                    <v-icon
+                      large 
+                    >
+                    mdi-delete-forever-outline
+                    </v-icon>                  
+                  </v-btn>
+                </v-col>                
+                <v-col v-if="propType === 'Parameter Change Proposal'" cols="12" sm="4" md="4">
+                    <v-text-field v-model="amountSpend" outlined label="Subspace" required></v-text-field>
+                </v-col>
+                <v-col v-if="propType === 'Parameter Change Proposal'"  cols="12" sm="4" md="4">
+                  <v-text-field v-model="receivingAddress" outlined label="Key" required></v-text-field>
+                </v-col> 
+                <v-col v-if="propType === 'Parameter Change Proposal'"  cols="12" sm="4" md="4">
+                  <v-text-field v-model="receivingAddress" outlined label="Value" required></v-text-field>
+                </v-col>     
+                
+              </v-row>
+            </span>            
+            <v-btn v-if="propType === 'Parameter Change Proposal'" @click="add">add</v-btn>
           </v-container>
         </v-card-text>
         <v-card-actions>
@@ -69,8 +140,11 @@ import { Registry } from "@cosmjs/proto-signing";
 import { cosmos, cosmosProtoRegistry, cosmosAminoConverters } from 'interchain46';
 import { Any } from "cosmjs-types/google/protobuf/any";
 import { TextProposal } from "cosmjs-types/cosmos/gov/v1beta1/gov";
-import pkg from 'protobufjs';
-const { Type, Field } = pkg;
+import { CommunityPoolSpendProposal  } from "cosmjs-types/cosmos/distribution/v1beta1/distribution";
+import { SoftwareUpgradeProposal, Plan } from "cosmjs-types/cosmos/upgrade/v1beta1/upgrade";
+import Long from 'long';
+// import { ParameterChangeProposal, ParamChange } from "cosmjs-types/cosmos/params/v1beta1/params";
+
 import cosmosConfig from '~/cosmos.config'
 import { notifWaiting, notifError, notifSuccess } from '~/libs/notifications'
 
@@ -78,34 +152,59 @@ export default {
   data: () => ({
     items: [
       'Text Proposal',
-      //'Parameter Change Proposal',
-      //'Software Upgrade Proposal',
-      //'Cancel Software Upgrade Proposal',
-      //'Community Pool Spend Proposal',
+      'Community Pool Spend Proposal',
       //'Community Pool Spend Proposal With Deposit',
-      //'Create Validator',
-      //'CosmWasm',
+      'Software Upgrade Proposal',
+      //'Parameter Change Proposal',
+      
     ],
     // New
+    propType: '',
     propText: '',
     propTitle: '',
     proposer: '',
-    initDeposit: '4200000',
+    amountSpend: '',
+    receivingAddress: '',
+    initDeposit: '10000000',
     isSend: false,
+    // Upgrade part
+    upgradeName: '',
+    upgradeHeight: '',
+    upgradeInfo: '',
+    textFields: []
   }),
   computed: {
     ...mapState('keplr', [`accounts`, `initialized`, `error`, `logged`, `logout`]),
     ...mapState('data', ['chainId'])
   },
   watch: {
-
+    // whenever question changes, this function will run
+    propType(newdata) {
+      console.log(newdata)
+    }
   },
   async mounted() {
     this.isSend = false
     this.proposer = this.accounts[0].address
   },
   methods: {
+    add () {
+        this.textFields.push({ 
+          label1: "Subspace", 
+          value1: "",
+          label2: "key",
+          value2: ""
+        })
+     },
+
+     remove (index) {
+         this.textFields.splice(index, 1)
+     },
+
     async createProposalv1Beta() {
+
+      console.log(CommunityPoolSpendProposal)
+
 
       const chainId = cosmosConfig[this.chainId].chainId;
       await window.keplr.enable(chainId);
@@ -116,27 +215,78 @@ export default {
         offlineSigner,
         { gasPrice: GasPrice.fromString(cosmosConfig[this.chainId].gasPrice + cosmosConfig[this.chainId].coinLookup.chainDenom) }
       )
-
+      
       const foundMsgType = defaultRegistryTypes.find(element => element[0] === '/cosmos.gov.v1beta1.MsgSubmitProposal');
-      const textProposal = TextProposal.fromPartial({
-        title: this.propTitle,
-        description: this.propText,
-      });
       const initialDeposit = coins(this.initDeposit, "ubcna");
+      let finalMsg = {}
 
-      const finalMsg = {
-
-        typeUrl: foundMsgType[0],
-        value: foundMsgType[1].fromPartial({
-          content: Any.fromPartial({
-            typeUrl: "/cosmos.gov.v1beta1.TextProposal",
-            value: Uint8Array.from(TextProposal.encode(textProposal).finish()),
-          }),
-          proposer: this.accounts[0].address,
-          initialDeposit: initialDeposit,
-        })
-
+      if (this.propType === "Text Proposal") {
+        const textProposal = TextProposal.fromPartial({
+          title: this.propTitle,
+          description: this.propText,
+        });
+        finalMsg = {
+          typeUrl: foundMsgType[0],
+          value: foundMsgType[1].fromPartial({
+            content: Any.fromPartial({
+              typeUrl: "/cosmos.gov.v1beta1.TextProposal",
+              value: Uint8Array.from(TextProposal.encode(textProposal).finish()),
+            }),
+            proposer: this.accounts[0].address,
+            initialDeposit: initialDeposit,
+          })
+        }
       }
+      if (this.propType === "Community Pool Spend Proposal") {
+        const communityPoolSpend = CommunityPoolSpendProposal.fromPartial({
+          title: this.propTitle,
+          description: this.propText,
+          recipient: this.receivingAddress,
+          amount: coins(this.amountSpend, "ubcna"),
+        });
+        finalMsg = {
+          typeUrl: foundMsgType[0],
+          value: foundMsgType[1].fromPartial({
+            content: Any.fromPartial({
+              typeUrl: "/cosmos.distribution.v1beta1.CommunityPoolSpendProposal",
+              value: Uint8Array.from(CommunityPoolSpendProposal.encode(communityPoolSpend).finish()),
+            }),
+            proposer: this.accounts[0].address,
+            initialDeposit: initialDeposit,
+          })
+        }
+      }
+      if (this.propType === "Software Upgrade Proposal") {
+
+        const softwareUpgrade = SoftwareUpgradeProposal.fromPartial({
+          title: this.propTitle,
+          description: this.propText,
+          // plan: Uint8Array.from(Plan.encode(softwarePlan).finish()),
+          plan: {
+            name: this.upgradeName,
+            /* time: {
+              nanos: 0,
+              seconds: Long.fromValue(0)
+            }, */
+            height: Long.fromValue(this.upgradeHeight),
+            info: this.upgradeInfo,
+            upgradedClientState: undefined,
+          },
+        });
+
+        finalMsg = {
+          typeUrl: foundMsgType[0],
+          value: foundMsgType[1].fromPartial({
+            content: Any.fromPartial({
+              typeUrl: "/cosmos.upgrade.v1beta1.SoftwareUpgradeProposal",
+              value: Uint8Array.from(SoftwareUpgradeProposal.encode(softwareUpgrade).finish()),
+            }),
+            proposer: this.accounts[0].address,
+            initialDeposit: initialDeposit,
+          })
+        }
+      }
+
       console.log(finalMsg)
 
       try {
