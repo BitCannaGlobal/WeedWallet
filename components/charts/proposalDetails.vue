@@ -3,7 +3,7 @@
 
     <client-only>
 <!--    {{ amount }}-->
-      <Doughnut
+      <PolarArea
         :data="chartData"
         :width="width"
         :height="height"
@@ -35,11 +35,11 @@ export default {
     },
     width: {
       type: Number,
-      default: 200
+      default: 300
     },
     height: {
       type: Number,
-      default: 200
+      default: 300
     },
     cssClasses: {
       default: '',
