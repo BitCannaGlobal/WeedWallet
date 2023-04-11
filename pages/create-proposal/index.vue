@@ -37,10 +37,10 @@
                   label="Proposal text"
                   required
                 ></v-textarea>
-    <div id="editor">
+<!--     <div id="editor">
       <textarea :value="input" @input="update"></textarea>
       <div v-html="compiledMarkdown"></div>
-    </div>                
+    </div>      -->           
               </v-col>
               
               <v-col cols="12" sm="12" md="12">
