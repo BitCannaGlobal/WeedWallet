@@ -20,7 +20,8 @@
                 </v-card-title>
                 <v-card-text>
  
-                  <div v-html="$md.render(proposalData.proposal.content.description)"></div>
+                  <!-- <div v-html="$md.render(proposalData.proposal.content.description)"></div> -->
+                  {{  proposalData.proposal.content.description }}
                   <v-row>
  
                     <v-col >
