@@ -21,6 +21,16 @@
                 <v-card-text>
  
                   <div v-html="$md.render(proposalData.proposal.content.description)"></div>
+                  <v-row>
+ 
+                    <v-col >
+                      <v-text-field v-model="initDeposit" outlined label="Initial Deposit (ubcna)" required></v-text-field>
+                    </v-col>
+
+                  </v-row>  
+                  <v-btn color="#00b786" @click="submitDeposit">
+                    Submit deposit
+                  </v-btn>                                
                 </v-card-text>
               </v-card>
             </v-col>
