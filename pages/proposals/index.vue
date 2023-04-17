@@ -1,10 +1,53 @@
-<!--==============================
-=            PROJECTS            =
-===============================-->
-
 <template>
-
   <div>
+    <sequential-entrance>
+      <v-row justify="space-around" class="mb-4 data-row">
+        <v-col> 
+          <v-card class="accent">
+            <v-card-title class="headline">
+              <v-col >
+              <h4 class="icon">
+                Voting period
+              </h4>
+            </v-col>
+            <v-col class="text-right">
+            {{ paramsVoting.voting_period }}
+            </v-col>               
+            </v-card-title> 
+          </v-card>          
+        </v-col>        
+        <v-col>
+          <v-card class="accent">
+            <v-card-title class="headline">
+              <v-col  >
+              <h4 class="icon">
+                &ensp; Min deposite
+              </h4>
+            </v-col>
+            <v-col class="text-right"> 
+              {{ paramsDeposit.min_deposit }} BCNA
+            </v-col>               
+            </v-card-title> 
+          </v-card>
+        </v-col>
+        <v-col> 
+          <v-card class="accent">
+            <v-card-title class="headline">
+              <v-col >
+              <h4 class="icon">
+                Max deposit period
+              </h4>
+            </v-col>
+            <v-col class="text-right">
+            {{ paramsDeposit.max_deposit_period }}
+            </v-col>               
+            </v-card-title> 
+          </v-card>          
+        </v-col>
+      </v-row>
+      </sequential-entrance>
+
+
     <v-card class="accent">
     <v-card-title>
       All proposals
@@ -84,14 +127,69 @@
                 </v-chip>              
               </td>        
       </template>  
+      
       <template #item.submit_time="{ item }">
-        {{ item.submit_time | formatDate }}     
+        
+        <v-tooltip top>
+          <template v-slot:activator="{ on, attrs }">
+            <span
+              class="mt-n1"
+              v-bind="attrs"
+              v-on="on"             
+            >{{ item.submit_time | timeFromNow }}</span>
+          </template>
+            <span>
+              {{ item.submit_time | formatDate }}
+            </span>
+        </v-tooltip>  
+               
       </template>          
       <template #item.voting_start_time="{ item }">
-        <td v-if="item.status !== 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">{{ item.voting_start_time | formatDate }} </td>      
+        <td>
+          <v-tooltip top>  
+            <template v-slot:activator="{ on, attrs }">
+              <span
+                class="mt-n1"
+                v-bind="attrs"
+                v-on="on"             
+              >{{ item.submit_time | timeFromNow }}</span>
+            </template>
+              <span>
+                {{ item.submit_time | formatDate }}
+              </span>
+          </v-tooltip> 
+        </td>     
       </template>        
       <template #item.voting_end_time="{ item }">
-        <td v-if="item.status !== 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">{{ item.voting_end_time | formatDate }} </td>         
+        <td v-if="item.status !== 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
+          <v-tooltip top>  
+            <template v-slot:activator="{ on, attrs }">
+              <span
+                class="mt-n1"
+                v-bind="attrs"
+                v-on="on"             
+              >{{ item.voting_end_time | timeFromNow }}</span>
+            </template>
+              <span>
+                {{ item.voting_end_time | formatDate }}
+              </span>
+          </v-tooltip>        
+        </td>      
+        <td v-else>
+          <v-tooltip top>  
+            <template v-slot:activator="{ on, attrs }">
+              <span
+                class="mt-n1"
+                v-bind="attrs"
+                v-on="on"             
+              >{{ { submit: item.submit_time, secondes: paramsDeposit.max_deposit_seconde } | formatDateDeposite | timeFromNow }} </span>
+            </template>
+              <span>
+                {{ { submit: item.submit_time, secondes: paramsDeposit.max_deposit_seconde } | formatDateDeposite | formatDate }} 
+              </span>
+          </v-tooltip>            
+          
+        </td>      
       </template>      
       <template #item.myvote="{ item }">
         <v-btn
@@ -167,7 +265,10 @@
 
 </template>
 <script>
+import { mapState } from 'vuex'
 import axios from 'axios'
+import moment from 'moment'
+
 import cosmosConfig from '~/cosmos.config'
 
   export default {
@@ -194,8 +295,12 @@ import cosmosConfig from '~/cosmos.config'
         ],   
       }
     },
+  computed: {
+    ...mapState('data', ['chainId', `balances`, 'proposal', 'proposalLoaded', 'paramsDeposit', 'paramsVoting']),
+      
+  },
   async mounted () {
-    //https://lcd-devnet-6.bitcanna.io/cosmos/gov/v1/proposals
+    // List of proposal from the blockchain
     const allProposals = await axios(cosmosConfig[0].apiURL + `/cosmos/gov/v1beta1/proposals`)
     
     let setFinalPropos = []
@@ -204,6 +309,11 @@ import cosmosConfig from '~/cosmos.config'
     });
     console.log(setFinalPropos)
     this.proposals =  setFinalPropos.reverse()
+
+
+    await this.$store.dispatch('data/getProposalParamsDeposit')
+    await this.$store.dispatch('data/getProposalParamsVoting')
+    
   },
   filters: {
       formatDate: (dateStr) =>
@@ -217,6 +327,13 @@ import cosmosConfig from '~/cosmos.config'
             second: "numeric",
             hour12: false
           }).format(new Date(dateStr)),
+
+ 
+      formatDateDeposite( dateStr ) {
+        return moment(dateStr.submit).add(dateStr.secondes, 's')
+      },
+      timeFromNow: (dateStr) => moment(dateStr).fromNow(),
+      timeToNow: (dateStr) => moment(dateStr).toNow(),
     }     
   }
 </script>

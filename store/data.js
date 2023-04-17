@@ -1,4 +1,5 @@
 import axios from 'axios'
+import moment from 'moment';
 import cosmosConfig from '~/cosmos.config'
 
 export const state = () => ({
@@ -27,7 +28,9 @@ export const state = () => ({
   validatorDetails: '',
   totalWallet: '',
   totalWalletPrice: '',
-  validatorDelegations: ''
+  validatorDelegations: '',
+  paramsDeposit: '',
+  paramsVoting: '',
 })
 
 export const mutations = {
@@ -219,8 +222,38 @@ export const actions = {
   async resetFinalMsgProp({ commit, state }) {
     commit('setFinalMsgProp', [])
   },
+ 
+  async getProposalParamsDeposit({ commit, state }) {
+    const paramsDeposit = await axios(cosmosConfig[state.chainId].apiURL + '/cosmos/gov/v1beta1/params/deposit')
 
+    var duration = moment.duration(paramsDeposit.data.deposit_params.max_deposit_period.replace('s', ''), 'seconds');
+    const days = duration.days();
+    const hours = duration.hours();
+ 
+    console.log(duration)
+    let saveParams = {
+      min_deposit: (paramsDeposit.data.deposit_params.min_deposit[0].amount / 1000000).toFixed(2),
+      max_deposit_period: `${days} days, ${hours} hours`,
+      max_deposit_seconde: paramsDeposit.data.deposit_params.max_deposit_period.replace('s', '')      
+    }
+    commit('setParamsDeposit', saveParams)
+  },
 
+  async getProposalParamsVoting({ commit, state }) {
+    const paramsDeposit = await axios(cosmosConfig[state.chainId].apiURL + '/cosmos/gov/v1beta1/params/voting')
+
+    var duration = moment.duration(paramsDeposit.data.voting_params.voting_period.replace('s', ''), 'seconds');
+    const days = duration.days();
+    const hours = duration.hours();
+    const minutes = duration.minutes();
+
+ 
+    console.log(paramsDeposit.data.voting_params.voting_period)
+    let saveParams = {
+      voting_period: `${hours} hours, ${minutes} minutes`
+    }
+    commit('setParamsVoting', saveParams)
+  },
 
   async getChartProposalData({ commit, state }, proposalId) {
 

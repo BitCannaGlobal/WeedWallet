@@ -5,6 +5,7 @@
     <!-- If deposit period -->
     <v-col v-if="proposalData.proposal.status === 'PROPOSAL_STATUS_DEPOSIT_PERIOD'" cols="12" sm="8" md="10">
       <v-row>
+        {{proposalData.proposal}}
             <v-col
               cols="12"
               md="8"
@@ -47,7 +48,7 @@
                 <v-card-text>      
                   <ChartsProposalDeposite  
                     :total_deposit="proposalData.proposal.total_deposit[0].amount" 
-                    :min_deposit="configDeposite.deposit_params.min_deposit[0].amount" 
+                    :min_deposit="paramsDeposit.min_deposit" 
                   />   
                   <br /> 
 
@@ -63,7 +64,7 @@
                             mdi-circle
                           </v-icon>                      
                           Minimum Deposit</td>
-                        <td>{{ configDeposite.deposit_params.min_deposit[0].amount / 1000000 }} {{ cosmosConfig[chainId].coinLookup.viewDenom }}</td>
+                        <td>{{ paramsDeposit.min_deposit }} {{ cosmosConfig[chainId].coinLookup.viewDenom }}</td>
                       </tr>
                       <tr>
                         <td>
@@ -85,7 +86,7 @@
                             mdi-circle
                           </v-icon>                          
                           Deposit Remaining</td>
-                        <td>{{ (configDeposite.deposit_params.min_deposit[0].amount - proposalData.proposal.total_deposit[0].amount) / 1000000 }} {{ cosmosConfig[chainId].coinLookup.viewDenom }}</td>
+                        <td>{{ (paramsDeposit.min_deposit - (proposalData.proposal.total_deposit[0].amount / 1000000)) }} {{ cosmosConfig[chainId].coinLookup.viewDenom }}</td>
                       </tr>
 
                     </tbody>
@@ -219,6 +220,7 @@
                   <v-simple-table>
                     <template v-slot:default>
                       <tbody>
+
                         <tr v-if="proposalData.proposal.total_deposit.length > 0">
                           <td>Total deposit</td>
                           <td>{{ proposalData.proposal?.total_deposit[0].amount / 1000000 }} {{ cosmosConfig[chainId].coinLookup.viewDenom }}</td>
@@ -239,10 +241,11 @@
                     </template>
                   </v-simple-table>
                   <br /><br /><br /><br />
+                  {{proposalData.proposal}}
   <v-stepper >
     <v-stepper-header dark>
       <v-stepper-step
-        v-if="proposalData.proposal.status === 'PROPOSAL_STATUS_DEPOSIT_PERIOD'"
+        v-if="proposalData.proposal.status !== 'PROPOSAL_STATUS_DEPOSIT_PERIOD'"
         step="1"
         complete
         color="#00b786"
@@ -357,7 +360,6 @@ export default {
       loadedProposal: false,
       id: '',
       initDeposit: 0,
-      configDeposite: '',
       cosmosConfig: cosmosConfig,
       cards: [
         { title: 'Yes', src: 'https://cdn.vuetifyjs.com/images/cards/house.jpg', flex: 5 },
@@ -368,7 +370,7 @@ export default {
   }),
   computed: {
     ...mapState('keplr', [`accounts`]),
-    ...mapState('data', ['chainId', `balances`, 'proposal', 'proposalLoaded']),
+    ...mapState('data', ['chainId', `balances`, 'proposal', 'proposalLoaded', 'paramsDeposit']),
     chartData() {
       return {
         labels: ['Yes', 'No', 'No With Veto', 'Abstain'],
@@ -395,6 +397,7 @@ export default {
         console.log('submitDeposit')
   
         console.log(this.$route.params.id)
+ 
 
           const chainId = cosmosConfig[this.chainId].chainId;
           await window.keplr.enable(chainId);
@@ -498,11 +501,8 @@ export default {
     //await this.$store.dispatch('keplr/checkLogin')
     //console.log(this.$route.params.id)
     this.id = this.$route.params.id
-
-    this.configDeposite = await fetch(
-      cosmosConfig[this.chainId].apiURL + `/cosmos/gov/v1beta1/params/deposit`
-    ).then(res => res.json())
-    console.log(this.configDeposite)   
+    await this.$store.dispatch('data/getProposalParamsDeposit')
+ 
   },
   filters: {
       formatDate: (dateStr) =>
