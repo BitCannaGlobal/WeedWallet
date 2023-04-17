@@ -205,7 +205,7 @@
                 </template>
               </v-simple-table>
             </template>
-            <template v-if="item.messageInfo.type === '/cosmos.gov.v1beta1.MsgDeposit'">
+            <template v-if="item.messageInfo.type === '/cosmos.gov.v1beta1.MsgDeposit'"> 
               <v-simple-table class="accent">
                 <template v-slot:default>
                   <thead>
