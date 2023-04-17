@@ -205,7 +205,28 @@
                 </template>
               </v-simple-table>
             </template>
-
+            <template v-if="item.messageInfo.type === '/cosmos.gov.v1beta1.MsgDeposit'">
+              <v-simple-table class="accent">
+                <template v-slot:default>
+                  <thead>
+                    <tr>
+                      <th class="text-left">
+                        Proposal Id
+                      </th>
+                      <th class="text-left">
+                        Deposit Amount
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>#{{ item.messageInfo.msgData.proposal_id }}</td>
+                      <td>{{ item.messageInfo.msgData.amount }} {{ cosmosConfig[0].coinLookup.viewDenom }}</td> 
+                    </tr>
+                  </tbody>
+                </template>
+              </v-simple-table>
+            </template>
         </v-expansion-panel-content>
       </v-expansion-panel>
     </v-expansion-panels>
