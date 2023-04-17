@@ -46,7 +46,7 @@ export default {
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
     'nuxt-clipboard',
-    // '@nuxtjs/markdownit',
+    '@nuxtjs/markdownit',
     [
       'vue-toastification/nuxt',
       {
@@ -77,7 +77,7 @@ export default {
   },
   // [optional] markdownit options
   // See https://github.com/markdown-it/markdown-it
-  /*markdownit: {
+  markdownit: {
     preset: 'default',
     linkify: true,
     breaks: false,
@@ -86,7 +86,7 @@ export default {
       'markdown-it-div',
       'markdown-it-attrs'
     ]
-  }, */
+  }, 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {
     customVariables: ['~/assets/variables.scss'],

@@ -5,36 +5,56 @@
     <!-- If deposit period -->
     <v-col v-if="proposalData.proposal.status === 'PROPOSAL_STATUS_DEPOSIT_PERIOD'" cols="12" sm="8" md="10">
       <v-row>
-        {{proposalData.proposal}}
             <v-col
               cols="12"
               md="8"
             >
               <v-card
                 dark
- 
+                class="accent"
+              >
+              test
+              </v-card>
+            </v-col>     
+            <v-col
+              cols="12"
+              md="4"
+            >
+              <v-card
+                dark
+                class="accent"
+              >
+              test
+              </v-card>
+            </v-col>  
+            
+            
+            <v-col
+              cols="12"
+              md="8"
+            >
+              <v-card
+                dark
+                class="accent"
               >
                 <v-card-title>
                   #{{ proposalData.proposal.proposal_id }} {{ proposalData.proposal.content.title }}
                   <v-spacer></v-spacer>
-                  {{ proposalData.proposal.deposit_end_time | formatDate }}
+                  End time: {{ proposalData.proposal.deposit_end_time | formatDate }}
                 </v-card-title>
                 <v-card-text>
  
-                  <!-- <div v-html="$md.render(proposalData.proposal.content.description)"></div> -->
-                  {{  proposalData.proposal.content.description }}
-                  <v-row>
- 
-                    <v-col >
-                      <v-text-field v-model="initDeposit" outlined label="Initial Deposit (ubcna)" required></v-text-field>
-                    </v-col>
-
-                  </v-row>  
-                  <v-btn color="#00b786" @click="submitDeposit">
-                    Submit deposit
-                  </v-btn>                                
+                  <div v-html="$md.render(proposalData.proposal.content.description)"></div> 
+                  <!-- {{  proposalData.proposal.content.description }} -->
+                            
                 </v-card-text>
               </v-card>
+              <v-card
+                dark
+                class="accent mt-4"
+              >
+              test
+              </v-card>              
             </v-col>
             <v-col
               cols="12"
@@ -42,7 +62,7 @@
             >
               <v-card
                 dark
- 
+                class="accent"
               >
                 <v-card-title><span class="text-h5">Deposite detail</span></v-card-title>
                 <v-card-text>      
@@ -90,7 +110,15 @@
                       </tr>
 
                     </tbody>
-                  </v-simple-table>                  
+                  </v-simple-table>     
+                  <v-row class="mt-4"> 
+                    <v-col >
+                      <v-text-field v-model="initDeposit" outlined label="Deposit (bcna)" required></v-text-field>
+                    </v-col>
+                  </v-row>  
+                  <v-btn color="#00b786" @click="submitDeposit">
+                    Submit deposit
+                  </v-btn>                                
                 </v-card-text>
               </v-card>
             </v-col>            
@@ -241,7 +269,7 @@
                     </template>
                   </v-simple-table>
                   <br /><br /><br /><br />
-                  {{proposalData.proposal}}
+                  <!-- {{proposalData.proposal}} -->
   <v-stepper >
     <v-stepper-header dark>
       <v-stepper-step
@@ -267,16 +295,28 @@
 
       <v-stepper-step
         step="3"
+        complete
+        color="#00b786"        
       >
-        Voting Period Starts
-        <small>Alert message</small>
+        Voting Period Starts 
       </v-stepper-step>
 
       <v-divider></v-divider>
 
-      <v-stepper-step step="4">
+      <v-stepper-step 
+        step="4"
+        v-if="proposalData.proposal.status === 'PROPOSAL_STATUS_VOTING_PERIOD'"
+      >
         Voting Period Ends
       </v-stepper-step>
+      <v-stepper-step 
+        step="4"
+        complete
+        color="#00b786"         
+        v-else
+      >
+        Voting Period Ends
+      </v-stepper-step>      
     </v-stepper-header>
   </v-stepper>
                 </v-card-text>
@@ -309,32 +349,7 @@
               </v-card>
             </v-col>            
           </v-row>
-          <v-row>
-            <v-col
-              cols="12"
-              md="8"
-            >
-              <v-card
-                dark
-                height="200"
-              >
-                <v-card-title>Voter</v-card-title>
-                <v-card-text>Card content</v-card-text>
-              </v-card>
-            </v-col>
-            <v-col
-              cols="12"
-              md="4"
-            >
-              <v-card
-                dark
-                height="200"
-              >
-                <v-card-title>Taly</v-card-title>
-                <v-card-text>Card content</v-card-text>
-              </v-card>
-            </v-col>            
-          </v-row>
+ 
 
         </v-container>
       </v-item-group>
@@ -502,6 +517,8 @@ export default {
     //console.log(this.$route.params.id)
     this.id = this.$route.params.id
     await this.$store.dispatch('data/getProposalParamsDeposit')
+    await this.$store.dispatch('data/getProposalDeposits', this.id)
+    
  
   },
   filters: {

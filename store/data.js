@@ -255,6 +255,14 @@ export const actions = {
     commit('setParamsVoting', saveParams)
   },
 
+  async getProposalDeposits({ commit, state }, idProposal) {
+    // https://lcd-devnet-6.bitcanna.io/cosmos/gov/v1beta1/proposals/27/deposits
+    const proposalDeposits = await axios(cosmosConfig[state.chainId].apiURL + '/cosmos/gov/v1beta1/proposals/' + idProposal + '/deposits')
+
+    console.log(proposalDeposits.data.deposits)
+    // commit('setParamsVoting', saveParams)
+  },  
+  
   async getChartProposalData({ commit, state }, proposalId) {
 
     const allProposals = await axios(cosmosConfig[state.chainId].apiURL + '/cosmos/group/v1/proposals/'+proposalId+'/tally')
