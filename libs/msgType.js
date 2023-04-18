@@ -77,7 +77,17 @@ module.exports = {
             option: msg.option
           }          
           console.log(msg)
-        break;        
+        break;
+        case "/cosmos.gov.v1beta1.MsgDeposit":
+          type = msg['@type']
+          typeReadable = 'Submit Deposit'
+          color = '#00b786'
+          icon = 'Unknown.svg'
+          msgData = {
+            proposal_id: msg.proposal_id,
+            amount: msg.amount[0].amount / 1000000
+          }
+        break;
       case "/cosmos.staking.v1beta1.MsgBeginRedelegate":
         typeReadable = 'Redelegate'
         color = '#00b786'
