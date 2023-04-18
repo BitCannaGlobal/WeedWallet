@@ -79,6 +79,7 @@ module.exports = {
           console.log(msg)
         break;
         case "/cosmos.gov.v1beta1.MsgDeposit":
+        case "/cosmos.gov.v1.MsgDeposit":
           type = msg['@type']
           typeReadable = 'Submit Deposit'
           color = '#00b786'
