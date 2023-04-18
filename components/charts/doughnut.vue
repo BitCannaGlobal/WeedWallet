@@ -25,7 +25,10 @@ export default {
       type: String,
       default: '0'
     },
-
+    totalUnbound: {
+      type: String,
+      default: '0'
+    },
     rewardsDoughnut: {
       type: String,
       default: '0'
@@ -61,21 +64,20 @@ export default {
   },
   computed: {
     chartData() {
-      console.log(this.amount)
       return {
-        labels: ['Available', 'Delegated', 'Reward', 'Undelegated'],
+        labels: ['Available', 'Delegated', 'Undelegated', 'Reward'],
         datasets: [
           {
             label: 'test',
-            data: [this.amount / 1000000, this.totalDelegated / 1000000, this.rewardsDoughnut / 1000000, 0 ],
+            data: [this.amount / 1000000, this.totalDelegated / 1000000, this.totalUnbound, this.rewardsDoughnut / 1000000 ],
             backgroundColor: [
               '#b3ffeb',
               '#33ffc9',
               '#00b383',
               '#004d38'
             ],
-            borderColor: '#00b786',
-            borderWidth: 2,
+            //borderColor: '#00b786',
+            borderWidth: 0,
           },
         ],
       }

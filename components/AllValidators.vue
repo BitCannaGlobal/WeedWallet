@@ -1,7 +1,7 @@
 <template>
   <v-row justify="center" align="center">
     <v-col cols="12" sm="12" md="12">
-      <br />
+ 
       <div class="row">
         <div class="col-sm">
 
@@ -13,8 +13,7 @@
           >
 
             <template v-slot:top>
-              <br />
-
+ 
             </template>
             <template #item.status="{ item }">
 
@@ -36,14 +35,14 @@
               </router-link>
             </template>
 
-            <template #item.actions="{ item }">
+            <!-- <template #item.actions="{ item }">
                 <DelegateModal
                   :chainIdProps="cosmosConfig[chainId].coinLookup.addressPrefix"
                   :addressTo="item.op_address"
                   :validatorName="item.validatorName"
                   :balances="balances"
                 />
-            </template>
+            </template> -->
           </v-data-table>
         </div>
       </div>

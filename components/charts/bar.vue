@@ -1,15 +1,14 @@
 <template>
-  <div v-if="loaded" class="p-2 border border-gray-500 mt-4">
-
-      <!--<BarChart
-        :width="width"
-        :height="height"
+  <div>
+    <v-skeleton-loader v-if="firstLoad" :loading="loading" type="image"></v-skeleton-loader>
+    <div v-if="loaded" class="p-2 border border-gray-500 mt-4">
+      <line-chart         
+        :width="width"              
+        :height="height" 
         :data="pricedata"
-
-      />-->
-<line-chart         :width="width"
-        :height="height" :data="pricedata"></line-chart>
+      ></line-chart>
   </div>
+</div>
 </template>
 
 <script>
@@ -48,7 +47,9 @@ export default {
   },
   data: () => ({
     pricedata: '',
-    loaded: false
+    loaded: false,
+    loading: true,
+    firstLoad: true,    
   }),
   /*computed: {
     chartData() {
@@ -95,7 +96,6 @@ export default {
    full.data.forEach((item) => {
     
       var dateFormat= new Date(item.time  * 1000);
-      console.log(dateFormat)
       let finalDate = 
           dateFormat.getDate()+
           "/"+(dateFormat.getMonth()+1)+
@@ -120,6 +120,8 @@ export default {
     }
     this.pricedata = dataChart
     this.loaded = true
+    this.loading = false
+    this.firstLoad = false
   },
 }
 </script>

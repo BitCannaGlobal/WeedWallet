@@ -26,7 +26,7 @@ module.exports = {
   notifSuccess(toast, transactionHash) {
     var toastSuccess = toast.success('Tx send! \nHash: ' + transactionHash, {
       position: 'bottom-right',
-      timeout: false,
+      timeout: 5000,
       closeOnClick: true,
       showCloseButtonOnHover: false,
       hideProgressBar: false,

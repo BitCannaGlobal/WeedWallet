@@ -1,5 +1,5 @@
 <template>
-  <div class="p-2 border border-gray-500">
+  <div class="p-2 border border-gray-500 mt-4">
 
     <client-only>
 <!--    {{ amount }}-->
@@ -17,11 +17,11 @@ import { mapState } from 'vuex'
 export default {
 
   props: {
-    totalProps: {
+    total_deposit: {
       type: String,
       default: '0'
     },
-    totalVoted: {
+    min_deposit: {
       type: String,
       default: '0'
     },
@@ -35,7 +35,7 @@ export default {
     },
     width: {
       type: Number,
-      default: 400
+      default: 200
     },
     height: {
       type: Number,
@@ -56,19 +56,20 @@ export default {
   },
   computed: {
     chartData() {
-
       return {
-        labels: ['Voted', 'Not voted'],
+        labels: ['Total deposit', 'Deposit Remaining'],
         datasets: [
           {
             label: 'test',
-            data: [this.totalVoted , (this.totalProps - this.totalVoted)],
+            data: [this.total_deposit / 1000000, (this.min_deposit / 1000000) - (this.total_deposit / 1000000) ],
             backgroundColor: [
-               '#33ffc9',
-              '#00b383' 
+              '#33ffc9',
+              '#00b383',
+              '#00b383',
+              '#004d38'
             ],
             //borderColor: '#00b786',
-            borderWidth: 2,
+            borderWidth: 0,
           },
         ],
       }

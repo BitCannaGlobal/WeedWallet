@@ -1,4 +1,5 @@
 import axios from 'axios'
+import moment from 'moment';
 import cosmosConfig from '~/cosmos.config'
 
 export const state = () => ({
@@ -6,9 +7,11 @@ export const state = () => ({
   chainId: 0,
   blockNow: '0',
   balances: [],
+  balancesPrice: '',
   delegations: '',
   totalDelegated: '',
   rewards: '',
+  totalUnbound: '',
   delegationsLoaded: false,
   proposal: [],
   chartProposalData: [],
@@ -22,7 +25,12 @@ export const state = () => ({
   aprNow: '',
   sdkVersion: '',
   totalBonded: '',
-  validatorDetails: ''
+  validatorDetails: '',
+  totalWallet: '',
+  totalWalletPrice: '',
+  validatorDelegations: '',
+  paramsDeposit: '',
+  paramsVoting: '',
 })
 
 export const mutations = {
@@ -49,7 +57,7 @@ export const actions = {
       dispatch('getSdkVersion'),
       dispatch('getWalletInfo', address),
       dispatch('getDelegations', address),
-      dispatch('getPriceNow'),
+      dispatch('getPriceNow')
     ]
     await Promise.all(calls)
   },
@@ -72,8 +80,17 @@ export const actions = {
 
   async getWalletInfo({ commit, state }, address) {
     const accountInfo = await axios(cosmosConfig[state.chainId].apiURL + '/cosmos/bank/v1beta1/balances/' + address)
-    const foundAccountInfo = accountInfo.data.balances.find(element => element.denom === cosmosConfig[state.chainId].coinLookup.chainDenom);
+    let foundAccountInfo = accountInfo.data.balances.find(element => element.denom === cosmosConfig[state.chainId].coinLookup.chainDenom);
 
+    if (typeof foundAccountInfo === 'undefined') {
+      foundAccountInfo = {
+        denom: cosmosConfig[state.chainId].coinLookup.chainDenom,
+        amount: '0'
+      }
+    }
+
+    console.log(state.priceNow)
+    commit('setBalancesPrice', (foundAccountInfo?.amount / 1000000 * state.priceNow).toFixed(2))
     commit('setBalances', foundAccountInfo?.amount)
     return accountInfo
   },
@@ -107,12 +124,32 @@ export const actions = {
       totalDelegated += Number(foundDelegByValidator.delegation.shares)
     });
 
+    const getUnbound = await axios(cosmosConfig[state.chainId].apiURL + '/cosmos/staking/v1beta1/delegators/' + address + '/unbonding_delegations')
+    let sumUnbonding = 0;
+    for (let i = 0; i < getUnbound.data.unbonding_responses.length; i++) {
+      let item = getUnbound.data.unbonding_responses[i];    
+      for (let j = 0; j < item.entries.length; j++) {
+        sumUnbonding += Number(item.entries[j].balance);
+      }      
+    } 
+ 
+    commit('setTotalUnbound', (sumUnbonding / 1000000).toFixed(2))
     commit('setDelegations', copieRewards)
     commit('setRewards', foundMainDenom)
     commit('setTotalDelegated', String(totalDelegated))
     commit('setDelegationsLoaded', true)
   },
+  getAllBalances({ commit, state }) {
+    var sum = 
+      parseFloat(state.balances) + 
+      parseFloat(state.rewards.amount) + 
+      parseFloat(state.totalUnbound) +  
+      parseFloat(state.totalDelegated)
 
+    commit('setTotalWallet', (sum /1000000).toFixed(2))
+    commit('setTotalWalletPrice', ((sum /1000000) * state.priceNow).toFixed(2))
+
+  },
   async getSingleProposal({ commit, state }, proposalId) {
     const singleProposals = await axios(cosmosConfig[state.chainId].apiURL + '/cosmos/group/v1/proposal/' + proposalId)
     const allVotes = await axios(cosmosConfig[state.chainId].apiURL + '/cosmos/group/v1/votes_by_proposal/' + proposalId)
@@ -185,9 +222,47 @@ export const actions = {
   async resetFinalMsgProp({ commit, state }) {
     commit('setFinalMsgProp', [])
   },
+ 
+  async getProposalParamsDeposit({ commit, state }) {
+    const paramsDeposit = await axios(cosmosConfig[state.chainId].apiURL + '/cosmos/gov/v1beta1/params/deposit')
 
+    var duration = moment.duration(paramsDeposit.data.deposit_params.max_deposit_period.replace('s', ''), 'seconds');
+    const days = duration.days();
+    const hours = duration.hours();
+ 
+    console.log(duration)
+    let saveParams = {
+      min_deposit: (paramsDeposit.data.deposit_params.min_deposit[0].amount / 1000000).toFixed(2),
+      max_deposit_period: `${days} days, ${hours} hours`,
+      max_deposit_seconde: paramsDeposit.data.deposit_params.max_deposit_period.replace('s', '')      
+    }
+    commit('setParamsDeposit', saveParams)
+  },
 
+  async getProposalParamsVoting({ commit, state }) {
+    const paramsDeposit = await axios(cosmosConfig[state.chainId].apiURL + '/cosmos/gov/v1beta1/params/voting')
 
+    var duration = moment.duration(paramsDeposit.data.voting_params.voting_period.replace('s', ''), 'seconds');
+    const days = duration.days();
+    const hours = duration.hours();
+    const minutes = duration.minutes();
+
+ 
+    console.log(paramsDeposit.data.voting_params.voting_period)
+    let saveParams = {
+      voting_period: `${hours} hours, ${minutes} minutes`
+    }
+    commit('setParamsVoting', saveParams)
+  },
+
+  async getProposalDeposits({ commit, state }, idProposal) {
+    // https://lcd-devnet-6.bitcanna.io/cosmos/gov/v1beta1/proposals/27/deposits
+    const proposalDeposits = await axios(cosmosConfig[state.chainId].apiURL + '/cosmos/gov/v1beta1/proposals/' + idProposal + '/deposits')
+
+    console.log(proposalDeposits.data.deposits)
+    // commit('setParamsVoting', saveParams)
+  },  
+  
   async getChartProposalData({ commit, state }, proposalId) {
 
     const allProposals = await axios(cosmosConfig[state.chainId].apiURL + '/cosmos/group/v1/proposals/'+proposalId+'/tally')
@@ -245,6 +320,13 @@ export const actions = {
 
     commit('setValidatorDetails', validatorDetails.data.validator)
   },
+  async getValidatorDelegation({ commit, state }, data) {
+    console.log(data)
+    const validatorDelegation = await axios(cosmosConfig[state.chainId].apiURL + '/cosmos/staking/v1beta1/validators/' + data.validatorAddr + '/delegations/' + data.delegatorAddr)
+    console.log(validatorDelegation.data.delegation_response.balance.amount)
+
+    commit('setValidatorDelegations', validatorDelegation.data.delegation_response.balance.amount) 
+  },    
   changeChaniId({ commit }, chainId) {
     commit('setChainId', chainId)
   },

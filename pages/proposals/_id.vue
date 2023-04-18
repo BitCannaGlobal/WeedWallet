@@ -1,193 +1,358 @@
 <template>
-  <p v-if="$fetchState.pending">
-  <v-row justify="center" align="center">
+  <v-row v-if="$fetchState.pending" justify="center" align="center"></v-row>
+  <v-row v-else-if="$fetchState.error" justify="center" align="center"></v-row>
+  <v-row v-else justify="center" align="center">
+    <!-- If deposit period -->
+    <v-col v-if="proposalData.proposal.status === 'PROPOSAL_STATUS_DEPOSIT_PERIOD'" cols="12" sm="8" md="10">
+      <v-row>
+            <v-col
+              cols="12"
+              md="8"
+            >
+              <v-card
+                dark
+                class="accent"
+              >
+              test
+              </v-card>
+            </v-col>     
+            <v-col
+              cols="12"
+              md="4"
+            >
+              <v-card
+                dark
+                class="accent"
+              >
+              test
+              </v-card>
+            </v-col>  
+            
+            
+            <v-col
+              cols="12"
+              md="8"
+            >
+              <v-card
+                dark
+                class="accent"
+              >
+                <v-card-title>
+                  #{{ proposalData.proposal.proposal_id }} {{ proposalData.proposal.content.title }}
+                  <v-spacer></v-spacer>
+                  End time: {{ proposalData.proposal.deposit_end_time | formatDate }}
+                </v-card-title>
+                <v-card-text>
+ 
+                  <div v-html="$md.render(proposalData.proposal.content.description)"></div> 
+                  <!-- {{  proposalData.proposal.content.description }} -->
+                            
+                </v-card-text>
+              </v-card>
+              <v-card
+                dark
+                class="accent mt-4"
+              >
+              test
+              </v-card>              
+            </v-col>
+            <v-col
+              cols="12"
+              md="4"
+            >
+              <v-card
+                dark
+                class="accent"
+              >
+                <v-card-title><span class="text-h5">Deposite detail</span></v-card-title>
+                <v-card-text>      
+                  <ChartsProposalDeposite  
+                    :total_deposit="proposalData.proposal.total_deposit[0].amount" 
+                    :min_deposit="paramsDeposit.min_deposit" 
+                  />   
+                  <br /> 
 
-    <v-col cols="12" sm="8" md="10">
-      <br />
-      <div class="row">
-        <div class="col-sm">
-          <v-card class="accent">
-            <v-card-title class="headline">
-              Proposal loading
-            </v-card-title>
-            <v-card-text>
-               <br />
-              <v-col cols="12">
-                <v-progress-linear
-                  color="#00fafa"
-                  indeterminate
-                  rounded
-                  height="20"
-                  bottom
-                ></v-progress-linear>
-              </v-col>
-            </v-card-text>
-          </v-card>
-        </div>
-      </div>
+                  <v-simple-table class="accent">
+
+                    <tbody>
+                      <tr>
+                        <td>
+                          <v-icon
+                            color="#b3ffeb"
+                            small
+                          >
+                            mdi-circle
+                          </v-icon>                      
+                          Minimum Deposit</td>
+                        <td>{{ paramsDeposit.min_deposit }} {{ cosmosConfig[chainId].coinLookup.viewDenom }}</td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <v-icon
+                            color="#33ffc9"
+                            small
+                          >
+                            mdi-circle
+                          </v-icon>                            
+                          Total Deposit</td>
+                        <td>{{ proposalData.proposal.total_deposit[0].amount / 1000000 }} {{ cosmosConfig[chainId].coinLookup.viewDenom }}</td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <v-icon
+                            color="#00b383"
+                            small
+                          >
+                            mdi-circle
+                          </v-icon>                          
+                          Deposit Remaining</td>
+                        <td>{{ (paramsDeposit.min_deposit - (proposalData.proposal.total_deposit[0].amount / 1000000)) }} {{ cosmosConfig[chainId].coinLookup.viewDenom }}</td>
+                      </tr>
+
+                    </tbody>
+                  </v-simple-table>     
+                  <v-row class="mt-4"> 
+                    <v-col >
+                      <v-text-field v-model="initDeposit" outlined label="Deposit (bcna)" required></v-text-field>
+                    </v-col>
+                  </v-row>  
+                  <v-btn color="#00b786" @click="submitDeposit">
+                    Submit deposit
+                  </v-btn>                                
+                </v-card-text>
+              </v-card>
+            </v-col>            
+          </v-row>      
 
     </v-col>
-  </v-row>
-  </p>
-  <p v-else-if="$fetchState.error">Une erreur est survenue :(</p>
-
-  <v-row v-else justify="center" align="center">
-
-    <v-col cols="12" sm="8" md="10">
-      <br />
-      <div class="row">
-        <div class="col-sm">
-          <v-card class="accent" height="444">
-            <v-card-title class="headline">
-            </v-card-title>
-
-            <v-card-text v-if="proposalLoaded === true && proposal.final_tally_result.yes != 0">
-               <ProposalChart />
-            </v-card-text>
-            <v-card-text v-else>
-
-              No data for now
-              <!--<v-container fluid>
-                <v-row dense>
-                  <v-col
-                  class="mx-auto"
-                    v-for="card in cards"
-                    :key="card.title"
-                    :cols="card.flex"
-                  >
-                    <v-card>
-                      <v-card-title v-text="card.title"></v-card-title>
-
-                      <v-card-actions>
-                        <v-spacer></v-spacer>
-
-                        <v-btn icon>
-                          <v-icon>mdi-heart</v-icon>
-                        </v-btn>
-
-                      </v-card-actions>
-                    </v-card>
-                  </v-col>
-                </v-row>
-              </v-container>-->
-
-            </v-card-text>
-          </v-card>
-        </div>
-        <div class="col-sm">
-          <v-card class="accent" height="444">
-            <v-card-title class="headline">
-              #{{ id }} <v-spacer />
-              <div v-if="proposalData.proposal.status === 'PROPOSAL_STATUS_PASSED'">
+    <v-col v-else cols="12" sm="8" md="10">
+      <v-item-group>
+        <v-container>
+          <v-row>
+            <v-col
+              cols="12"
+              md="12"
+            >
+              <v-card
+                dark
+                height="65"
+              >
+              <v-card-title>
+                #{{ proposalData.proposal.proposal_id }} {{ proposalData.proposal.content.title }}   
+                <v-spacer></v-spacer>
+              <td v-if="proposalData.proposal.status === 'PROPOSAL_STATUS_PASSED'">              
                 <v-chip
-                  class="ma-2"
                   color="green"
                   text-color="white"
                   label
                 >
                   <v-icon class="mr-1">mdi-checkbox-marked-circle</v-icon>
-                  Proposal Passed
-                </v-chip>
-              </div>
-              <div v-if="proposalData.proposal.status === 'PROPOSAL_STATUS_REJECTED'">
+                  Proposal Passed 
+                </v-chip>              
+              </td>
+              <td v-if="proposalData.proposal.status === 'PROPOSAL_STATUS_REJECTED'">
                 <v-chip
-                  class="ma-2"
                   color="red"
                   text-color="white"
                   label
                 >
                   <v-icon class="mr-1">mdi-delete-forever</v-icon>
                   Proposal Rejected
-                </v-chip>
-              </div>
-              <div v-if="proposalData.proposal.status === 'PROPOSAL_STATUS_VOTING_PERIOD'">
+                </v-chip>                  
+              </td>
+              <td v-if="proposalData.proposal.status === 'PROPOSAL_STATUS_VOTING_PERIOD'">
+                <!--{{ item.status }}-->
                 <v-chip
-                  class="ma-2"
-                  color="primary"
                   text-color="white"
+                  color="blue"
                   label
                 >
-                  <v-icon class="mr-1">mdi-alarm-check</v-icon>
+                  <v-icon class="mr-1">
+                    mdi-alarm-check
+                  </v-icon>
                   Voting Period
-                </v-chip>
-              </div>
-              <div v-if="proposalData.proposal.status === 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
+                </v-chip>              
+              </td>
+              <td v-if="proposalData.proposal.status === 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
+                <!--{{ item.status }}-->
                 <v-chip
-                  class="ma-2"
-                  color="primary"
-                  text-color="white"
+                  text-color="white" 
                   label
                 >
-                  <v-icon class="mr-1">mdi-cash-fast</v-icon>
-                  Voting Period
-                </v-chip>
-              </div>
-            </v-card-title>
-            <v-card-text>
-                 <!--<v-list-item>
-                  <v-list-item-content>
-                    <v-list-item-title>Total deposit</v-list-item-title>
-                    <v-list-item-subtitle v-if="proposalData.proposal.total_deposit.length > 0">
-                      {{ proposalData.proposal.total_deposit[0].amount / 1000000 }} {{ config[chainId].coinLookup.viewDenom }}
-                    </v-list-item-subtitle>
-                    <v-list-item-subtitle v-else>
-                      Waiting end of Voting Period
-                    </v-list-item-subtitle>
-                  </v-list-item-content>
-                </v-list-item>
-                <v-list-item>
-                  <v-list-item-content>
-                    <v-list-item-title>Voting Start</v-list-item-title>
-                    <v-list-item-subtitle>{{ $moment(proposalData.proposal.voting_start_time) }}</v-list-item-subtitle>
-                  </v-list-item-content>
-                </v-list-item>
+                  <v-icon class="mr-1">
+                    mdi-cash-fast
+                  </v-icon>
+                  Deposit Period
+                </v-chip>              
+              </td>  
+              </v-card-title>
 
-                <v-list-item>
-                  <v-list-item-content>
-                    <v-list-item-title>Voting End</v-list-item-title>
-                    <v-list-item-subtitle>{{ $moment(proposalData.proposal.voting_end_time) }}</v-list-item-subtitle>
-                  </v-list-item-content>
-                </v-list-item>
+              </v-card>
+            </v-col>         
+          </v-row>
 
-                <v-list-item>
-                  <v-list-item-content>
-                    <v-list-item-title>Deposit End Time</v-list-item-title>
-                    <v-list-item-subtitle>{{ $moment(proposalData.proposal.deposit_end_time) }}</v-list-item-subtitle>
-                  </v-list-item-content>
-                </v-list-item><br />-->
-
-             <!-- <v-col class="text-right"  v-if="proposalData.proposal.status === 'PROPOSAL_STATUS_VOTING_PERIOD'">-->
-
-                <SendProposalModal
-                  :chainIdProps="config[chainId].coinLookup.addressPrefix"
-                  :coinIcon="config[chainId].coinLookup.icon"
-                  :idProposal="id"
-                  :cardsVote="cards"
-                />
-              <!--</v-col>-->
-            </v-card-text>
-          </v-card>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-sm">
-          <v-card class="accent">
-            <v-card-title class="headline">
-              {{ proposalData.proposal.content.title }}
-            </v-card-title>
-            <!--<v-card-text v-html="$md.render(proposalData.proposal.content.description)">
-              <v-col class="text-right">
-              <v-btn
-                class="ma-2"
-                nuxt
+          <v-row>
+            <v-col
+              cols="12"
+              md="4"
+            >
+              <v-card
+                dark
+                height="480"
               >
-                Website
-              </v-btn>
-              </v-col>
-            </v-card-text>-->
-          </v-card>
-        </div>
-      </div>
+              <v-card-title>Proposal result</v-card-title>
+              <v-card-text>
+
+                <client-only>
+                  <PolarArea 
+                    :data="chartData" 
+                  />
+                </client-only>                
+              </v-card-text>
+              </v-card>
+            </v-col>
+            <v-col
+              cols="12"
+              md="8"
+            >
+              <v-card
+                dark
+                height="480"
+              >
+                <v-card-title>
+                  Proposal info
+                  <v-spacer></v-spacer>
+                  <v-chip   
+                    v-if="proposalData.proposal.content['@type'] === '/cosmos.gov.v1beta1.TextProposal'"
+                    color="#00b786"
+                    outlined
+                  >  
+                  Text Proposal   
+                  </v-chip> 
+                  <v-chip   
+                    v-if="proposalData.proposal.content['@type'] === '/cosmos.distribution.v1beta1.CommunityPoolSpendProposal'"
+                    color="#00b786"
+                    outlined
+                  >  
+                  Community Pool Spend Proposal
+                  </v-chip>   
+                  <v-chip   
+                    v-if="proposalData.proposal.content['@type'] === '/cosmos.upgrade.v1beta1.SoftwareUpgradeProposal'"
+                    color="#00b786"
+                    outlined
+                  >  
+                  Software Upgrade Proposal  
+                  </v-chip>                                                       
+                </v-card-title>
+                <v-card-text>
+                  <v-simple-table>
+                    <template v-slot:default>
+                      <tbody>
+
+                        <tr v-if="proposalData.proposal.total_deposit.length > 0">
+                          <td>Total deposit</td>
+                          <td>{{ proposalData.proposal?.total_deposit[0].amount / 1000000 }} {{ cosmosConfig[chainId].coinLookup.viewDenom }}</td>
+                        </tr>
+                        <tr>
+                          <td>Deposit End Time</td>
+                          <td>{{ proposalData.proposal.deposit_end_time | formatDate }}</td>
+                        </tr>                          
+                        <tr>
+                          <td>Voting Start</td>
+                          <td>{{ proposalData.proposal.voting_start_time | formatDate }}</td>
+                        </tr>
+                        <tr>
+                          <td>Voting End</td>
+                          <td>{{ proposalData.proposal.voting_end_time | formatDate }}</td>
+                        </tr>                     
+                      </tbody>
+                    </template>
+                  </v-simple-table>
+                  <br /><br /><br /><br />
+                  <!-- {{proposalData.proposal}} -->
+  <v-stepper >
+    <v-stepper-header dark>
+      <v-stepper-step
+        v-if="proposalData.proposal.status !== 'PROPOSAL_STATUS_DEPOSIT_PERIOD'"
+        step="1"
+        complete
+        color="#00b786"
+      >
+        Created
+      </v-stepper-step>
+
+      <v-divider></v-divider>
+
+      <v-stepper-step
+        step="2"
+        complete
+        color="#00b786"
+      >
+        Deposit Period Ends
+      </v-stepper-step>
+
+      <v-divider></v-divider>
+
+      <v-stepper-step
+        step="3"
+        complete
+        color="#00b786"        
+      >
+        Voting Period Starts 
+      </v-stepper-step>
+
+      <v-divider></v-divider>
+
+      <v-stepper-step 
+        step="4"
+        v-if="proposalData.proposal.status === 'PROPOSAL_STATUS_VOTING_PERIOD'"
+      >
+        Voting Period Ends
+      </v-stepper-step>
+      <v-stepper-step 
+        step="4"
+        complete
+        color="#00b786"         
+        v-else
+      >
+        Voting Period Ends
+      </v-stepper-step>      
+    </v-stepper-header>
+  </v-stepper>
+                </v-card-text>
+              </v-card>
+            </v-col>            
+          </v-row>
+          <v-row>
+            <v-col
+              cols="12"
+              md="8"
+            >
+              <v-card
+                dark
+                height="200"
+              >
+                <v-card-title>Voter</v-card-title>
+                <v-card-text>Card content</v-card-text>
+              </v-card>
+            </v-col>
+            <v-col
+              cols="12"
+              md="4"
+            >
+              <v-card
+                dark
+                height="200"
+              >
+                <v-card-title>Taly</v-card-title>
+                <v-card-text>Card content</v-card-text>
+              </v-card>
+            </v-col>            
+          </v-row>
+ 
+
+        </v-container>
+      </v-item-group>
     </v-col>
   </v-row>
 </template>
@@ -199,6 +364,8 @@ import { DirectSecp256k1HdWallet } from '@cosmjs/proto-signing'
 import {
 	assertIsBroadcastTxSuccess,
 	SigningStargateClient,
+  defaultRegistryTypes,
+  GasPrice
 } from '@cosmjs/stargate'
 import cosmosConfig from '~/cosmos.config'
 
@@ -207,7 +374,8 @@ export default {
   data: () => ({
       loadedProposal: false,
       id: '',
-      config: cosmosConfig,
+      initDeposit: 0,
+      cosmosConfig: cosmosConfig,
       cards: [
         { title: 'Yes', src: 'https://cdn.vuetifyjs.com/images/cards/house.jpg', flex: 5 },
         { title: 'No', src: 'https://cdn.vuetifyjs.com/images/cards/road.jpg', flex: 5 },
@@ -216,10 +384,74 @@ export default {
       ],
   }),
   computed: {
-    ...mapState('data', ['chainId', `balances`, 'proposal', 'proposalLoaded']),
-
+    ...mapState('keplr', [`accounts`]),
+    ...mapState('data', ['chainId', `balances`, 'proposal', 'proposalLoaded', 'paramsDeposit']),
+    chartData() {
+      return {
+        labels: ['Yes', 'No', 'No With Veto', 'Abstain'],
+        datasets: [
+          {
+            label: '',
+            data: [10, 2, 15, 7],
+            backgroundColor: [
+              '#33ffc9',
+              '#00b383',
+              '#00b383',
+              '#004d38'
+            ],
+            //borderColor: '#00b786',
+            borderWidth: 1,
+            circular: false,
+          },
+        ],
+      }
+    },
   },
     methods: {
+      async submitDeposit () {
+        console.log('submitDeposit')
+  
+        console.log(this.$route.params.id)
+ 
+
+          const chainId = cosmosConfig[this.chainId].chainId;
+          await window.keplr.enable(chainId);
+          const offlineSigner = await window.getOfflineSignerAuto(chainId);
+          const client = await SigningStargateClient.connectWithSigner(
+            cosmosConfig[this.chainId].rpcURL,
+            offlineSigner,
+            { gasPrice: GasPrice.fromString(0.25 + cosmosConfig[this.chainId].coinLookup.chainDenom) }
+          )
+             
+          const foundMsgType = defaultRegistryTypes.find(element => element[0] === '/cosmos.gov.v1beta1.MsgDeposit');
+
+          const convertAmount = (this.initDeposit * 1000000).toFixed(0)
+          const amount = {
+            denom: cosmosConfig[this.chainId].coinLookup.chainDenom,
+            amount: convertAmount.toString(),
+          }
+
+          const finalMsg = {
+            typeUrl: foundMsgType[0],
+            value: foundMsgType[1].fromPartial({
+                proposalId: this.$route.params.id,
+                depositor: this.accounts[0].address,
+                amount: [amount],
+            })
+          }     
+
+          console.log(finalMsg)
+            try {
+
+              const result = await client.signAndBroadcast(this.accounts[0].address, [finalMsg], 'auto', this.memo)
+              assertIsBroadcastTxSuccess(result)
+              console.log(result)
+ 
+            } catch (error) {
+              console.error(error)
+ 
+            }          
+      },
       validate () {
         if (this.$refs.form.validate() === true) {
           (async () => {
@@ -273,6 +505,10 @@ export default {
     this.proposalData = await fetch(
       cosmosConfig[this.chainId].apiURL + `/cosmos/gov/v1beta1/proposals/` + this.$route.params.id
     ).then(res => res.json())
+    this.proposalDeposits = await fetch(
+      cosmosConfig[this.chainId].apiURL + '/cosmos/gov/v1beta1/proposals/' + this.$route.params.id + '/deposits'
+    ).then(res => res.json())    
+    
     console.log(this.proposalData)
   },
   async mounted () {
@@ -280,7 +516,24 @@ export default {
     //await this.$store.dispatch('keplr/checkLogin')
     //console.log(this.$route.params.id)
     this.id = this.$route.params.id
-  }
+    await this.$store.dispatch('data/getProposalParamsDeposit')
+    await this.$store.dispatch('data/getProposalDeposits', this.id)
+    
+ 
+  },
+  filters: {
+      formatDate: (dateStr) =>
+        Intl.DateTimeFormat("us-EN",
+          {
+            year: "numeric",
+            month: "numeric",
+            day: "numeric",
+            hour: "numeric",
+            minute: "numeric",
+            second: "numeric",
+            hour12: false
+          }).format(new Date(dateStr)),
+    }    
 }
 </script>
 

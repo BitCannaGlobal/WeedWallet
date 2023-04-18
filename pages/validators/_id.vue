@@ -33,7 +33,8 @@
                   v-if="logged"
                   :chainIdProps="cosmosConfig[chainId].coinLookup.addressPrefix"
                   :addressFrom="validatorAddr"
-                  :amountUn="myTotalDelegation"
+                  :amountUn="validatorDelegations / 1000000"
+                  :amountTotalUn="myTotalUnDelegation"                  
                   :validatorName="validatorDetails.description?.moniker"
                   :coinIcon="cosmosConfig[chainId].coinLookup.icon"
                 />
@@ -41,7 +42,7 @@
                   v-if="logged"
                   :chainIdProps="cosmosConfig[chainId].coinLookup.addressPrefix"
                   :addressFrom="validatorAddr"
-                  :amountRe="myTotalDelegation"
+                  :amountRe="validatorDelegations / 1000000"
                   :validatorName="validatorDetails.description?.moniker"
                   :coinIcon="cosmosConfig[chainId].coinLookup.icon"
                 />
@@ -112,7 +113,7 @@
               </h4>
             </v-card-title>
             <v-card-text class="text-right text-h5">
-              {{ myTotalDelegation }} {{ cosmosConfig[chainId].coinLookup.viewDenom }}
+              {{ validatorDelegations / 1000000 }} {{ cosmosConfig[chainId].coinLookup.viewDenom }}
             </v-card-text>
           </v-card>
         </v-col>
@@ -275,11 +276,6 @@ var tendermintRpc = require('@cosmjs/tendermint-rpc')
 const { toAscii, toHex } = require("@cosmjs/encoding")
 var { buildQuery } = require('@cosmjs/tendermint-rpc/build/tendermint34/requests.js')
 
-
-
-
-
-
 import cosmosConfig from '~/cosmos.config'
 
 export default {
@@ -291,11 +287,12 @@ export default {
     delegationsRpc: [],
     unDelegateRpc: [],
     myTotalDelegation: '',
-    myTotalUnDelegation: ''
+    myTotalUnDelegation: '',
+    cosmosConfig: cosmosConfig
   }),
   computed: {
     ...mapState('keplr', [`accounts`, 'logged']),
-    ...mapState('data', ['chainId', 'balances', 'rewards', 'delegations', 'priceNow', 'aprNow', 'totalDelegated', 'validatorDetails']),
+    ...mapState('data', ['chainId', 'balances', 'rewards', 'delegations', 'priceNow', 'aprNow', 'totalDelegated', 'validatorDetails', 'validatorDelegations']),
     validatorApr() {
       // const commission = this.validator.commission * 100 // this.validator.commission = 0.1
       // const finalApr = this.aprNow - commission
@@ -314,8 +311,7 @@ export default {
 
   async beforeMount () {
 
-
-
+    // TODO refactoring all data in vueX
     this.validatorAddr = this.$route.params.id
     await this.$store.dispatch('data/getValidatorDetails', this.validatorAddr)
 
@@ -329,27 +325,8 @@ export default {
     // https://lcd-devnet-6.bitcanna.io/cosmos/tx/v1beta1/txs?events=message.sender=%27bcna1zvxldjgetj5u9wah0t8fnz229533xzsmz8y5js%27&events=message.action=%27/cosmos.gov.v1beta1.MsgVote%27
   },
   async mounted () {
-
-    // TODO
-    // 1/ lcd -> get delegations
-    // 2/ lcd -> get undelegate
-    // 2/ rpc -> get historic
-    if (this.logged) {
-
-      const getTotalDelegated = await axios(cosmosConfig[0].apiURL + '/cosmos/staking/v1beta1/validators/'+this.validatorAddr+'/delegations/'+this.accounts[0].address)
-      try {
-        const getTotalUnDelegated = await axios(cosmosConfig[0].apiURL + '/cosmos/staking/v1beta1/validators/'+this.validatorAddr+'/delegations/'+this.accounts[0].address+'/unbonding_delegation')
-        this.myTotalUnDelegation = getTotalUnDelegated.data.unbond.entries[0].initial_balance / 1000000
-      } catch (error) {
-        console.error(error);
-      }
-
-
-      //console.log(getTotalUnDelegated.data)
-      this.myTotalDelegation = getTotalDelegated.data.delegation_response.balance.amount / 1000000
-
-      const rpcEndpoint = "https://rpc-devnet-6.bitcanna.io";
-      const client = await tendermintRpc.Tendermint34Client.connect(rpcEndpoint);
+    if (this.logged) {      
+      const client = await tendermintRpc.Tendermint34Client.connect(cosmosConfig[0].rpcURL);
 
       // Delegation historical
       const queryDelegate = buildQuery({
@@ -360,6 +337,7 @@ export default {
       });
       const resultDelegate = await client.txSearch({ query: queryDelegate });
 
+      let sumDelegation = 0
       resultDelegate.txs.forEach(async (item) => {
         let txEvent = JSON.parse(item.result.log)
         const txHash = toHex(item.hash)
@@ -368,8 +346,10 @@ export default {
         const found = txEvent[0].events.find(element => element.type === 'delegate');
         const foundAmount = found.attributes.find(element => element.key === 'amount');
         item.amount = foundAmount.value.replace('ubcna', '')
+        sumDelegation += parseInt(item.amount)
       });
       this.delegationsRpc = resultDelegate.txs.reverse()
+      this.myTotalDelegation = (sumDelegation / 1000000).toFixed(2)
 
       // UnDelegation historical
       const queryUnDelegate = buildQuery({
@@ -381,6 +361,7 @@ export default {
       const resultUnDelegate = await client.txSearch({ query: queryUnDelegate });
       console.log(resultUnDelegate)
 
+      let sumUnDelegate = 0
       resultUnDelegate.txs.forEach(async (item) => {
         let txEvent = JSON.parse(item.result.log)
         const txHash = toHex(item.hash)
@@ -389,16 +370,19 @@ export default {
         const found = txEvent[0].events.find(element => element.type === 'unbond');
         const foundAmount = found.attributes.find(element => element.key === 'amount');
         item.amount = foundAmount.value.replace('ubcna', '')
+        sumUnDelegate += parseInt(item.amount)
       });
       this.unDelegateRpc = resultUnDelegate.txs.reverse()
+      this.myTotalUnDelegation = (sumUnDelegate / 1000000).toFixed(2)
 
-
+      await this.$store.dispatch('data/getValidatorDelegation', { validatorAddr: this.validatorAddr, delegatorAddr: this.accounts[0].address}) 
     }
+
+    
   },
   methods: {
     async getTxDate(height) {
-        const rpcEndpoint = "https://rpc-devnet-6.bitcanna.io";
-        const client = await tendermintRpc.Tendermint34Client.connect(rpcEndpoint);
+        const client = await tendermintRpc.Tendermint34Client.connect(cosmosConfig[0].rpcURL);
         //console.log(height)
         const block = await client.block(Number(height));
         return block.block.header.time
