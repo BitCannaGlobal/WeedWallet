@@ -1,5 +1,5 @@
 <template>
-  <div> 
+  <div class="d-inline"> 
     <v-dialog
       v-model="dialog"
       max-width="600px"

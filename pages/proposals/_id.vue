@@ -5,30 +5,7 @@
     <!-- If deposit period -->
     <v-col v-if="proposalData.proposal.status === 'PROPOSAL_STATUS_DEPOSIT_PERIOD'" cols="12" sm="8" md="10">
       <v-row>
-            <v-col
-              cols="12"
-              md="8"
-            >
-              <v-card
-                dark
-                class="accent"
-              >
-              test
-              </v-card>
-            </v-col>     
-            <v-col
-              cols="12"
-              md="4"
-            >
-              <v-card
-                dark
-                class="accent"
-              >
-              test
-              </v-card>
-            </v-col>  
-            
-            
+
             <v-col
               cols="12"
               md="8"
@@ -162,6 +139,12 @@
               </td>
               <td v-if="proposalData.proposal.status === 'PROPOSAL_STATUS_VOTING_PERIOD'">
                 <!--{{ item.status }}-->
+                <SendProposalModal 
+                  :chainIdProps="cosmosConfig[chainId].coinLookup.addressPrefix"
+                  :coinIcon="cosmosConfig[chainId].coinLookup.icon"
+                  :idProposal="id"
+                  :cardsVote="cards"
+                />
                 <v-chip
                   text-color="white"
                   color="blue"
@@ -204,9 +187,21 @@
               <v-card-text>
 
                 <client-only>
-                  <PolarArea 
+ 
+                  <Doughnut 
+                    v-if="proposalData.proposal.final_tally_result.yes > 0
+                    || proposalData.proposal.final_tally_result.no  > 0
+                    || proposalData.proposal.final_tally_result.abstain  > 0
+                    || proposalData.proposal.final_tally_result.no_with_veto  > 0"
                     :data="chartData" 
                   />
+                  <h2 
+                    v-else  
+                    class="mt-10 d-flex justify-center align-center fill-height"
+                  >
+                    No vote
+                </h2>
+ 
                 </client-only>                
               </v-card-text>
               </v-card>
@@ -323,17 +318,27 @@
               </v-card>
             </v-col>            
           </v-row>
-          <v-row>
+
+          
+          <v-row v-if="proposalData.proposal.status === 'PROPOSAL_STATUS_VOTING_PERIOD'">
             <v-col
               cols="12"
               md="8"
             >
               <v-card
                 dark
-                height="200"
+ 
               >
-                <v-card-title>Voter</v-card-title>
-                <v-card-text>Card content</v-card-text>
+                <v-card-title>Voters</v-card-title>
+                <v-card-text>
+                  <v-data-table
+                    :headers="headers"
+                    :items="getVoters.votes"
+                    :items-per-page="5"
+                    class="elevation-1"
+                  ></v-data-table>
+
+                </v-card-text>
               </v-card>
             </v-col>
             <v-col
@@ -344,12 +349,27 @@
                 dark
                 height="200"
               >
-                <v-card-title>Taly</v-card-title>
+                <v-card-title>Depositors</v-card-title>
                 <v-card-text>Card content</v-card-text>
               </v-card>
             </v-col>            
           </v-row>
- 
+
+          <v-row>
+            <v-col
+              cols="12"
+              md="128"
+            >
+              <v-card
+                dark 
+              >
+                <v-card-title>Proposal description</v-card-title>
+                <v-card-text>
+                  <div v-html="$md.render(proposalData.proposal.content.description)"></div> 
+                </v-card-text>
+              </v-card>
+            </v-col>          
+          </v-row> 
 
         </v-container>
       </v-item-group>
@@ -376,23 +396,40 @@ export default {
       id: '',
       initDeposit: 0,
       cosmosConfig: cosmosConfig,
+      getVoters: [],
       cards: [
         { title: 'Yes', src: 'https://cdn.vuetifyjs.com/images/cards/house.jpg', flex: 5 },
         { title: 'No', src: 'https://cdn.vuetifyjs.com/images/cards/road.jpg', flex: 5 },
         { title: 'NoWithVeto', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg', flex: 5 },
         { title: 'Abstain', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg', flex: 5 },
       ],
+      headers: [
+          {
+            text: 'Voter',
+            align: 'start',
+            sortable: false,
+            value: 'voter',
+          },
+          { text: 'Option', value: 'options[0].option' },
+          { text: 'Voting power', value: 'options[0].weight' }
+        ],      
   }),
   computed: {
     ...mapState('keplr', [`accounts`]),
     ...mapState('data', ['chainId', `balances`, 'proposal', 'proposalLoaded', 'paramsDeposit']),
     chartData() {
+      console.log(this.proposalData.proposal.final_tally_result.yes)
       return {
         labels: ['Yes', 'No', 'No With Veto', 'Abstain'],
         datasets: [
           {
             label: '',
-            data: [10, 2, 15, 7],
+            data: [
+              this.proposalData.proposal.final_tally_result.yes  / 1000000, 
+              this.proposalData.proposal.final_tally_result.no / 1000000, 
+              this.proposalData.proposal.final_tally_result.no_with_veto / 1000000, 
+              this.proposalData.proposal.final_tally_result.abstain / 1000000, 
+            ],
             backgroundColor: [
               '#33ffc9',
               '#00b383',
@@ -508,7 +545,9 @@ export default {
     this.proposalDeposits = await fetch(
       cosmosConfig[this.chainId].apiURL + '/cosmos/gov/v1beta1/proposals/' + this.$route.params.id + '/deposits'
     ).then(res => res.json())    
-    
+    this.getVoters = await fetch(
+      cosmosConfig[this.chainId].apiURL + '/cosmos/gov/v1beta1/proposals/' + this.$route.params.id + '/votes'
+    ).then(res => res.json())       
     console.log(this.proposalData)
   },
   async mounted () {
