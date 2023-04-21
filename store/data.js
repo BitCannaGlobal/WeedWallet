@@ -24,13 +24,13 @@ export const state = () => ({
   priceNow: '',
   aprNow: '',
   sdkVersion: '',
-  totalBonded: '',
   validatorDetails: '',
   totalWallet: '',
   totalWalletPrice: '',
   validatorDelegations: '',
   paramsDeposit: '',
   paramsVoting: '',
+  totalBonded: '',
 })
 
 export const mutations = {
@@ -290,6 +290,21 @@ export const actions = {
 
     commit('setChartProposalData', allData)
   },
+
+  async getProposalQuorum({ commit, state }) {
+    const allDelegations = await axios(cosmosConfig[state.chainId].apiURL + '/cosmos/staking/v1beta1/validators')
+    console.log(allDelegations.data.validators)
+ 
+    let totalBonded = 0
+    for (let i = 0; i < allDelegations.data.validators.length; i++) {
+      const item = (allDelegations.data.validators[i].tokens  / 1000000);
+      console.log(item);
+      totalBonded += Number(item)
+    }  
+    console.log(totalBonded);
+    commit('setTotalBonded', totalBonded)
+  },
+
   async getAllValidators({ commit, state }) {
     var copieValidators = []
     const allValidators = await axios(cosmosConfig[state.chainId].apiURL + '/cosmos/staking/v1beta1/validators')

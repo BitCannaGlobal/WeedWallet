@@ -30,6 +30,7 @@ export default {
     '@plugins/chart',
     '@plugins/entrance',
     '@plugins/qrCode',
+    // '@plugins/ellipseProgress',
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
