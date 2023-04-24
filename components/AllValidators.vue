@@ -27,6 +27,15 @@
                 <!--{{ item.status }}-->
                 Online
               </v-chip>
+              <v-chip
+                v-else
+                class="ma-2"
+                color="red"
+                outlined
+                label
+              >
+                Offline
+              </v-chip>                 
               <!-- BOND_STATUS_UNBONDING-->
             </template>
             <template #item.name="{ item }">

@@ -345,6 +345,7 @@ import {
             await window.keplr.enable(chainId);
             const offlineSigner = await window.getOfflineSignerAuto(chainId);
             const accounts = await offlineSigner.getAccounts();
+            console.log(cosmosConfig[this.chainId].gasPrice + cosmosConfig[this.chainId].coinLookup.chainDenom)
 
             const client = await SigningStargateClient.connectWithSigner(
               cosmosConfig[this.chainId].rpcURL,

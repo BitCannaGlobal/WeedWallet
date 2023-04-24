@@ -142,6 +142,15 @@
                           <!--{{ item.status }}-->
                           Online
                         </v-chip>
+                        <v-chip
+                          v-else
+                          class="ma-2"
+                          color="red"
+                          outlined
+                          label
+                        >
+                          Offline
+                        </v-chip>                        
                        </td>
                       <td>
                         <router-link :to="'/validators/'+item.op_address" class="linkFormat">

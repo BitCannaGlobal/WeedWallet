@@ -263,57 +263,58 @@
                       </tbody>
                     </template>
                   </v-simple-table>
+ 
                   <br /><br /><br /><br />
                   <!-- {{proposalData.proposal}} -->
-  <v-stepper >
-    <v-stepper-header dark>
-      <v-stepper-step
-        v-if="proposalData.proposal.status !== 'PROPOSAL_STATUS_DEPOSIT_PERIOD'"
-        step="1"
-        complete
-        color="#00b786"
-      >
-        Created
-      </v-stepper-step>
+                    <v-stepper >
+                      <v-stepper-header dark>
+                        <v-stepper-step
+                          v-if="proposalData.proposal.status !== 'PROPOSAL_STATUS_DEPOSIT_PERIOD'"
+                          step="1"
+                          complete
+                          color="#00b786"
+                        >
+                          Created
+                        </v-stepper-step>
 
-      <v-divider></v-divider>
+                        <v-divider></v-divider>
 
-      <v-stepper-step
-        step="2"
-        complete
-        color="#00b786"
-      >
-        Deposit Period Ends
-      </v-stepper-step>
+                        <v-stepper-step
+                          step="2"
+                          complete
+                          color="#00b786"
+                        >
+                          Deposit Period Ends
+                        </v-stepper-step>
 
-      <v-divider></v-divider>
+                        <v-divider></v-divider>
 
-      <v-stepper-step
-        step="3"
-        complete
-        color="#00b786"        
-      >
-        Voting Period Starts 
-      </v-stepper-step>
+                        <v-stepper-step
+                          step="3"
+                          complete
+                          color="#00b786"        
+                        >
+                          Voting Period Starts 
+                        </v-stepper-step>
 
-      <v-divider></v-divider>
+                        <v-divider></v-divider>
 
-      <v-stepper-step 
-        step="4"
-        v-if="proposalData.proposal.status === 'PROPOSAL_STATUS_VOTING_PERIOD'"
-      >
-        Voting Period Ends
-      </v-stepper-step>
-      <v-stepper-step 
-        step="4"
-        complete
-        color="#00b786"         
-        v-else
-      >
-        Voting Period Ends
-      </v-stepper-step>      
-    </v-stepper-header>
-  </v-stepper>
+                        <v-stepper-step 
+                          step="4"
+                          v-if="proposalData.proposal.status === 'PROPOSAL_STATUS_VOTING_PERIOD'"
+                        >
+                          Voting Period Ends
+                        </v-stepper-step>
+                        <v-stepper-step 
+                          step="4"
+                          complete
+                          color="#00b786"         
+                          v-else
+                        >
+                          Voting Period Ends
+                        </v-stepper-step>      
+                      </v-stepper-header>
+                    </v-stepper>
                 </v-card-text>
               </v-card>
             </v-col>            
@@ -339,48 +340,48 @@
                     class="mb-10"
                   >
                   <div v-if="((totalTally / 1000000) / (totalBonded /* * 0.33 */) * 100).toFixed(2) > 33" class="ml-10">Quorum reached</div>
-                  <div v-else class="ml-10">Quorum not reached</div>
+                  <div v-else class="ml-10 text-red">Quorum not reached</div>
                 </v-progress-linear>
  
-  <v-simple-table>
-    <template v-slot:default>
-      <tbody>
-        <tr>
-          <td>
-            <v-icon
-              color="#00b786"
-              small
-            >
-              mdi-circle
-            </v-icon>             
-            Total Bounded</td>
-          <td>100% ({{ (totalBonded).toFixed(2) }} bcna)</td>
-        </tr>        
-        <tr>
-          <td>
-            <v-icon
-              color="#00b786"
-              small
-            >
-              mdi-circle
-            </v-icon>             
-            Quorum needed</td>
-          <td>33% ({{ (totalBonded * 0.33).toFixed(2) }} bcna)</td>
-        </tr>
-        <tr>
-          <td>
-            <v-icon
-              color="#14FFC0"
-              small
-            >
-              mdi-circle
-            </v-icon>              
-            Quorum actual</td>
-          <td>{{ ((totalTally / 1000000) / (totalBonded /* * 0.33 */) * 100).toFixed(2) }}% ({{ (totalTally / 1000000).toFixed(2)}} bcna)</td>
-        </tr>                  
-      </tbody>
-    </template>
-  </v-simple-table>
+                  <v-simple-table>
+                    <template v-slot:default>
+                      <tbody>
+                        <tr>
+                          <td>
+                            <v-icon
+                              color="#00b786"
+                              small
+                            >
+                              mdi-circle
+                            </v-icon>             
+                            Total Bounded</td>
+                          <td>100% ({{ (totalBonded).toFixed(2) }} bcna)</td>
+                        </tr>        
+                        <tr>
+                          <td>
+                            <v-icon
+                              color="#00b786"
+                              small
+                            >
+                              mdi-circle
+                            </v-icon>             
+                            Quorum needed</td>
+                          <td>33% ({{ (totalBonded * 0.33).toFixed(2) }} bcna)</td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <v-icon
+                              color="#14FFC0"
+                              small
+                            >
+                              mdi-circle
+                            </v-icon>              
+                            Quorum actual</td>
+                          <td>{{ ((totalTally / 1000000) / (totalBonded /* * 0.33 */) * 100).toFixed(2) }}% ({{ (totalTally / 1000000).toFixed(2)}} bcna)</td>
+                        </tr>                  
+                      </tbody>
+                    </template>
+                  </v-simple-table>
                 
                 
 
@@ -388,24 +389,22 @@
                 </v-card-text>
               </v-card>
             </v-col>          
-            <v-col
-            v-if="proposalData.proposal.status === 'PROPOSAL_STATUS_VOTING_PERIOD'"
+            <v-col 
               cols="12"
               md="6"
             >
               <v-card
                 dark 
               >
-                <v-card-title>Threshold</v-card-title>
+                <v-card-title>Threshold (soon)</v-card-title>
                 <v-card-text>
                   <v-progress-linear  
                       value="20" 
                       height="20" 
-                      background-color="#00b786" 
-                      color="#14FFC0"
+                      background-color="#353434" 
+                      color="grey"
                       class="mb-10"
-                    >
-                    <div class="ml-10">Quorum not reached</div>
+                    > 
                   </v-progress-linear>
 
                   <v-simple-table>
@@ -461,15 +460,12 @@
           <v-row v-if="proposalData.proposal.status === 'PROPOSAL_STATUS_VOTING_PERIOD'">
             <v-col
               cols="12"
-              md="8"
+              md="12"
             >
               <v-card
-                dark
- 
+                dark 
               >
-                <v-card-title>Voters
-
-                 
+                <v-card-title>Voters                 
                 </v-card-title>
                 <v-card-text>
                   <v-data-table
@@ -477,23 +473,49 @@
                     :items="getVoters.votes"
                     :items-per-page="5"
                     class="elevation-1"
-                  ></v-data-table>
-
+                  >
+                    <template #item.options[0].option="{ item }">
+                        <v-chip
+                          v-if="item.options[0].option === 'VOTE_OPTION_YES'"
+                          class="ma-2"
+                          color="green"
+                          outlined
+                          label
+                        >
+                          YES
+                        </v-chip>
+                        <v-chip
+                          v-if="item.options[0].option === 'VOTE_OPTION_NO'"
+                          class="ma-2"
+                          color="red"
+                          outlined
+                          label
+                        >
+                          NO
+                        </v-chip> 
+                        <v-chip
+                          v-if="item.options[0].option === 'VOTE_OPTION_ABSTAIN'"
+                          class="ma-2"
+                          color="red"
+                          outlined
+                          label
+                        >
+                          ABSTAIN
+                        </v-chip> 
+                        <v-chip
+                          v-if="item.options[0].option === 'VOTE_OPTION_NO_WITH_VETO'"
+                          class="ma-2"
+                          color="orange"
+                          outlined
+                          label
+                        >
+                           NO WITH VETO
+                        </v-chip>                    
+                    </template>                  
+                  </v-data-table>
                 </v-card-text>
               </v-card>
-            </v-col>
-            <v-col
-              cols="12"
-              md="4"
-            >
-              <v-card
-                dark
-                height="200"
-              >
-                <v-card-title>Depositors</v-card-title>
-                <v-card-text>Card content</v-card-text>
-              </v-card>
-            </v-col>            
+            </v-col>         
           </v-row>
 
           <v-row>
@@ -552,8 +574,19 @@ export default {
             value: 'voter',
           },
           { text: 'Option', value: 'options[0].option' },
-          { text: 'Voting power', value: 'options[0].weight' }
-        ],      
+          // { text: 'Voting power', value: 'options[0].weight' }
+        ], 
+      items: [
+        {
+          id: 1,
+          name: 'Applications :',
+          children: [
+            { id: 2, name: 'Calendar : app' },
+            { id: 3, name: 'Chrome : app' },
+            { id: 4, name: 'Webstorm : app' },
+          ],
+        }, 
+      ],    
   }),
   computed: {
     ...mapState('keplr', [`accounts`]),
@@ -580,8 +613,8 @@ export default {
               this.getTally.tally.abstain / 1000000, 
             ],
             backgroundColor: [
+            '#b3ffeb',
               '#33ffc9',
-              '#00b383',
               '#00b383',
               '#004d38'
             ],

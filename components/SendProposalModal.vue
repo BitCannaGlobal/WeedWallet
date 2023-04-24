@@ -39,7 +39,7 @@
                     >
                     <v-item :value="card" v-slot="{ active, toggle }">
                       <v-card
-                        :color="active ? 'primary' : ''"
+                        :color="active ? 'green' : ''"
                         class="d-flex align-center"
                         @click="toggle();"
                       >

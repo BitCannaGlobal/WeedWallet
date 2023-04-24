@@ -338,9 +338,19 @@ export const actions = {
   async getValidatorDelegation({ commit, state }, data) {
     console.log(data)
     const validatorDelegation = await axios(cosmosConfig[state.chainId].apiURL + '/cosmos/staking/v1beta1/validators/' + data.validatorAddr + '/delegations/' + data.delegatorAddr)
-    console.log(validatorDelegation.data.delegation_response.balance.amount)
+    .then(res => {
+      commit('setValidatorDelegations', res.data.delegation_response.balance.amount) 
+       return res.data
+       
+    })
+    .catch(error => {
+       console.log(error)
+    })
 
-    commit('setValidatorDelegations', validatorDelegation.data.delegation_response.balance.amount) 
+    /* const validatorDelegation = await axios(cosmosConfig[state.chainId].apiURL + '/cosmos/staking/v1beta1/validators/' + data.validatorAddr + '/delegations/' + data.delegatorAddr)
+    console.log(validatorDelegation.data.delegation_response.balance.amount) */
+
+    
   },    
   changeChaniId({ commit }, chainId) {
     commit('setChainId', chainId)
