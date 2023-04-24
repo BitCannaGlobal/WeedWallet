@@ -299,8 +299,8 @@ import {
              
           const foundMsgType = defaultRegistryTypes.find(element => element[0] === '/cosmos.staking.v1beta1.MsgBeginRedelegate');
 
-
-          const convertAmount = (this.amount * 1000000).toFixed(0)
+ 
+          const convertAmount = Math.round(this.amount * 1000000)
           const amount = {
             denom: cosmosConfig[this.chainId].coinLookup.chainDenom,
             amount: convertAmount.toString(),

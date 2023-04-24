@@ -193,7 +193,8 @@ import {
 	assertIsDeliverTxSuccess,
 	SigningStargateClient,
 	GasPrice,
-  calculateFee
+  calculateFee,
+  parseCoins
 } from '@cosmjs/stargate'
 
   function countPlaces(num) {
@@ -262,8 +263,8 @@ import {
             )
              
           const foundMsgType = defaultRegistryTypes.find(element => element[0] === '/cosmos.staking.v1beta1.MsgDelegate');
- 
-          const convertAmount = (this.amount * 1000000).toFixed(0)
+
+          const convertAmount = Math.round(this.amount * 1000000)
           const amount = {
             denom: cosmosConfig[this.chainId].coinLookup.chainDenom,
             amount: convertAmount.toString(),
@@ -316,15 +317,20 @@ import {
               offlineSigner,
               { gasPrice: GasPrice.fromString(cosmosConfig[this.chainId].gasPrice + cosmosConfig[this.chainId].coinLookup.chainDenom) }
             )
-            const convertAmount = Number(this.amountFinal) * 1000000
+            
+            const convertAmount = Math.round(this.amountFinal * 1000000)
             const amountFinal = {
               denom: cosmosConfig[this.chainId].coinLookup.chainDenom,
               amount: convertAmount.toString(),
             }
 
+            console.log(amountFinal)
+ 
+
             try {
               const result = await client.delegateTokens(accounts[0].address, this.addressVal, amountFinal, 'auto', this.memo)
               assertIsDeliverTxSuccess(result)
+              console.log(result)
               this.step3 = false
               this.step4 = true
               this.loading = false
