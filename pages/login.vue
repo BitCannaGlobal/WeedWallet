@@ -1,4 +1,6 @@
 <template>
+      <v-container class="bcnaBackground">
+
   <v-row justify="center" align="center">
     <v-col cols="4" sm="4" md="4">
 
@@ -23,11 +25,11 @@
       subheader
     >
 
-      <v-list-item @click="connectKeplr">
+      <v-list-item color="#000000" @click="connectKeplr">
         <v-list-item-avatar>
           <v-img
             alt="bcna"
-            src="https://pbs.twimg.com/profile_images/1498228570862219266/uctq7aeh_400x400.png"
+            src="uctq7aeh_400x400.png"
           ></v-img>
         </v-list-item-avatar>
         <v-list-item-content>
@@ -60,32 +62,9 @@
           </v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>
-
-      <v-list-item>
-        <v-list-item-avatar>
-          <v-img
-            alt="bcna"
-            src="ledger.svg"
-          ></v-img>
-        </v-list-item-avatar>
-
-        <v-list-item-content>
-          <v-list-item-title>Ledger connect</v-list-item-title>
-          <v-list-item-subtitle>Connect your wallet cosmos from Ledger
-          <v-chip
-            x-small
-            class="ma-2"
-            color="orange"
-            label
-            outlined
-          >
-            Soon
-          </v-chip>
-          </v-list-item-subtitle>
-        </v-list-item-content>
-      </v-list-item>
+ 
     </v-list>
-    </v-list>
+ 
 
 
 
@@ -120,41 +99,11 @@
           </v-btn>
         </v-card-actions>
       </v-card>-->
-      <br />
-
-
-  <v-item-group>
-    <v-container>
-<!--      <v-row>
-        <v-col
-          v-for="(item, index) in config"
-          :key="index"
-          cols="12"
-          md="4"
-          sm="8"
-        >
-          <v-item>
-            <v-card
-              dark
-              height="200"
-            >
-            <v-card-title class="headline">
-              <img :class="`rounded-xl mr-2`" style="vertical-align: middle" width="25" height="25" :srcset='item.coinLookup.icon'>
-              {{ item.name }}
-            </v-card-title>
-            <v-card-text>
-              {{ item.desc }}
-            </v-card-text>
-            </v-card>
-          </v-item>
-        </v-col>
-      </v-row>-->
-    </v-container>
-  </v-item-group>
-
+ 
 
     </v-col>
   </v-row>
+</v-container>
 </template>
 
 <script>
@@ -192,5 +141,13 @@ export default {
   height: 380px;
   width: 380px;
 }
-
+ 
+.bcnaBackground {
+ 
+  background: transparent url('/bg_imgs.png') 0 0 no-repeat padding-box;
+    background-size: 800px;
+    background-position: 20% 10%;
+    height: 100vh;
+}
+ 
 </style>

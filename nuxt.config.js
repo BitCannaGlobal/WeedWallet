@@ -5,8 +5,8 @@ export default {
   ssr: false,
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    titleTemplate: '%s - cosmos-group',
-    title: 'cosmos-group',
+    titleTemplate: '%s - WeedWallet',
+    title: 'WeedWallet',
     htmlAttrs: {
       lang: 'en'
     },
