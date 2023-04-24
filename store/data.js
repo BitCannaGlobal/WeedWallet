@@ -119,9 +119,10 @@ export const actions = {
         op_address: foundDelegByValidator.delegation.validator_address,
         reward: (item.reward[0]?.amount / 1000000).toFixed(4),
         share: foundDelegByValidator.delegation.shares,
+        delegated: foundDelegByValidator.balance.amount,
         status: foundValidatorMainInfo?.status
       });
-      totalDelegated += Number(foundDelegByValidator.delegation.shares)
+      totalDelegated += Number(foundDelegByValidator.balance.amount)
     });
 
     const getUnbound = await axios(cosmosConfig[state.chainId].apiURL + '/cosmos/staking/v1beta1/delegators/' + address + '/unbonding_delegations')

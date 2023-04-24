@@ -124,13 +124,13 @@
                       v-for="item in delegations"
                       :key="item.validatorName"
                     >
-                      <td>
+                      <!-- <td>
                         <v-checkbox
                           v-model="selected"
                           :value="item.op_address"
                           color="#00b786"
                         ></v-checkbox>
-                      </td>
+                      </td> -->
                       <td>
                         <v-chip
                           v-if="item.status === 'BOND_STATUS_BONDED'"
@@ -158,7 +158,7 @@
                           {{ item.validatorName }}
                         </router-link> 
                       </td>
-                      <td>{{ item.share / 1000000 }} {{ cosmosConfig[0].coinLookup.viewDenom }}</td>
+                      <td>{{ item.delegated / 1000000 }} {{ cosmosConfig[0].coinLookup.viewDenom }}</td>
                       <td>{{ (item.reward) }} {{ cosmosConfig[0].coinLookup.viewDenom }}</td>
                       <td>
                         <v-btn
@@ -168,6 +168,16 @@
                         >
                         <v-icon class="mr-2">mdi-download</v-icon> Claim
                         </v-btn>
+                        <v-btn
+                          class="ma-2"                           
+                        >
+                        Redelegate
+                        </v-btn>    
+                        <v-btn
+                          class="ma-2"                           
+                        >
+                        Undelegate
+                        </v-btn>                                               
                       </td>
                     </tr>
                   </tbody>
