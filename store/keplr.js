@@ -50,6 +50,7 @@ export const actions = {
     commit,
     dispatch
   }, trys = 0) {
+    nuxtStorage.localStorage.removeItem('accounts');
     commit('setLogout')
   },
   async checkLogin({
@@ -109,7 +110,7 @@ export const actions = {
         data: returnAcount.accounts,
         pubkey: returnAcount.accounts[0].pubkey
     }, 1000, 'd')
-    
+
     commit('setInitialized')
     commit('setLogged')
   },
