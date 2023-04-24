@@ -626,6 +626,7 @@ export default {
       }
     },
   },
+ 
     methods: {
       async submitDeposit () {
         console.log('submitDeposit')
@@ -742,6 +743,7 @@ export default {
     //await this.$store.dispatch('data/getSingleProposal', this.$route.params.id)
     //await this.$store.dispatch('keplr/checkLogin')
     //console.log(this.$route.params.id)
+ await this.$store.dispatch('keplr/checkLogin')
     this.id = this.$route.params.id
     await this.$store.dispatch('data/getProposalParamsDeposit')
     await this.$store.dispatch('data/getProposalDeposits', this.id)

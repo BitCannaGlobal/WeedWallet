@@ -323,7 +323,7 @@ export default {
 
   },
   async mounted () {
-
+    await this.$store.dispatch('keplr/checkLogin')
     // TODO
     // 1/ lcd -> get delegations
     // 2/ lcd -> get undelegate

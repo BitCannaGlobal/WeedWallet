@@ -300,6 +300,7 @@ import cosmosConfig from '~/cosmos.config'
       
   },
   async mounted () {
+    
     // List of proposal from the blockchain
     const allProposals = await axios(cosmosConfig[0].apiURL + `/cosmos/gov/v1beta1/proposals`)
     

@@ -122,6 +122,16 @@ export default {
     ...mapState('keplr', [`accounts`, `initialized`, `error`, `loading`, `logged`, `logout`]),
     ...mapState('data', [`chainId`]),
   },
+  async mounted () {
+    // console.log(this.logged)
+
+    await this.$store.dispatch('keplr/checkLogin')
+    /* if (!this.logged) {
+      this.$router.push({path: "/login"})
+      return
+    }
+  */
+  },  
   methods: {
     connectKeplr: async function (event) {
       var payload = {'key1': cosmosConfig[0], 'key2': this.chainId}
@@ -132,6 +142,13 @@ export default {
       await this.$store.dispatch('data/refresh', this.accounts[0].address)
 
       this.$router.push({path: "/"})
+
+      await this.$store.dispatch('data/getPriceNow')
+      await this.$store.dispatch('data/getApr')
+      await this.$store.dispatch('data/getWalletInfo', this.accounts[0].address)
+      await this.$store.dispatch('data/getDelegations', this.accounts[0].address)
+      await this.$store.dispatch('data/getAllBalances')
+
     }
   }
 }

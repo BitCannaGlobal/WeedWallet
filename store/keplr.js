@@ -1,4 +1,5 @@
 // import cosmos from 'cosmos-lib'
+import nuxtStorage from 'nuxt-storage';
 import cosmosConfig from '~/cosmos.config'
 import { connectKeplrSuggest } from '~/libs/keplrAuth'
 
@@ -60,8 +61,20 @@ export const actions = {
       // commit('setLogged', 'true')
     } else {
       commit('setLogged', 'false')
+    }*/
+    let getAccount = nuxtStorage.localStorage.getData('accounts')
+    console.log('check login')
+    // console.log(getAccount)
+    if (getAccount) {
+      console.log(getAccount)
+      commit('setAccounts', getAccount)
+      commit('setLogged', 'true')
+    } else {
+      console.log('No session!')
     }
-    console.log(state.logged)*/
+    
+
+
   },
   async changeKeplrAccount({
     commit,
@@ -90,8 +103,14 @@ export const actions = {
           data: returnAcount.accounts,
           pubkey: returnAcount.accounts[0].pubkey
       })
-      commit('setInitialized')
-      commit('setLogged')
-
+      nuxtStorage.localStorage.setData('accounts',{
+        id: chainId.key1.name,
+        walletName: returnAcount.getKey.name,
+        data: returnAcount.accounts,
+        pubkey: returnAcount.accounts[0].pubkey
+    }, 1000, 'd')
+    
+    commit('setInitialized')
+    commit('setLogged')
   },
 }

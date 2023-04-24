@@ -246,6 +246,20 @@ import pjson from '~/package'
     }
   },
   async mounted() {
+    await this.$store.dispatch('keplr/checkLogin')
+
+    if (this.logged) {
+      await this.$store.dispatch('data/getPriceNow')
+      await this.$store.dispatch('data/getApr')
+      await this.$store.dispatch('data/getWalletInfo', this.accounts[0].address)
+      await this.$store.dispatch('data/getDelegations', this.accounts[0].address)
+      await this.$store.dispatch('data/getAllBalances')
+    }  else {
+      this.$router.push({path: "/login"})
+      return
+    }
+
+    
 
     this.$store.dispatch('data/getBlockNow')
     this.$store.dispatch('data/getSdkVersion')
