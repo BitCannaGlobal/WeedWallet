@@ -79,7 +79,9 @@ export const actions = {
   },
 
   async getWalletInfo({ commit, state }, address) {
-    const accountInfo = await axios(cosmosConfig[state.chainId].apiURL + '/cosmos/bank/v1beta1/balances/' + address)
+    // /cosmos/bank/v1beta1/balances/
+    // /cosmos/bank/v1beta1/spendable_balances/{address}
+    const accountInfo = await axios(cosmosConfig[state.chainId].apiURL + '/cosmos/bank/v1beta1/spendable_balances/' + address)
     let foundAccountInfo = accountInfo.data.balances.find(element => element.denom === cosmosConfig[state.chainId].coinLookup.chainDenom);
 
     if (typeof foundAccountInfo === 'undefined') {
@@ -148,7 +150,7 @@ export const actions = {
       parseFloat(state.totalDelegated)
 
     commit('setTotalWallet', (sum /1000000).toFixed(6))
-    commit('setTotalWalletPrice', ((sum /1000000) * state.priceNow).toFixed(2))
+    commit('setTotalWalletPrice', ((sum /1000000) * state.priceNow).toFixed(4))
 
   },
   async getSingleProposal({ commit, state }, proposalId) {
