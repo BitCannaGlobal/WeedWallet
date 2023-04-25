@@ -117,7 +117,7 @@ export const actions = {
       copieRewards.push({
         validatorName: foundValidatorMainInfo?.description.moniker,
         op_address: foundDelegByValidator.delegation.validator_address,
-        reward: (item.reward[0]?.amount / 1000000).toFixed(4),
+        reward: (item.reward[0]?.amount / 1000000).toFixed(6),
         share: foundDelegByValidator.delegation.shares,
         delegated: foundDelegByValidator.balance.amount,
         status: foundValidatorMainInfo?.status

@@ -92,6 +92,12 @@
           <v-card class="accent">
             <v-card-title class="headline">
                 <v-icon class="mr-2">mdi-wallet-outline</v-icon> Wallet delegations
+                <v-spacer />
+                <ClaimAllModal 
+ 
+                  :amountClaimAll="(rewards.amount / 1000000).toFixed(6)"
+                  :getAllDelegation="delegations"
+                />
           </v-card-title>  
             <v-card-text class="text-h5">
 
@@ -171,12 +177,12 @@
                         <v-btn
                           class="ma-2"                           
                         >
-                        Redelegate
+                        Redelegate (soon)
                         </v-btn>    
                         <v-btn
                           class="ma-2"                           
                         >
-                        Undelegate
+                        Undelegate (soon)
                         </v-btn>                                               
                       </td>
                     </tr>
