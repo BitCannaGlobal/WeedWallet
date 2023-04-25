@@ -99,9 +99,9 @@
                 <template v-slot:default>
                   <thead>
                     <tr>
-                      <th>
+                      <!-- <th>
                         Action
-                      </th>
+                      </th> -->
                       <th>
                         Status
                       </th>

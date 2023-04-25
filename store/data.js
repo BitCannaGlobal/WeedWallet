@@ -134,7 +134,7 @@ export const actions = {
       }      
     } 
  
-    commit('setTotalUnbound', (sumUnbonding / 1000000).toFixed(2))
+    commit('setTotalUnbound', (sumUnbonding / 1000000).toFixed(6))
     commit('setDelegations', copieRewards)
     commit('setRewards', foundMainDenom)
     commit('setTotalDelegated', String(totalDelegated))
@@ -147,7 +147,7 @@ export const actions = {
       parseFloat(state.totalUnbound) +  
       parseFloat(state.totalDelegated)
 
-    commit('setTotalWallet', (sum /1000000).toFixed(2))
+    commit('setTotalWallet', (sum /1000000).toFixed(6))
     commit('setTotalWalletPrice', ((sum /1000000) * state.priceNow).toFixed(2))
 
   },

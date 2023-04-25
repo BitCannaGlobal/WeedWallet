@@ -74,6 +74,23 @@
             </v-col>
             <v-col class="text-right">
                 ${{ priceNow }}
+                <v-tooltip top>
+                <template v-slot:activator="{ on, attrs }">
+ 
+                <v-icon 
+                  class="mt-n1"
+                  color="#00b786"
+                  v-bind="attrs"
+                  v-on="on"                
+                >
+                  mdi-information-slab-circle-outline
+                </v-icon>
+
+                </template>
+                <span>
+                  Proudly powered by BCNAracle 💚
+                </span>
+              </v-tooltip>                 
             </v-col>               
             </v-card-title> 
           </v-card>
@@ -136,7 +153,7 @@
                             mdi-circle
                           </v-icon>                      
                           Available</td>
-                        <td>{{ (balances / 1000000).toFixed(2) }} {{ cosmosConfig[chainId].coinLookup.viewDenom }}</td>
+                        <td>{{ (balances / 1000000).toFixed(6) }} {{ cosmosConfig[chainId].coinLookup.viewDenom }}</td>
                       </tr>
                       <tr>
                         <td>
@@ -147,7 +164,7 @@
                             mdi-circle
                           </v-icon>                            
                           Delegated</td>
-                        <td>{{ (totalDelegated /1000000).toFixed(2) }} {{ cosmosConfig[chainId].coinLookup.viewDenom }}</td>
+                        <td>{{ (totalDelegated /1000000).toFixed(6) }} {{ cosmosConfig[chainId].coinLookup.viewDenom }}</td>
                       </tr>
                       <tr>
                         <td>
@@ -169,11 +186,19 @@
                             mdi-circle
                           </v-icon>                                              
                           Staking Reward</td>
-                        <td>{{ (rewards.amount / 1000000).toFixed(2) }} {{ cosmosConfig[chainId].coinLookup.viewDenom }}</td>
+                        <td>{{ (rewards.amount / 1000000).toFixed(6) }} {{ cosmosConfig[chainId].coinLookup.viewDenom }}</td>
                       </tr>
                       <tr>
-                        <td>Total BCNA</td>
-                        <td>{{ totalWallet }} {{ cosmosConfig[chainId].coinLookup.viewDenom }}</td>
+                        <td>
+                          <v-icon
+                            color="#00b786"
+                            small
+                          >
+                            mdi-circle
+                          </v-icon>                             
+                          Total</td>
+                        <td>
+                          {{ totalWallet }} {{ cosmosConfig[chainId].coinLookup.viewDenom }}</td>
                       </tr>
                     </tbody>
                   </v-simple-table>

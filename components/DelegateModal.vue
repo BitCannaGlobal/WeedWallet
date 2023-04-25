@@ -328,14 +328,14 @@ import {
  
 
             try {
-              const result = await client.delegateTokens(accounts[0].address, this.addressVal, amountFinal, 'auto', this.memo)
+              const result = await client.delegateTokens(accounts[0].address, this.addressVal, amountFinal, 1.3, this.memo)
               assertIsDeliverTxSuccess(result)
               console.log(result)
               this.step3 = false
               this.step4 = true
               this.loading = false
-
-              await this.$store.dispatch('data/refresh', accounts[0].address)
+              await this.$store.dispatch('data/getDelegations', accounts[0].address)
+              // await this.$store.dispatch('data/refresh', accounts[0].address)
              } catch (error) {
                 console.error(error);
                 this.eError = false
