@@ -228,7 +228,7 @@ import pjson from '~/package'
         // ['mdi-wallet-outline', 'Ibc manager', '/ibc'],
         // ['mdi-account-multiple', 'Groups manager', '/groups'],
         ['mdi-chevron-right', 'Transactions', '/transactions'],
-        ['mdi-chevron-right', 'Collectibles', '/collectibles'],
+        ['mdi-chevron-right', 'My NFT\'s', '/nfts'],
         ['mdi-chevron-right', 'Create proposal', '/create-proposal'],
       ],
     }),
