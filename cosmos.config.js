@@ -27,7 +27,7 @@ export default [
       viewDenom: 'BCNA',
       chainDenom: 'ubcna',
       addressPrefix: 'bcna',
-      icon: `https://raw.githubusercontent.com/osmosis-labs/assetlists/main/images/bcna.svg`,
+      icon: `https://raw.githubusercontent.com/cosmos/chain-registry/master/bitcanna/images/bcna.svg`,
     },
     feeMultiplier: 1.3,
     gasPrice: 0.025,    
