@@ -3,7 +3,7 @@ import moment from 'moment';
 import cosmosConfig from '~/cosmos.config'
 
 export const state = () => ({
-  layout: false,
+  layout: true,
   block: undefined,
   chainId: 0,
   blockNow: '0',
