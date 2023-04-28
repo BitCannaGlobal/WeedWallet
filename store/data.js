@@ -3,6 +3,7 @@ import moment from 'moment';
 import cosmosConfig from '~/cosmos.config'
 
 export const state = () => ({
+  layout: false,
   block: undefined,
   chainId: 0,
   blockNow: '0',
@@ -31,6 +32,10 @@ export const state = () => ({
   paramsDeposit: '',
   paramsVoting: '',
   totalBonded: '',
+  allUnbonding: '',
+  allRedelegate: '',
+  allTxs: '',
+  allTxsLoaded: false,
 })
 
 export const mutations = {
@@ -61,6 +66,9 @@ export const actions = {
     ]
     await Promise.all(calls)
   },
+  async changeLayout({ commit, state }, value) {
+    commit('setLayout', value)
+  },  
   async getBlockNow({ commit, state }) {
     const getBlock = await axios(cosmosConfig[state.chainId].apiURL + '/cosmos/base/tendermint/v1beta1/blocks/latest')
     commit('setBlockNow', getBlock.data.block.header.height)
@@ -97,8 +105,21 @@ export const actions = {
     return accountInfo
   },
 
+  async getAllTxs({ commit, state }, address) {
+    const resultSender = await axios(cosmosConfig[0].apiURL + '/cosmos/tx/v1beta1/txs?events=message.sender=%27'+address+'%27&limit=20&order_by=2' )
+    const resultRecipient = await axios(cosmosConfig[0].apiURL + '/cosmos/tx/v1beta1/txs?events=transfer.recipient=%27'+address+'%27&limit=20&order_by=2')
+    const finalTxs = resultSender.data.tx_responses.concat(resultRecipient.data.tx_responses);
+ 
+    commit('setAllTxs', finalTxs)
+    commit('setAllTxsLoaded', true)
+
+  },  
+ 
   async getDelegations({ commit, state }, address) {
     const getDelegations = await axios(cosmosConfig[state.chainId].apiURL + '/cosmos/distribution/v1beta1/delegators/' + address + '/rewards')
+    const getUnDelegations = await axios(cosmosConfig[state.chainId].apiURL + '/cosmos/staking/v1beta1/delegators/' + address + '/unbonding_delegations')
+    const getRedelegations = await axios(cosmosConfig[state.chainId].apiURL + '/cosmos/staking/v1beta1/delegators/' + address + '/redelegations')
+    
     let foundMainDenom = getDelegations.data.total.find(element => element.denom === cosmosConfig[state.chainId].coinLookup.chainDenom);
     if (typeof foundMainDenom === 'undefined') {
       foundMainDenom = {
@@ -115,13 +136,54 @@ export const actions = {
     await getDelegations.data.rewards.forEach(function(item){
       let foundDelegByValidator = getValidatorInfo.data.delegation_responses.find(element => element.delegation.validator_address === item.validator_address);
       let foundValidatorMainInfo = getValidatorMainInfo.data.validators.find(element => element.operator_address === item.validator_address);
+      let foundUnDelegations = getUnDelegations.data.unbonding_responses.find(element => element.validator_address === item.validator_address);
+      let foundRedelegations = getRedelegations.data.redelegation_responses.find(element => element.redelegation.validator_src_address  === item.validator_address);
+      
+      if (typeof foundUnDelegations === 'undefined') {
+        foundUnDelegations = {
+          denom: cosmosConfig[state.chainId].coinLookup.chainDenom,
+          amount: '0'
+        }
+      } else {
+        let totalUnDelegations = 0
+        for (let i = 0; i < foundUnDelegations.entries.length; i++) {
+          totalUnDelegations += foundUnDelegations.entries[i].balance / 1000000
+        }
+        console.log(totalUnDelegations)
+        foundUnDelegations = {
+          denom: cosmosConfig[state.chainId].coinLookup.chainDenom,
+          amount: totalUnDelegations
+        }
+      }
+      if (typeof foundRedelegations === 'undefined') {
+        foundRedelegations = {
+          denom: cosmosConfig[state.chainId].coinLookup.chainDenom,
+          amount: '0'
+        }
+      } else {
+        foundRedelegations = {
+          denom: cosmosConfig[state.chainId].coinLookup.chainDenom,
+          amount: foundRedelegations.entries[0].balance / 1000000
+        }
+      }
 
+      let finalRewardAmount = 0
+      if (typeof item.reward[0]?.amount === 'undefined') {
+        finalRewardAmount = 0
+      } else {
+        finalRewardAmount = (item.reward[0].amount / 1000000).toFixed(6)
+      }
+
+
+      console.log(finalRewardAmount)
       copieRewards.push({
         validatorName: foundValidatorMainInfo?.description.moniker,
         op_address: foundDelegByValidator.delegation.validator_address,
-        reward: (item.reward[0]?.amount / 1000000).toFixed(6),
+        reward: finalRewardAmount,
         share: foundDelegByValidator.delegation.shares,
         delegated: foundDelegByValidator.balance.amount,
+        unDelegations: foundUnDelegations,
+        reDelegations: foundRedelegations,
         status: foundValidatorMainInfo?.status
       });
       totalDelegated += Number(foundDelegByValidator.balance.amount)
@@ -141,6 +203,9 @@ export const actions = {
     commit('setRewards', foundMainDenom)
     commit('setTotalDelegated', String(totalDelegated))
     commit('setDelegationsLoaded', true)
+    commit('setAllUnbonding', getUnDelegations.data.unbonding_responses)
+    commit('setAllRedelegate', getRedelegations.data.redelegation_responses)
+    
   },
   getAllBalances({ commit, state }) {
     var sum = 

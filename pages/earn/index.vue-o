@@ -1,95 +1,5 @@
- 
 <template>
   <div>
-    <v-item-group>
-      <v-container>
-        <v-row align="center" justify="center">
-          <v-col cols="12" md="3">
-            <v-item>
-              <div class="flex-grow-1 text-center">
-                <v-hover v-slot="{ hover }" open-delay="200">
-                  <v-card class="rounded-lg justify-center mx-auto" :elevation="hover ? 16 : 2"
-                    :class="{ 'on-hover': hover }" :color="$vuetify.theme.dark ? 'theme-dark' : 'theme-light'" tile
-                    outlined>
- 
-                      <div class="d-flex text-5 white--text  font-weight-bold pt-10 justify-center mx-auto mb-6">
-                        POOL 571
-                      </div>
-                      <img src="icon/BCNA-Osmo.svg" width="80" height="45" />
-
-                    <v-list color="transparent" class="text-center " nav dense>
-                      <v-list-item-title class="text-h6 font-weight-bold">
-                        Title 
-                      </v-list-item-title>
-                      <v-list-item class="rounded-lg justify-center mx-auto">
-                        Sub title Sub title Sub title Sub title
-                      </v-list-item>
-                      <v-list-item-group v-model="selectedItem" color="primary">
-                        <v-list-item v-for="(item, i) in items" :key="i">
-
-                          <v-list-item-content>
-                            <v-list-item-title v-text="item.text"></v-list-item-title>
-                          </v-list-item-content>
-                        </v-list-item>
-                      </v-list-item-group>
-                    </v-list>
-                    <div class="text-center ma-3">
-                      <v-btn dark>
-                        Choose Plan
-                      </v-btn>
-                    </div>
-                  </v-card>
-                </v-hover>
-              </div>
-            </v-item>
-          </v-col>
-
-          <v-col cols="12" md="3">
-            <v-item>
-              <div class="flex-grow-1 text-center">
-                <v-hover v-slot="{ hover }" open-delay="200">
-                  <v-card class="rounded-lg justify-center mx-auto" :elevation="hover ? 16 : 2"
-                    :class="{ 'on-hover': hover }" :color="$vuetify.theme.dark ? 'theme-dark' : 'theme-light'" tile
-                    outlined>
- 
-                      <div class="d-flex text-5 white--text  font-weight-bold pt-10 justify-center mx-auto mb-6">
-                        POOL 572
-                      </div>
- 
-                    <img src="icon/BCNA-Atom.svg" />
-                    <v-list color="transparent" class="text-center " nav dense>
-                      <v-list-item-title class="text-h6 font-weight-bold">
-                        Title
-                      </v-list-item-title>
-                      <v-list-item  class="rounded-lg justify-center mx-auto">
-                        Sub title Sub title Sub title Sub title
-                      </v-list-item>
-                      <v-list-item-group v-model="selectedItem" color="primary">
-                        <v-list-item v-for="(item, i) in items" :key="i">
-
-                          <v-list-item-content>
-                            <v-list-item-title v-text="item.text"></v-list-item-title>
-                          </v-list-item-content>
-                        </v-list-item>
-                      </v-list-item-group>
-                    </v-list>
-                    <div class="text-center ma-3">
-                      <v-btn dark>
-                        Choose Plan
-                      </v-btn>
-                    </div>
-                  </v-card>
-                </v-hover>
-              </div>
-            </v-item>
-          </v-col>          
-
-        </v-row>
-      </v-container>
-    </v-item-group>
-  </div>
-</template>
-<!--   <div>
 
     <sequential-entrance>
     <v-row justify="space-around">
@@ -187,7 +97,9 @@
                 </td>
                 <td class="cell">
                   {{ aprNow }}% (excl. commission)
- 
+                  <!-- <nuxt-link to="/earn" @click.native="hi">
+                    <i class="material-icons">help</i>
+                  </nuxt-link> -->
                 </td>
                 <td class="cell noel">
 
@@ -204,7 +116,7 @@
                 </td>
                 <td class="cell">
                   {{ aprNow }}% (excl. commission)
- 
+                  <!-- <i class="material-icons">help</i> -->
                 </td>
                 <td class="cell">
 
@@ -216,7 +128,7 @@
       </v-col>
     </v-row>
     </sequential-entrance>
-  </div> -->
+  </div>
 </template>
 
 <script>
@@ -233,44 +145,6 @@ export default {
     bonus571: '',
     bonus572: '',
     bcnaBonded: '',
-
-    items2: [{
-                    icon: 'mdi-wifi',
-                    text: 'Wifi',
-                },
-                {
-                    icon: 'mdi-bluetooth',
-                    text: 'Bluetooth',
-                },
-                {
-                    icon: 'mdi-chart-donut',
-                    text: 'Data Usage',
-                },
-            ],
-            model: 1,
-            selectedItem: 0,
-            items: [{
-                    text: 'Data 1',
-                    icon: 'done'
-                },
-                {
-                    text: 'Data 2',
-                    icon: 'done'
-                },
-                {
-                    text: 'Data 3',
-                    icon: 'done'
-                },
-                {
-                    text: 'Data 4',
-                    icon: 'done'
-                },
-                {
-                    text: 'Data 5',
-                    icon: 'done'
-                },
-
-            ],    
   }),
   computed: {
     ...mapState('data', ['priceNow', 'aprNow']),
@@ -345,8 +219,7 @@ export default {
   margin: 2rem 0;
   width: 100%;
 }
-
-.swap2>h3 {
+.swap2 > h3 {
   font-size: 24px;
   color: var(--white);
   font-weight: 600;
@@ -359,15 +232,13 @@ export default {
   border-radius: var(--border-radius);
   background: var(--gray-1100);
 }
-
-.container2>h1 {
+.container2 > h1 {
   font-size: 24px;
   color: #fff;
   color: var(--white);
   font-weight: 600;
   padding-bottom: 1rem;
 }
-
 .icon {
   display: inline-flex;
   align-self: center;
@@ -381,7 +252,6 @@ export default {
   border-spacing: 0 10px;
   margin-top: -10px;
 }
-
 .tableearn th {
   padding: 1rem 0.75rem;
   overflow: hidden;
@@ -389,7 +259,6 @@ export default {
   white-space: nowrap;
   text-align: left;
 }
-
 .tableearn td {
   vertical-align: middle;
   border: solid 1px #000;
@@ -397,13 +266,11 @@ export default {
   padding: 15px;
   background-color: black;
 }
-
 .tableearn td:first-child {
   border-left-style: solid;
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
 }
-
 .tableearn td:last-child {
   border-right-style: solid;
   border-bottom-right-radius: 10px;

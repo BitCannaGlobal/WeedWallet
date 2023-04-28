@@ -393,8 +393,8 @@ export default {
 
       }); */
 
-      const resultSender = await axios(cosmosConfig[0].apiURL + '/cosmos/tx/v1beta1/txs?events=message.sender=%27'+this.accounts[0].address+'%27' )
-      const resultRecipient = await axios(cosmosConfig[0].apiURL + '/cosmos/tx/v1beta1/txs?events=transfer.recipient=%27'+this.accounts[0].address+'%27')
+      const resultSender = await axios(cosmosConfig[0].apiURL + '/cosmos/tx/v1beta1/txs?events=message.sender=%27'+this.accounts[0].address+'%27&limit=2&order_by=2' )
+      const resultRecipient = await axios(cosmosConfig[0].apiURL + '/cosmos/tx/v1beta1/txs?events=transfer.recipient=%27'+this.accounts[0].address+'%27&limit=2&order_by=2')
       const finalTxs = resultSender.data.tx_responses.concat(resultRecipient.data.tx_responses);
 
       this.rpcAllTxs = this.transactionsReducer(finalTxs)

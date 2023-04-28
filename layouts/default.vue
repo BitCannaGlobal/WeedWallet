@@ -124,7 +124,11 @@
     </v-tooltip>
     <span v-if="isCopied" class="ml-2">Address copied!</span>
       <v-spacer></v-spacer>
-
+      <v-switch
+        v-model="switch1"
+        class=" mt-6"
+        :label="`Simple/Pro: ${switch1.toString()}`"
+      ></v-switch>
         <v-menu
           v-model="menu"
           :close-on-content-click="false"
@@ -194,7 +198,7 @@
         class="py-8 px-6"
         fluid
       >
-        <Nuxt />
+        <Nuxt :vueMode="switch1.toString()" />
         
       </v-container>
     </v-main>
@@ -212,6 +216,7 @@ import pjson from '~/package'
   export default {
     data: () => ({
       cards: ['Today', 'Yesterday'],
+      switch1: true,
       drawer: null,
       right: true,
       rightDrawer: false,
@@ -243,6 +248,10 @@ import pjson from '~/package'
       },
       deep: true,
       immediate: true
+    },
+    async switch1(newQuestion, oldQuestion) {
+      console.log(newQuestion)
+      await this.$store.dispatch('data/changeLayout', newQuestion)
     }
   },
   async mounted() {
@@ -253,6 +262,8 @@ import pjson from '~/package'
       await this.$store.dispatch('data/getApr')
       await this.$store.dispatch('data/getWalletInfo', this.accounts[0].address)
       await this.$store.dispatch('data/getDelegations', this.accounts[0].address)
+      await this.$store.dispatch('data/getAllTxs', this.accounts[0].address)
+ 
       await this.$store.dispatch('data/getAllBalances')
     }  else {
       this.$router.push({path: "/login"})
