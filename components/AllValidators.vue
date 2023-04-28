@@ -43,7 +43,10 @@
                 <v-icon class="mr-2">mdi-shield-check</v-icon> {{ item.name }}
               </router-link>
             </template>
-
+            <template #item.uptime="{ item }">
+              <span v-if="item.status === 'BOND_STATUS_BONDED'">100%</span>
+              <span v-else>0%</span>
+            </template>
             <!-- <template #item.actions="{ item }">
                 <DelegateModal
                   :chainIdProps="cosmosConfig[chainId].coinLookup.addressPrefix"
@@ -80,6 +83,7 @@ export default {
           { text: 'Name', value: 'name' },
           { text: 'Commission rate', value: 'crate' },
           { text: 'Voting power', value: 'votingPower' },
+          { text: 'Uptime', value: 'uptime' },
           { text: '', value: 'actions' },
         ],
 

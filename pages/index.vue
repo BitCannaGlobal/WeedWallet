@@ -117,7 +117,7 @@
       <sequential-entrance fromBottom>
       <v-row class="mt-4">
         <v-col>
-          <v-card class="accent">
+          <v-card class="accent" min-height="400">
             <v-card-title class="headline">
               <v-icon class="mr-2">mdi-wallet-outline</v-icon> Price history
             </v-card-title>
@@ -127,19 +127,31 @@
           </v-card>
         </v-col>
         <v-col>
-          <v-card class="accent">
+          <v-card class="accent" min-height="400">
             <v-card-title class="headline">
               <v-icon class="mr-2">mdi-wallet-outline</v-icon> Wallet distribution
             </v-card-title>
             <v-card-text>
               <v-row align="center" justify="center">
                 <v-col>
+ 
+
                    <ChartsDoughnut 
+                    v-if="Number(balances) > 0
+                      || rewards.amount > 0
+                      || totalDelegated  > 0
+                      || totalUnbound  > 0"
                       :amount="Number(balances)" 
                       :rewardsDoughnut="rewards.amount" 
                       :totalDelegated="totalDelegated" 
                       :totalUnbound="totalUnbound"
                     />
+                    <h2 
+                    v-else  
+                    class="mt-10 d-flex justify-center align-center fill-height"
+                  >
+                    No balance
+                  </h2>
                 </v-col>
                 <v-col>
                   <v-simple-table class="accent">
