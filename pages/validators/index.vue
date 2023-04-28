@@ -200,7 +200,7 @@
                           :validatorName="item.validatorName"
                           :coinIcon="cosmosConfig[chainId].coinLookup.icon"
  
-                />                                             
+                        />                                             
                       </td>
                     </tr>
                   </tbody>
@@ -222,7 +222,7 @@
               <v-card-title class="headline">
                 <v-icon class="mr-2">mdi-wallet-outline</v-icon> Wallet Undelegates
               </v-card-title> 
-              {{ allUnbonding }}
+              <!-- {{ allUnbonding }} -->
               <v-data-table
                 :headers="headersUndbound"
                 :items="allUnbonding"
@@ -239,7 +239,7 @@
  
                 <v-icon class="mr-2">mdi-wallet-outline</v-icon> Wallet Redelegates
               </v-card-title> 
-              {{ allRedelegate }}
+              <!-- {{ allRedelegate }} -->
               <v-data-table
                 :headers="headersRedelegate"
                 :items="allRedelegate"
@@ -299,11 +299,14 @@ export default {
         ],   
         headersRedelegate: [
           {
-            text: 'Dessert (100g serving)',
+            text: 'From',
             align: 'start',
             sortable: false,
             value: 'redelegation.validator_src_address',
-          } 
+          },
+          { text: 'Amount', value: 'entries[0].balance' },
+          { text: 'completion_time', value: 'entries[0].redelegation_entry.completion_time' },
+          
         ],                
   }),
   computed: {
