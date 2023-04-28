@@ -222,7 +222,7 @@ import {
         // v => bech32Validation(v) || 'Bad address (not bech32) ' + bech32Validation(v),
       ],
       amount: (instance.balances / 1000000),
-      amountFinal: (instance.balances / 1000000),
+      amountFinal: '',
       amountRules: [
         v => !!v || 'Amount is required',
         v => !isNaN(v) || 'Amount must be number',
