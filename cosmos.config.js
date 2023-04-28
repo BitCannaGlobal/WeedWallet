@@ -32,5 +32,7 @@ export default [
     feeMultiplier: 1.3,
     gasPrice: 0.025,    
     coingeckoId: 'bitcanna',
+    maxTxSender: 20,
+    maxTxRecipient: 20,
   },
 ]
