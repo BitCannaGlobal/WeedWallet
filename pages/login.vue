@@ -17,6 +17,7 @@
       <br />
 
       <v-card class="mt-10" height="100%">
+ <a href="chrome-extension://cidldciikbgbemcccegkacpncnajjpnp/popup.html" target="_blank">Options</a>
 
       <v-card-actions class="justify-center">
 
@@ -62,9 +63,9 @@
           </v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>
- 
+
     </v-list>
- 
+
 
 
 
@@ -99,7 +100,7 @@
           </v-btn>
         </v-card-actions>
       </v-card>-->
- 
+
 
     </v-col>
   </v-row>
@@ -131,7 +132,7 @@ export default {
       return
     }
   */
-  },  
+  },
   methods: {
     connectKeplr: async function (event) {
       var payload = {'key1': cosmosConfig[0], 'key2': this.chainId}
@@ -158,13 +159,13 @@ export default {
   height: 380px;
   width: 380px;
 }
- 
+
 .bcnaBackground {
- 
+
   background: transparent url('/bg_imgs.png') 0 0 no-repeat padding-box;
     background-size: 800px;
     background-position: 20% 10%;
     height: 100vh;
 }
- 
+
 </style>

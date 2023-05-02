@@ -355,7 +355,7 @@
                               mdi-circle
                             </v-icon>             
                             Total Bounded</td>
-                          <td>100% ({{ (totalBonded).toFixed(2) }} bcna)</td>
+                          <td>100% ({{ Number(totalBonded).toFixed(2) }} bcna)</td>
                         </tr>        
                         <tr>
                           <td>
@@ -366,7 +366,7 @@
                               mdi-circle
                             </v-icon>             
                             Quorum needed</td>
-                          <td>33% ({{ (totalBonded * 0.33).toFixed(2) }} bcna)</td>
+                          <td>33% ({{ Number(totalBonded * 0.33).toFixed(2) }} bcna)</td>
                         </tr>
                         <tr>
                           <td>
@@ -377,7 +377,7 @@
                               mdi-circle
                             </v-icon>              
                             Quorum actual</td>
-                          <td>{{ ((totalTally / 1000000) / (totalBonded /* * 0.33 */) * 100).toFixed(2) }}% ({{ (totalTally / 1000000).toFixed(2)}} bcna)</td>
+                          <td>{{ Number((totalTally / 1000000) / (totalBonded /* * 0.33 */) * 100).toFixed(2) }}% ({{ (totalTally / 1000000).toFixed(2)}} bcna)</td>
                         </tr>                  
                       </tbody>
                     </template>

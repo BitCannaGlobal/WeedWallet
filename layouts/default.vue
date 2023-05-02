@@ -20,12 +20,7 @@
         </v-avatar>
          <span class="ml-2"> {{ accounts[0].walletName }}</span>
 
-        <v-btn
-          class="mb-2"
-          block
-          @click="logoutNow"
-        >Logout
-        </v-btn>
+
         </div>
         <v-btn
           v-if="!logged"
@@ -87,7 +82,14 @@
               </v-list-item-content>
             </v-list-item>
           </v-list>-->
-
+          <v-footer class="mb-8 justify-center pl-3" fixed>
+              <v-btn
+              class="mb-2"
+              block
+              @click="logoutNow"
+            >Logout
+            </v-btn>
+          </v-footer>
           <v-footer class="justify-center pl-0" fixed>
 
           <v-icon
@@ -124,11 +126,11 @@
     </v-tooltip>
     <span v-if="isCopied" class="ml-2">Address copied!</span>
       <v-spacer></v-spacer>
-      <v-switch
+      <!-- <v-switch
         v-model="switch1"
         class=" mt-6"
         :label="`Simple/Pro: ${switch1.toString()}`"
-      ></v-switch>
+      ></v-switch> -->
         <v-menu
           v-model="menu"
           :close-on-content-click="false"
