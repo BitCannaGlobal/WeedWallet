@@ -17,8 +17,8 @@
       <br />
 
       <v-card class="mt-10" height="100%">
- <a href="chrome-extension://cidldciikbgbemcccegkacpncnajjpnp/popup.html" target="_blank">Options</a>
-
+<!--  <a href="chrome-extension://cidldciikbgbemcccegkacpncnajjpnp/popup.html" target="_blank">Options</a>
+ -->
       <v-card-actions class="justify-center">
 
     <v-list
