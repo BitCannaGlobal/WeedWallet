@@ -227,6 +227,28 @@
                 </template>
               </v-simple-table>
             </template>
+            <template v-if="item.messageInfo.type === '/cosmos.staking.v1beta1.MsgUndelegate'"> 
+              <v-simple-table class="accent">
+                <template v-slot:default>
+                  <thead>
+                    <tr>
+                      <th class="text-left">
+                        From validator
+                      </th>
+                      <th class="text-left">
+                        Amount
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>#{{ item.messageInfo.msgData.validator_address }}</td>
+                      <td>{{ item.messageInfo.msgData.amount }} {{ cosmosConfig[0].coinLookup.viewDenom }}</td> 
+                    </tr>
+                  </tbody>
+                </template>
+              </v-simple-table>
+            </template>            
         </v-expansion-panel-content>
       </v-expansion-panel>
     </v-expansion-panels>
