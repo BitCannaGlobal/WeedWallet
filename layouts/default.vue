@@ -261,11 +261,11 @@ import pjson from '~/package'
 
     if (this.logged) {
       await this.$store.dispatch('data/getPriceNow')
-      await this.$store.dispatch('data/getApr')
       await this.$store.dispatch('data/getWalletInfo', this.accounts[0].address)
       await this.$store.dispatch('data/getDelegations', this.accounts[0].address)
       await this.$store.dispatch('data/getAllTxs', this.accounts[0].address)
- 
+      await this.$store.dispatch('data/getAllValidators')
+      await this.$store.dispatch('data/getApr') 
       await this.$store.dispatch('data/getAllBalances')
     }  else {
       this.$router.push({path: "/login"})

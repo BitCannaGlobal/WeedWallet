@@ -110,7 +110,7 @@ export default {
     if (this.logged === 'false')
       this.$router.push({path: "login"})
 
-    this.$store.dispatch('data/getAllValidators')
+    
   },
   methods: {
     filterOnlyCapsText (value, search, item) {
