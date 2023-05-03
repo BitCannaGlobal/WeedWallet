@@ -126,11 +126,11 @@
     </v-tooltip>
     <span v-if="isCopied" class="ml-2">Address copied!</span>
       <v-spacer></v-spacer>
-      <!-- <v-switch
+      <v-switch
         v-model="switch1"
         class=" mt-6"
         :label="`Simple/Pro: ${switch1.toString()}`"
-      ></v-switch> -->
+      ></v-switch>
         <v-menu
           v-model="menu"
           :close-on-content-click="false"
