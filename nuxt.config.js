@@ -5,8 +5,8 @@ export default {
   ssr: false,
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    titleTemplate: '%s - cosmos-group',
-    title: 'cosmos-group',
+    titleTemplate: '%s - WeedWallet',
+    title: 'WeedWallet',
     htmlAttrs: {
       lang: 'en'
     },
@@ -30,6 +30,7 @@ export default {
     '@plugins/chart',
     '@plugins/entrance',
     '@plugins/qrCode',
+    // '@plugins/ellipseProgress',
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

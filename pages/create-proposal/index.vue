@@ -159,7 +159,7 @@ export default {
       'Community Pool Spend Proposal',
       //'Community Pool Spend Proposal With Deposit',
       'Software Upgrade Proposal',
-      //'Parameter Change Proposal',
+      'Parameter Change Proposal',
       
     ],
     // New

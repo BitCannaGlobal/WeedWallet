@@ -3,6 +3,7 @@ import moment from 'moment';
 import cosmosConfig from '~/cosmos.config'
 
 export const state = () => ({
+  layout: true,
   block: undefined,
   chainId: 0,
   blockNow: '0',
@@ -24,13 +25,17 @@ export const state = () => ({
   priceNow: '',
   aprNow: '',
   sdkVersion: '',
-  totalBonded: '',
   validatorDetails: '',
   totalWallet: '',
   totalWalletPrice: '',
   validatorDelegations: '',
   paramsDeposit: '',
   paramsVoting: '',
+  totalBonded: '',
+  allUnbonding: '',
+  allRedelegate: '',
+  allTxs: '',
+  allTxsLoaded: false,
 })
 
 export const mutations = {
@@ -61,6 +66,9 @@ export const actions = {
     ]
     await Promise.all(calls)
   },
+  async changeLayout({ commit, state }, value) {
+    commit('setLayout', value)
+  },  
   async getBlockNow({ commit, state }) {
     const getBlock = await axios(cosmosConfig[state.chainId].apiURL + '/cosmos/base/tendermint/v1beta1/blocks/latest')
     commit('setBlockNow', getBlock.data.block.header.height)
@@ -79,7 +87,9 @@ export const actions = {
   },
 
   async getWalletInfo({ commit, state }, address) {
-    const accountInfo = await axios(cosmosConfig[state.chainId].apiURL + '/cosmos/bank/v1beta1/balances/' + address)
+    // /cosmos/bank/v1beta1/balances/
+    // /cosmos/bank/v1beta1/spendable_balances/{address}
+    const accountInfo = await axios(cosmosConfig[state.chainId].apiURL + '/cosmos/bank/v1beta1/spendable_balances/' + address)
     let foundAccountInfo = accountInfo.data.balances.find(element => element.denom === cosmosConfig[state.chainId].coinLookup.chainDenom);
 
     if (typeof foundAccountInfo === 'undefined') {
@@ -95,8 +105,21 @@ export const actions = {
     return accountInfo
   },
 
+  async getAllTxs({ commit, state }, address) {
+    const resultSender = await axios(cosmosConfig[0].apiURL + '/cosmos/tx/v1beta1/txs?events=message.sender=%27'+address+'%27&limit=20&order_by=2' )
+    const resultRecipient = await axios(cosmosConfig[0].apiURL + '/cosmos/tx/v1beta1/txs?events=transfer.recipient=%27'+address+'%27&limit=20&order_by=2')
+    const finalTxs = resultSender.data.tx_responses.concat(resultRecipient.data.tx_responses);
+ 
+    commit('setAllTxs', finalTxs)
+    commit('setAllTxsLoaded', true)
+
+  },  
+ 
   async getDelegations({ commit, state }, address) {
     const getDelegations = await axios(cosmosConfig[state.chainId].apiURL + '/cosmos/distribution/v1beta1/delegators/' + address + '/rewards')
+    const getUnDelegations = await axios(cosmosConfig[state.chainId].apiURL + '/cosmos/staking/v1beta1/delegators/' + address + '/unbonding_delegations')
+    const getRedelegations = await axios(cosmosConfig[state.chainId].apiURL + '/cosmos/staking/v1beta1/delegators/' + address + '/redelegations')
+    
     let foundMainDenom = getDelegations.data.total.find(element => element.denom === cosmosConfig[state.chainId].coinLookup.chainDenom);
     if (typeof foundMainDenom === 'undefined') {
       foundMainDenom = {
@@ -113,15 +136,57 @@ export const actions = {
     await getDelegations.data.rewards.forEach(function(item){
       let foundDelegByValidator = getValidatorInfo.data.delegation_responses.find(element => element.delegation.validator_address === item.validator_address);
       let foundValidatorMainInfo = getValidatorMainInfo.data.validators.find(element => element.operator_address === item.validator_address);
+      let foundUnDelegations = getUnDelegations.data.unbonding_responses.find(element => element.validator_address === item.validator_address);
+      let foundRedelegations = getRedelegations.data.redelegation_responses.find(element => element.redelegation.validator_src_address  === item.validator_address);
+      
+      if (typeof foundUnDelegations === 'undefined') {
+        foundUnDelegations = {
+          denom: cosmosConfig[state.chainId].coinLookup.chainDenom,
+          amount: '0'
+        }
+      } else {
+        let totalUnDelegations = 0
+        for (let i = 0; i < foundUnDelegations.entries.length; i++) {
+          totalUnDelegations += foundUnDelegations.entries[i].balance / 1000000
+        }
+        console.log(totalUnDelegations)
+        foundUnDelegations = {
+          denom: cosmosConfig[state.chainId].coinLookup.chainDenom,
+          amount: totalUnDelegations
+        }
+      }
+      if (typeof foundRedelegations === 'undefined') {
+        foundRedelegations = {
+          denom: cosmosConfig[state.chainId].coinLookup.chainDenom,
+          amount: '0'
+        }
+      } else {
+        foundRedelegations = {
+          denom: cosmosConfig[state.chainId].coinLookup.chainDenom,
+          amount: foundRedelegations.entries[0].balance / 1000000
+        }
+      }
 
+      let finalRewardAmount = 0
+      if (typeof item.reward[0]?.amount === 'undefined') {
+        finalRewardAmount = 0
+      } else {
+        finalRewardAmount = (item.reward[0].amount / 1000000).toFixed(6)
+      }
+
+
+      console.log(finalRewardAmount)
       copieRewards.push({
         validatorName: foundValidatorMainInfo?.description.moniker,
         op_address: foundDelegByValidator.delegation.validator_address,
-        reward: (item.reward[0]?.amount / 1000000).toFixed(4),
+        reward: finalRewardAmount,
         share: foundDelegByValidator.delegation.shares,
+        delegated: foundDelegByValidator.balance.amount,
+        unDelegations: foundUnDelegations,
+        reDelegations: foundRedelegations,
         status: foundValidatorMainInfo?.status
       });
-      totalDelegated += Number(foundDelegByValidator.delegation.shares)
+      totalDelegated += Number(foundDelegByValidator.balance.amount)
     });
 
     const getUnbound = await axios(cosmosConfig[state.chainId].apiURL + '/cosmos/staking/v1beta1/delegators/' + address + '/unbonding_delegations')
@@ -133,11 +198,14 @@ export const actions = {
       }      
     } 
  
-    commit('setTotalUnbound', (sumUnbonding / 1000000).toFixed(2))
+    commit('setTotalUnbound', (sumUnbonding / 1000000).toFixed(6))
     commit('setDelegations', copieRewards)
     commit('setRewards', foundMainDenom)
     commit('setTotalDelegated', String(totalDelegated))
     commit('setDelegationsLoaded', true)
+    commit('setAllUnbonding', getUnDelegations.data.unbonding_responses)
+    commit('setAllRedelegate', getRedelegations.data.redelegation_responses)
+    
   },
   getAllBalances({ commit, state }) {
     var sum = 
@@ -146,8 +214,8 @@ export const actions = {
       parseFloat(state.totalUnbound) +  
       parseFloat(state.totalDelegated)
 
-    commit('setTotalWallet', (sum /1000000).toFixed(2))
-    commit('setTotalWalletPrice', ((sum /1000000) * state.priceNow).toFixed(2))
+    commit('setTotalWallet', (sum /1000000).toFixed(6))
+    commit('setTotalWalletPrice', ((sum /1000000) * state.priceNow).toFixed(4))
 
   },
   async getSingleProposal({ commit, state }, proposalId) {
@@ -290,6 +358,21 @@ export const actions = {
 
     commit('setChartProposalData', allData)
   },
+
+  async getProposalQuorum({ commit, state }) {
+    const allDelegations = await axios(cosmosConfig[state.chainId].apiURL + '/cosmos/staking/v1beta1/validators')
+    console.log(allDelegations.data.validators)
+ 
+    let totalBonded = 0
+    for (let i = 0; i < allDelegations.data.validators.length; i++) {
+      const item = (allDelegations.data.validators[i].tokens  / 1000000);
+      console.log(item);
+      totalBonded += Number(item)
+    }  
+    console.log(totalBonded);
+    commit('setTotalBonded', totalBonded)
+  },
+
   async getAllValidators({ commit, state }) {
     var copieValidators = []
     const allValidators = await axios(cosmosConfig[state.chainId].apiURL + '/cosmos/staking/v1beta1/validators')
@@ -323,9 +406,19 @@ export const actions = {
   async getValidatorDelegation({ commit, state }, data) {
     console.log(data)
     const validatorDelegation = await axios(cosmosConfig[state.chainId].apiURL + '/cosmos/staking/v1beta1/validators/' + data.validatorAddr + '/delegations/' + data.delegatorAddr)
-    console.log(validatorDelegation.data.delegation_response.balance.amount)
+    .then(res => {
+      commit('setValidatorDelegations', res.data.delegation_response.balance.amount) 
+       return res.data
+       
+    })
+    .catch(error => {
+       console.log(error)
+    })
 
-    commit('setValidatorDelegations', validatorDelegation.data.delegation_response.balance.amount) 
+    /* const validatorDelegation = await axios(cosmosConfig[state.chainId].apiURL + '/cosmos/staking/v1beta1/validators/' + data.validatorAddr + '/delegations/' + data.delegatorAddr)
+    console.log(validatorDelegation.data.delegation_response.balance.amount) */
+
+    
   },    
   changeChaniId({ commit }, chainId) {
     commit('setChainId', chainId)

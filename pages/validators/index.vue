@@ -67,14 +67,12 @@
             </v-card>
           </v-col>
         </v-row>
-
-
       </sequential-entrance>
  
       <sequential-entrance fromBottom>
       <v-row justify="space-around">
         <v-col>
-          <v-row class="mt-4 mb-2" justify="space-around">
+          <v-row class="mb-2" justify="space-around">
 
             <v-col class="text-h6 text-md-h5 text-lg-h4"> </v-col>
             <v-col>
@@ -92,6 +90,12 @@
           <v-card class="accent">
             <v-card-title class="headline">
                 <v-icon class="mr-2">mdi-wallet-outline</v-icon> Wallet delegations
+                <v-spacer />
+                <ClaimAllModal 
+ 
+                  :amountClaimAll="(rewards.amount / 1000000).toFixed(6)"
+                  :getAllDelegation="delegations"
+                />
           </v-card-title>  
             <v-card-text class="text-h5">
 
@@ -99,9 +103,9 @@
                 <template v-slot:default>
                   <thead>
                     <tr>
-                      <th>
+                      <!-- <th>
                         Action
-                      </th>
+                      </th> -->
                       <th>
                         Status
                       </th>
@@ -115,6 +119,12 @@
                         Reward
                       </th>
                       <th>
+                        Undelegate
+                      </th>                      
+                      <th>
+                        Redelegate
+                      </th>  
+                      <th>
                       </th>
                     </tr>
                   </thead>
@@ -124,13 +134,13 @@
                       v-for="item in delegations"
                       :key="item.validatorName"
                     >
-                      <td>
+                      <!-- <td>
                         <v-checkbox
                           v-model="selected"
                           :value="item.op_address"
                           color="#00b786"
                         ></v-checkbox>
-                      </td>
+                      </td> -->
                       <td>
                         <v-chip
                           v-if="item.status === 'BOND_STATUS_BONDED'"
@@ -142,6 +152,15 @@
                           <!--{{ item.status }}-->
                           Online
                         </v-chip>
+                        <v-chip
+                          v-else
+                          class="ma-2"
+                          color="red"
+                          outlined
+                          label
+                        >
+                          Offline
+                        </v-chip>                        
                        </td>
                       <td>
                         <router-link :to="'/validators/'+item.op_address" class="linkFormat">
@@ -149,16 +168,39 @@
                           {{ item.validatorName }}
                         </router-link> 
                       </td>
-                      <td>{{ item.share / 1000000 }} {{ cosmosConfig[0].coinLookup.viewDenom }}</td>
-                      <td>{{ (item.reward) }} {{ cosmosConfig[0].coinLookup.viewDenom }}</td>
+                      <td>{{ item.delegated / 1000000 }} {{ cosmosConfig[0].coinLookup.viewDenom }}</td>
+                      <td>{{ Number(item.reward).toFixed(6) }} {{ cosmosConfig[0].coinLookup.viewDenom }}</td>
+                      <td>{{ (item.unDelegations.amount) }} {{ cosmosConfig[0].coinLookup.viewDenom }}</td>
+                      <td>{{ (item.reDelegations.amount) }} {{ cosmosConfig[0].coinLookup.viewDenom }}</td>
+                      
                       <td>
                         <v-btn
+                          :disabled="item.reward > 0 ? false : true"
                           class="ma-2"
                           color="#00b786"
                           @click="getReward(item.op_address)"
                         >
                         <v-icon class="mr-2">mdi-download</v-icon> Claim
                         </v-btn>
+                        <RedelegateModal          
+                          class="ma-2"
+                          
+                          :chainIdProps="cosmosConfig[chainId].coinLookup.addressPrefix"
+                          :addressFrom="item.op_address"
+                          :amountRe="item.delegated / 1000000"
+                          :validatorName="item.validatorName"
+                          :coinIcon="cosmosConfig[chainId].coinLookup.icon"
+                        />
+                        <UndelegateSingleModal
+                          class="ma-2"
+                          :chainIdProps="cosmosConfig[chainId].coinLookup.addressPrefix"
+                          :addressFrom="item.op_address"
+                          :amountUn="item.delegated  / 1000000"
+                          :amountTotalUn="item.delegated"
+                          :validatorName="item.validatorName"
+                          :coinIcon="cosmosConfig[chainId].coinLookup.icon"
+ 
+                        />                                             
                       </td>
                     </tr>
                   </tbody>
@@ -169,9 +211,46 @@
         </v-col>
 
       </v-row>
- 
-    </sequential-entrance>
 
+   
+
+    </sequential-entrance>
+    <sequential-entrance v-if="dataLoaded" fromBottom>
+    <v-row  justify="space-around"  class="mt-4 data-row">
+          <v-col>
+            <v-card class="accent" min-height="500" >
+              <v-card-title class="headline">
+                <v-icon class="mr-2">mdi-wallet-outline</v-icon> Wallet Undelegates
+              </v-card-title> 
+              <!-- {{ allUnbonding }} -->
+              <v-data-table
+                :headers="headersUndbound"
+                :items="allUnbonding"
+                :items-per-page="5"
+                class="elevation-1 accent"
+ 
+              ></v-data-table>              
+            </v-card>
+          </v-col>
+          
+          <v-col>
+            <v-card class="accent" min-height="500">
+              <v-card-title class="headline">
+ 
+                <v-icon class="mr-2">mdi-wallet-outline</v-icon> Wallet Redelegates
+              </v-card-title> 
+              <!-- {{ allRedelegate }} -->
+              <v-data-table
+                :headers="headersRedelegate"
+                :items="allRedelegate"
+                :items-per-page="5"
+                class="elevation-1 accent"
+              ></v-data-table>               
+            </v-card>
+          </v-col>
+ 
+        </v-row>  
+      </sequential-entrance> 
       <sequential-entrance fromBottom>
         <v-row class="mt-4" justify="space-around">
           <v-col>
@@ -204,19 +283,58 @@ import {
 export default {
   data: () => ({
     cosmosConfig: cosmosConfig,
-    selected: []
+    selected: [],
+    dataLoaded: false,
+
+    headersUndbound: [
+          {
+            text: 'From',
+            align: 'start',
+            sortable: false,
+            value: 'validator_address',
+          },
+          { text: 'Amount', value: 'entries[0].balance' },
+          { text: 'completion_time', value: 'entries[0].completion_time' },
+          
+        ],   
+        headersRedelegate: [
+          {
+            text: 'From',
+            align: 'start',
+            sortable: false,
+            value: 'redelegation.validator_src_address',
+          },
+          { text: 'Amount', value: 'entries[0].balance' },
+          { text: 'completion_time', value: 'entries[0].redelegation_entry.completion_time' },
+          
+        ],                
   }),
   computed: {
     ...mapState('keplr', [`accounts`, `initialized`, `error`, `logged`, `logout`]),
-    ...mapState('data', ['chainId', 'balances', 'rewards', 'delegations', 'priceNow', 'totalBonded', 'validators', 'balancesPrice', 'totalWalletPrice']),
+    ...mapState('data', [
+      'chainId', 
+      'balances', 
+      'rewards', 
+      'delegations', 
+      'priceNow', 
+      'totalBonded', 
+      'validators', 
+      'balancesPrice', 
+      'totalWalletPrice', 
+      'allUnbonding',
+      'allRedelegate'
+    ]),
+
   },
   async mounted() {
-
-    await this.$store.dispatch('keplr/checkLogin')
+ 
+    await this.$store.dispatch('keplr/checkLogin')  
     if (!this.logged) {
       this.$router.push({ path: "/login" })
       return
     }
+    await this.$store.dispatch('data/getDelegations', this.accounts[0].address)
+    this.dataLoaded = true
   },
   methods: {
     getReward(addrValidator) {
@@ -246,7 +364,7 @@ export default {
             assertIsDeliverTxSuccess(result)
             this.$toast.dismiss(returnWaiting);
             notifSuccess(this.$toast, result.transactionHash)
-            await this.$store.dispatch('data/refresh', accounts[0].address)
+            await this.$store.dispatch('data/getDelegations', accounts[0].address)
           } catch (error) {
             console.error(error);
 

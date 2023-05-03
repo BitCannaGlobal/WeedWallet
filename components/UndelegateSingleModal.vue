@@ -248,7 +248,8 @@ import {
       ...mapState('data', ['chainId', `balances`]),
       enableModal: function () {
         var isDeleg = false
-        if (this.amountUn !== '0')
+        console.log(this.amountUn)
+        if (this.amountTotalUn !== '0')
           isDeleg =  true
 
         return isDeleg

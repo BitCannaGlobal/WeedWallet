@@ -5,30 +5,7 @@
     <!-- If deposit period -->
     <v-col v-if="proposalData.proposal.status === 'PROPOSAL_STATUS_DEPOSIT_PERIOD'" cols="12" sm="8" md="10">
       <v-row>
-            <v-col
-              cols="12"
-              md="8"
-            >
-              <v-card
-                dark
-                class="accent"
-              >
-              test
-              </v-card>
-            </v-col>     
-            <v-col
-              cols="12"
-              md="4"
-            >
-              <v-card
-                dark
-                class="accent"
-              >
-              test
-              </v-card>
-            </v-col>  
-            
-            
+
             <v-col
               cols="12"
               md="8"
@@ -162,6 +139,12 @@
               </td>
               <td v-if="proposalData.proposal.status === 'PROPOSAL_STATUS_VOTING_PERIOD'">
                 <!--{{ item.status }}-->
+                <SendProposalModal 
+                  :chainIdProps="cosmosConfig[chainId].coinLookup.addressPrefix"
+                  :coinIcon="cosmosConfig[chainId].coinLookup.icon"
+                  :idProposal="id"
+                  :cardsVote="cards"
+                />
                 <v-chip
                   text-color="white"
                   color="blue"
@@ -204,9 +187,21 @@
               <v-card-text>
 
                 <client-only>
-                  <PolarArea 
+ 
+                  <Doughnut 
+                    v-if="getTally.tally.yes > 0
+                    || getTally.tally.no  > 0
+                    || getTally.tally.abstain  > 0
+                    || getTally.tally.no_with_veto  > 0"
                     :data="chartData" 
                   />
+                  <h2 
+                    v-else  
+                    class="mt-10 d-flex justify-center align-center fill-height"
+                  >
+                    No vote
+                </h2>
+ 
                 </client-only>                
               </v-card-text>
               </v-card>
@@ -268,88 +263,276 @@
                       </tbody>
                     </template>
                   </v-simple-table>
+ 
                   <br /><br /><br /><br />
                   <!-- {{proposalData.proposal}} -->
-  <v-stepper >
-    <v-stepper-header dark>
-      <v-stepper-step
-        v-if="proposalData.proposal.status !== 'PROPOSAL_STATUS_DEPOSIT_PERIOD'"
-        step="1"
-        complete
-        color="#00b786"
-      >
-        Created
-      </v-stepper-step>
+                    <v-stepper >
+                      <v-stepper-header dark>
+                        <v-stepper-step
+                          v-if="proposalData.proposal.status !== 'PROPOSAL_STATUS_DEPOSIT_PERIOD'"
+                          step="1"
+                          complete
+                          color="#00b786"
+                        >
+                          Created
+                        </v-stepper-step>
 
-      <v-divider></v-divider>
+                        <v-divider></v-divider>
 
-      <v-stepper-step
-        step="2"
-        complete
-        color="#00b786"
-      >
-        Deposit Period Ends
-      </v-stepper-step>
+                        <v-stepper-step
+                          step="2"
+                          complete
+                          color="#00b786"
+                        >
+                          Deposit Period Ends
+                        </v-stepper-step>
 
-      <v-divider></v-divider>
+                        <v-divider></v-divider>
 
-      <v-stepper-step
-        step="3"
-        complete
-        color="#00b786"        
-      >
-        Voting Period Starts 
-      </v-stepper-step>
+                        <v-stepper-step
+                          step="3"
+                          complete
+                          color="#00b786"        
+                        >
+                          Voting Period Starts 
+                        </v-stepper-step>
 
-      <v-divider></v-divider>
+                        <v-divider></v-divider>
 
-      <v-stepper-step 
-        step="4"
-        v-if="proposalData.proposal.status === 'PROPOSAL_STATUS_VOTING_PERIOD'"
-      >
-        Voting Period Ends
-      </v-stepper-step>
-      <v-stepper-step 
-        step="4"
-        complete
-        color="#00b786"         
-        v-else
-      >
-        Voting Period Ends
-      </v-stepper-step>      
-    </v-stepper-header>
-  </v-stepper>
+                        <v-stepper-step 
+                          step="4"
+                          v-if="proposalData.proposal.status === 'PROPOSAL_STATUS_VOTING_PERIOD'"
+                        >
+                          Voting Period Ends
+                        </v-stepper-step>
+                        <v-stepper-step 
+                          step="4"
+                          complete
+                          color="#00b786"         
+                          v-else
+                        >
+                          Voting Period Ends
+                        </v-stepper-step>      
+                      </v-stepper-header>
+                    </v-stepper>
                 </v-card-text>
               </v-card>
             </v-col>            
           </v-row>
+
+          <v-row >
+            <v-col
+              cols="12"
+              md="6"
+            >
+              <v-card
+                dark 
+              >
+                <v-card-title>Quorum </v-card-title>
+                <v-card-text>
+                  <v-progress-linear  
+                    buffer-value="33" 
+                    stream     
+                    :value="((totalTally / 1000000) / (totalBonded /* * 0.33 */) * 100).toFixed(2)" 
+                    height="20" 
+                    background-color="#00b786" 
+                    color="#14FFC0"
+                    class="mb-10"
+                  >
+                  <div v-if="((totalTally / 1000000) / (totalBonded /* * 0.33 */) * 100).toFixed(2) > 33" class="ml-10">Quorum reached</div>
+                  <div v-else class="ml-10 text-red">Quorum not reached</div>
+                </v-progress-linear>
+ 
+                  <v-simple-table>
+                    <template v-slot:default>
+                      <tbody>
+                        <tr>
+                          <td>
+                            <v-icon
+                              color="#00b786"
+                              small
+                            >
+                              mdi-circle
+                            </v-icon>             
+                            Total Bounded</td>
+                          <td>100% ({{ Number(totalBonded).toFixed(2) }} bcna)</td>
+                        </tr>        
+                        <tr>
+                          <td>
+                            <v-icon
+                              color="#00b786"
+                              small
+                            >
+                              mdi-circle
+                            </v-icon>             
+                            Quorum needed</td>
+                          <td>33% ({{ Number(totalBonded * 0.33).toFixed(2) }} bcna)</td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <v-icon
+                              color="#14FFC0"
+                              small
+                            >
+                              mdi-circle
+                            </v-icon>              
+                            Quorum actual</td>
+                          <td>{{ Number((totalTally / 1000000) / (totalBonded /* * 0.33 */) * 100).toFixed(2) }}% ({{ (totalTally / 1000000).toFixed(2)}} bcna)</td>
+                        </tr>                  
+                      </tbody>
+                    </template>
+                  </v-simple-table>
+                
+                
+
+
+                </v-card-text>
+              </v-card>
+            </v-col>          
+            <v-col 
+              cols="12"
+              md="6"
+            >
+              <v-card
+                dark 
+              >
+                <v-card-title>Threshold (soon)</v-card-title>
+                <v-card-text>
+                  <v-progress-linear  
+                      value="20" 
+                      height="20" 
+                      background-color="#353434" 
+                      color="grey"
+                      class="mb-10"
+                    > 
+                  </v-progress-linear>
+
+                  <v-simple-table>
+    <template v-slot:default>
+      <tbody>
+        <tr>
+          <td>
+            <v-icon
+              color="#00b786"
+              small
+            >
+              mdi-circle
+            </v-icon>             
+            Voted yes</td>
+          <td>X %</td>  
+          <td>{{ getTally.tally.yes / 1000000 }} BCNA</td>
+        </tr>
+        <tr>
+          <td>
+            <v-icon
+              color="#14FFC0"
+              small
+            >
+              mdi-circle
+            </v-icon>              
+            Voted no</td>
+          <td>X %</td>
+          <td>{{ getTally.tally.no / 1000000 }} BCNA</td>
+        </tr>  
+        <tr>
+          <td>
+            <v-icon
+              color="#14FFC0"
+              small
+            >
+              mdi-circle
+            </v-icon>              
+            No With Veto</td>
+          <td>X %</td>
+          <td>{{ getTally.tally.no_with_veto / 1000000 }} BCNA</td>
+        </tr>                
+      </tbody>
+    </template>
+  </v-simple-table>
+
+
+                </v-card-text>
+              </v-card>
+            </v-col>  
+          </v-row> 
+ 
+
+          <v-row v-if="proposalData.proposal.status === 'PROPOSAL_STATUS_VOTING_PERIOD'">
+            <v-col
+              cols="12"
+              md="12"
+            >
+              <v-card
+                dark 
+              >
+                <v-card-title>Voters                 
+                </v-card-title>
+                <v-card-text>
+                  <v-data-table
+                    :headers="headers"
+                    :items="getVoters.votes"
+                    :items-per-page="5"
+                    class="elevation-1"
+                  >
+                    <template #item.options[0].option="{ item }">
+                        <v-chip
+                          v-if="item.options[0].option === 'VOTE_OPTION_YES'"
+                          class="ma-2"
+                          color="green"
+                          outlined
+                          label
+                        >
+                          YES
+                        </v-chip>
+                        <v-chip
+                          v-if="item.options[0].option === 'VOTE_OPTION_NO'"
+                          class="ma-2"
+                          color="red"
+                          outlined
+                          label
+                        >
+                          NO
+                        </v-chip> 
+                        <v-chip
+                          v-if="item.options[0].option === 'VOTE_OPTION_ABSTAIN'"
+                          class="ma-2"
+                          color="red"
+                          outlined
+                          label
+                        >
+                          ABSTAIN
+                        </v-chip> 
+                        <v-chip
+                          v-if="item.options[0].option === 'VOTE_OPTION_NO_WITH_VETO'"
+                          class="ma-2"
+                          color="orange"
+                          outlined
+                          label
+                        >
+                           NO WITH VETO
+                        </v-chip>                    
+                    </template>                  
+                  </v-data-table>
+                </v-card-text>
+              </v-card>
+            </v-col>         
+          </v-row>
+
           <v-row>
             <v-col
               cols="12"
-              md="8"
+              md="128"
             >
               <v-card
-                dark
-                height="200"
+                dark 
               >
-                <v-card-title>Voter</v-card-title>
-                <v-card-text>Card content</v-card-text>
+                <v-card-title>Proposal description</v-card-title>
+                <v-card-text>
+                  <div v-html="$md.render(proposalData.proposal.content.description)"></div> 
+                </v-card-text>
               </v-card>
-            </v-col>
-            <v-col
-              cols="12"
-              md="4"
-            >
-              <v-card
-                dark
-                height="200"
-              >
-                <v-card-title>Taly</v-card-title>
-                <v-card-text>Card content</v-card-text>
-              </v-card>
-            </v-col>            
-          </v-row>
- 
+            </v-col>          
+          </v-row> 
 
         </v-container>
       </v-item-group>
@@ -376,26 +559,62 @@ export default {
       id: '',
       initDeposit: 0,
       cosmosConfig: cosmosConfig,
+      getVoters: [],
       cards: [
         { title: 'Yes', src: 'https://cdn.vuetifyjs.com/images/cards/house.jpg', flex: 5 },
         { title: 'No', src: 'https://cdn.vuetifyjs.com/images/cards/road.jpg', flex: 5 },
         { title: 'NoWithVeto', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg', flex: 5 },
         { title: 'Abstain', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg', flex: 5 },
       ],
+      headers: [
+          {
+            text: 'Voter',
+            align: 'start',
+            sortable: false,
+            value: 'voter',
+          },
+          { text: 'Option', value: 'options[0].option' },
+          // { text: 'Voting power', value: 'options[0].weight' }
+        ], 
+      items: [
+        {
+          id: 1,
+          name: 'Applications :',
+          children: [
+            { id: 2, name: 'Calendar : app' },
+            { id: 3, name: 'Chrome : app' },
+            { id: 4, name: 'Webstorm : app' },
+          ],
+        }, 
+      ],    
   }),
   computed: {
     ...mapState('keplr', [`accounts`]),
-    ...mapState('data', ['chainId', `balances`, 'proposal', 'proposalLoaded', 'paramsDeposit']),
+    ...mapState('data', ['chainId', `balances`, 'proposal', 'proposalLoaded', 'paramsDeposit', 'totalBonded']),
+    totalTally() {
+      let totalTally = (Number(this.getTally.tally.yes) + 
+        Number(this.getTally.tally.no) + 
+        Number(this.getTally.tally.no_with_veto) + 
+        Number(this.getTally.tally.abstain))
+      console.log(totalTally)
+      return totalTally
+    },
     chartData() {
+      console.log(this.getTally)
       return {
         labels: ['Yes', 'No', 'No With Veto', 'Abstain'],
         datasets: [
           {
             label: '',
-            data: [10, 2, 15, 7],
+            data: [
+              this.getTally.tally.yes  / 1000000, 
+              this.getTally.tally.no / 1000000, 
+              this.getTally.tally.no_with_veto / 1000000, 
+              this.getTally.tally.abstain / 1000000, 
+            ],
             backgroundColor: [
+            '#b3ffeb',
               '#33ffc9',
-              '#00b383',
               '#00b383',
               '#004d38'
             ],
@@ -407,6 +626,7 @@ export default {
       }
     },
   },
+ 
     methods: {
       async submitDeposit () {
         console.log('submitDeposit')
@@ -508,16 +728,27 @@ export default {
     this.proposalDeposits = await fetch(
       cosmosConfig[this.chainId].apiURL + '/cosmos/gov/v1beta1/proposals/' + this.$route.params.id + '/deposits'
     ).then(res => res.json())    
-    
+    this.getVoters = await fetch(
+      cosmosConfig[this.chainId].apiURL + '/cosmos/gov/v1beta1/proposals/' + this.$route.params.id + '/votes'
+    ).then(res => res.json())       
     console.log(this.proposalData)
+
+
+    this.getTally = await fetch(
+      cosmosConfig[this.chainId].apiURL + '/cosmos/gov/v1beta1/proposals/' + this.$route.params.id + '/tally'
+    ).then(res => res.json())       
+ 
   },
   async mounted () {
     //await this.$store.dispatch('data/getSingleProposal', this.$route.params.id)
     //await this.$store.dispatch('keplr/checkLogin')
     //console.log(this.$route.params.id)
+ await this.$store.dispatch('keplr/checkLogin')
     this.id = this.$route.params.id
     await this.$store.dispatch('data/getProposalParamsDeposit')
     await this.$store.dispatch('data/getProposalDeposits', this.id)
+    await this.$store.dispatch('data/getProposalQuorum')
+    
     
  
   },

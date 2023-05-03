@@ -20,12 +20,7 @@
         </v-avatar>
          <span class="ml-2"> {{ accounts[0].walletName }}</span>
 
-        <v-btn
-          class="mb-2"
-          block
-          @click="logoutNow"
-        >Logout
-        </v-btn>
+
         </div>
         <v-btn
           v-if="!logged"
@@ -87,7 +82,14 @@
               </v-list-item-content>
             </v-list-item>
           </v-list>-->
-
+          <v-footer class="mb-8 justify-center pl-3" fixed>
+              <v-btn
+              class="mb-2"
+              block
+              @click="logoutNow"
+            >Logout
+            </v-btn>
+          </v-footer>
           <v-footer class="justify-center pl-0" fixed>
 
           <v-icon
@@ -124,7 +126,11 @@
     </v-tooltip>
     <span v-if="isCopied" class="ml-2">Address copied!</span>
       <v-spacer></v-spacer>
-
+      <!-- <v-switch
+        v-model="switch1"
+        class=" mt-6"
+        :label="`Simple/Pro: ${switch1.toString()}`"
+      ></v-switch> -->
         <v-menu
           v-model="menu"
           :close-on-content-click="false"
@@ -194,7 +200,7 @@
         class="py-8 px-6"
         fluid
       >
-        <Nuxt />
+        <Nuxt :vueMode="switch1.toString()" />
         
       </v-container>
     </v-main>
@@ -212,6 +218,7 @@ import pjson from '~/package'
   export default {
     data: () => ({
       cards: ['Today', 'Yesterday'],
+      switch1: true,
       drawer: null,
       right: true,
       rightDrawer: false,
@@ -228,7 +235,7 @@ import pjson from '~/package'
         // ['mdi-wallet-outline', 'Ibc manager', '/ibc'],
         // ['mdi-account-multiple', 'Groups manager', '/groups'],
         ['mdi-chevron-right', 'Transactions', '/transactions'],
-        ['mdi-chevron-right', 'Collectibles', '/collectibles'],
+        ['mdi-chevron-right', 'My NFT\'s', '/nfts'],
         ['mdi-chevron-right', 'Create proposal', '/create-proposal'],
       ],
     }),
@@ -243,9 +250,29 @@ import pjson from '~/package'
       },
       deep: true,
       immediate: true
+    },
+    async switch1(newQuestion, oldQuestion) {
+      console.log(newQuestion)
+      await this.$store.dispatch('data/changeLayout', newQuestion)
     }
   },
   async mounted() {
+    await this.$store.dispatch('keplr/checkLogin')
+
+    if (this.logged) {
+      await this.$store.dispatch('data/getPriceNow')
+      await this.$store.dispatch('data/getApr')
+      await this.$store.dispatch('data/getWalletInfo', this.accounts[0].address)
+      await this.$store.dispatch('data/getDelegations', this.accounts[0].address)
+      await this.$store.dispatch('data/getAllTxs', this.accounts[0].address)
+ 
+      await this.$store.dispatch('data/getAllBalances')
+    }  else {
+      this.$router.push({path: "/login"})
+      return
+    }
+
+    
 
     this.$store.dispatch('data/getBlockNow')
     this.$store.dispatch('data/getSdkVersion')

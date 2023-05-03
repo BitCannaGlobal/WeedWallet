@@ -193,7 +193,8 @@ import {
 	assertIsDeliverTxSuccess,
 	SigningStargateClient,
 	GasPrice,
-  calculateFee
+  calculateFee,
+  parseCoins
 } from '@cosmjs/stargate'
 
   function countPlaces(num) {
@@ -221,7 +222,7 @@ import {
         // v => bech32Validation(v) || 'Bad address (not bech32) ' + bech32Validation(v),
       ],
       amount: (instance.balances / 1000000),
-      amountFinal: (instance.balances / 1000000),
+      amountFinal: '',
       amountRules: [
         v => !!v || 'Amount is required',
         v => !isNaN(v) || 'Amount must be number',
@@ -262,8 +263,8 @@ import {
             )
              
           const foundMsgType = defaultRegistryTypes.find(element => element[0] === '/cosmos.staking.v1beta1.MsgDelegate');
- 
-          const convertAmount = (this.amount * 1000000).toFixed(0)
+
+          const convertAmount = Math.round(this.amount * 1000000)
           const amount = {
             denom: cosmosConfig[this.chainId].coinLookup.chainDenom,
             amount: convertAmount.toString(),
@@ -316,20 +317,25 @@ import {
               offlineSigner,
               { gasPrice: GasPrice.fromString(cosmosConfig[this.chainId].gasPrice + cosmosConfig[this.chainId].coinLookup.chainDenom) }
             )
-            const convertAmount = Number(this.amountFinal) * 1000000
+            
+            const convertAmount = Math.round(this.amountFinal * 1000000)
             const amountFinal = {
               denom: cosmosConfig[this.chainId].coinLookup.chainDenom,
               amount: convertAmount.toString(),
             }
 
+            console.log(amountFinal)
+ 
+
             try {
-              const result = await client.delegateTokens(accounts[0].address, this.addressVal, amountFinal, 'auto', this.memo)
+              const result = await client.delegateTokens(accounts[0].address, this.addressVal, amountFinal, 1.3, this.memo)
               assertIsDeliverTxSuccess(result)
+              console.log(result)
               this.step3 = false
               this.step4 = true
               this.loading = false
-
-              await this.$store.dispatch('data/refresh', accounts[0].address)
+              await this.$store.dispatch('data/getDelegations', accounts[0].address)
+              // await this.$store.dispatch('data/refresh', accounts[0].address)
              } catch (error) {
                 console.error(error);
                 this.eError = false

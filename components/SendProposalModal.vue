@@ -1,5 +1,5 @@
 <template>
-  <div> 
+  <div class="d-inline"> 
     <v-dialog
       v-model="dialog"
       max-width="600px"
@@ -39,7 +39,7 @@
                     >
                     <v-item :value="card" v-slot="{ active, toggle }">
                       <v-card
-                        :color="active ? 'primary' : ''"
+                        :color="active ? 'green' : ''"
                         class="d-flex align-center"
                         @click="toggle();"
                       >

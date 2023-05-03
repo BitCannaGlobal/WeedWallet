@@ -23,8 +23,7 @@
       >
       <v-expansion-panel-header v-slot="{ open }">
         <v-row no-gutters>
-          <v-col cols="2">
-
+          <v-col cols="1">
           <v-avatar
             class="mr-2"
           >
@@ -33,17 +32,18 @@
               alt="John"
             >
           </v-avatar>
-
+          </v-col>          
+          <v-col cols="2" class="mt-4">
             {{ item.timestamp | formatDate }}
           </v-col>
           <v-col
             cols="8"
-            class="text--secondary"
+            class="text--secondary "
           >
             <v-fade-transition leave-absolute>
               <span v-if="open">
                 <v-chip
-                  class="mt-2"
+                  class="mt-3"
                   :color="item.messageInfo.color"
                   outlined
                   label
@@ -59,7 +59,7 @@
               >
                 <v-col cols="3">
                   <v-chip
-                    class="mt-2"
+                    class="mt-3"
                     :color="item.messageInfo.color"
                     outlined
                     label
@@ -69,7 +69,7 @@
                   </v-chip>
 
                 </v-col>
-                <v-col cols="9">
+                <v-col cols="9" class="mt-4">
                   {{ item.txhash }}
                 </v-col>
               </v-row>
@@ -323,7 +323,7 @@ export default {
 
   },
   async mounted () {
-
+    await this.$store.dispatch('keplr/checkLogin')
     // TODO
     // 1/ lcd -> get delegations
     // 2/ lcd -> get undelegate
@@ -393,8 +393,10 @@ export default {
 
       }); */
 
-      const resultSender = await axios(cosmosConfig[0].apiURL + '/cosmos/tx/v1beta1/txs?events=message.sender=%27'+this.accounts[0].address+'%27' )
-      const resultRecipient = await axios(cosmosConfig[0].apiURL + '/cosmos/tx/v1beta1/txs?events=transfer.recipient=%27'+this.accounts[0].address+'%27')
+      const resultSender = await axios(
+        cosmosConfig[0].apiURL + '/cosmos/tx/v1beta1/txs?events=message.sender=%27'+this.accounts[0].address+'%27&limit='+cosmosConfig[this.chainId].maxTxSender+'&order_by=2' )
+      const resultRecipient = await axios(
+        cosmosConfig[0].apiURL + '/cosmos/tx/v1beta1/txs?events=transfer.recipient=%27'+this.accounts[0].address+'%27&limit='+cosmosConfig[this.chainId].maxTxSender+'&order_by=2')
       const finalTxs = resultSender.data.tx_responses.concat(resultRecipient.data.tx_responses);
 
       this.rpcAllTxs = this.transactionsReducer(finalTxs)
