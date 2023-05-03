@@ -78,8 +78,12 @@ export const actions = {
     commit('setPriceNow', getPrice.data.bitcanna.usd.toFixed(5))
   },
   async getApr({ commit, state }) {
-    const getApr =  await axios('https://graphql.bitcanna.io/api/rest/price/apr')
-    commit('setAprNow', Number (getApr.data.cmc_supply_apr[0].apr).toFixed(1))
+    const totalSupply =  await axios(cosmosConfig[state.chainId].apiURL + '/cosmos/bank/v1beta1/supply')
+    const inflation =  await axios(cosmosConfig[state.chainId].apiURL + '/cosmos/mint/v1beta1/inflation')
+    
+    let foundSupply = totalSupply.data.supply.find(element => element.denom === cosmosConfig[state.chainId].coinLookup.chainDenom);
+    let finalApr = (foundSupply.amount * inflation.data.inflation / state.totalBonded * 100).toFixed(1)
+    commit('setAprNow', finalApr)
   },
   async getSdkVersion({ commit, state }) {
     const getSdk =  await axios(cosmosConfig[state.chainId].apiURL + '/cosmos/base/tendermint/v1beta1/node_info')
