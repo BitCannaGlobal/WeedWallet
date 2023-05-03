@@ -396,59 +396,62 @@
               <v-card
                 dark 
               >
-                <v-card-title>Threshold (soon)</v-card-title>
+                <v-card-title>Threshold</v-card-title>
                 <v-card-text>
-                  <v-progress-linear  
-                      value="20" 
-                      height="20" 
-                      background-color="#353434" 
-                      color="grey"
-                      class="mb-10"
-                    > 
-                  </v-progress-linear>
+
+                  <v-progress-linear
+                    height="20" 
+                    background-color="error"
+                    color="#00b786"
+                    :value="(
+                        (Number(getTally.tally.yes) * 100) / 
+                        (Number(getTally.tally.yes) + Number(getTally.tally.no) + Number(getTally.tally.no_with_veto))
+                      ).toFixed(2) "
+                    class="mb-10"
+                  ></v-progress-linear>
 
                   <v-simple-table>
-    <template v-slot:default>
-      <tbody>
-        <tr>
-          <td>
-            <v-icon
-              color="#00b786"
-              small
-            >
-              mdi-circle
-            </v-icon>             
-            Voted yes</td>
-          <td>X %</td>  
-          <td>{{ getTally.tally.yes / 1000000 }} BCNA</td>
-        </tr>
-        <tr>
-          <td>
-            <v-icon
-              color="#14FFC0"
-              small
-            >
-              mdi-circle
-            </v-icon>              
-            Voted no</td>
-          <td>X %</td>
-          <td>{{ getTally.tally.no / 1000000 }} BCNA</td>
-        </tr>  
-        <tr>
-          <td>
-            <v-icon
-              color="#14FFC0"
-              small
-            >
-              mdi-circle
-            </v-icon>              
-            No With Veto</td>
-          <td>X %</td>
-          <td>{{ getTally.tally.no_with_veto / 1000000 }} BCNA</td>
-        </tr>                
-      </tbody>
-    </template>
-  </v-simple-table>
+                    <template v-slot:default>
+                      <tbody>
+                        <tr>
+                          <td>
+                            <v-icon
+                              color="#00b786"
+                              small
+                            >
+                              mdi-circle
+                            </v-icon>             
+                            Voted yes</td>
+                          <td>{{ ((Number(getTally.tally.yes) * 100) / ( Number(getTally.tally.yes) + Number(getTally.tally.no) + Number(getTally.tally.no_with_veto) )).toFixed(2) }} %</td>  
+                          <td>{{ getTally.tally.yes / 1000000 }} BCNA</td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <v-icon
+                              color="error"
+                              small
+                            >
+                              mdi-circle
+                            </v-icon>              
+                            Voted no</td>
+                          <td>{{ ((Number(getTally.tally.no) * 100) / ( Number(getTally.tally.yes) + Number(getTally.tally.no) + Number(getTally.tally.no_with_veto) )).toFixed(2) }} %</td> 
+                          <td>{{ getTally.tally.no / 1000000 }} BCNA</td>
+                        </tr>  
+                        <tr>
+                          <td>
+                            <v-icon
+                              color="#14FFC0"
+                              small
+                            >
+                              mdi-circle
+                            </v-icon>              
+                            No With Veto</td>
+                            <td>{{ ((Number(getTally.tally.no_with_veto) * 100) / ( Number(getTally.tally.yes) + Number(getTally.tally.no) + Number(getTally.tally.no_with_veto) )).toFixed(2) }} %</td> 
+                          <td>{{ getTally.tally.no_with_veto / 1000000 }} BCNA</td>
+                        </tr>                
+                      </tbody>
+                    </template>
+                  </v-simple-table>
 
 
                 </v-card-text>
@@ -561,10 +564,10 @@ export default {
       cosmosConfig: cosmosConfig,
       getVoters: [],
       cards: [
-        { title: 'Yes', src: 'https://cdn.vuetifyjs.com/images/cards/house.jpg', flex: 5 },
-        { title: 'No', src: 'https://cdn.vuetifyjs.com/images/cards/road.jpg', flex: 5 },
-        { title: 'NoWithVeto', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg', flex: 5 },
-        { title: 'Abstain', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg', flex: 5 },
+        { title: 'Yes', flex: 5 },
+        { title: 'No', flex: 5 },
+        { title: 'NoWithVeto', flex: 5 },
+        { title: 'Abstain', flex: 5 },
       ],
       headers: [
           {
