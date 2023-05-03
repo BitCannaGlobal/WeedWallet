@@ -173,7 +173,44 @@
                   <tbody>
                     <tr>
                       <td>#{{ item.messageInfo.msgData.proposal_id }}</td> 
-                      <td>{{ item.messageInfo.msgData.option }}</td>
+                      <td>
+                        <v-chip
+                          v-if="item.messageInfo.msgData.option === 'VOTE_OPTION_YES'"
+                          class="ma-2"
+                          color="green"
+                          outlined
+                          label
+                        >
+                          YES
+                        </v-chip>
+                        <v-chip
+                          v-if="item.messageInfo.msgData.option === 'VOTE_OPTION_NO'"
+                          class="ma-2"
+                          color="red"
+                          outlined
+                          label
+                        >
+                          NO
+                        </v-chip> 
+                        <v-chip
+                          v-if="item.messageInfo.msgData.option === 'VOTE_OPTION_ABSTAIN'"
+                          class="ma-2"
+                          color="red"
+                          outlined
+                          label
+                        >
+                          ABSTAIN
+                        </v-chip> 
+                        <v-chip
+                          v-if="item.messageInfo.msgData.option === 'VOTE_OPTION_NO_WITH_VETO'"
+                          class="ma-2"
+                          color="orange"
+                          outlined
+                          label
+                        >
+                           NO WITH VETO
+                        </v-chip>                      
+                      </td>
                     </tr>
                   </tbody>
                 </template>
