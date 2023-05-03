@@ -188,14 +188,6 @@
           >
             Send tx
           </v-btn>
-          
-            <v-btn
-              v-if="bcnaAddon && step2" 
-              color="#0FB786"
-              @click="bcnaSend"
-            >
-              Send from bcna
-            </v-btn> 
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -277,15 +269,7 @@ import {
  
     },    
     async mounted () {
-
-      // The ID of the extension we want to talk to.
-      if (typeof chrome.runtime === 'undefined') {
-        console.log('Chrome runtime is not defined. Are you running in an Android WebView?');
-        return;
-      } else {
-        console.log('Chrome runtime is defined.');  
-        this.bcnaAddon = true; 
-      }    
+      // TODO: https://gist.github.com/atmoner/a5f22555948a285890c8d95be908bac7
     },
     methods: {
       getMax () {
@@ -300,32 +284,7 @@ import {
       test () {
         this.dialogStepper = true
       }, 
-      bcnaSend () {
-  
-        // The ID of the extension we want to talk to.
-        if (typeof chrome.runtime === 'undefined') {
-          console.log('Chrome runtime is not defined. Are you running in an Android WebView?');
-          return;
-        } else {
-          console.log('Chrome runtime is defined.');
-          var editorExtensionId = "cidldciikbgbemcccegkacpncnajjpnp";
-          console.log(chrome.runtime)
-
-          // Make a simple request:
-          //console.log(chrome.runtime)
-          chrome.runtime.sendMessage(editorExtensionId, {
-            type: '/cosmos.bank.v1beta1.MsgSend',
-            from: this.accounts[0].address, 
-            to: this.address, 
-            amount: Math.round(this.amount * 1000000),
-            memo: this.memo
-          }, function(response) {
-            /* if (!response.success)
-              handleError(url); */
-            console.log(response)
-          });   
-        } 
-      },          
+        
       async validate () {
         
         if  (this.$refs.form.validate() === true) {
