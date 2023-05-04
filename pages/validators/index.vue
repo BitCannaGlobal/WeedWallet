@@ -218,7 +218,7 @@
     <sequential-entrance v-if="dataLoaded" fromBottom>
     <v-row  justify="space-around"  class="mt-4 data-row">
           <v-col>
-            <v-card class="accent" min-height="500" >
+            <v-card class="accent">
               <v-card-title class="headline">
                 <v-icon class="mr-2">mdi-wallet-outline</v-icon> Wallet Undelegates
               </v-card-title> 
@@ -234,7 +234,7 @@
           </v-col>
           
           <v-col>
-            <v-card class="accent" min-height="500">
+            <v-card class="accent">
               <v-card-title class="headline">
  
                 <v-icon class="mr-2">mdi-wallet-outline</v-icon> Wallet Redelegates
