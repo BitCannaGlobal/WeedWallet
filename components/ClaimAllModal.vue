@@ -52,7 +52,7 @@
               </tr>
             </tbody>          
             </v-simple-table>           
-            <v-stepper v-model="e1" v-if="dialogStepper">
+            <!-- <v-stepper v-model="e1" v-if="dialogStepper">
               <v-stepper-header>
                 <v-stepper-step
                   :complete="e1 > 1"
@@ -79,7 +79,7 @@
                   Tx send!
                 </v-stepper-step>
               </v-stepper-header> 
-            </v-stepper>  
+            </v-stepper>  --> 
           </v-container>
           </v-form>
         </v-card-text>
