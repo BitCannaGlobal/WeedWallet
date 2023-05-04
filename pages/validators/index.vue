@@ -92,7 +92,7 @@
                 <v-icon class="mr-2">mdi-wallet-outline</v-icon> Wallet delegations
                 <v-spacer />
                 <ClaimAllModal 
- 
+                  v-if="rewards.amount > 0"
                   :amountClaimAll="(rewards.amount / 1000000).toFixed(6)"
                   :getAllDelegation="delegations"
                 />
