@@ -257,9 +257,25 @@
             <v-card class="accent">
               <v-card-title class="headline">
                 <v-icon class="mr-2">mdi-wallet-outline</v-icon> All validators
+
+                  <v-spacer /> 
+                  <v-btn-toggle
+                    v-model="getStatus"
+                    borderless
+                    color="#00b786"
+                  >
+                    <v-btn value="all">
+                      <span class="hidden-sm-and-down">All</span>
+                    </v-btn>
+ 
+                    <v-btn value="active">
+                      <span class="hidden-sm-and-down">Active</span>
+                    </v-btn>
+                  </v-btn-toggle>
+
               </v-card-title>
               <v-card-text>
-                <AllValidators />
+                <AllValidators :getStatus="getStatus" />
               </v-card-text>
             </v-card>
           </v-col>
@@ -285,7 +301,7 @@ export default {
     cosmosConfig: cosmosConfig,
     selected: [],
     dataLoaded: false,
-
+    getStatus: 'active',
     headersUndbound: [
           {
             text: 'From',

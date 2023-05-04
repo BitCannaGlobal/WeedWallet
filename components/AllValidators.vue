@@ -1,22 +1,19 @@
 <template>
   <v-row justify="center" align="center">
     <v-col cols="12" sm="12" md="12">
- 
       <div class="row">
         <div class="col-sm">
 
           <v-data-table
             class="accent"
             :headers="headers"
-            :items="validators"
+            :items="finalValidators"
             :items-per-page="100"
           >
 
-            <template v-slot:top>
- 
+            <template v-slot:top> 
             </template>
             <template #item.status="{ item }">
-
               <v-chip
                 v-if="item.status === 'BOND_STATUS_BONDED'"
                 class="ma-2"
@@ -74,6 +71,7 @@ import cosmosConfig from '~/cosmos.config'
 import { notifWaiting, notifError, notifSuccess } from '~/libs/notifications'
 
 export default {
+  props: ['getStatus'],
   name: 'Validators',
     data () {
       return {
@@ -86,7 +84,7 @@ export default {
           { text: 'Uptime', value: 'uptime' },
           { text: '', value: 'actions' },
         ],
-
+      finalValidators: [],
       valid: false,
       addressToDelegate: '',
       amountToDelegate: '0',
@@ -100,16 +98,31 @@ export default {
       cosmosConfig: cosmosConfig,
       }
     },
+  watch: {
+    getStatus: function (val) {
+      if(val === 'active') {
+        const result = this.validators.filter(val => val.status === "BOND_STATUS_BONDED");
+        this.finalValidators = result
+      } else {
+        this.finalValidators = this.validators       
+      } 
+    },
+  },
   computed: {
     ...mapState('data', ['chainId', `balances`, 'validators']),
     ...mapState('keplr', [`logged`]),
   },
   async mounted () {
-    console.log(this.validators)
+    // console.log(this.validators)
     await this.$store.dispatch('keplr/checkLogin')
     if (this.logged === 'false')
       this.$router.push({path: "login"})
 
+    await this.$store.dispatch('data/getAllValidators')
+    if(this.getStatus === 'active') {
+      const result = this.validators.filter(val => val.status === "BOND_STATUS_BONDED");
+      this.finalValidators = result
+    }
     
   },
   methods: {

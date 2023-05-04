@@ -279,6 +279,8 @@ export const actions = {
   async getAllValidator({ commit, state }) {
     const allVal = await axios(cosmosConfig[state.chainId].apiURL + '/cosmos/staking/v1beta1/validators')
     commit('setAllValidators', allVal.data.validators)
+    commit('setValidatorsLoaded', true)
+    
   },
 
   async formatFinalMsgProp({ commit, state }, data) {
