@@ -1,5 +1,5 @@
 module.exports = {
-  setMsg(msg, addrGet) {
+  setMsg(msg, addrGet, timestamp) {
 
     let type = ''
     let typeReadable = ''
@@ -9,7 +9,7 @@ module.exports = {
 
     switch (msg['@type']) {
       case "/cosmos.bank.v1beta1.MsgSend":
-        console.log(addrGet)
+        console.log(timestamp)
         if (msg.to_address === addrGet) {
           typeReadable = 'Payment Received'
         } else
@@ -144,6 +144,6 @@ module.exports = {
       default:
         console.log("Sorry, dont know " + msg['@type'] + ".");
     }
-    return { type, typeReadable, color, icon, msgData }
+    return { type, typeReadable, color, icon, timestamp, msgData }
   }
 }

@@ -273,14 +273,13 @@
 
                     <v-row class="mt-1">
                       <v-col md="6"> 
-                        <v-btn
-                          large
-                          block
-                          class="mt-2 white--text" 
-                          color="#0FB786"
-                        >
-                          Send
-                        </v-btn> 
+                        <SendModal
+                          class="text-right"
+                          :chainIdProps="cosmosConfig[chainId].coinLookup.addressPrefix"
+                          :amountAvailable="(balances / 1000000)"
+                          :coinIcon="cosmosConfig[chainId].coinLookup.icon"
+                          type="simpleSend"
+                        />                        
                       </v-col>
                       <v-col
                         md="6" 
@@ -329,16 +328,29 @@
           
           <v-col class="mt-4 ml-8 mb-6 text-h6 text-md-h5 text-lg-h4">Transactions</v-col>         
           <template v-for="group in groupedEvents()" >
-      <div >
-        <h3>{{ group[0].section }}</h3>
-        <v-card v-for="item in group" :key="item" class="ma-2 pa-4 accent" width="700" min-height="50">
-           {{ item }} 
+            <div>
+              <h3>{{ group[0].section }}</h3>
+              <v-card v-for="item in group" class="ma-2 pa-4 accent" width="700" min-height="50">
+                <!-- {{ item }}  -->
+              <v-row justify="space-around" class="data-row">
+                <v-col>
+                  <v-chip
+                    class="mb-2"
+                    :color="item.final.color"
+                    outlined
+                    label 
+                  >
+                    {{ item.final.typeReadable }}
+                  </v-chip> <br />
+                  {{ item.final.timestamp | formatDate }}           
+                </v-col>
+                <v-col v-if="item.final.msgData.amount" class="mt-4 text-right">{{ item.final.msgData.amount }} BCNA</v-col>
+              </v-row>            
 
-
-          </v-card>
-        <!-- {{ group }} -->
-      </div>
-    </template>
+                </v-card>
+              <!-- {{ group }} -->
+            </div>
+          </template>
 
           </v-col>
           <v-divider
@@ -356,14 +368,63 @@
             </v-col>           
             </v-card-title> 
             <v-card-text>
-             
-              <span class="text-h6 text-md-h5 text-lg-h4">
-                Available to stake
-              </span>     
-              <br />
-              <span class="text-h6 ">
-                {{ (balances / 1000000).toFixed(6) }} {{ cosmosConfig[chainId].coinLookup.viewDenom }}
-              </span>                       
+              <v-row>
+                <v-col class="mt-2">
+                  <span class="text-h6 text-md-h5 text-lg-h4">
+                    Available to stake
+                  </span>
+                  <br />
+                  <span class="text-h6 ">
+                    {{ (balances / 1000000).toFixed(6) }} {{ cosmosConfig[chainId].coinLookup.viewDenom }}
+                  </span>                 
+                </v-col>             
+                <v-col class="mt-2 text-right">
+                  <span class="text-h6 text-md-h5 text-lg-h4">
+                    <v-btn
+                      large 
+                      min-width="200"
+                      class="mt-2 white--text" 
+                      color="#0FB786"
+                    >
+                      Stake
+                    </v-btn>
+                  </span>
+                </v-col>      
+              </v-row>
+            </v-card-text>
+          </v-card>  
+ 
+          <v-card class="mt-6 accent" width="700" min-height="220">
+            <v-card-title class="headline">
+              <v-col class="mt-2">
+                <h4 class="icon">
+                  <img src="icon-reward.png" /> 
+                </h4>
+              </v-col>           
+            </v-card-title> 
+            <v-card-text>
+              <v-row>
+              <v-col class="mt-2">
+                <span class="text-h6 text-md-h5 text-lg-h4">
+                  Your rewards
+                </span>
+                <br />
+                <span class="text-h6 ">
+                  {{ (rewards.amount / 1000000).toFixed(6) }} {{ cosmosConfig[chainId].coinLookup.viewDenom }}
+                </span>                 
+              </v-col>             
+              <v-col class="mt-2 text-right">
+                <span class="text-h6 text-md-h5 text-lg-h4">
+                  <v-btn
+                    large 
+                    min-width="200"
+                    class="mt-2 white--text" 
+                  >
+                    Claim
+                  </v-btn>
+                </span>
+              </v-col>      
+            </v-row>       
             </v-card-text>
           </v-card>  
           </v-col>
@@ -463,7 +524,7 @@ export default {
         const category = categories.find(({ matcher }) => matcher(event))
         
         if (category) {
-          let final = this.getMessageType(event.tx.body.messages[0])
+          let final = this.getMessageType(event.tx.body.messages[0], event.timestamp)
           return {
             section: category.section + dateString,
             final,
@@ -474,7 +535,7 @@ export default {
         const date = dayjs(event.timestamp)
         const today = dayjs()
         if (date.year() === today.year()) {
-          let final = this.getMessageType(event.tx.body.messages[0])
+          let final = this.getMessageType(event.tx.body.messages[0], event.timestamp)
           return {
             section: date.format('MMMM D, YYYY'),
             final,
@@ -482,18 +543,31 @@ export default {
         }
 
         // tx is in a month another year
-        let final = this.getMessageType(event.tx.body.messages[0])
+        let final = this.getMessageType(event.tx.body.messages[0], event.timestamp)
         return {
           section: date.format('MMMM D, YYYY'),
           final,
         }
       })
     },
-    getMessageType(msg) {
-      let typeReadable = setMsg(msg, this.accounts[0].address)
+    getMessageType(msg, timestamp) {
+      let typeReadable = setMsg(msg, this.accounts[0].address, timestamp)
       return typeReadable
     },
-  }
+  },
+  filters: {
+    formatDate: (dateStr) =>
+      Intl.DateTimeFormat("us-EN",
+        {
+          year: "numeric",
+          month: "numeric",
+          day: "numeric",
+          hour: "numeric",
+          minute: "numeric",
+          second: "numeric",
+          hour12: false
+        }).format(new Date(dateStr)),
+  }  
 }
 </script>
 <style>

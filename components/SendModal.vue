@@ -6,13 +6,25 @@
     >
       <template v-slot:activator="{ on, attrs }">
         <v-btn
+          v-if="type === 'simpleSend'"
+          large
+          block
+          v-bind="attrs"
+          v-on="on"
+          class="mt-2 white--text" 
+          color="#0FB786"
+        >
+          Send
+        </v-btn>  
+        <v-btn
+          v-else
           dark
           v-bind="attrs"
           v-on="on"
           color="#00b786"
         >
           <v-icon class="mr-2">mdi-send-circle</v-icon> Send
-        </v-btn>
+        </v-btn>      
       </template>
       <v-card class="accent">
         <v-card-title>
@@ -229,7 +241,7 @@ import {
     return b[1]? b[1].length : 0;
   }  
   export default {
-    props: ['chainIdProps', 'amountAvailable', 'coinIcon'],
+    props: ['chainIdProps', 'amountAvailable', 'coinIcon', 'type'],
     data: (instance) => ({
       e1: 1,
       eError: true,

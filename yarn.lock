@@ -1327,6 +1327,11 @@
   resolved "https://registry.npmjs.org/@csstools/selector-specificity/-/selector-specificity-2.2.0.tgz"
   integrity sha512-+OJ9konv95ClSTOJCmMZqpd5+YGsB2S+x6w3E1oaM8UuR5j8nTNHYSz8c9BEPGDOCMQYIEEGlVPj/VY64iTbGw==
 
+"@deepsource/nuxt-websocket@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@deepsource/nuxt-websocket/-/nuxt-websocket-1.0.0.tgz#4fcffc7711dc0aab319be8711df8415a4b08ed3b"
+  integrity sha512-zph3DqmBTGY090YpJpdfVb+EdkiQzXz+buZGkhyRYA8EDQJthTNxBSeFKD5WmRAf3g8UoF3f+9KVbwfDbxYMzA==
+
 "@discoveryjs/json-ext@0.5.7":
   version "0.5.7"
   resolved "https://registry.npmjs.org/@discoveryjs/json-ext/-/json-ext-0.5.7.tgz"
