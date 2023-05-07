@@ -1,4 +1,4 @@
-# cosmos-group
+# WeedWallet
 
 ## Build Setup
 
