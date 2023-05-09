@@ -63,7 +63,7 @@ export default {
     }
   },
   computed: {
-    chartData() {
+    chartData() { 
       return {
         labels: ['Available', 'Delegated', 'Undelegated', 'Reward'],
         datasets: [

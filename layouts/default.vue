@@ -306,6 +306,13 @@ import pjson from '~/package'
     this.$store.dispatch('data/getSdkVersion')
     setInterval(async () => {
       this.$store.dispatch('data/getBlockNow')
+      await this.$store.dispatch('data/getPriceNow')
+      await this.$store.dispatch('data/getWalletInfo', this.accounts[0].address)
+      await this.$store.dispatch('data/getDelegations', this.accounts[0].address)
+      await this.$store.dispatch('data/getAllTxs', this.accounts[0].address)
+      await this.$store.dispatch('data/getAllValidators')
+      await this.$store.dispatch('data/getApr') 
+      await this.$store.dispatch('data/getAllBalances')      
     }, 5000);
 
     window.addEventListener("keplr_keystorechange", async () => {
