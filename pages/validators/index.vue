@@ -150,7 +150,7 @@
                           label
                         >
                           <!--{{ item.status }}-->
-                          Online
+                          Active
                         </v-chip>
                         <v-chip
                           v-else
@@ -159,7 +159,7 @@
                           outlined
                           label
                         >
-                          Offline
+                          Inactive
                         </v-chip>                        
                        </td>
                       <td>

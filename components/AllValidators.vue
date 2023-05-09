@@ -21,8 +21,7 @@
                 outlined
                 label
               >
-                <!--{{ item.status }}-->
-                Online
+                Active
               </v-chip>
               <v-chip
                 v-else
@@ -31,9 +30,8 @@
                 outlined
                 label
               >
-                Offline
+              Inactive
               </v-chip>                 
-              <!-- BOND_STATUS_UNBONDING-->
             </template>
             <template #item.name="{ item }">
               <router-link :to="'/validators/'+item.op_address" class="linkFormat">
@@ -44,14 +42,6 @@
               <span v-if="item.status === 'BOND_STATUS_BONDED'">100%</span>
               <span v-else>0%</span>
             </template>
-            <!-- <template #item.actions="{ item }">
-                <DelegateModal
-                  :chainIdProps="cosmosConfig[chainId].coinLookup.addressPrefix"
-                  :addressTo="item.op_address"
-                  :validatorName="item.validatorName"
-                  :balances="balances"
-                />
-            </template> -->
           </v-data-table>
         </div>
       </div>
