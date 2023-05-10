@@ -320,8 +320,9 @@
             </v-col>            
           </v-row>
 
-          <v-row >
+          <v-row>
             <v-col
+              v-if="proposalData.proposal.status === 'PROPOSAL_STATUS_VOTING_PERIOD'"
               cols="12"
               md="6"
             >
@@ -341,8 +342,7 @@
                   >
                   <div v-if="((totalTally / 1000000) / (totalBonded /* * 0.33 */) * 100).toFixed(2) > 33" class="ml-10">Quorum reached</div>
                   <div v-else class="ml-10 text-red">Quorum not reached</div>
-                </v-progress-linear>
- 
+                </v-progress-linear> 
                   <v-simple-table>
                     <template v-slot:default>
                       <tbody>
@@ -381,17 +381,13 @@
                         </tr>                  
                       </tbody>
                     </template>
-                  </v-simple-table>
-                
-                
-
-
+                  </v-simple-table>  
                 </v-card-text>
               </v-card>
             </v-col>          
             <v-col 
               cols="12"
-              md="6"
+              :md="proposalData.proposal.status === 'PROPOSAL_STATUS_PASSED' ? '12' : '6'"
             >
               <v-card
                 dark 
