@@ -90,9 +90,15 @@ module.exports = {
           }
         break;
       case "/cosmos.staking.v1beta1.MsgBeginRedelegate":
+        type = msg['@type']
         typeReadable = 'Redelegate'
         color = '#00b786'
         icon = 'Unknown.svg'
+        msgData = {
+          from: msg.validator_src_address,
+          to: msg.validator_dst_address,
+          amount: msg.amount.amount / 1000000
+        }        
         break;     
       case "/ibc.applications.transfer.v1.MsgTransfer":
         typeReadable = 'IBC'
