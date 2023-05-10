@@ -188,7 +188,7 @@
                             mdi-circle
                           </v-icon>                          
                           Unbonding</td>
-                        <td>{{ totalUnbound }} {{ cosmosConfig[chainId].coinLookup.viewDenom }}</td>
+                        <td>{{ (totalUnbound /1000000).toFixed(6) }} {{ cosmosConfig[chainId].coinLookup.viewDenom }}</td>
                       </tr>
                       <tr>
                         <td>

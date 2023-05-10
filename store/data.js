@@ -202,7 +202,7 @@ export const actions = {
       }      
     } 
  
-    commit('setTotalUnbound', (sumUnbonding / 1000000).toFixed(6))
+    commit('setTotalUnbound', String(sumUnbonding))
     commit('setDelegations', copieRewards)
     commit('setRewards', foundMainDenom)
     commit('setTotalDelegated', String(totalDelegated))
