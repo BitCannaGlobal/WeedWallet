@@ -388,7 +388,7 @@ export const actions = {
     }))
 
     commit('setTotalBonded', totalBonded2)
-    commit('setValidators', copieValidators)
+    commit('setValidators', copieValidators.sort(() => 0.5 - Math.random()))
     commit('setValidatorsLoaded', true)
   },
   async getValidatorDetails({ commit, state }, valAddr) {
