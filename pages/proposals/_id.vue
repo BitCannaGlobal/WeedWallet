@@ -447,7 +447,7 @@
                         <tr v-else>
                           <td>
                             <v-icon
-                              color="#00b786"
+                              color="error"
                               small
                             >
                               mdi-circle
@@ -471,7 +471,7 @@
                         <tr v-else>
                           <td>
                             <v-icon
-                              color="#00b786"
+                              color="#14FFC0"
                               small
                             >
                               mdi-circle
