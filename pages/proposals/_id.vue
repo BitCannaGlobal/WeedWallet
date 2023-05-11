@@ -393,8 +393,7 @@
                 dark 
               >
                 <v-card-title>Threshold</v-card-title>
-                <v-card-text>
-{{ getTally.tally.yes }}
+                <v-card-text> 
                   <v-progress-linear
                     height="20" 
                     background-color="error"
