@@ -347,7 +347,7 @@ import {
       returnStep () {
         this.step1 = true
         this.step2 = false
-      },      
+      },          
       validatestep2 () {
         if (this.$refs.form.validate() === true) {
           (async () => {
@@ -382,13 +382,16 @@ import {
               this.step4 = true
               this.loading = false
               await this.$store.dispatch('data/refresh', accounts[0].address)
-              this.e1 = 3
+              this.e1 = 3              
             } catch (error) {
                 console.error(error);
                 this.eError = false
                 this.loading = false
                 this.step3 = false
                 this.step2 = true
+            } finally {
+              await new Promise(resolve => setTimeout(resolve, 4000))
+              this.dialog = false
             }
           })();
         }
