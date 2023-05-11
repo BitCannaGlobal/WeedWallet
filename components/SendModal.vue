@@ -278,10 +278,20 @@ import {
       ...mapState('data', ['chainId', `balances`]),
     },    
     watch: {
- 
+      dialog(value) {
+        if(value){
+          this.step1 = true
+          this.step2 = false
+          this.step3 = false
+          this.step4 = false 
+          this.address = ''
+          this.amount = ''
+        }
+      },
     },    
     async mounted () {
       // TODO: https://gist.github.com/atmoner/a5f22555948a285890c8d95be908bac7
+      this.step1 = true
     },
     methods: {
       getMax () {

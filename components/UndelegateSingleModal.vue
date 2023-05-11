@@ -243,6 +243,17 @@ import {
       loadingInput: false,
       cosmosConfig: cosmosConfig
     }),
+    watch: {
+      dialog(value) {
+        if(value){
+          this.step1 = true
+          this.step2 = false
+          this.step3 = false
+          this.step4 = false 
+          this.amount = ''
+        }
+      },
+    },     
     computed: {
       ...mapState('keplr', [`accounts`]),
       ...mapState('data', ['chainId', `balances`]),
@@ -363,6 +374,9 @@ import {
                 this.loading = false
                 this.step3 = false
                 this.step2 = true
+            } finally {
+              await new Promise(resolve => setTimeout(resolve, 4000))
+              this.dialog = false
             }
           })();
         }

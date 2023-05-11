@@ -234,6 +234,17 @@ import {
       loading: false,
       cosmosConfig: cosmosConfig
     }),
+    watch: {
+      dialog(value) {
+        if(value){
+          this.step1 = true
+          this.step2 = false
+          this.step3 = false
+          this.step4 = false 
+          this.amountFinal = ''
+        }
+      },
+    },      
     computed: {
       ...mapState('keplr', [`accounts`]),
       ...mapState('data', ['chainId']),
@@ -324,9 +335,6 @@ import {
               amount: convertAmount.toString(),
             }
 
-            console.log(amountFinal)
- 
-
             try {
               const result = await client.delegateTokens(accounts[0].address, this.addressVal, amountFinal, 1.3, this.memo)
               assertIsDeliverTxSuccess(result)
@@ -342,6 +350,9 @@ import {
                 this.loading = false
                 this.step3 = false
                 this.step2 = true
+            } finally {
+              await new Promise(resolve => setTimeout(resolve, 4000))
+              this.dialog = false
             }
           })();
         }
