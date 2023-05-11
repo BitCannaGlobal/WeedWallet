@@ -103,7 +103,6 @@ export const actions = {
       }
     }
 
-    console.log(state.priceNow)
     commit('setBalancesPrice', (foundAccountInfo?.amount / 1000000 * state.priceNow).toFixed(2))
     commit('setBalances', foundAccountInfo?.amount)
     return accountInfo
@@ -153,7 +152,6 @@ export const actions = {
         for (let i = 0; i < foundUnDelegations.entries.length; i++) {
           totalUnDelegations += foundUnDelegations.entries[i].balance / 1000000
         }
-        console.log(totalUnDelegations)
         foundUnDelegations = {
           denom: cosmosConfig[state.chainId].coinLookup.chainDenom,
           amount: totalUnDelegations
@@ -178,8 +176,6 @@ export const actions = {
         finalRewardAmount = (item.reward[0].amount / 1000000).toFixed(6)
       }
 
-
-      console.log(finalRewardAmount)
       copieRewards.push({
         validatorName: foundValidatorMainInfo?.description.moniker,
         op_address: foundDelegByValidator.delegation.validator_address,
@@ -303,8 +299,6 @@ export const actions = {
     var duration = moment.duration(paramsDeposit.data.deposit_params.max_deposit_period.replace('s', ''), 'seconds');
     const days = duration.days();
     const hours = duration.hours();
- 
-    console.log(duration)
     let saveParams = {
       min_deposit: (paramsDeposit.data.deposit_params.min_deposit[0].amount / 1000000).toFixed(2),
       max_deposit_period: `${days} days, ${hours} hours`,
@@ -321,8 +315,6 @@ export const actions = {
     const hours = duration.hours();
     const minutes = duration.minutes();
 
- 
-    console.log(paramsDeposit.data.voting_params.voting_period)
     let saveParams = {
       voting_period: `${hours} hours, ${minutes} minutes`
     }
@@ -333,7 +325,6 @@ export const actions = {
     // https://lcd-devnet-6.bitcanna.io/cosmos/gov/v1beta1/proposals/27/deposits
     const proposalDeposits = await axios(cosmosConfig[state.chainId].apiURL + '/cosmos/gov/v1beta1/proposals/' + idProposal + '/deposits')
 
-    console.log(proposalDeposits.data.deposits)
     // commit('setParamsVoting', saveParams)
   },  
   
@@ -367,15 +358,12 @@ export const actions = {
 
   async getProposalQuorum({ commit, state }) {
     const allDelegations = await axios(cosmosConfig[state.chainId].apiURL + '/cosmos/staking/v1beta1/validators')
-    console.log(allDelegations.data.validators)
  
     let totalBonded = 0
     for (let i = 0; i < allDelegations.data.validators.length; i++) {
       const item = (allDelegations.data.validators[i].tokens  / 1000000);
-      console.log(item);
       totalBonded += Number(item)
     }  
-    console.log(totalBonded);
     commit('setTotalBonded', totalBonded)
   },
 
@@ -405,12 +393,10 @@ export const actions = {
   async getValidatorDetails({ commit, state }, valAddr) {
 
     const validatorDetails = await axios(cosmosConfig[state.chainId].apiURL + '/cosmos/staking/v1beta1/validators/' + valAddr)
-    console.log(validatorDetails)
 
     commit('setValidatorDetails', validatorDetails.data.validator)
   },
   async getValidatorDelegation({ commit, state }, data) {
-    console.log(data)
     const validatorDelegation = await axios(cosmosConfig[state.chainId].apiURL + '/cosmos/staking/v1beta1/validators/' + data.validatorAddr + '/delegations/' + data.delegatorAddr)
     .then(res => {
       commit('setValidatorDelegations', res.data.delegation_response.balance.amount) 
