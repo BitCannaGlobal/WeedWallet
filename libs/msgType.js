@@ -1,14 +1,14 @@
-export function setMsg(msg, addrGet, timestamp) {
+export function setMsg(msg, addrGet, timestamp, allVal) {
 
   let type = ''
   let typeReadable = ''
   let color = ''
   let icon = ''
+  let foundVal = ''
   let msgData = Object
 
   switch (msg['@type']) {
-    case "/cosmos.bank.v1beta1.MsgSend":
-      console.log(timestamp)
+    case "/cosmos.bank.v1beta1.MsgSend": 
       if (msg.to_address === addrGet) {
         typeReadable = 'Payment Received'
       }
@@ -25,34 +25,38 @@ export function setMsg(msg, addrGet, timestamp) {
       }
       break
     case "/cosmos.staking.v1beta1.MsgDelegate":
+      foundVal = allVal.find(element => element.op_address === msg.validator_address);
       type = msg['@type']
       typeReadable = 'Delegate'
       color = '#f0a841'
       icon = 'Stake.svg'
       msgData = {
         delegator_address: msg.delegator_address,
-        validator_address: msg.validator_address,
+        validator_address: foundVal.name,
         amount: msg.amount.amount / 1000000
       }
       break
     case "/cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward":
+     
+      foundVal = allVal.find(element => element.op_address === msg.validator_address);
       type = msg['@type']
       typeReadable = 'Claim reward'
       color = '#6fffa3'
       icon = 'ClaimRewards.svg'
       msgData = {
         delegator_address: msg.delegator_address,
-        validator_address: msg.validator_address
+        validator_address: foundVal.name
       }
       break
     case "/cosmos.staking.v1beta1.MsgUndelegate":
+      foundVal = allVal.find(element => element.op_address === msg.validator_address);
       type = msg['@type']
       typeReadable = 'Unbound'
       color = '#f15249'
       icon = 'Unstake.svg'
       msgData = {
         delegator_address: msg.delegator_address,
-        validator_address: msg.validator_address,
+        validator_address: foundVal.name,
         amount: msg.amount.amount / 1000000
       }
       break
@@ -76,7 +80,6 @@ export function setMsg(msg, addrGet, timestamp) {
         proposal_id: msg.proposal_id,
         option: msg.option
       }
-      console.log(msg)
       break
     case "/cosmos.gov.v1beta1.MsgDeposit":
     case "/cosmos.gov.v1.MsgDeposit":
@@ -90,13 +93,15 @@ export function setMsg(msg, addrGet, timestamp) {
       }
       break
     case "/cosmos.staking.v1beta1.MsgBeginRedelegate":
+      foundVal = allVal.find(element => element.op_address === msg.validator_src_address);
+      let foundVal2 = allVal.find(element => element.op_address === msg.validator_dst_address);
       type = msg['@type']
       typeReadable = 'Redelegate'
       color = '#00b786'
       icon = 'Unknown.svg'
       msgData = {
-        from: msg.validator_src_address,
-        to: msg.validator_dst_address,
+        from: foundVal.name,
+        to: foundVal2.name,
         amount: msg.amount.amount / 1000000
       }
       break

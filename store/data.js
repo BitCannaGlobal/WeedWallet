@@ -389,6 +389,7 @@ export const actions = {
 
     commit('setTotalBonded', totalBonded2)
     commit('setValidators', copieValidators)
+    commit('setValidatorsLoaded', true)
   },
   async getValidatorDetails({ commit, state }, valAddr) {
 
