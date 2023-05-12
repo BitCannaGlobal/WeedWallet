@@ -588,7 +588,7 @@ export default {
     grid-template-columns: repeat(1, 1fr);
   }
 }
-@media (min-width: 1760px) {
+@media (min-width: 1200px) {
   .data-row {
     display: flex;
     justify-content: space-between;
