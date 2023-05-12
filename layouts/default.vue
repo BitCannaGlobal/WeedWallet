@@ -333,7 +333,7 @@ import pjson from '~/package'
       this.address = this.accounts[0].address
       await this.$store.dispatch('data/refresh', this.accounts[0].address)
 
-      this.$router.push({path: "/"})
+      // this.$router.push({path: "/"})
     },
     logoutNow() {
       this.$store.dispatch('keplr/logout')
