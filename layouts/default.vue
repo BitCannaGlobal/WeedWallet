@@ -298,8 +298,8 @@ import pjson from '~/package'
       await this.$store.dispatch('data/getApr') 
       await this.$store.dispatch('data/getAllBalances')
     }  else {
-      this.$router.push({path: "/login"})
-      return
+      //this.$router.push({path: "/login"})
+      //return
     }
 
     
