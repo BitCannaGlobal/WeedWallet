@@ -5,8 +5,7 @@
       cols="12"
       v-if="layout"
     >
-    
-      <sequential-entrance>
+    <sequential-entrance>
         <v-row justify="space-around">
           <v-col class="text-h6 text-md-h5 text-lg-h4">Wallet Statistics</v-col>
           <v-col>
@@ -19,25 +18,23 @@
           />
           </v-col>
         </v-row>
-      </sequential-entrance>
+      </sequential-entrance>    
+
       <sequential-entrance>
-      <v-row justify="space-around" class="data-row">
+      <v-row justify="space-around">
         <v-col>
           <v-card class="accent">
-            
             <v-card-title class="headline">
               <!--<v-icon class="mr-2">mdi-wallet-outline</v-icon> Wallet amount-->
-              <v-col class="mt-2">
-                <h4 class="icon">
-                  <!-- <img src="icon/wallet.png" /> -->
-                  <v-img 
+              <h4 class="icon">
+                <v-img 
                     src="icon/wallet.png"
                   ></v-img>                  
                   &ensp; Wallet value 
-                </h4>
-              </v-col>
-              <v-col class="text-right">
-                ${{ totalWalletPrice }} 
+              </h4>
+            </v-card-title>
+            <v-card-text class="text-right text-h5">
+              ${{ totalWalletPrice }} 
                 <v-tooltip top>
                 <template v-slot:activator="{ on, attrs }">
  
@@ -57,24 +54,20 @@
                   - Unbonding<br />
                   - Reward<br />
                 </span>
-              </v-tooltip>                
-
-              </v-col>              
-            </v-card-title>
- 
+              </v-tooltip>   
+            </v-card-text>
           </v-card>
         </v-col>
         <v-col>
           <v-card class="accent">
             <v-card-title class="headline">
-              <v-col class="mt-2">
               <h4 class="icon">
                 <img src="icon/tokens.png" />
                 &ensp; BCNA price
               </h4>
-            </v-col>
-            <v-col class="text-right">
-                ${{ priceNow }}
+            </v-card-title>
+            <v-card-text class="text-right text-h5">
+              ${{ priceNow }}
                 <v-tooltip top>
                 <template v-slot:activator="{ on, attrs }">
  
@@ -91,29 +84,27 @@
                 <span>
                   Proudly powered by BCNAracle 💚
                 </span>
-              </v-tooltip>                 
-            </v-col>               
-            </v-card-title> 
+              </v-tooltip> 
+            </v-card-text>
           </v-card>
         </v-col>
         <v-col>
- 
           <v-card class="accent">
             <v-card-title class="headline">
-              <v-col class="mt-2">
               <h4 class="icon">
                 <img src="icon/apr.png" />
                 &ensp; APR
               </h4>
-            </v-col>
-            <v-col class="text-right">
+            </v-card-title>
+            <v-card-text class="text-right text-h5">
               {{ aprNow }}%
-            </v-col>               
-            </v-card-title> 
-          </v-card>          
+            </v-card-text>
+          </v-card>
         </v-col>
       </v-row>
-      </sequential-entrance>
+      </sequential-entrance>  
+
+ 
       <sequential-entrance fromBottom>
       <v-row class="mt-4">
         <v-col>
