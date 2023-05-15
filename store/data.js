@@ -1,14 +1,20 @@
 import axios from 'axios'
 import moment from 'moment';
+import { createProtobufRpcClient, QueryClient } from "@cosmjs/stargate";
+import { Tendermint34Client } from "@cosmjs/tendermint-rpc";
+import { buildQuery } from "@cosmjs/tendermint-rpc/build/tendermint34/requests.js";
+import { toAscii, toHex } from "@cosmjs/encoding";
 import cosmosConfig from '~/cosmos.config'
 
 export const state = () => ({
   layout: true,
   block: undefined,
+  rpcClient: '',
   chainId: 0,
   blockNow: '0',
   balances: [],
   balancesPrice: '',
+  myDelegatorData: [],
   delegations: '',
   totalDelegated: '',
   rewards: '',
@@ -89,7 +95,69 @@ export const actions = {
     const getSdk =  await axios(cosmosConfig[state.chainId].apiURL + '/cosmos/base/tendermint/v1beta1/node_info')
     commit('setSdkVersion', getSdk.data.application_version.cosmos_sdk_version)
   },
+  async initRpc({ commit, state  }) {      
+    const client = await Tendermint34Client.connect(cosmosConfig[state.chainId].rpcURL)
+    const queryClient = new QueryClient(client);
+    const rpcClient = createProtobufRpcClient(queryClient); 
+    commit('setRpcClient', client)
+  }, 
+  async getDelegatorDataRpc({ commit, state }, data) {  
+       // Delegation historical
+       const queryDelegate = buildQuery({
+        tags: [
+          { key: "delegate.validator", value: data.validator },
+          { key: "message.sender", value: data.delegator },
+        ]
+      });
+      const resultDelegate = await state.rpcClient.txSearch({ query: queryDelegate });
 
+      let sumDelegation = 0
+      resultDelegate.txs.forEach(async (item) => {
+        let txEvent = JSON.parse(item.result.log)
+        const txHash = toHex(item.hash)
+        item.hashDecoded = txHash
+        item.txEvent = txEvent[0].events
+        const found = txEvent[0].events.find(element => element.type === 'delegate');
+        const foundAmount = found.attributes.find(element => element.key === 'amount');
+        item.amount = foundAmount.value.replace('ubcna', '')
+        sumDelegation += parseInt(item.amount)
+      });
+      this.delegationsRpc = resultDelegate.txs.reverse()
+      this.myTotalDelegation = (sumDelegation / 1000000).toFixed(2)
+
+      // UnDelegation historical
+      const queryUnDelegate = buildQuery({
+        tags: [
+          { key: "unbond.validator", value: data.validator },
+          { key: "message.sender", value: data.delegator },
+        ]
+      });
+      const resultUnDelegate = await state.rpcClient.txSearch({ query: queryUnDelegate });
+      //console.log(resultUnDelegate)
+
+      let sumUnDelegate = 0
+      resultUnDelegate.txs.forEach(async (item) => {
+        let txEvent = JSON.parse(item.result.log)
+        const txHash = toHex(item.hash)
+        item.hashDecoded = txHash
+        item.txEvent = txEvent[0].events
+        const found = txEvent[0].events.find(element => element.type === 'unbond');
+        const foundAmount = found.attributes.find(element => element.key === 'amount');
+        item.amount = foundAmount.value.replace('ubcna', '')
+        sumUnDelegate += parseInt(item.amount)
+      });
+      this.unDelegateRpc = resultUnDelegate.txs.reverse()
+      this.myTotalUnDelegation = (sumUnDelegate / 1000000).toFixed(2)
+
+      let myFinalData = {
+        delegationsRpc: resultDelegate.txs.reverse(),
+        unDelegateRpc: resultUnDelegate.txs.reverse(),
+        myTotalDelegation: (sumDelegation / 1000000).toFixed(2),
+        myTotalUnDelegation: (sumUnDelegate / 1000000).toFixed(2)
+      }
+      console.log(myFinalData)
+      commit('setMyDelegatorData', myFinalData)
+  },   
   async getWalletInfo({ commit, state }, address) {
     // /cosmos/bank/v1beta1/balances/
     // /cosmos/bank/v1beta1/spendable_balances/{address}

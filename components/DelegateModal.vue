@@ -343,6 +343,8 @@ import {
               this.step4 = true
               this.loading = false
               await this.$store.dispatch('data/getDelegations', accounts[0].address)
+              await this.$store.dispatch('data/getDelegatorDataRpc', { validator: this.addressVal, delegator: accounts[0].address })
+              await this.$store.dispatch('data/getValidatorDelegation', { validatorAddr: this.addressVal, delegatorAddr: accounts[0].address}) 
               // await this.$store.dispatch('data/refresh', accounts[0].address)
              } catch (error) {
                 console.error(error);
