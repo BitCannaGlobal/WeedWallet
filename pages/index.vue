@@ -473,6 +473,9 @@ export default {
   },
   async mounted () {
     await this.$store.dispatch('keplr/checkLogin')
+    if (!this.logged) {
+      this.$router.push({path: "/login"})
+    }  
   },
   
   methods: {
