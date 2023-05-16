@@ -321,7 +321,7 @@
           <template v-for="group in groupedEvents()" >
             <div>
               <h3>{{ group[0].section }}</h3>
-              <v-card v-for="item in group" class="ma-2 pa-4 accent" width="700" min-height="50">
+              <v-card v-for="item in group" :key="group[0].section" class="ma-2 pa-4 accent" width="700" min-height="50">
                 <!-- {{ item }}  -->
               <v-row justify="space-around" class="data-row">
                 <v-col>

@@ -39,7 +39,7 @@
     "vue-template-compiler": "^2.7.10",
     "vue-toastification": "^1.7.14",
     "vue2-flip-countdown": "^0.12.1",
-    "vuetify": "^2.6.10"
+    "vuetify": "^2.6.15"
   },
   "devDependencies": {
     "@nuxtjs/vuetify": "^1.12.3"
