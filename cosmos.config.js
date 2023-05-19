@@ -1,5 +1,5 @@
 export default [
- /* {
+  /* {
     chainId: 'bitcanna-dev-6',
     name: 'Bitcanna-testnet',
     desc: 'Bitcanna-testnet',
@@ -18,21 +18,21 @@ export default [
     sg721: 'stars1w4dff5myjyzymk8tkpjrzj6gnv352hcdpt2dszweqnff927a9xmqc7e0gv'
   },*/
   {
-    chainId: 'bitcanna-dev-1',
-    name: 'Bitcanna-testnet-1',
-    desc: 'Bitcanna-testnet',
-    apiURL: 'https://lcd-testnet.bitcanna.io',
-    rpcURL: 'https://rpc-testnet.bitcanna.io',
+    chainId: "bitcanna-dev-1",
+    name: "Bitcanna-testnet-1",
+    desc: "Bitcanna-testnet",
+    apiURL: "https://lcd-testnet.bitcanna.io",
+    rpcURL: "https://rpc-testnet.bitcanna.io",
     coinLookup: {
-      viewDenom: 'BCNA',
-      chainDenom: 'ubcna',
-      addressPrefix: 'bcna',
+      viewDenom: "BCNA",
+      chainDenom: "ubcna",
+      addressPrefix: "bcna",
       icon: `https://raw.githubusercontent.com/cosmos/chain-registry/master/bitcanna/images/bcna.svg`,
     },
     feeMultiplier: 1.5,
-    gasPrice: 0.025,    
-    coingeckoId: 'bitcanna',
+    gasPrice: 0.025,
+    coingeckoId: "bitcanna",
     maxTxSender: 20,
     maxTxRecipient: 20,
   },
-]
+];

@@ -6,14 +6,14 @@
           <v-card>
             <!--<webSocketGetTxs />-->
           </v-card>
-      <div class="row">
-        <div class="col-sm">
-          <v-card>
-            <v-card-title class="headline">
-              Last 50 Transactions
-            </v-card-title>
-            <v-card-text>
-              <!--<v-expansion-panels>
+          <div class="row">
+            <div class="col-sm">
+              <v-card>
+                <v-card-title class="headline">
+                  Last 50 Transactions
+                </v-card-title>
+                <v-card-text>
+                  <!--<v-expansion-panels>
                 <v-expansion-panel
                   v-for="item in lastTxs.tx_responses"
                   :key="item.txhash"
@@ -51,151 +51,162 @@
                 </v-expansion-panel>
               </v-expansion-panels>-->
 
+                  <v-simple-table>
+                    <template v-slot:default>
+                      <thead>
+                        <tr>
+                          <th class="text-left">Date</th>
+                          <th class="text-left">height</th>
+                          <th class="text-left">txhash</th>
+                          <th class="text-left">Type</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr
+                          v-for="item in lastTxs.tx_responses"
+                          :key="item.txhash"
+                        >
+                          <td>{{ item.timestamp | formatDate }}</td>
+                          <td>{{ item.height }}</td>
 
+                          <!--<td>{{ item.tx.body.messages[0]['@type'] }}</td>-->
+                          <td
+                            v-if="
+                              item.tx.body.messages[0]['@type'] ===
+                              '/cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward'
+                            "
+                          >
+                            <v-chip class="ma-2">
+                              Withdraw Delegator Reward
+                            </v-chip>
+                          </td>
+                          <td
+                            v-if="
+                              item.tx.body.messages[0]['@type'] ===
+                              '/cosmos.bank.v1beta1.MsgSend'
+                            "
+                          >
+                            <v-chip class="ma-2"> Msg Send </v-chip>
+                          </td>
+                          <td
+                            v-if="
+                              item.tx.body.messages[0]['@type'] ===
+                              '/cosmos.staking.v1beta1.MsgDelegate'
+                            "
+                          >
+                            <v-chip class="ma-2"> Delegate </v-chip>
+                          </td>
 
-              <v-simple-table>
-                <template v-slot:default>
-                  <thead>
-                    <tr>
-                      <th class="text-left">
-                        Date
-                      </th>
-                      <th class="text-left">
-                        height
-                      </th>
-                      <th class="text-left">
-                        txhash
-                      </th>
-                      <th class="text-left">
-                        Type
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr
-                      v-for="item in lastTxs.tx_responses"
-                      :key="item.txhash"
-                    >
-                      <td>{{ item.timestamp | formatDate }}</td>
-                      <td>{{ item.height }}</td>
-
-                      <!--<td>{{ item.tx.body.messages[0]['@type'] }}</td>-->
-                      <td v-if='item.tx.body.messages[0]["@type"] === "/cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward"'>
-                        <v-chip
-                          class="ma-2"
-                        >
-                          Withdraw Delegator Reward
-                        </v-chip>
-                      </td>
-                      <td v-if='item.tx.body.messages[0]["@type"] === "/cosmos.bank.v1beta1.MsgSend"'>
-                        <v-chip
-                          class="ma-2"
-                        >
-                          Msg Send
-                        </v-chip>
-                      </td>
-                      <td v-if='item.tx.body.messages[0]["@type"] === "/cosmos.staking.v1beta1.MsgDelegate"'>
-                        <v-chip
-                          class="ma-2"
-                        >
-                         Delegate
-                        </v-chip>
-                      </td>
-
-                      <td v-if='item.tx.body.messages[0]["@type"] === "/cosmos.group.v1.MsgExec"'>
-                        <v-chip
-                          class="ma-2"
-                        >
-                          Msg Exec
-                        </v-chip>
-                      </td>
-                      <td v-if='item.tx.body.messages[0]["@type"] === "/cosmos.group.v1.MsgSubmitProposal"'>
-                        <v-chip
-                          class="ma-2"
-                        >
-                          Submit Proposal
-                        </v-chip>
-                      </td>
-                      <td v-if='item.tx.body.messages[0]["@type"] === "/cosmos.group.v1.MsgVote"'>
-                        <v-chip
-                          class="ma-2"
-                        >
-                          Group Vote
-                        </v-chip>
-                      </td>
-                      <td v-if='item.tx.body.messages[0]["@type"] === "/cosmos.group.v1.MsgCreateGroupWithPolicy"'>
-                        <v-chip
-                          class="ma-2"
-                        >
-                          Create Group With Policy
-                        </v-chip>
-                      </td>
-                      <td v-if='item.tx.body.messages[0]["@type"] === "/ibc.applications.transfer.v1.MsgTransfer"'>
-                        <v-chip
-                          class="ma-2"
-                        >
-                          IBC MsgTransfer
-                        </v-chip>
-                      </td>
-                      <td v-if='item.tx.body.messages[0]["@type"] === "/ibc.core.client.v1.MsgUpdateClient"'>
-                        <v-chip
-                          class="ma-2"
-                        >
-                          IBC MsgUpdateClient
-                        </v-chip>
-                      </td>
-                      <td v-if='item.tx.body.messages[0]["@type"] === "/ibc.core.channel.v1.MsgChannelOpenInit"'>
-                        <v-chip
-                          class="ma-2"
-                        >
-                          IBC MsgChannelOpenInit
-                        </v-chip>
-                      </td>
-                      <td v-if='item.tx.body.messages[0]["@type"] === "/ibc.core.connection.v1.MsgConnectionOpenInit"'>
-                        <v-chip
-                          class="ma-2"
-                        >
-                          IBC MsgConnectionOpenInit
-                        </v-chip>
-                      </td>
-                      <td v-if='item.tx.body.messages[0]["@type"] === "/ibc.core.client.v1.MsgCreateClient"'>
-                        <v-chip
-                          class="ma-2"
-                        >
-                          IBC MsgCreateClient
-                        </v-chip>
-                      </td>
-                      <td v-if='item.tx.body.messages[0]["@type"] === "/cosmos.group.v1.MsgUpdateGroupMembers"'>
-                        <v-chip
-                          class="ma-2"
-                        >
-                          Update Group Members
-                        </v-chip>
-                      </td>
-                      <td v-if='item.tx.body.messages[0]["@type"] === "/cosmos.group.v1.MsgUpdateGroupMetadata"'>
-                        <v-chip
-                          class="ma-2"
-                        >
-                          Update Group Metadata
-                        </v-chip>
-                      </td>
-                      <td>
-                        <v-tooltip top>
-                          <template v-slot:activator="{ on, attrs }">
-                            <v-btn
-                              v-bind="attrs"
-                              v-on="on"
-                            >
-                              View detail
-                            </v-btn>
-                          </template>
-                          <span>{{ item.txhash }}</span>
-                        </v-tooltip>
-                      </td>
-                    </tr>
-                  </tbody>
-                </template>
-              </v-simple-table>
+                          <td
+                            v-if="
+                              item.tx.body.messages[0]['@type'] ===
+                              '/cosmos.group.v1.MsgExec'
+                            "
+                          >
+                            <v-chip class="ma-2"> Msg Exec </v-chip>
+                          </td>
+                          <td
+                            v-if="
+                              item.tx.body.messages[0]['@type'] ===
+                              '/cosmos.group.v1.MsgSubmitProposal'
+                            "
+                          >
+                            <v-chip class="ma-2"> Submit Proposal </v-chip>
+                          </td>
+                          <td
+                            v-if="
+                              item.tx.body.messages[0]['@type'] ===
+                              '/cosmos.group.v1.MsgVote'
+                            "
+                          >
+                            <v-chip class="ma-2"> Group Vote </v-chip>
+                          </td>
+                          <td
+                            v-if="
+                              item.tx.body.messages[0]['@type'] ===
+                              '/cosmos.group.v1.MsgCreateGroupWithPolicy'
+                            "
+                          >
+                            <v-chip class="ma-2">
+                              Create Group With Policy
+                            </v-chip>
+                          </td>
+                          <td
+                            v-if="
+                              item.tx.body.messages[0]['@type'] ===
+                              '/ibc.applications.transfer.v1.MsgTransfer'
+                            "
+                          >
+                            <v-chip class="ma-2"> IBC MsgTransfer </v-chip>
+                          </td>
+                          <td
+                            v-if="
+                              item.tx.body.messages[0]['@type'] ===
+                              '/ibc.core.client.v1.MsgUpdateClient'
+                            "
+                          >
+                            <v-chip class="ma-2"> IBC MsgUpdateClient </v-chip>
+                          </td>
+                          <td
+                            v-if="
+                              item.tx.body.messages[0]['@type'] ===
+                              '/ibc.core.channel.v1.MsgChannelOpenInit'
+                            "
+                          >
+                            <v-chip class="ma-2">
+                              IBC MsgChannelOpenInit
+                            </v-chip>
+                          </td>
+                          <td
+                            v-if="
+                              item.tx.body.messages[0]['@type'] ===
+                              '/ibc.core.connection.v1.MsgConnectionOpenInit'
+                            "
+                          >
+                            <v-chip class="ma-2">
+                              IBC MsgConnectionOpenInit
+                            </v-chip>
+                          </td>
+                          <td
+                            v-if="
+                              item.tx.body.messages[0]['@type'] ===
+                              '/ibc.core.client.v1.MsgCreateClient'
+                            "
+                          >
+                            <v-chip class="ma-2"> IBC MsgCreateClient </v-chip>
+                          </td>
+                          <td
+                            v-if="
+                              item.tx.body.messages[0]['@type'] ===
+                              '/cosmos.group.v1.MsgUpdateGroupMembers'
+                            "
+                          >
+                            <v-chip class="ma-2"> Update Group Members </v-chip>
+                          </td>
+                          <td
+                            v-if="
+                              item.tx.body.messages[0]['@type'] ===
+                              '/cosmos.group.v1.MsgUpdateGroupMetadata'
+                            "
+                          >
+                            <v-chip class="ma-2">
+                              Update Group Metadata
+                            </v-chip>
+                          </td>
+                          <td>
+                            <v-tooltip top>
+                              <template v-slot:activator="{ on, attrs }">
+                                <v-btn v-bind="attrs" v-on="on">
+                                  View detail
+                                </v-btn>
+                              </template>
+                              <span>{{ item.txhash }}</span>
+                            </v-tooltip>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </template>
+                  </v-simple-table>
                   <!--<div class="text-center">
                     <v-pagination
                       v-model="currentPage"
@@ -204,10 +215,10 @@
                       @input="handlePageChange"
                     ></v-pagination>
                   </div>-->
-            </v-card-text>
-          </v-card>
-        </div>
-      </div>
+                </v-card-text>
+              </v-card>
+            </div>
+          </div>
         </v-col>
       </v-row>
     </v-col>
@@ -215,63 +226,65 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
-import axios from 'axios'
+import { mapState } from "vuex";
+import axios from "axios";
 import {
-	assertIsDeliverTxSuccess,
-	SigningStargateClient,
-} from '@cosmjs/stargate'
-import cosmosConfig from '~/cosmos.config'
-import { notifWaiting, notifError, notifSuccess } from '~/libs/notifications'
+  assertIsDeliverTxSuccess,
+  SigningStargateClient,
+} from "@cosmjs/stargate";
+import cosmosConfig from "~/cosmos.config";
+import { notifWaiting, notifError, notifSuccess } from "~/libs/notifications";
 
 export default {
   data: () => ({
     cosmosConfig: cosmosConfig,
-    totalPage: '',
+    totalPage: "",
     lastTxs: [],
-
   }),
   computed: {
-    ...mapState('keplr', [`accounts`, `initialized`, `error`, `logged`, `logout`]),
-    ...mapState('data', ['chainId', 'balances', 'rewards', 'delegations']),
+    ...mapState("keplr", [
+      `accounts`,
+      `initialized`,
+      `error`,
+      `logged`,
+      `logout`,
+    ]),
+    ...mapState("data", ["chainId", "balances", "rewards", "delegations"]),
   },
   async fetch() {
     var getTotalPages = await fetch(
-      cosmosConfig[this.chainId].apiURL + '/cosmos/tx/v1beta1/txs?events=message.action=%27%27&page=1&limit=50&order_by=2'
-    ).then(res => res.json())
-    this.totalPage = Number(getTotalPages.total)
-    console.log(this.totalPage)
-    console.log(getTotalPages)
-    this.lastTxs = getTotalPages
+      cosmosConfig[this.chainId].apiURL +
+        "/cosmos/tx/v1beta1/txs?events=message.action=%27%27&page=1&limit=50&order_by=2"
+    ).then((res) => res.json());
+    this.totalPage = Number(getTotalPages.total);
+    console.log(this.totalPage);
+    console.log(getTotalPages);
+    this.lastTxs = getTotalPages;
   },
-  methods: {
-
-  },
+  methods: {},
   filters: {
     formatDate: (dateStr) =>
-      Intl.DateTimeFormat("us-EN",
-        {
-          year: "numeric",
-          month: "numeric",
-          day: "numeric",
-          hour: "numeric",
-          minute: "numeric",
-          second: "numeric",
-          hour12: false
-        }).format(new Date(dateStr)),
+      Intl.DateTimeFormat("us-EN", {
+        year: "numeric",
+        month: "numeric",
+        day: "numeric",
+        hour: "numeric",
+        minute: "numeric",
+        second: "numeric",
+        hour12: false,
+      }).format(new Date(dateStr)),
 
     formatDateCountDown(dateStr) {
-      return Intl.DateTimeFormat("en-US",
-        {
-          year: "numeric",
-          month: "numeric",
-          day: "numeric",
-          hour: "numeric",
-          minute: "numeric",
-          second: "numeric",
-          hour12: false
-        }).format(new Date(dateStr))
+      return Intl.DateTimeFormat("en-US", {
+        year: "numeric",
+        month: "numeric",
+        day: "numeric",
+        hour: "numeric",
+        minute: "numeric",
+        second: "numeric",
+        hour12: false,
+      }).format(new Date(dateStr));
     },
   },
-}
+};
 </script>

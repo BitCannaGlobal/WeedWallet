@@ -1,4 +1,3 @@
-
 <template>
   <div>
     <v-item-group>
@@ -8,16 +7,22 @@
             <v-item>
               <div class="flex-grow-1 text-center">
                 <v-hover v-slot="{ hover }" open-delay="200">
-                  <v-card class="rounded-lg justify-center mx-auto" :elevation="hover ? 16 : 2"
-                    :class="{ 'on-hover': hover }" :color="$vuetify.theme.dark ? 'theme-dark' : 'theme-light'" tile
-                    outlined>
+                  <v-card
+                    class="rounded-lg justify-center mx-auto"
+                    :elevation="hover ? 16 : 2"
+                    :class="{ 'on-hover': hover }"
+                    :color="$vuetify.theme.dark ? 'theme-dark' : 'theme-light'"
+                    tile
+                    outlined
+                  >
+                    <div
+                      class="d-flex text-5 white--text font-weight-bold pt-10 justify-center mx-auto mb-6"
+                    >
+                      POOL 571
+                    </div>
+                    <img src="icon/BCNA-Osmo.svg" width="80" height="45" />
 
-                      <div class="d-flex text-5 white--text  font-weight-bold pt-10 justify-center mx-auto mb-6">
-                        POOL 571
-                      </div>
-                      <img src="icon/BCNA-Osmo.svg" width="80" height="45" />
-
-                    <v-list color="transparent" class="text-center " nav dense>
+                    <v-list color="transparent" class="text-center" nav dense>
                       <v-list-item-title class="text-h6 font-weight-bold">
                         Title
                       </v-list-item-title>
@@ -26,17 +31,16 @@
                       </v-list-item>
                       <v-list-item-group v-model="selectedItem" color="primary">
                         <v-list-item v-for="(item, i) in items" :key="i">
-
                           <v-list-item-content>
-                            <v-list-item-title v-text="item.text"></v-list-item-title>
+                            <v-list-item-title
+                              v-text="item.text"
+                            ></v-list-item-title>
                           </v-list-item-content>
                         </v-list-item>
                       </v-list-item-group>
                     </v-list>
                     <div class="text-center ma-3">
-                      <v-btn dark>
-                        Choose Plan
-                      </v-btn>
+                      <v-btn dark> Choose Plan </v-btn>
                     </div>
                   </v-card>
                 </v-hover>
@@ -48,42 +52,46 @@
             <v-item>
               <div class="flex-grow-1 text-center">
                 <v-hover v-slot="{ hover }" open-delay="200">
-                  <v-card class="rounded-lg justify-center mx-auto" :elevation="hover ? 16 : 2"
-                    :class="{ 'on-hover': hover }" :color="$vuetify.theme.dark ? 'theme-dark' : 'theme-light'" tile
-                    outlined>
-
-                      <div class="d-flex text-5 white--text  font-weight-bold pt-10 justify-center mx-auto mb-6">
-                        POOL 572
-                      </div>
+                  <v-card
+                    class="rounded-lg justify-center mx-auto"
+                    :elevation="hover ? 16 : 2"
+                    :class="{ 'on-hover': hover }"
+                    :color="$vuetify.theme.dark ? 'theme-dark' : 'theme-light'"
+                    tile
+                    outlined
+                  >
+                    <div
+                      class="d-flex text-5 white--text font-weight-bold pt-10 justify-center mx-auto mb-6"
+                    >
+                      POOL 572
+                    </div>
 
                     <img src="icon/BCNA-Atom.svg" />
-                    <v-list color="transparent" class="text-center " nav dense>
+                    <v-list color="transparent" class="text-center" nav dense>
                       <v-list-item-title class="text-h6 font-weight-bold">
                         Title
                       </v-list-item-title>
-                      <v-list-item  class="rounded-lg justify-center mx-auto">
+                      <v-list-item class="rounded-lg justify-center mx-auto">
                         Sub title Sub title Sub title Sub title
                       </v-list-item>
                       <v-list-item-group v-model="selectedItem" color="primary">
                         <v-list-item v-for="(item, i) in items" :key="i">
-
                           <v-list-item-content>
-                            <v-list-item-title v-text="item.text"></v-list-item-title>
+                            <v-list-item-title
+                              v-text="item.text"
+                            ></v-list-item-title>
                           </v-list-item-content>
                         </v-list-item>
                       </v-list-item-group>
                     </v-list>
                     <div class="text-center ma-3">
-                      <v-btn dark>
-                        Choose Plan
-                      </v-btn>
+                      <v-btn dark> Choose Plan </v-btn>
                     </div>
                   </v-card>
                 </v-hover>
               </div>
             </v-item>
           </v-col>
-
         </v-row>
       </v-container>
     </v-item-group>
@@ -218,96 +226,94 @@
     </sequential-entrance>
   </div> -->
 
-
 <script>
-import { mapState } from 'vuex'
-import axios from 'axios'
+import { mapState } from "vuex";
+import axios from "axios";
 
 export default {
   data: () => ({
-    tvlData571: '',
-    tvlData572: '',
-    bcnaAprr: '',
-    apr571: '',
-    apr572: '',
-    bonus571: '',
-    bonus572: '',
-    bcnaBonded: '',
+    tvlData571: "",
+    tvlData572: "",
+    bcnaAprr: "",
+    apr571: "",
+    apr572: "",
+    bonus571: "",
+    bonus572: "",
+    bcnaBonded: "",
 
-    items2: [{
-                    icon: 'mdi-wifi',
-                    text: 'Wifi',
-                },
-                {
-                    icon: 'mdi-bluetooth',
-                    text: 'Bluetooth',
-                },
-                {
-                    icon: 'mdi-chart-donut',
-                    text: 'Data Usage',
-                },
-            ],
-            model: 1,
-            selectedItem: 0,
-            items: [{
-                    text: 'Data 1',
-                    icon: 'done'
-                },
-                {
-                    text: 'Data 2',
-                    icon: 'done'
-                },
-                {
-                    text: 'Data 3',
-                    icon: 'done'
-                },
-                {
-                    text: 'Data 4',
-                    icon: 'done'
-                },
-                {
-                    text: 'Data 5',
-                    icon: 'done'
-                },
-
-            ],
+    items2: [
+      {
+        icon: "mdi-wifi",
+        text: "Wifi",
+      },
+      {
+        icon: "mdi-bluetooth",
+        text: "Bluetooth",
+      },
+      {
+        icon: "mdi-chart-donut",
+        text: "Data Usage",
+      },
+    ],
+    model: 1,
+    selectedItem: 0,
+    items: [
+      {
+        text: "Data 1",
+        icon: "done",
+      },
+      {
+        text: "Data 2",
+        icon: "done",
+      },
+      {
+        text: "Data 3",
+        icon: "done",
+      },
+      {
+        text: "Data 4",
+        icon: "done",
+      },
+      {
+        text: "Data 5",
+        icon: "done",
+      },
+    ],
   }),
   computed: {
-    ...mapState('data', ['priceNow', 'aprNow']),
+    ...mapState("data", ["priceNow", "aprNow"]),
   },
   async beforeMount() {
-
     const responseBcnaBonded = await axios.get(
-      'https://graphql.bitcanna.io/api/rest/supply/bonded'
-    )
-    this.bcnaBonded = ((responseBcnaBonded.data.staking_pool[0].bonded_tokens / 1000000) * this.priceNow).toFixed(2)
-    console.log(this.bcnaBonded)
+      "https://graphql.bitcanna.io/api/rest/supply/bonded"
+    );
+    this.bcnaBonded = (
+      (responseBcnaBonded.data.staking_pool[0].bonded_tokens / 1000000) *
+      this.priceNow
+    ).toFixed(2);
+    console.log(this.bcnaBonded);
     // Pool 571
-    const responseData571 = await axios.get(
-      '/api/pool/571'
-    )
-    this.tvlData571 = responseData571.data[0].liquidity
+    const responseData571 = await axios.get("/api/pool/571");
+    this.tvlData571 = responseData571.data[0].liquidity;
 
     // Pool 572
-    const responseData572 = await axios.get(
-      '/api/pool/572'
-    )
-    this.tvlData572 = responseData572.data[0].liquidity
+    const responseData572 = await axios.get("/api/pool/572");
+    this.tvlData572 = responseData572.data[0].liquidity;
 
     // Apr 571
-    const aprData572 = await axios.get(
-      '/api/apr/572'
-    )
-    console.log(aprData572.data[0])
+    const aprData572 = await axios.get("/api/apr/572");
+    console.log(aprData572.data[0]);
     // TODO Improve this fucking shit!
-    this.apr572 = (Number(aprData572.data[0].apr_list[0].apr_14d).toFixed(10) * 10000000).toFixed(2)
+    this.apr572 = (
+      Number(aprData572.data[0].apr_list[0].apr_14d).toFixed(10) * 10000000
+    ).toFixed(2);
 
     // Apr 571
-    const aprData571 = await axios.get(
-      '/api/apr/571'
-    )
+    const aprData571 = await axios.get("/api/apr/571");
 
-    this.apr571 = (Number(aprData571.data[0].apr_list[0].apr_14d).toFixed(10) * 10000000).toFixed(2)
+    this.apr571 = (
+      Number(aprData571.data[0].apr_list[0].apr_14d).toFixed(10) * 10000000
+    ).toFixed(2);
     // you take the total liquidity of the pool (1.75M)
     // and the bonus rewards (2.4M)
     // (((((2.4M * 0.14) / 180) / 1.75M) * 365) * 100)
@@ -316,18 +322,17 @@ export default {
       ((1600000 * this.priceNow) / 180 / responseData571.data[0].liquidity) *
       365 *
       100
-    ).toFixed(2)
-    this.bonus571 = finalBonus571
+    ).toFixed(2);
+    this.bonus571 = finalBonus571;
 
     const finalBonus572 = (
       ((2400000 * this.priceNow) / 180 / responseData572.data[0].liquidity) *
       365 *
       100
-    ).toFixed(2)
-    this.bonus572 = finalBonus572
-
+    ).toFixed(2);
+    this.bonus572 = finalBonus572;
   },
-}
+};
 </script>
 
 <style>
@@ -346,7 +351,7 @@ export default {
   width: 100%;
 }
 
-.swap2>h3 {
+.swap2 > h3 {
   font-size: 24px;
   color: var(--white);
   font-weight: 600;
@@ -360,7 +365,7 @@ export default {
   background: var(--gray-1100);
 }
 
-.container2>h1 {
+.container2 > h1 {
   font-size: 24px;
   color: #fff;
   color: var(--white);

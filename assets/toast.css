@@ -11,43 +11,56 @@
   pointer-events: none;
 }
 @media only screen and (min-width: 600px) {
-  .Vue-Toastification__container.top-left, .Vue-Toastification__container.top-right, .Vue-Toastification__container.top-center {
+  .Vue-Toastification__container.top-left,
+  .Vue-Toastification__container.top-right,
+  .Vue-Toastification__container.top-center {
     top: 1em;
   }
-  .Vue-Toastification__container.bottom-left, .Vue-Toastification__container.bottom-right, .Vue-Toastification__container.bottom-center {
+  .Vue-Toastification__container.bottom-left,
+  .Vue-Toastification__container.bottom-right,
+  .Vue-Toastification__container.bottom-center {
     bottom: 1em;
     flex-direction: column-reverse;
   }
-  .Vue-Toastification__container.top-left, .Vue-Toastification__container.bottom-left {
+  .Vue-Toastification__container.top-left,
+  .Vue-Toastification__container.bottom-left {
     left: 1em;
   }
-  .Vue-Toastification__container.top-left .Vue-Toastification__toast, .Vue-Toastification__container.bottom-left .Vue-Toastification__toast {
+  .Vue-Toastification__container.top-left .Vue-Toastification__toast,
+  .Vue-Toastification__container.bottom-left .Vue-Toastification__toast {
     margin-right: auto;
   }
   @supports not (-moz-appearance: none) {
-    .Vue-Toastification__container.top-left .Vue-Toastification__toast--rtl, .Vue-Toastification__container.bottom-left .Vue-Toastification__toast--rtl {
+    .Vue-Toastification__container.top-left .Vue-Toastification__toast--rtl,
+    .Vue-Toastification__container.bottom-left .Vue-Toastification__toast--rtl {
       margin-right: unset;
       margin-left: auto;
     }
   }
-  .Vue-Toastification__container.top-right, .Vue-Toastification__container.bottom-right {
+  .Vue-Toastification__container.top-right,
+  .Vue-Toastification__container.bottom-right {
     right: 1em;
     margin-bottom: 1em;
   }
-  .Vue-Toastification__container.top-right .Vue-Toastification__toast, .Vue-Toastification__container.bottom-right .Vue-Toastification__toast {
+  .Vue-Toastification__container.top-right .Vue-Toastification__toast,
+  .Vue-Toastification__container.bottom-right .Vue-Toastification__toast {
     margin-left: auto;
   }
   @supports not (-moz-appearance: none) {
-    .Vue-Toastification__container.top-right .Vue-Toastification__toast--rtl, .Vue-Toastification__container.bottom-right .Vue-Toastification__toast--rtl {
+    .Vue-Toastification__container.top-right .Vue-Toastification__toast--rtl,
+    .Vue-Toastification__container.bottom-right
+      .Vue-Toastification__toast--rtl {
       margin-left: unset;
       margin-right: auto;
     }
   }
-  .Vue-Toastification__container.top-center, .Vue-Toastification__container.bottom-center {
+  .Vue-Toastification__container.top-center,
+  .Vue-Toastification__container.bottom-center {
     left: 50%;
     margin-left: -300px;
   }
-  .Vue-Toastification__container.top-center .Vue-Toastification__toast, .Vue-Toastification__container.bottom-center .Vue-Toastification__toast {
+  .Vue-Toastification__container.top-center .Vue-Toastification__toast,
+  .Vue-Toastification__container.bottom-center .Vue-Toastification__toast {
     margin-left: auto;
     margin-right: auto;
   }
@@ -62,10 +75,14 @@
   .Vue-Toastification__container .Vue-Toastification__toast {
     width: 100%;
   }
-  .Vue-Toastification__container.top-left, .Vue-Toastification__container.top-right, .Vue-Toastification__container.top-center {
+  .Vue-Toastification__container.top-left,
+  .Vue-Toastification__container.top-right,
+  .Vue-Toastification__container.top-center {
     top: 0;
   }
-  .Vue-Toastification__container.bottom-left, .Vue-Toastification__container.bottom-right, .Vue-Toastification__container.bottom-center {
+  .Vue-Toastification__container.bottom-left,
+  .Vue-Toastification__container.bottom-right,
+  .Vue-Toastification__container.bottom-center {
     bottom: 0;
     flex-direction: column-reverse;
   }
@@ -149,10 +166,12 @@
   opacity: 0.3;
   transition: visibility 0s, opacity 0.2s linear;
 }
-.Vue-Toastification__close-button:hover, .Vue-Toastification__close-button:focus {
+.Vue-Toastification__close-button:hover,
+.Vue-Toastification__close-button:focus {
   opacity: 1;
 }
-.Vue-Toastification__toast:not(:hover) .Vue-Toastification__close-button.show-on-hover {
+.Vue-Toastification__toast:not(:hover)
+  .Vue-Toastification__close-button.show-on-hover {
   opacity: 0;
 }
 .Vue-Toastification__toast--rtl .Vue-Toastification__close-button {
@@ -201,7 +220,11 @@
 }
 
 @keyframes bounceInRight {
-  from, 60%, 75%, 90%, to {
+  from,
+  60%,
+  75%,
+  90%,
+  to {
     animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
   }
   from {
@@ -233,7 +256,11 @@
   }
 }
 @keyframes bounceInLeft {
-  from, 60%, 75%, 90%, to {
+  from,
+  60%,
+  75%,
+  90%,
+  to {
     animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
   }
   0% {
@@ -265,7 +292,11 @@
   }
 }
 @keyframes bounceInUp {
-  from, 60%, 75%, 90%, to {
+  from,
+  60%,
+  75%,
+  90%,
+  to {
     animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
   }
   from {
@@ -290,7 +321,8 @@
   20% {
     transform: translate3d(0, -10px, 0);
   }
-  40%, 45% {
+  40%,
+  45% {
     opacity: 1;
     transform: translate3d(0, 20px, 0);
   }
@@ -300,7 +332,11 @@
   }
 }
 @keyframes bounceInDown {
-  from, 60%, 75%, 90%, to {
+  from,
+  60%,
+  75%,
+  90%,
+  to {
     animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
   }
   0% {
@@ -325,7 +361,8 @@
   20% {
     transform: translate3d(0, 10px, 0);
   }
-  40%, 45% {
+  40%,
+  45% {
     opacity: 1;
     transform: translate3d(0, -20px, 0);
   }
@@ -334,10 +371,12 @@
     transform: translate3d(0, 2000px, 0);
   }
 }
-.Vue-Toastification__bounce-enter-active.top-left, .Vue-Toastification__bounce-enter-active.bottom-left {
+.Vue-Toastification__bounce-enter-active.top-left,
+.Vue-Toastification__bounce-enter-active.bottom-left {
   animation-name: bounceInLeft;
 }
-.Vue-Toastification__bounce-enter-active.top-right, .Vue-Toastification__bounce-enter-active.bottom-right {
+.Vue-Toastification__bounce-enter-active.top-right,
+.Vue-Toastification__bounce-enter-active.bottom-right {
   animation-name: bounceInRight;
 }
 .Vue-Toastification__bounce-enter-active.top-center {
@@ -347,10 +386,12 @@
   animation-name: bounceInUp;
 }
 
-.Vue-Toastification__bounce-leave-active.top-left, .Vue-Toastification__bounce-leave-active.bottom-left {
+.Vue-Toastification__bounce-leave-active.top-left,
+.Vue-Toastification__bounce-leave-active.bottom-left {
   animation-name: bounceOutLeft;
 }
-.Vue-Toastification__bounce-leave-active.top-right, .Vue-Toastification__bounce-leave-active.bottom-right {
+.Vue-Toastification__bounce-leave-active.top-right,
+.Vue-Toastification__bounce-leave-active.bottom-right {
   animation-name: bounceOutRight;
 }
 .Vue-Toastification__bounce-leave-active.top-center {
@@ -452,10 +493,12 @@
     opacity: 1;
   }
 }
-.Vue-Toastification__fade-enter-active.top-left, .Vue-Toastification__fade-enter-active.bottom-left {
+.Vue-Toastification__fade-enter-active.top-left,
+.Vue-Toastification__fade-enter-active.bottom-left {
   animation-name: fadeInLeft;
 }
-.Vue-Toastification__fade-enter-active.top-right, .Vue-Toastification__fade-enter-active.bottom-right {
+.Vue-Toastification__fade-enter-active.top-right,
+.Vue-Toastification__fade-enter-active.bottom-right {
   animation-name: fadeInRight;
 }
 .Vue-Toastification__fade-enter-active.top-center {
@@ -465,10 +508,12 @@
   animation-name: fadeInBottom;
 }
 
-.Vue-Toastification__fade-leave-active.top-left, .Vue-Toastification__fade-leave-active.bottom-left {
+.Vue-Toastification__fade-leave-active.top-left,
+.Vue-Toastification__fade-leave-active.bottom-left {
   animation-name: fadeOutLeft;
 }
-.Vue-Toastification__fade-leave-active.top-right, .Vue-Toastification__fade-leave-active.bottom-right {
+.Vue-Toastification__fade-leave-active.top-right,
+.Vue-Toastification__fade-leave-active.bottom-right {
   animation-name: fadeOutRight;
 }
 .Vue-Toastification__fade-leave-active.top-center {
@@ -602,10 +647,12 @@
     opacity: 0;
   }
 }
-.Vue-Toastification__slideBlurred-enter-active.top-left, .Vue-Toastification__slideBlurred-enter-active.bottom-left {
+.Vue-Toastification__slideBlurred-enter-active.top-left,
+.Vue-Toastification__slideBlurred-enter-active.bottom-left {
   animation-name: slideInBlurredLeft;
 }
-.Vue-Toastification__slideBlurred-enter-active.top-right, .Vue-Toastification__slideBlurred-enter-active.bottom-right {
+.Vue-Toastification__slideBlurred-enter-active.top-right,
+.Vue-Toastification__slideBlurred-enter-active.bottom-right {
   animation-name: slideInBlurredRight;
 }
 .Vue-Toastification__slideBlurred-enter-active.top-center {
@@ -615,10 +662,12 @@
   animation-name: slideInBlurredBottom;
 }
 
-.Vue-Toastification__slideBlurred-leave-active.top-left, .Vue-Toastification__slideBlurred-leave-active.bottom-left {
+.Vue-Toastification__slideBlurred-leave-active.top-left,
+.Vue-Toastification__slideBlurred-leave-active.bottom-left {
   animation-name: slideOutBlurredLeft;
 }
-.Vue-Toastification__slideBlurred-leave-active.top-right, .Vue-Toastification__slideBlurred-leave-active.bottom-right {
+.Vue-Toastification__slideBlurred-leave-active.top-right,
+.Vue-Toastification__slideBlurred-leave-active.bottom-right {
   animation-name: slideOutBlurredRight;
 }
 .Vue-Toastification__slideBlurred-leave-active.top-center {
@@ -632,4 +681,4 @@
   transition-timing-function: ease-in-out;
   transition-property: all;
   transition-duration: 400ms;
-} 
+}
