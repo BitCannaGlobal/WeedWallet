@@ -243,6 +243,17 @@ import {
       loadingInput: false,
       cosmosConfig: cosmosConfig
     }),
+    watch: {
+      dialog(value) {
+        if(value){
+          this.step1 = true
+          this.step2 = false
+          this.step3 = false
+          this.step4 = false 
+          this.amount = ''
+        }
+      },
+    },     
     computed: {
       ...mapState('keplr', [`accounts`]),
       ...mapState('data', ['chainId', `balances`]),
@@ -357,12 +368,17 @@ import {
               this.step4 = true
               this.loading = false
               await this.$store.dispatch('data/refresh', accounts[0].address)
+              await this.$store.dispatch('data/getDelegatorDataRpc', { validator: this.address, delegator: accounts[0].address })
+              await this.$store.dispatch('data/getValidatorDelegation', { validatorAddr: this.address, delegatorAddr: accounts[0].address}) 
             } catch (error) {
                 console.error(error)
                 this.eError = false
                 this.loading = false
                 this.step3 = false
                 this.step2 = true
+            } finally {
+              await new Promise(resolve => setTimeout(resolve, 4000))
+              this.dialog = false
             }
           })();
         }

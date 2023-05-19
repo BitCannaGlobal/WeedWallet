@@ -6,13 +6,25 @@
     >
       <template v-slot:activator="{ on, attrs }">
         <v-btn
+          v-if="type === 'simpleSend'"
+          large
+          block
+          v-bind="attrs"
+          v-on="on"
+          class="mt-2 white--text" 
+          color="#0FB786"
+        >
+          Send
+        </v-btn>  
+        <v-btn
+          v-else
           dark
           v-bind="attrs"
           v-on="on"
           color="#00b786"
         >
           <v-icon class="mr-2">mdi-send-circle</v-icon> Send
-        </v-btn>
+        </v-btn>      
       </template>
       <v-card class="accent">
         <v-card-title>
@@ -188,7 +200,6 @@
           >
             Send tx
           </v-btn>
-
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -230,7 +241,7 @@ import {
     return b[1]? b[1].length : 0;
   }  
   export default {
-    props: ['chainIdProps', 'amountAvailable', 'coinIcon'],
+    props: ['chainIdProps', 'amountAvailable', 'coinIcon', 'type'],
     data: (instance) => ({
       e1: 1,
       eError: true,
@@ -244,6 +255,7 @@ import {
       step4: false,
       feeDeducted: false,
       gasFee: {},
+      bcnaAddon: false,
       addressRules: [
         v => !!v || 'Address is required',
         v => v.startsWith(instance.chainIdProps.toLowerCase()) || 'Address must start with "' + instance.chainIdProps.toLowerCase() + '"',
@@ -266,9 +278,21 @@ import {
       ...mapState('data', ['chainId', `balances`]),
     },    
     watch: {
- 
+      dialog(value) {
+        if(value){
+          this.step1 = true
+          this.step2 = false
+          this.step3 = false
+          this.step4 = false 
+          this.address = ''
+          this.amount = ''
+        }
+      },
     },    
-
+    async mounted () {
+      // TODO: https://gist.github.com/atmoner/a5f22555948a285890c8d95be908bac7
+      this.step1 = true
+    },
     methods: {
       getMax () {
         this.amount = this.amountAvailable
@@ -282,6 +306,7 @@ import {
       test () {
         this.dialogStepper = true
       }, 
+        
       async validate () {
         
         if  (this.$refs.form.validate() === true) {
@@ -332,7 +357,7 @@ import {
       returnStep () {
         this.step1 = true
         this.step2 = false
-      },      
+      },          
       validatestep2 () {
         if (this.$refs.form.validate() === true) {
           (async () => {
@@ -367,13 +392,16 @@ import {
               this.step4 = true
               this.loading = false
               await this.$store.dispatch('data/refresh', accounts[0].address)
-              this.e1 = 3
+              this.e1 = 3              
             } catch (error) {
                 console.error(error);
                 this.eError = false
                 this.loading = false
                 this.step3 = false
                 this.step2 = true
+            } finally {
+              await new Promise(resolve => setTimeout(resolve, 4000))
+              this.dialog = false
             }
           })();
         }

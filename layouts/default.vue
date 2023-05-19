@@ -103,7 +103,9 @@
     </v-footer>
 
     </v-navigation-drawer>
+    
     <v-app-bar v-if="logged" app class="accent">
+      <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
       My address:
 
 
@@ -131,7 +133,38 @@
         class=" mt-6"
         :label="`Simple/Pro: ${switch1.toString()}`"
       ></v-switch> -->
-        <v-menu
+
+      <v-btn-toggle
+        v-model="switch1"
+        borderless
+        color="#00b786"
+      >
+        <v-btn value="true">
+          <span class="hidden-sm-and-down">Pro</span>
+        </v-btn>
+ 
+        <v-btn value="false">
+          <span class="hidden-sm-and-down">Simple</span>
+        </v-btn>
+      </v-btn-toggle>      
+
+    </v-app-bar>
+    <v-main>
+      <v-container
+        class="py-8 px-6"
+        fluid
+      >
+        <Nuxt :vueMode="switch1.toString()" />
+        
+      </v-container>
+    </v-main>
+    <v-footer padless>
+    <v-col
+      class="text-center"
+      cols="12"
+    >
+      {{ new Date().getFullYear() }} — <strong>WeedWallet</strong> — 
+      <v-menu
           v-model="menu"
           :close-on-content-click="false"
           :nudge-width="200"
@@ -139,14 +172,14 @@
 
         >
           <template v-slot:activator="{ on, attrs }">
-            <v-btn
+            <span
               color="#00b786"
               dark
               v-bind="attrs"
               v-on="on"
             >
               V{{ version }}
-            </v-btn>
+            </span>
           </template>
 
           <v-card class="accent">
@@ -155,7 +188,7 @@
                 <v-list-item-avatar>
                   <img
                     src="https://pbs.twimg.com/profile_images/1455116847024586757/T9o06sNM_400x400.png"
-                    alt="John"
+                    alt="WeedWallet"
                   >
                 </v-list-item-avatar>
 
@@ -194,16 +227,8 @@
             </v-card-actions>
           </v-card>
         </v-menu>
-    </v-app-bar>
-    <v-main>
-      <v-container
-        class="py-8 px-6"
-        fluid
-      >
-        <Nuxt :vueMode="switch1.toString()" />
-        
-      </v-container>
-    </v-main>
+    </v-col>
+  </v-footer>
   </v-app>
 </template>
 
@@ -253,7 +278,12 @@ import pjson from '~/package'
     },
     async switch1(newQuestion, oldQuestion) {
       console.log(newQuestion)
-      await this.$store.dispatch('data/changeLayout', newQuestion)
+      let finalView = ''
+      if (newQuestion === 'true') {
+        finalView = true
+      } else
+        finalView = false
+      await this.$store.dispatch('data/changeLayout', finalView)
     }
   },
   async mounted() {
@@ -261,15 +291,15 @@ import pjson from '~/package'
 
     if (this.logged) {
       await this.$store.dispatch('data/getPriceNow')
-      await this.$store.dispatch('data/getApr')
       await this.$store.dispatch('data/getWalletInfo', this.accounts[0].address)
       await this.$store.dispatch('data/getDelegations', this.accounts[0].address)
       await this.$store.dispatch('data/getAllTxs', this.accounts[0].address)
- 
+      await this.$store.dispatch('data/getAllValidators')
+      await this.$store.dispatch('data/getApr') 
       await this.$store.dispatch('data/getAllBalances')
     }  else {
-      this.$router.push({path: "/login"})
-      return
+      //this.$router.push({path: "/login"})
+      //return
     }
 
     
@@ -278,6 +308,13 @@ import pjson from '~/package'
     this.$store.dispatch('data/getSdkVersion')
     setInterval(async () => {
       this.$store.dispatch('data/getBlockNow')
+      await this.$store.dispatch('data/getPriceNow')
+      await this.$store.dispatch('data/getWalletInfo', this.accounts[0].address)
+      await this.$store.dispatch('data/getDelegations', this.accounts[0].address)
+      await this.$store.dispatch('data/getAllTxs', this.accounts[0].address)
+      await this.$store.dispatch('data/getAllValidators')
+      await this.$store.dispatch('data/getApr') 
+      await this.$store.dispatch('data/getAllBalances')      
     }, 5000);
 
     window.addEventListener("keplr_keystorechange", async () => {
@@ -296,7 +333,7 @@ import pjson from '~/package'
       this.address = this.accounts[0].address
       await this.$store.dispatch('data/refresh', this.accounts[0].address)
 
-      this.$router.push({path: "/"})
+      // this.$router.push({path: "/"})
     },
     logoutNow() {
       this.$store.dispatch('keplr/logout')

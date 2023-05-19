@@ -1,14 +1,17 @@
 <template>
   <v-app dark>
+    <v-container class="bcnaBackground">
     <h1 v-if="error.statusCode === 404">
       {{ pageNotFound }}
     </h1>
     <h1 v-else>
       {{ otherError }}
     </h1>
+    420 Enhance your calm
     <NuxtLink to="/">
       Home page
     </NuxtLink>
+  </v-container>
   </v-app>
 </template>
 
@@ -25,7 +28,7 @@ export default {
   data () {
     return {
       pageNotFound: '404 Not Found',
-      otherError: 'An error occurred'
+      otherError: '420 error '
     }
   },
   head () {
@@ -38,8 +41,14 @@ export default {
 }
 </script>
 
-<style scoped>
-h1 {
-  font-size: 20px;
+<style>
+ 
+.bcnaBackground {
+
+  background: transparent url('/bg_imgs.png') 0 0 no-repeat padding-box;
+    background-size: 800px;
+    background-position: 20% 10%;
+    height: 100vh;
 }
+
 </style>

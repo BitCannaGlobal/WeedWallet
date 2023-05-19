@@ -7,7 +7,6 @@
             <v-card-title class="headline">
               <!--<v-icon class="mr-2">mdi-wallet-outline</v-icon> Wallet amount-->
               <h4 class="icon">
-                <img src="icon/wallet.png" />
                 &ensp; Transactions historical
               </h4>
             </v-card-title>
@@ -27,10 +26,10 @@
           <v-avatar
             class="mr-2"
           >
-            <img
-              :src="'transactions/'+item.messageInfo.icon"
-              alt="John"
-            >
+            <v-img
+              :src="'../transactions/'+item.messageInfo.icon"
+              :alt="item.messageInfo.typeReadable"
+            ></v-img> 
           </v-avatar>
           </v-col>          
           <v-col cols="2" class="mt-4">
@@ -125,7 +124,7 @@
                   <tbody>
                     <tr>
                       <td>{{ item.messageInfo.msgData.delegator_address }}</td>
-                      <td>{{ item.messageInfo.msgData.validator_address }}</td>
+                      <td><v-icon class="mr-2">mdi-shield-check</v-icon> {{ item.messageInfo.msgData.validator_address }}</td>
                       <td class="green--text">{{ item.messageInfo.msgData.amount }}  {{ cosmosConfig[0].coinLookup.viewDenom }}</td>
                     </tr>
                   </tbody>
@@ -147,7 +146,7 @@
                   </thead>
                   <tbody>
                     <tr>
-                      <td>{{ item.messageInfo.msgData.validator_address }}</td>
+                      <td><v-icon class="mr-2">mdi-shield-check</v-icon> {{ item.messageInfo.msgData.validator_address }}</td>
                       <td>{{ item.messageInfo.msgData.delegator_address }}</td>
                     </tr>
                   </tbody>
@@ -173,7 +172,44 @@
                   <tbody>
                     <tr>
                       <td>#{{ item.messageInfo.msgData.proposal_id }}</td> 
-                      <td>{{ item.messageInfo.msgData.option }}</td>
+                      <td>
+                        <v-chip
+                          v-if="item.messageInfo.msgData.option === 'VOTE_OPTION_YES'"
+                          class="ma-2"
+                          color="green"
+                          outlined
+                          label
+                        >
+                          YES
+                        </v-chip>
+                        <v-chip
+                          v-if="item.messageInfo.msgData.option === 'VOTE_OPTION_NO'"
+                          class="ma-2"
+                          color="red"
+                          outlined
+                          label
+                        >
+                          NO
+                        </v-chip> 
+                        <v-chip
+                          v-if="item.messageInfo.msgData.option === 'VOTE_OPTION_ABSTAIN'"
+                          class="ma-2"
+                          color="red"
+                          outlined
+                          label
+                        >
+                          ABSTAIN
+                        </v-chip> 
+                        <v-chip
+                          v-if="item.messageInfo.msgData.option === 'VOTE_OPTION_NO_WITH_VETO'"
+                          class="ma-2"
+                          color="orange"
+                          outlined
+                          label
+                        >
+                           NO WITH VETO
+                        </v-chip>                      
+                      </td>
                     </tr>
                   </tbody>
                 </template>
@@ -227,6 +263,54 @@
                 </template>
               </v-simple-table>
             </template>
+            <template v-if="item.messageInfo.type === '/cosmos.staking.v1beta1.MsgUndelegate'"> 
+              <v-simple-table class="accent">
+                <template v-slot:default>
+                  <thead>
+                    <tr>
+                      <th class="text-left">
+                        From validator
+                      </th>
+                      <th class="text-left">
+                        Amount
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><v-icon class="mr-2">mdi-shield-check</v-icon> {{ item.messageInfo.msgData.validator_address }}</td>
+                      <td>{{ item.messageInfo.msgData.amount }} {{ cosmosConfig[0].coinLookup.viewDenom }}</td> 
+                    </tr>
+                  </tbody>
+                </template>
+              </v-simple-table>
+            </template>   
+            <template v-if="item.messageInfo.type === '/cosmos.staking.v1beta1.MsgBeginRedelegate'"> 
+              <v-simple-table class="accent">
+                <template v-slot:default>
+                  <thead>
+                    <tr>
+                      <th class="text-left">
+                        From validator
+                      </th>
+                      <th class="text-left">
+                        To validator
+                      </th>
+                      <th class="text-left">
+                        Amount
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><v-icon class="mr-2">mdi-shield-check</v-icon> {{ item.messageInfo.msgData.from }}</td>
+                      <td><v-icon class="mr-2">mdi-shield-check</v-icon> {{ item.messageInfo.msgData.to }}</td>
+                      <td>{{ item.messageInfo.msgData.amount }} {{ cosmosConfig[0].coinLookup.viewDenom }}</td> 
+                    </tr>
+                  </tbody>
+                </template>
+              </v-simple-table>
+            </template>                       
         </v-expansion-panel-content>
       </v-expansion-panel>
     </v-expansion-panels>
@@ -312,23 +396,22 @@ export default {
   }),
   computed: {
     ...mapState('keplr', [`accounts`, 'logged']),
-    ...mapState('data', ['chainId', 'balances', 'rewards', 'delegations', 'priceNow', 'aprNow', 'totalDelegated', 'validatorDetails']),
+    ...mapState('data', ['chainId', 'balances', 'rewards', 'delegations', 'priceNow', 'aprNow', 'totalDelegated', 'validatorDetails', 'validators', 'validatorsLoaded']),
 
   },
   watch: {
 
   },
 
+   
   async beforeMount () {
-
-  },
-  async mounted () {
     await this.$store.dispatch('keplr/checkLogin')
+    await this.$store.dispatch('data/getAllValidators')
     // TODO
     // 1/ lcd -> get delegations
     // 2/ lcd -> get undelegate
-    // 2/ rpc -> get historic
-    if (this.logged) {
+    // 2/ rpc -> get historic    
+    if (this.logged && this.validatorsLoaded === true) {
         /*
       const rpcEndpoint = "https://rpc-devnet-6.bitcanna.io";
       const client = await tendermintRpc.Tendermint34Client.connect(rpcEndpoint);
@@ -419,8 +502,8 @@ export default {
         return collection.concat(transaction)
       }, [])
     },
-    getMessageType(msg) {
-      let typeReadable = setMsg(msg, this.accounts[0].address)
+    getMessageType(msg) {      
+      let typeReadable = setMsg(msg, this.accounts[0].address, '', this.validators)
       return typeReadable
     },
   },

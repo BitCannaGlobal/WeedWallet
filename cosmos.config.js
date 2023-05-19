@@ -29,7 +29,7 @@ export default [
       addressPrefix: 'bcna',
       icon: `https://raw.githubusercontent.com/cosmos/chain-registry/master/bitcanna/images/bcna.svg`,
     },
-    feeMultiplier: 1.3,
+    feeMultiplier: 1.5,
     gasPrice: 0.025,    
     coingeckoId: 'bitcanna',
     maxTxSender: 20,

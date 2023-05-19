@@ -21,7 +21,10 @@ Vue.component('line-chart', {
           point:{
             radius: 0
           }
-        }        
+        },
+        animation: {
+          duration: 0,
+        }               
       }),
     },
   },
@@ -31,7 +34,7 @@ Vue.component('line-chart', {
     },
   },
 	mounted () {
-		this.renderChart(this.data, this.options)
+		this.renderChart(this.data, this.options) 
 	}
 })
 
@@ -51,6 +54,9 @@ Vue.component('BarChart', {
         legend: {
           display: true,
         },
+        animation: {
+          duration: 0,
+        }   
       }),
     },
   },
@@ -80,6 +86,9 @@ Vue.component('Doughnut', {
         legend: {
           display: false,
         },
+        animation: {
+          duration: 0,
+        }   
       }),
 
     },

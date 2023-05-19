@@ -320,8 +320,9 @@
             </v-col>            
           </v-row>
 
-          <v-row >
+          <v-row>
             <v-col
+              v-if="proposalData.proposal.status === 'PROPOSAL_STATUS_VOTING_PERIOD'"
               cols="12"
               md="6"
             >
@@ -341,8 +342,7 @@
                   >
                   <div v-if="((totalTally / 1000000) / (totalBonded /* * 0.33 */) * 100).toFixed(2) > 33" class="ml-10">Quorum reached</div>
                   <div v-else class="ml-10 text-red">Quorum not reached</div>
-                </v-progress-linear>
- 
+                </v-progress-linear> 
                   <v-simple-table>
                     <template v-slot:default>
                       <tbody>
@@ -381,74 +381,108 @@
                         </tr>                  
                       </tbody>
                     </template>
-                  </v-simple-table>
-                
-                
-
-
+                  </v-simple-table>  
                 </v-card-text>
               </v-card>
             </v-col>          
             <v-col 
               cols="12"
-              md="6"
+              :md="proposalData.proposal.status === 'PROPOSAL_STATUS_VOTING_PERIOD' ? '6' : '12'"
             >
               <v-card
                 dark 
               >
-                <v-card-title>Threshold (soon)</v-card-title>
-                <v-card-text>
-                  <v-progress-linear  
-                      value="20" 
-                      height="20" 
-                      background-color="#353434" 
-                      color="grey"
-                      class="mb-10"
-                    > 
-                  </v-progress-linear>
+                <v-card-title>Threshold</v-card-title>
+                <v-card-text> 
+                  <v-progress-linear
+                    height="20" 
+                    background-color="error"
+                    color="#00b786"
+                    :value="(
+                        (Number(getTally.tally.yes) * 100) / 
+                        (Number(getTally.tally.yes) + Number(getTally.tally.no) + Number(getTally.tally.no_with_veto))
+                      ).toFixed(2) "
+                    class="mb-10"
+                  ></v-progress-linear>
 
                   <v-simple-table>
-    <template v-slot:default>
-      <tbody>
-        <tr>
-          <td>
-            <v-icon
-              color="#00b786"
-              small
-            >
-              mdi-circle
-            </v-icon>             
-            Voted yes</td>
-          <td>X %</td>  
-          <td>{{ getTally.tally.yes / 1000000 }} BCNA</td>
-        </tr>
-        <tr>
-          <td>
-            <v-icon
-              color="#14FFC0"
-              small
-            >
-              mdi-circle
-            </v-icon>              
-            Voted no</td>
-          <td>X %</td>
-          <td>{{ getTally.tally.no / 1000000 }} BCNA</td>
-        </tr>  
-        <tr>
-          <td>
-            <v-icon
-              color="#14FFC0"
-              small
-            >
-              mdi-circle
-            </v-icon>              
-            No With Veto</td>
-          <td>X %</td>
-          <td>{{ getTally.tally.no_with_veto / 1000000 }} BCNA</td>
-        </tr>                
-      </tbody>
-    </template>
-  </v-simple-table>
+                    <template v-slot:default>
+                      <tbody>
+                        <tr v-if="getTally.tally.yes > 0">
+                          <td>
+                            <v-icon
+                              color="#00b786"
+                              small
+                            >
+                              mdi-circle
+                            </v-icon>             
+                            Voted yes</td>
+                          <td>{{ ((Number(getTally.tally.yes) * 100) / ( Number(getTally.tally.yes) + Number(getTally.tally.no) + Number(getTally.tally.no_with_veto) )).toFixed(2) }} %</td>  
+                          <td>{{ getTally.tally.yes / 1000000 }} BCNA</td>
+                        </tr>
+                        <tr v-else>
+                          <td>
+                            <v-icon
+                              color="#00b786"
+                              small
+                            >
+                              mdi-circle
+                            </v-icon>             
+                            Voted yes</td>
+                          <td>0 %</td>  
+                          <td>0 BCNA</td>
+                        </tr>                        
+                        <tr v-if="getTally.tally.no > 0">
+                          <td>
+                            <v-icon
+                              color="error"
+                              small
+                            >
+                              mdi-circle
+                            </v-icon>              
+                            Voted no</td>
+                          <td>{{ ((Number(getTally.tally.no) * 100) / ( Number(getTally.tally.yes) + Number(getTally.tally.no) + Number(getTally.tally.no_with_veto) )).toFixed(2) }} %</td> 
+                          <td>{{ getTally.tally.no / 1000000 }} BCNA</td>
+                        </tr>  
+                        <tr v-else>
+                          <td>
+                            <v-icon
+                              color="error"
+                              small
+                            >
+                              mdi-circle
+                            </v-icon>             
+                            Voted no</td>
+                          <td>0 %</td>  
+                          <td>0 BCNA</td>
+                        </tr>                         
+                        <tr v-if="getTally.tally.no_with_veto > 0">
+                          <td>
+                            <v-icon
+                              color="#14FFC0"
+                              small
+                            >
+                              mdi-circle
+                            </v-icon>              
+                            No With Veto</td>
+                            <td>{{ ((Number(getTally.tally.no_with_veto) * 100) / ( Number(getTally.tally.yes) + Number(getTally.tally.no) + Number(getTally.tally.no_with_veto) )).toFixed(2) }} %</td> 
+                          <td>{{ getTally.tally.no_with_veto / 1000000 }} BCNA</td>
+                        </tr> 
+                        <tr v-else>
+                          <td>
+                            <v-icon
+                              color="#14FFC0"
+                              small
+                            >
+                              mdi-circle
+                            </v-icon>             
+                            No With Veto</td>
+                          <td>0 %</td>  
+                          <td>0 BCNA</td>
+                        </tr>                                        
+                      </tbody>
+                    </template>
+                  </v-simple-table>
 
 
                 </v-card-text>
@@ -561,10 +595,10 @@ export default {
       cosmosConfig: cosmosConfig,
       getVoters: [],
       cards: [
-        { title: 'Yes', src: 'https://cdn.vuetifyjs.com/images/cards/house.jpg', flex: 5 },
-        { title: 'No', src: 'https://cdn.vuetifyjs.com/images/cards/road.jpg', flex: 5 },
-        { title: 'NoWithVeto', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg', flex: 5 },
-        { title: 'Abstain', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg', flex: 5 },
+        { title: 'Yes', flex: 5 },
+        { title: 'No', flex: 5 },
+        { title: 'NoWithVeto', flex: 5 },
+        { title: 'Abstain', flex: 5 },
       ],
       headers: [
           {

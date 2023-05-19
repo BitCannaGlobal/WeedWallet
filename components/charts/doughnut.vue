@@ -63,13 +63,13 @@ export default {
     }
   },
   computed: {
-    chartData() {
+    chartData() { 
       return {
         labels: ['Available', 'Delegated', 'Undelegated', 'Reward'],
         datasets: [
           {
             label: 'test',
-            data: [this.amount / 1000000, this.totalDelegated / 1000000, this.totalUnbound, this.rewardsDoughnut / 1000000 ],
+            data: [this.amount / 1000000, this.totalDelegated / 1000000, this.totalUnbound  / 1000000, this.rewardsDoughnut / 1000000 ],
             backgroundColor: [
               '#b3ffeb',
               '#33ffc9',
