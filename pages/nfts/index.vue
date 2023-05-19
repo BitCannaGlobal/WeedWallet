@@ -110,7 +110,7 @@
             <br>
             <v-btn
               color="#00b786"
-              :to="'/collectibles/' + index.id"
+              :to="'/nfts/' + index.id"
             >
               <v-icon class="mr-2">
                 mdi-download
