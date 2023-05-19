@@ -6,7 +6,8 @@
     "dev": "nuxt",
     "build": "nuxt build",
     "start": "nuxt start",
-    "generate": "nuxt generate"
+    "generate": "nuxt generate",
+    "prettier-check": "prettier --check ."
   },
   "dependencies": {
     "@cosmjs/cosmwasm-stargate": "^0.29.5",
@@ -42,6 +43,7 @@
     "vuetify": "^2.6.15"
   },
   "devDependencies": {
-    "@nuxtjs/vuetify": "^1.12.3"
+    "@nuxtjs/vuetify": "^1.12.3",
+    "prettier": "2.8.8"
   }
 }

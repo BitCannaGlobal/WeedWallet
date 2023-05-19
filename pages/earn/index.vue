@@ -1,4 +1,4 @@
- 
+
 <template>
   <div>
     <v-item-group>
@@ -11,7 +11,7 @@
                   <v-card class="rounded-lg justify-center mx-auto" :elevation="hover ? 16 : 2"
                     :class="{ 'on-hover': hover }" :color="$vuetify.theme.dark ? 'theme-dark' : 'theme-light'" tile
                     outlined>
- 
+
                       <div class="d-flex text-5 white--text  font-weight-bold pt-10 justify-center mx-auto mb-6">
                         POOL 571
                       </div>
@@ -19,7 +19,7 @@
 
                     <v-list color="transparent" class="text-center " nav dense>
                       <v-list-item-title class="text-h6 font-weight-bold">
-                        Title 
+                        Title
                       </v-list-item-title>
                       <v-list-item class="rounded-lg justify-center mx-auto">
                         Sub title Sub title Sub title Sub title
@@ -51,11 +51,11 @@
                   <v-card class="rounded-lg justify-center mx-auto" :elevation="hover ? 16 : 2"
                     :class="{ 'on-hover': hover }" :color="$vuetify.theme.dark ? 'theme-dark' : 'theme-light'" tile
                     outlined>
- 
+
                       <div class="d-flex text-5 white--text  font-weight-bold pt-10 justify-center mx-auto mb-6">
                         POOL 572
                       </div>
- 
+
                     <img src="icon/BCNA-Atom.svg" />
                     <v-list color="transparent" class="text-center " nav dense>
                       <v-list-item-title class="text-h6 font-weight-bold">
@@ -82,7 +82,7 @@
                 </v-hover>
               </div>
             </v-item>
-          </v-col>          
+          </v-col>
 
         </v-row>
       </v-container>
@@ -187,7 +187,7 @@
                 </td>
                 <td class="cell">
                   {{ aprNow }}% (excl. commission)
- 
+
                 </td>
                 <td class="cell noel">
 
@@ -204,7 +204,7 @@
                 </td>
                 <td class="cell">
                   {{ aprNow }}% (excl. commission)
- 
+
                 </td>
                 <td class="cell">
 
@@ -217,7 +217,7 @@
     </v-row>
     </sequential-entrance>
   </div> -->
-</template>
+
 
 <script>
 import { mapState } from 'vuex'
@@ -270,7 +270,7 @@ export default {
                     icon: 'done'
                 },
 
-            ],    
+            ],
   }),
   computed: {
     ...mapState('data', ['priceNow', 'aprNow']),
