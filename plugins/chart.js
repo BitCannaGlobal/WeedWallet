@@ -1,8 +1,8 @@
-import Vue from 'vue'
-import { Bar, Doughnut, Line, PolarArea, Radar } from 'vue-chartjs'
+import Vue from "vue";
+import { Bar, Doughnut, Line, PolarArea, Radar } from "vue-chartjs";
 
-Vue.component('line-chart', {
-	extends: Line,
+Vue.component("LineChart", {
+  extends: Line,
   props: {
     data: {
       type: Object,
@@ -18,27 +18,27 @@ Vue.component('line-chart', {
           display: false,
         },
         elements: {
-          point:{
-            radius: 0
-          }
+          point: {
+            radius: 0,
+          },
         },
         animation: {
           duration: 0,
-        }               
+        },
       }),
     },
   },
   watch: {
     data() {
-      this.renderChart(this.data, this.options)
+      this.renderChart(this.data, this.options);
     },
   },
-	mounted () {
-		this.renderChart(this.data, this.options) 
-	}
-})
+  mounted() {
+    this.renderChart(this.data, this.options);
+  },
+});
 
-Vue.component('BarChart', {
+Vue.component("BarChart", {
   extends: Bar,
   props: {
     data: {
@@ -56,21 +56,21 @@ Vue.component('BarChart', {
         },
         animation: {
           duration: 0,
-        }   
+        },
       }),
     },
   },
   watch: {
     data() {
-      this.renderChart(this.data, this.options)
+      this.renderChart(this.data, this.options);
     },
   },
   mounted() {
-    this.renderChart(this.data, this.options)
+    this.renderChart(this.data, this.options);
   },
-})
+});
 
-Vue.component('Doughnut', {
+Vue.component("Doughnut", {
   extends: Doughnut,
   props: {
     data: {
@@ -88,22 +88,21 @@ Vue.component('Doughnut', {
         },
         animation: {
           duration: 0,
-        }   
+        },
       }),
-
     },
   },
   watch: {
     data() {
-      this.renderChart(this.data, this.options)
+      this.renderChart(this.data, this.options);
     },
   },
   mounted() {
-    this.renderChart(this.data, this.options)
+    this.renderChart(this.data, this.options);
   },
-})
+});
 
-Vue.component('PolarArea', {
+Vue.component("PolarArea", {
   extends: PolarArea,
   props: {
     data: {
@@ -120,19 +119,18 @@ Vue.component('PolarArea', {
           display: false,
         },
       }),
-
     },
   },
   watch: {
     data() {
-      this.renderChart(this.data, this.options)
+      this.renderChart(this.data, this.options);
     },
   },
   mounted() {
-    this.renderChart(this.data, this.options)
+    this.renderChart(this.data, this.options);
   },
-})
-Vue.component('Radar', {
+});
+Vue.component("Radar", {
   extends: Radar,
   props: {
     data: {
@@ -149,15 +147,14 @@ Vue.component('Radar', {
           display: false,
         },
       }),
-
     },
   },
   watch: {
     data() {
-      this.renderChart(this.data, this.options)
+      this.renderChart(this.data, this.options);
     },
   },
   mounted() {
-    this.renderChart(this.data, this.options)
+    this.renderChart(this.data, this.options);
   },
-})
+});

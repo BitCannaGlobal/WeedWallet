@@ -1,13 +1,14 @@
 {
   "name": "weed-wallet",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "private": true,
   "scripts": {
     "dev": "nuxt",
     "build": "nuxt build",
     "start": "nuxt start",
     "generate": "nuxt generate",
-    "prettier-check": "prettier --check ."
+    "prettier-check": "prettier --check .",
+    "lint": "eslint ."
   },
   "dependencies": {
     "@cosmjs/cosmwasm-stargate": "^0.29.5",
@@ -44,6 +45,8 @@
   },
   "devDependencies": {
     "@nuxtjs/vuetify": "^1.12.3",
-    "prettier": "2.8.8"
+    "prettier": "2.8.8",
+    "@nuxt/eslint-config": "^0.1.1",
+    "eslint": "^8.40.0"    
   }
 }
