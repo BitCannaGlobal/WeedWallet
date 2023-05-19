@@ -4,10 +4,10 @@
       <v-col cols="12">
         <sequential-entrance>
           <v-row justify="space-around">
-            <v-col class="text-h6 text-md-h5 text-lg-h4"
-              >Buddhead NFT Collection</v-col
-            >
-            <v-col> </v-col>
+            <v-col class="text-h6 text-md-h5 text-lg-h4">
+              Buddhead NFT Collection
+            </v-col>
+            <v-col />
           </v-row>
         </sequential-entrance>
         <sequential-entrance>
@@ -81,16 +81,22 @@
 
     <sequential-entrance>
       <v-row justify="space-around">
-        <v-col class="text-h6 text-md-h5 text-lg-h4">Buddhead</v-col>
-        <v-col> </v-col>
+        <v-col class="text-h6 text-md-h5 text-lg-h4">
+          Buddhead
+        </v-col>
+        <v-col />
       </v-row>
     </sequential-entrance>
     <sequential-entrance>
       <!--<h1>Buddhead collection</h1>-->
-      <div v-for="index in myNft" :key="index.id" class="mt-4 mr-4 card">
+      <div
+        v-for="index in myNft"
+        :key="index.id"
+        class="mt-4 mr-4 card"
+      >
         <!-- Image à la une -->
         <div class="card-image">
-          <img :src="index.url" />
+          <img :src="index.url">
         </div>
         <!-- Fin de l'image à la une -->
         <!-- Corp de notre carte -->
@@ -98,12 +104,17 @@
           <!-- Date de publication de l'article-->
           Buddhead #{{ index.id }}
           <!-- Titre de l'article -->
-          <div class="card-title"></div>
+          <div class="card-title" />
           <!-- Extrait de l'article -->
           <div class="card-excerpt">
-            <br />
-            <v-btn color="#00b786" :to="'/collectibles/' + index.id">
-              <v-icon class="mr-2">mdi-download</v-icon> View detail
+            <br>
+            <v-btn
+              color="#00b786"
+              :to="'/collectibles/' + index.id"
+            >
+              <v-icon class="mr-2">
+                mdi-download
+              </v-icon> View detail
             </v-btn>
           </div>
         </div>

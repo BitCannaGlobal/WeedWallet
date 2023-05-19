@@ -2,11 +2,20 @@
   <div>
     <v-item-group>
       <v-container>
-        <v-row align="center" justify="center">
-          <v-col cols="12" md="3">
+        <v-row
+          align="center"
+          justify="center"
+        >
+          <v-col
+            cols="12"
+            md="3"
+          >
             <v-item>
               <div class="flex-grow-1 text-center">
-                <v-hover v-slot="{ hover }" open-delay="200">
+                <v-hover
+                  v-slot="{ hover }"
+                  open-delay="200"
+                >
                   <v-card
                     class="rounded-lg justify-center mx-auto"
                     :elevation="hover ? 16 : 2"
@@ -20,27 +29,44 @@
                     >
                       POOL 571
                     </div>
-                    <img src="icon/BCNA-Osmo.svg" width="80" height="45" />
+                    <img
+                      src="icon/BCNA-Osmo.svg"
+                      width="80"
+                      height="45"
+                    >
 
-                    <v-list color="transparent" class="text-center" nav dense>
+                    <v-list
+                      color="transparent"
+                      class="text-center"
+                      nav
+                      dense
+                    >
                       <v-list-item-title class="text-h6 font-weight-bold">
                         Title
                       </v-list-item-title>
                       <v-list-item class="rounded-lg justify-center mx-auto">
                         Sub title Sub title Sub title Sub title
                       </v-list-item>
-                      <v-list-item-group v-model="selectedItem" color="primary">
-                        <v-list-item v-for="(item, i) in items" :key="i">
+                      <v-list-item-group
+                        v-model="selectedItem"
+                        color="primary"
+                      >
+                        <v-list-item
+                          v-for="(item, i) in items"
+                          :key="i"
+                        >
                           <v-list-item-content>
                             <v-list-item-title
                               v-text="item.text"
-                            ></v-list-item-title>
+                            />
                           </v-list-item-content>
                         </v-list-item>
                       </v-list-item-group>
                     </v-list>
                     <div class="text-center ma-3">
-                      <v-btn dark> Choose Plan </v-btn>
+                      <v-btn dark>
+                        Choose Plan
+                      </v-btn>
                     </div>
                   </v-card>
                 </v-hover>
@@ -48,10 +74,16 @@
             </v-item>
           </v-col>
 
-          <v-col cols="12" md="3">
+          <v-col
+            cols="12"
+            md="3"
+          >
             <v-item>
               <div class="flex-grow-1 text-center">
-                <v-hover v-slot="{ hover }" open-delay="200">
+                <v-hover
+                  v-slot="{ hover }"
+                  open-delay="200"
+                >
                   <v-card
                     class="rounded-lg justify-center mx-auto"
                     :elevation="hover ? 16 : 2"
@@ -66,26 +98,39 @@
                       POOL 572
                     </div>
 
-                    <img src="icon/BCNA-Atom.svg" />
-                    <v-list color="transparent" class="text-center" nav dense>
+                    <img src="icon/BCNA-Atom.svg">
+                    <v-list
+                      color="transparent"
+                      class="text-center"
+                      nav
+                      dense
+                    >
                       <v-list-item-title class="text-h6 font-weight-bold">
                         Title
                       </v-list-item-title>
                       <v-list-item class="rounded-lg justify-center mx-auto">
                         Sub title Sub title Sub title Sub title
                       </v-list-item>
-                      <v-list-item-group v-model="selectedItem" color="primary">
-                        <v-list-item v-for="(item, i) in items" :key="i">
+                      <v-list-item-group
+                        v-model="selectedItem"
+                        color="primary"
+                      >
+                        <v-list-item
+                          v-for="(item, i) in items"
+                          :key="i"
+                        >
                           <v-list-item-content>
                             <v-list-item-title
                               v-text="item.text"
-                            ></v-list-item-title>
+                            />
                           </v-list-item-content>
                         </v-list-item>
                       </v-list-item-group>
                     </v-list>
                     <div class="text-center ma-3">
-                      <v-btn dark> Choose Plan </v-btn>
+                      <v-btn dark>
+                        Choose Plan
+                      </v-btn>
                     </div>
                   </v-card>
                 </v-hover>

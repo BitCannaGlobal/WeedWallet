@@ -6,7 +6,9 @@
         <v-icon> mdi-eye-outline </v-icon>
       </v-list-item-action>
       <v-list-item-title>Live transactions</v-list-item-title>
-      <v-icon @click="deleteHistory"> mdi-trash-can-outline </v-icon>
+      <v-icon @click="deleteHistory">
+        mdi-trash-can-outline
+      </v-icon>
     </v-list-item>
 
     <v-expansion-panels class="ml-1 mr-1">
@@ -82,15 +84,15 @@ export default {
   },
   async mounted() {
     this.$socket.$on("message", (data) => {
-      var finalData = JSON.parse(data.data.toString("utf-8"));
+      const finalData = JSON.parse(data.data.toString("utf-8"));
 
       if (finalData?.result.data) {
         this.rightDrawer = true;
         // finalData.result.data.value.TxResult.result.log
-        let finalDataDecode = finalData.result.data;
-        let finalDataDecodeEvents = finalData.result.events;
+        const finalDataDecode = finalData.result.data;
+        const finalDataDecodeEvents = finalData.result.events;
         console.log(finalDataDecodeEvents);
-        let dataShow = {};
+        const dataShow = {};
         dataShow.block = finalDataDecodeEvents["tx.height"][0];
         dataShow.hash = finalDataDecodeEvents["tx.hash"][0];
         dataShow.action = finalDataDecodeEvents["message.action"][0];

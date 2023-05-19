@@ -1,15 +1,20 @@
 <template>
   <v-row>
-    <v-col cols="12" v-if="layout">
+    <v-col
+      v-if="layout"
+      cols="12"
+    >
       <sequential-entrance>
         <v-row justify="space-around">
-          <v-col class="text-h6 text-md-h5 text-lg-h4">Wallet Statistics</v-col>
+          <v-col class="text-h6 text-md-h5 text-lg-h4">
+            Wallet Statistics
+          </v-col>
           <v-col>
             <SendModal
               class="text-right"
-              :chainIdProps="cosmosConfig[chainId].coinLookup.addressPrefix"
-              :amountAvailable="balances / 1000000"
-              :coinIcon="cosmosConfig[chainId].coinLookup.icon"
+              :chain-id-props="cosmosConfig[chainId].coinLookup.addressPrefix"
+              :amount-available="balances / 1000000"
+              :coin-icon="cosmosConfig[chainId].coinLookup.icon"
             />
           </v-col>
         </v-row>
@@ -22,14 +27,14 @@
               <v-card-title class="headline">
                 <!--<v-icon class="mr-2">mdi-wallet-outline</v-icon> Wallet amount-->
                 <h4 class="icon">
-                  <v-img src="icon/wallet.png"></v-img>
+                  <v-img src="icon/wallet.png" />
                   &ensp; Wallet value
                 </h4>
               </v-card-title>
               <v-card-text class="text-right text-h5">
                 ${{ totalWalletPrice }}
                 <v-tooltip top>
-                  <template v-slot:activator="{ on, attrs }">
+                  <template #activator="{ on, attrs }">
                     <v-icon
                       class="mt-n1"
                       color="#00b786"
@@ -40,10 +45,10 @@
                     </v-icon>
                   </template>
                   <span>
-                    - Available<br />
-                    - Delegated<br />
-                    - Unbonding<br />
-                    - Reward<br />
+                    - Available<br>
+                    - Delegated<br>
+                    - Unbonding<br>
+                    - Reward<br>
                   </span>
                 </v-tooltip>
               </v-card-text>
@@ -53,14 +58,14 @@
             <v-card class="accent">
               <v-card-title class="headline">
                 <h4 class="icon">
-                  <img src="icon/tokens.png" />
+                  <img src="icon/tokens.png">
                   &ensp; BCNA price
                 </h4>
               </v-card-title>
               <v-card-text class="text-right text-h5">
                 ${{ priceNow }}
                 <v-tooltip top>
-                  <template v-slot:activator="{ on, attrs }">
+                  <template #activator="{ on, attrs }">
                     <v-icon
                       class="mt-n1"
                       color="#00b786"
@@ -79,7 +84,7 @@
             <v-card class="accent">
               <v-card-title class="headline">
                 <h4 class="icon">
-                  <img src="icon/apr.png" />
+                  <img src="icon/apr.png">
                   &ensp; APR
                 </h4>
               </v-card-title>
@@ -91,12 +96,17 @@
         </v-row>
       </sequential-entrance>
 
-      <sequential-entrance fromBottom>
+      <sequential-entrance from-bottom>
         <v-row class="mt-4">
           <v-col>
-            <v-card class="accent" min-height="400">
+            <v-card
+              class="accent"
+              min-height="400"
+            >
               <v-card-title class="headline">
-                <v-icon class="mr-2">mdi-wallet-outline</v-icon> Price history
+                <v-icon class="mr-2">
+                  mdi-wallet-outline
+                </v-icon> Price history
               </v-card-title>
               <v-card-text>
                 <ChartsBar />
@@ -104,25 +114,33 @@
             </v-card>
           </v-col>
           <v-col>
-            <v-card class="accent" min-height="400">
+            <v-card
+              class="accent"
+              min-height="400"
+            >
               <v-card-title class="headline">
-                <v-icon class="mr-2">mdi-wallet-outline</v-icon> Wallet
+                <v-icon class="mr-2">
+                  mdi-wallet-outline
+                </v-icon> Wallet
                 distribution
               </v-card-title>
               <v-card-text>
-                <v-row align="center" justify="center">
+                <v-row
+                  align="center"
+                  justify="center"
+                >
                   <v-col>
                     <ChartsDoughnut
                       v-if="
                         Number(balances) > 0 ||
-                        rewards.amount > 0 ||
-                        totalDelegated > 0 ||
-                        totalUnbound > 0
+                          rewards.amount > 0 ||
+                          totalDelegated > 0 ||
+                          totalUnbound > 0
                       "
                       :amount="Number(balances)"
-                      :rewardsDoughnut="rewards.amount"
-                      :totalDelegated="totalDelegated"
-                      :totalUnbound="totalUnbound"
+                      :rewards-doughnut="rewards.amount"
+                      :total-delegated="totalDelegated"
+                      :total-unbound="totalUnbound"
                     />
                     <h2
                       v-else
@@ -136,7 +154,12 @@
                       <tbody>
                         <tr>
                           <td>
-                            <v-icon color="#b3ffeb" small> mdi-circle </v-icon>
+                            <v-icon
+                              color="#b3ffeb"
+                              small
+                            >
+                              mdi-circle
+                            </v-icon>
                             Available
                           </td>
                           <td>
@@ -146,7 +169,12 @@
                         </tr>
                         <tr>
                           <td>
-                            <v-icon color="#33ffc9" small> mdi-circle </v-icon>
+                            <v-icon
+                              color="#33ffc9"
+                              small
+                            >
+                              mdi-circle
+                            </v-icon>
                             Delegated
                           </td>
                           <td>
@@ -156,7 +184,12 @@
                         </tr>
                         <tr>
                           <td>
-                            <v-icon color="#00b383" small> mdi-circle </v-icon>
+                            <v-icon
+                              color="#00b383"
+                              small
+                            >
+                              mdi-circle
+                            </v-icon>
                             Unbonding
                           </td>
                           <td>
@@ -166,7 +199,12 @@
                         </tr>
                         <tr>
                           <td>
-                            <v-icon color="#004d38" small> mdi-circle </v-icon>
+                            <v-icon
+                              color="#004d38"
+                              small
+                            >
+                              mdi-circle
+                            </v-icon>
                             Staking Reward
                           </td>
                           <td>
@@ -176,7 +214,12 @@
                         </tr>
                         <tr>
                           <td>
-                            <v-icon color="#00b786" small> mdi-circle </v-icon>
+                            <v-icon
+                              color="#00b786"
+                              small
+                            >
+                              mdi-circle
+                            </v-icon>
                             Total
                           </td>
                           <td>
@@ -193,7 +236,7 @@
           </v-col>
         </v-row>
       </sequential-entrance>
-      <sequential-entrance> </sequential-entrance>
+      <sequential-entrance />
 
       <!--<v-row justify="space-around">
 
@@ -213,38 +256,45 @@
       </v-row>-->
     </v-col>
 
-    <v-col cols="12" v-else>
-      <v-col class="ml-6 mb-6 text-h6 text-md-h5 text-lg-h4"
-        >atmon3r's portfolio</v-col
-      >
+    <v-col
+      v-else
+      cols="12"
+    >
+      <v-col class="ml-6 mb-6 text-h6 text-md-h5 text-lg-h4">
+        atmon3r's portfolio
+      </v-col>
 
       <sequential-entrance>
         <v-row>
           <v-col
             class="fill-height d-flex flex-column justify-center align-center"
           >
-            <v-card class="pa-4 accent" width="700" min-height="220">
+            <v-card
+              class="pa-4 accent"
+              width="700"
+              min-height="220"
+            >
               <v-card-text>
                 <v-row>
                   <v-col md="6">
-                    Main account<br />
+                    Main account<br>
                     <span class="text-h6 text-md-h5 text-lg-h4">
                       {{ (balances / 1000000).toFixed(2) }}
                       {{ cosmosConfig[chainId].coinLookup.viewDenom }}
                     </span>
-                    <br />
+                    <br>
                     <span class="text-h6"> ${{ totalWalletPrice }} </span>
-                    <br />
+                    <br>
 
                     <v-row class="mt-1">
                       <v-col md="6">
                         <SendModal
                           class="text-right"
-                          :chainIdProps="
+                          :chain-id-props="
                             cosmosConfig[chainId].coinLookup.addressPrefix
                           "
-                          :amountAvailable="balances / 1000000"
-                          :coinIcon="cosmosConfig[chainId].coinLookup.icon"
+                          :amount-available="balances / 1000000"
+                          :coin-icon="cosmosConfig[chainId].coinLookup.icon"
                           type="simpleSend"
                         />
                       </v-col>
@@ -261,13 +311,25 @@
                     </v-row>
                   </v-col>
                   <v-col md="6">
-                    <v-sheet outlined color="#00b786" rounded>
-                      <v-card class="pa-2 accent" outlined tile height="160">
+                    <v-sheet
+                      outlined
+                      color="#00b786"
+                      rounded
+                    >
+                      <v-card
+                        class="pa-2 accent"
+                        outlined
+                        tile
+                        height="160"
+                      >
                         <v-avatar>
-                          <img src="logo-bcna.png" alt="bcna" />
+                          <img
+                            src="logo-bcna.png"
+                            alt="bcna"
+                          >
                         </v-avatar>
-                        <br /><br />
-                        <span class="mt-2"> atmon3r's portfolio</span> <br />
+                        <br><br>
+                        <span class="mt-2"> atmon3r's portfolio</span> <br>
                         <span class="text-caption">
                           {{ accounts[0]?.address }}
                         </span>
@@ -278,9 +340,9 @@
               </v-card-text>
             </v-card>
 
-            <v-col class="mt-4 ml-8 mb-6 text-h6 text-md-h5 text-lg-h4"
-              >Transactions</v-col
-            >
+            <v-col class="mt-4 ml-8 mb-6 text-h6 text-md-h5 text-lg-h4">
+              Transactions
+            </v-col>
             <template v-for="group in groupedEvents()">
               <div>
                 <h3>{{ group[0].section }}</h3>
@@ -292,7 +354,10 @@
                   min-height="50"
                 >
                   <!-- {{ item }}  -->
-                  <v-row justify="space-around" class="data-row">
+                  <v-row
+                    justify="space-around"
+                    class="data-row"
+                  >
                     <v-col>
                       <v-chip
                         class="mb-2"
@@ -302,30 +367,38 @@
                       >
                         {{ item.final.typeReadable }}
                       </v-chip>
-                      <br />
+                      <br>
                       {{ item.final.timestamp | formatDate }}
                     </v-col>
                     <v-col
                       v-if="item.final.msgData.amount"
                       class="mt-4 text-right"
-                      >{{ item.final.msgData.amount }} BCNA</v-col
                     >
+                      {{ item.final.msgData.amount }} BCNA
+                    </v-col>
                   </v-row>
                 </v-card>
                 <!-- {{ group }} -->
               </div>
             </template>
           </v-col>
-          <v-divider class="mx-4" vertical></v-divider>
+          <v-divider
+            class="mx-4"
+            vertical
+          />
 
           <v-col
             class="fill-height d-flex flex-column justify-center align-center"
           >
-            <v-card class="accent" width="700" min-height="220">
+            <v-card
+              class="accent"
+              width="700"
+              min-height="220"
+            >
               <v-card-title class="headline">
                 <v-col class="mt-2">
                   <h4 class="icon">
-                    <img src="icon-stake.png" />
+                    <img src="icon-stake.png">
                   </h4>
                 </v-col>
               </v-card-title>
@@ -335,7 +408,7 @@
                     <span class="text-h6 text-md-h5 text-lg-h4">
                       Available to stake
                     </span>
-                    <br />
+                    <br>
                     <span class="text-h6">
                       {{ (balances / 1000000).toFixed(6) }}
                       {{ cosmosConfig[chainId].coinLookup.viewDenom }}
@@ -357,11 +430,15 @@
               </v-card-text>
             </v-card>
 
-            <v-card class="mt-6 accent" width="700" min-height="220">
+            <v-card
+              class="mt-6 accent"
+              width="700"
+              min-height="220"
+            >
               <v-card-title class="headline">
                 <v-col class="mt-2">
                   <h4 class="icon">
-                    <img src="icon-reward.png" />
+                    <img src="icon-reward.png">
                   </h4>
                 </v-col>
               </v-card-title>
@@ -371,7 +448,7 @@
                     <span class="text-h6 text-md-h5 text-lg-h4">
                       Your rewards
                     </span>
-                    <br />
+                    <br>
                     <span class="text-h6">
                       {{ (rewards.amount / 1000000).toFixed(6) }}
                       {{ cosmosConfig[chainId].coinLookup.viewDenom }}
@@ -379,7 +456,11 @@
                   </v-col>
                   <v-col class="mt-2 text-right">
                     <span class="text-h6 text-md-h5 text-lg-h4">
-                      <v-btn large min-width="200" class="mt-2 white--text">
+                      <v-btn
+                        large
+                        min-width="200"
+                        class="mt-2 white--text"
+                      >
                         Claim
                       </v-btn>
                     </span>
@@ -481,7 +562,7 @@ export default {
     },
     groupedEvents() {
       if (this.allTxsLoaded) {
-        let test = orderBy(
+        const test = orderBy(
           groupBy(this.categorizedEvents(), "section"),
           (group) => group[0].final.timestamp,
           "desc"
@@ -499,7 +580,7 @@ export default {
         const category = categories.find(({ matcher }) => matcher(event));
 
         if (category) {
-          let final = this.getMessageType(
+          const final = this.getMessageType(
             event.tx.body.messages[0],
             event.timestamp
           );
@@ -513,7 +594,7 @@ export default {
         const date = dayjs(event.timestamp);
         const today = dayjs();
         if (date.year() === today.year()) {
-          let final = this.getMessageType(
+          const final = this.getMessageType(
             event.tx.body.messages[0],
             event.timestamp
           );
@@ -524,7 +605,7 @@ export default {
         }
 
         // tx is in a month another year
-        let final = this.getMessageType(
+        const final = this.getMessageType(
           event.tx.body.messages[0],
           event.timestamp
         );
@@ -535,7 +616,7 @@ export default {
       });
     },
     getMessageType(msg, timestamp) {
-      let typeReadable = setMsg(msg, this.accounts[0].address, timestamp);
+      const typeReadable = setMsg(msg, this.accounts[0].address, timestamp);
       return typeReadable;
     },
   },

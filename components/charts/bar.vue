@@ -4,13 +4,16 @@
       v-if="firstLoad"
       :loading="loading"
       type="image"
-    ></v-skeleton-loader>
-    <div v-if="loaded" class="p-2 border border-gray-500 mt-4">
+    />
+    <div
+      v-if="loaded"
+      class="p-2 border border-gray-500 mt-4"
+    >
       <line-chart
         :width="width"
         :height="height"
         :data="pricedata"
-      ></line-chart>
+      />
     </div>
   </div>
 </template>
@@ -79,8 +82,8 @@ export default {
     // const full = await axios('https://api.coingecko.com/api/v3/coins/bitcanna/market_chart?vs_currency=usd&days=7&interval=daily')
     const full = await axios("api/market-chart");
 
-    let copyItems = [];
-    let copyDates = [];
+    const copyItems = [];
+    const copyDates = [];
     /* full.data.prices.forEach((item) => {
 
       var dateFormat= new Date(item[0]);
@@ -97,8 +100,8 @@ export default {
       copyDates.push(finalDate);
     }) */
     full.data.forEach((item) => {
-      var dateFormat = new Date(item.time * 1000);
-      let finalDate =
+      const dateFormat = new Date(item.time * 1000);
+      const finalDate =
         dateFormat.getDate() +
         "/" +
         (dateFormat.getMonth() + 1) +

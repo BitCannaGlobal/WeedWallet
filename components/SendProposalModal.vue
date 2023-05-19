@@ -1,31 +1,52 @@
 <template>
   <div class="d-inline">
-    <v-dialog v-model="dialog" max-width="600px">
-      <template v-slot:activator="{ on, attrs }">
-        <v-btn dark v-bind="attrs" v-on="on">
-          <v-icon class="mr-2">mdi-send-circle</v-icon> Vote for proposal
+    <v-dialog
+      v-model="dialog"
+      max-width="600px"
+    >
+      <template #activator="{ on, attrs }">
+        <v-btn
+          dark
+          v-bind="attrs"
+          v-on="on"
+        >
+          <v-icon class="mr-2">
+            mdi-send-circle
+          </v-icon> Vote for proposal
           {{ idProposal }}
         </v-btn>
       </template>
       <v-card>
         <v-card-title>
           <span class="text-h5">Vote for proposal {{ idProposal }}</span>
-          <v-spacer></v-spacer>
-          <v-icon class="mr-2" @click="dialog = false">mdi-close-circle</v-icon>
+          <v-spacer />
+          <v-icon
+            class="mr-2"
+            @click="dialog = false"
+          >
+            mdi-close-circle
+          </v-icon>
         </v-card-title>
         <v-card-text>
-          <v-form ref="form" v-model="dislableSend" lazy-validation>
+          <v-form
+            ref="form"
+            v-model="dislableSend"
+            lazy-validation
+          >
             <v-item-group v-model="selected">
               <v-container>
                 <v-container fluid>
                   <v-row dense>
                     <v-col
-                      class="mx-auto"
                       v-for="card in cardsVote"
                       :key="card.title"
+                      class="mx-auto"
                       :cols="card.flex"
                     >
-                      <v-item :value="card" v-slot="{ active, toggle }">
+                      <v-item
+                        v-slot="{ active, toggle }"
+                        :value="card"
+                      >
                         <v-card
                           :color="active ? 'green' : ''"
                           class="d-flex align-center"
@@ -34,7 +55,7 @@
                           <v-btn icon>
                             <v-icon>mdi-vote-outline</v-icon>
                           </v-btn>
-                          <v-card-title v-text="card.title"></v-card-title>
+                          <v-card-title v-text="card.title" />
                         </v-card>
                       </v-item>
                     </v-col>
@@ -45,7 +66,7 @@
           </v-form>
         </v-card-text>
         <v-card-actions>
-          <v-spacer></v-spacer>
+          <v-spacer />
           <v-btn
             :disabled="!dislableSend"
             :loading="loading"
@@ -157,7 +178,7 @@ export default {
       if (this.$refs.form.validate() === true) {
         (async () => {
           // Send notification
-          var returnWaiting = notifWaiting(this.$toast);
+          const returnWaiting = notifWaiting(this.$toast);
           this.loading = true;
 
           const chainId = cosmosConfig[this.chainId].chainId;

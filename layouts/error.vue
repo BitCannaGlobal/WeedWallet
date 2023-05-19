@@ -8,7 +8,9 @@
         {{ otherError }}
       </h1>
       420 Enhance your calm
-      <NuxtLink to="/"> Home page </NuxtLink>
+      <NuxtLink to="/">
+        Home page
+      </NuxtLink>
     </v-container>
   </v-app>
 </template>

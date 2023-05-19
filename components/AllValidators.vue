@@ -1,6 +1,13 @@
 <template>
-  <v-row justify="center" align="center">
-    <v-col cols="12" sm="12" md="12">
+  <v-row
+    justify="center"
+    align="center"
+  >
+    <v-col
+      cols="12"
+      sm="12"
+      md="12"
+    >
       <div class="row">
         <div class="col-sm">
           <v-data-table
@@ -9,7 +16,7 @@
             :items="finalValidators"
             :items-per-page="100"
           >
-            <template v-slot:top> </template>
+            <template #top />
             <template #item.status="{ item }">
               <v-chip
                 v-if="item.status === 'BOND_STATUS_BONDED'"
@@ -20,7 +27,13 @@
               >
                 Active
               </v-chip>
-              <v-chip v-else class="ma-2" color="red" outlined label>
+              <v-chip
+                v-else
+                class="ma-2"
+                color="red"
+                outlined
+                label
+              >
                 Inactive
               </v-chip>
             </template>
@@ -29,7 +42,9 @@
                 :to="'/validators/' + item.op_address"
                 class="linkFormat"
               >
-                <v-icon class="mr-2">mdi-shield-check</v-icon> {{ item.name }}
+                <v-icon class="mr-2">
+                  mdi-shield-check
+                </v-icon> {{ item.name }}
               </router-link>
             </template>
             <template #item.uptime="{ item }">
@@ -55,8 +70,8 @@ import cosmosConfig from "~/cosmos.config";
 import { notifWaiting, notifError, notifSuccess } from "~/libs/notifications";
 
 export default {
-  props: ["getStatus"],
   name: "Validators",
+  props: ["getStatus"],
   data() {
     return {
       headers: [

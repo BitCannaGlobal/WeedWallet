@@ -1,42 +1,70 @@
 <template>
   <v-container class="bcnaBackground">
-    <v-row justify="center" align="center">
-      <v-col cols="4" sm="4" md="4">
+    <v-row
+      justify="center"
+      align="center"
+    >
+      <v-col
+        cols="4"
+        sm="4"
+        md="4"
+      >
         <div class="mt-10 row justify-center">
           <v-img
             alt="Cosmofolio Logo"
             src="logo-bcna.png"
             max-height="60"
             max-width="60"
-          ></v-img>
+          />
         </div>
-        <br />
+        <br>
 
-        <v-card class="mt-10" height="100%">
+        <v-card
+          class="mt-10"
+          height="100%"
+        >
           <v-card-actions class="justify-center">
-            <v-list two-line subheader>
-              <v-list-item color="#000000" @click="connectKeplr">
+            <v-list
+              two-line
+              subheader
+            >
+              <v-list-item
+                color="#000000"
+                @click="connectKeplr"
+              >
                 <v-list-item-avatar>
-                  <v-img alt="bcna" src="uctq7aeh_400x400.png"></v-img>
+                  <v-img
+                    alt="bcna"
+                    src="uctq7aeh_400x400.png"
+                  />
                 </v-list-item-avatar>
                 <v-list-item-content>
                   <v-list-item-title>Keplr connect </v-list-item-title>
-                  <v-list-item-subtitle
-                    >Connect your wallet cosmos from keplr</v-list-item-subtitle
-                  >
+                  <v-list-item-subtitle>
+                    Connect your wallet cosmos from keplr
+                  </v-list-item-subtitle>
                 </v-list-item-content>
               </v-list-item>
 
               <v-list-item>
                 <v-list-item-avatar>
-                  <v-img alt="bcna" src="nWwjGAZN_400x400.png"></v-img>
+                  <v-img
+                    alt="bcna"
+                    src="nWwjGAZN_400x400.png"
+                  />
                 </v-list-item-avatar>
 
                 <v-list-item-content>
                   <v-list-item-title>Cosmostation connect</v-list-item-title>
-                  <v-list-item-subtitle
-                    >Connect your wallet cosmos from Cosmostation
-                    <v-chip x-small class="ma-2" color="orange" label outlined>
+                  <v-list-item-subtitle>
+                    Connect your wallet cosmos from Cosmostation
+                    <v-chip
+                      x-small
+                      class="ma-2"
+                      color="orange"
+                      label
+                      outlined
+                    >
                       Soon
                     </v-chip>
                   </v-list-item-subtitle>
@@ -114,7 +142,7 @@ export default {
   },
   methods: {
     connectKeplr: async function (event) {
-      var payload = { key1: cosmosConfig[0], key2: this.chainId };
+      const payload = { key1: cosmosConfig[0], key2: this.chainId };
       await this.$store.dispatch("keplr/connectWallet", payload);
       console.log(this.accounts[0].address);
       //await this.$store.dispatch('data/getbitcannaId', this.accounts[0].address)

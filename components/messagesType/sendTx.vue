@@ -1,13 +1,18 @@
 <template>
   <v-container>
     <v-row class="mt-4">
-      <v-spacer></v-spacer>
+      <v-spacer />
 
       <v-switch
         v-model="viewJson"
         :label="viewJson ? 'View form' : 'View json'"
-      ></v-switch>
-      <v-col v-if="viewJson" cols="12" sm="12" md="12">
+      />
+      <v-col
+        v-if="viewJson"
+        cols="12"
+        sm="12"
+        md="12"
+      >
         <vue-json-pretty
           :data="jsonData"
           show-line
@@ -17,33 +22,49 @@
         />
       </v-col>
 
-      <v-col v-if="!viewJson" cols="12" sm="12" md="12">
+      <v-col
+        v-if="!viewJson"
+        cols="12"
+        sm="12"
+        md="12"
+      >
         <v-text-field
           v-model="selectPolicy"
           label="From address"
           required
           outlined
           disabled
-        ></v-text-field>
+        />
         <v-text-field
           v-model="toAddress"
           label="To address"
           required
           outlined
-        ></v-text-field>
+        />
         <v-text-field
           v-model="amount"
           label="Amount"
           :suffix="cosmosConfig[0].coinLookup.viewDenom"
           required
           outlined
-        ></v-text-field>
-        <v-btn elevation="2" @click="checkMsg">Check message</v-btn>
+        />
+        <v-btn
+          elevation="2"
+          @click="checkMsg"
+        >
+          Check message
+        </v-btn>
         <span v-if="showValidateData">
           {{ finalMsgProp }}
-          <v-icon v-if="validateData" color="teal"> mdi-check </v-icon>
+          <v-icon
+            v-if="validateData"
+            color="teal"
+          > mdi-check </v-icon>
 
-          <v-icon v-else color="red"> mdi-alert-circle </v-icon>
+          <v-icon
+            v-else
+            color="red"
+          > mdi-alert-circle </v-icon>
         </span>
       </v-col>
     </v-row>
@@ -68,10 +89,10 @@ import cosmosConfig from "~/cosmos.config";
 const { MsgSend } = cosmos.bank.v1beta1;
 
 export default {
-  props: ["from"],
   components: {
     VueJsonPretty,
   },
+  props: ["from"],
   data(props) {
     return {
       dialog: false,

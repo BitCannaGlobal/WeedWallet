@@ -1,13 +1,18 @@
 <template>
   <v-container>
     <v-row class="mt-4">
-      <v-spacer></v-spacer>
+      <v-spacer />
 
       <v-switch
         v-model="viewJson"
         :label="viewJson ? 'View form' : 'View json'"
-      ></v-switch>
-      <v-col v-if="viewJson" cols="12" sm="12" md="12">
+      />
+      <v-col
+        v-if="viewJson"
+        cols="12"
+        sm="12"
+        md="12"
+      >
         <vue-json-pretty
           :data="jsonData"
           show-line
@@ -17,119 +22,160 @@
         />
       </v-col>
 
-      <v-col v-if="!viewJson" cols="12" sm="12" md="12">
+      <v-col
+        v-if="!viewJson"
+        cols="12"
+        sm="12"
+        md="12"
+      >
         <v-row>
-          <v-col cols="12" sm="6" md="6">
+          <v-col
+            cols="12"
+            sm="6"
+            md="6"
+          >
             <v-text-field
               v-model="formMoniker"
               label="Moniker"
               required
               outlined
-            ></v-text-field>
+            />
             <v-text-field
               v-model="formIdentity"
               label="Identity"
               required
               outlined
-            ></v-text-field>
+            />
           </v-col>
-          <v-col cols="12" sm="6">
+          <v-col
+            cols="12"
+            sm="6"
+          >
             <v-text-field
               v-model="formWebsite"
               label="Website"
               required
               outlined
-            ></v-text-field>
+            />
             <v-text-field
               v-model="formSecurityContact"
               label="Security contact"
               required
               outlined
-            ></v-text-field>
+            />
           </v-col>
         </v-row>
 
         <v-row>
-          <v-col cols="12" sm="12" md="12">
+          <v-col
+            cols="12"
+            sm="12"
+            md="12"
+          >
             <v-text-field
               v-model="formDetails"
               label="Details"
               required
               outlined
-            ></v-text-field>
+            />
           </v-col>
         </v-row>
 
         <v-row>
-          <v-col cols="12" sm="6" md="6">
+          <v-col
+            cols="12"
+            sm="6"
+            md="6"
+          >
             <v-text-field
               v-model="formRate"
               label="Rate"
               required
               outlined
-            ></v-text-field>
+            />
 
             <v-text-field
               v-model="formMaxRate"
               label="Max Rate"
               required
               outlined
-            ></v-text-field>
+            />
           </v-col>
-          <v-col cols="12" sm="6">
+          <v-col
+            cols="12"
+            sm="6"
+          >
             <v-text-field
               v-model="formMaxChangeRate"
               label="Max change rate"
               required
               outlined
-            ></v-text-field>
+            />
 
             <v-text-field
               v-model="formMinSelfDelegation"
               label="Min Self Delegation"
               required
               outlined
-            ></v-text-field>
+            />
           </v-col>
         </v-row>
 
         <v-row>
-          <v-col cols="12" sm="6" md="6">
+          <v-col
+            cols="12"
+            sm="6"
+            md="6"
+          >
             <v-text-field
               v-model="formDelegatorAddress"
               label="Delegator Address"
               required
               outlined
-            ></v-text-field>
+            />
             <v-text-field
               v-model="formValidatorAddress"
               label="Validator Address"
               required
               outlined
-            ></v-text-field>
+            />
           </v-col>
-          <v-col cols="12" sm="6">
+          <v-col
+            cols="12"
+            sm="6"
+          >
             <v-text-field
               v-model="formPubkey"
               label="Public Key"
               required
               outlined
-            ></v-text-field>
+            />
             <v-text-field
               v-model="formValue"
               label="Amount delegate"
               required
               outlined
-            ></v-text-field>
+            />
           </v-col>
         </v-row>
 
-        <v-btn elevation="2" @click="checkMsg">Check message</v-btn>
+        <v-btn
+          elevation="2"
+          @click="checkMsg"
+        >
+          Check message
+        </v-btn>
         <span v-if="showValidateData">
           {{ finalMsgProp }}
-          <v-icon v-if="validateData" color="teal"> mdi-check </v-icon>
+          <v-icon
+            v-if="validateData"
+            color="teal"
+          > mdi-check </v-icon>
 
-          <v-icon v-else color="red"> mdi-alert-circle </v-icon>
+          <v-icon
+            v-else
+            color="red"
+          > mdi-alert-circle </v-icon>
         </span>
       </v-col>
     </v-row>
@@ -168,10 +214,10 @@ import cosmosConfig from "~/cosmos.config";
 const { MsgSend } = cosmos.bank.v1beta1;
 
 export default {
-  props: ["from"],
   components: {
     VueJsonPretty,
   },
+  props: ["from"],
   data(props) {
     return {
       dialog: false,
@@ -206,7 +252,6 @@ export default {
     ]),
     ...mapState("data", ["finalMsgProp", "infoGroupId"]),
   },
-  async mounted() {},
   watch: {
     from(newData, oldData) {
       const decode = bech32.decode(newData);
@@ -231,6 +276,7 @@ export default {
       this.jsonData = msgSend;
     },
   },
+  async mounted() {},
   methods: {
     async checkMsg() {
       this.showValidateData = true;

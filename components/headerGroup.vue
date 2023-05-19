@@ -1,9 +1,22 @@
 <template>
   <div>
-    <v-app-bar class="mb-3" flat>
+    <v-app-bar
+      class="mb-3"
+      flat
+    >
       <v-container class="py-0 fill-height">
-        <v-btn class="mr-2" text :to="'/group/' + infoGroupId.id"> Home </v-btn>
-        <v-btn class="mr-2" text :to="'/group/policy/' + infoGroupId.id">
+        <v-btn
+          class="mr-2"
+          text
+          :to="'/group/' + infoGroupId.id"
+        >
+          Home
+        </v-btn>
+        <v-btn
+          class="mr-2"
+          text
+          :to="'/group/policy/' + infoGroupId.id"
+        >
           Policy
         </v-btn>
         <v-btn
@@ -14,7 +27,7 @@
           Submit Proposal
         </v-btn>
 
-        <v-spacer></v-spacer>
+        <v-spacer />
 
         <v-chip
           v-if="infoGroupId.admin === accounts[0].address"
@@ -33,11 +46,17 @@
           outlined
         >
           <EditGroup
-            :addressAdmin="accounts[0].address"
-            :groupId="infoGroupId.id"
+            :address-admin="accounts[0].address"
+            :group-id="infoGroupId.id"
           />
         </v-chip>
-        <v-chip v-else class="ma-2" color="red" label outlined>
+        <v-chip
+          v-else
+          class="ma-2"
+          color="red"
+          label
+          outlined
+        >
           You are not admin
         </v-chip>
       </v-container>
@@ -45,17 +64,20 @@
 
     <!--{{ infoGroupId }}-->
     <v-card>
-      <v-img height="200px" :src="infoGroupId.meta?.group_banner">
+      <v-img
+        height="200px"
+        :src="infoGroupId.meta?.group_banner"
+      >
         <v-card-title class="white--text">
           <v-avatar size="56">
             <img
               alt="user"
               :src="infoGroupId.meta?.group_icon"
               class="invertColor"
-            />
+            >
           </v-avatar>
           <p class="ml-3">
-            {{ infoGroupId.meta?.name }}<br />
+            {{ infoGroupId.meta?.name }}<br>
             Members: {{ infoGroupId.members?.length }}
           </p>
 
@@ -63,8 +85,8 @@
         </v-card-title>
 
         <p class="ml-3">
-          <br />
-          Active Proposals: {{ allProps.length }}<br />
+          <br>
+          Active Proposals: {{ allProps.length }}<br>
           All Policies: {{ infoGroupId.policy?.length }}
         </p>
       </v-img>
@@ -104,7 +126,7 @@ export default {
       account: this.accounts[0].address,
     });
     console.log(this.infoGroupId);
-    let allProps = this.allProps;
+    const allProps = this.allProps;
     this.infoGroupId.policy.forEach(async (item) => {
       const getProps = await axios(
         cosmosConfig[0].apiURL +

@@ -2,7 +2,11 @@
   <div class="p-2 border border-gray-500 mt-4">
     <client-only>
       <!--    {{ amount }}-->
-      <PolarArea :data="chartData" :width="width" :height="height" />
+      <PolarArea
+        :data="chartData"
+        :width="width"
+        :height="height"
+      />
     </client-only>
   </div>
 </template>

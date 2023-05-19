@@ -5,31 +5,60 @@
 
     <v-container>
       <v-row justify="space-around">
-        <v-col class="mb-4 text-h6 text-md-h5 text-lg-h4"
-          >Buddhead #{{ nftId }}</v-col
-        >
+        <v-col class="mb-4 text-h6 text-md-h5 text-lg-h4">
+          Buddhead #{{ nftId }}
+        </v-col>
 
-        <v-chip class="mr-4" color="#00b786" outlined label>
+        <v-chip
+          class="mr-4"
+          color="#00b786"
+          outlined
+          label
+        >
           <!--{{ item.status }}-->
           You are owner
         </v-chip>
       </v-row>
       <v-row no-gutters>
-        <v-col cols="6" md="4">
-          <v-card class="mr-4 pa-2" outlined tile min-height="523">
-            <v-img :src="nftData.data?.token.media.image.jpgLink"></v-img>
+        <v-col
+          cols="6"
+          md="4"
+        >
+          <v-card
+            class="mr-4 pa-2"
+            outlined
+            tile
+            min-height="523"
+          >
+            <v-img :src="nftData.data?.token.media.image.jpgLink" />
           </v-card>
         </v-col>
-        <v-col cols="12" sm="6" md="8">
-          <v-card class="pa-2" outlined tile>
+        <v-col
+          cols="12"
+          sm="6"
+          md="8"
+        >
+          <v-card
+            class="pa-2"
+            outlined
+            tile
+          >
             <v-simple-table>
-              <template v-slot:default>
+              <template #default>
                 <thead>
                   <tr>
-                    <th class="text-left">Name</th>
-                    <th class="text-left">value</th>
-                    <th class="text-left">rarity</th>
-                    <th class="text-left">Rarity Score</th>
+                    <th class="text-left">
+                      Name
+                    </th>
+                    <th class="text-left">
+                      value
+                    </th>
+                    <th class="text-left">
+                      rarity
+                    </th>
+                    <th class="text-left">
+                      Rarity Score
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -46,14 +75,18 @@
               </template>
             </v-simple-table>
           </v-card>
-          <v-card class="mt-2 pa-2" outlined tile>
+          <v-card
+            class="mt-2 pa-2"
+            outlined
+            tile
+          >
             <v-simple-table>
-              <template v-slot:default>
+              <template #default>
                 <tbody>
                   <tr>
                     <td>Total Rarity Score</td>
-                    <td></td>
-                    <td></td>
+                    <td />
+                    <td />
                     <td>{{ nftData.data?.token.rarityScore }}</td>
                   </tr>
                 </tbody>
@@ -72,6 +105,7 @@ import axios from "axios";
 import cosmosConfig from "~/cosmos.config";
 
 export default {
+  filters: {},
   data: () => ({
     cosmosConfig: cosmosConfig,
     nftId: "",
@@ -103,6 +137,5 @@ export default {
   },
   async mounted() {},
   methods: {},
-  filters: {},
 };
 </script>

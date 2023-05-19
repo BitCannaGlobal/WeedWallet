@@ -1,5 +1,9 @@
 <template>
-  <v-row align="center" justify="center" dense>
+  <v-row
+    align="center"
+    justify="center"
+    dense
+  >
     <v-col
       cols="12"
       lg="6"
@@ -17,51 +21,67 @@
         Your proposal has been created! <strong>Click here</strong> to see the
         proposal
       </v-alert>
-      <v-card class="accent" max-width="600">
+      <v-card
+        class="accent"
+        max-width="600"
+      >
         <v-card-title>
           <span class="text-h5">Create BitCanna proposal (v1beta)</span>
         </v-card-title>
         <v-card-text>
           <v-container>
             <v-row>
-              <v-col cols="12" sm="12">
+              <v-col
+                cols="12"
+                sm="12"
+              >
                 <v-select
                   v-model="propType"
                   :items="items"
                   label="Proposal type"
                   required
                   outlined
-                ></v-select>
+                />
               </v-col>
-              <v-col cols="12" sm="12">
+              <v-col
+                cols="12"
+                sm="12"
+              >
                 <v-text-field
                   v-model="propTitle"
                   label="Proposal title"
                   outlined
                   required
-                ></v-text-field>
+                />
               </v-col>
-              <v-col cols="12" sm="12">
+              <v-col
+                cols="12"
+                sm="12"
+              >
                 <v-textarea
                   v-model="propText"
                   outlined
                   name="input-7-4"
                   label="Proposal text"
                   required
-                ></v-textarea>
+                />
                 <!--     <div id="editor">
       <textarea :value="input" @input="update"></textarea>
       <div v-html="compiledMarkdown"></div>
     </div>      -->
               </v-col>
 
-              <v-col cols="12" sm="12" md="12">
+              <v-col
+                cols="12"
+                sm="12"
+                md="12"
+              >
                 <v-text-field
                   v-model="initDeposit"
                   outlined
                   label="Initial Deposit (ubcna)"
                   required
-                ></v-text-field>
+                />
               </v-col>
 
               <v-col
@@ -75,7 +95,7 @@
                   outlined
                   label="Amount spend"
                   required
-                ></v-text-field>
+                />
               </v-col>
               <v-col
                 v-if="propType === 'Community Pool Spend Proposal'"
@@ -88,7 +108,7 @@
                   outlined
                   label="Receiving address"
                   required
-                ></v-text-field>
+                />
               </v-col>
               <!-- <v-col cols="12" sm="6" md="6">
                 <v-text-field v-model="proposer" outlined label="Proposer" required></v-text-field>
@@ -105,7 +125,7 @@
                   outlined
                   label="Upgrade Name"
                   required
-                ></v-text-field>
+                />
               </v-col>
               <v-col
                 v-if="propType === 'Software Upgrade Proposal'"
@@ -118,7 +138,7 @@
                   outlined
                   label="Upgrade Height"
                   required
-                ></v-text-field>
+                />
               </v-col>
               <v-col
                 v-if="propType === 'Software Upgrade Proposal'"
@@ -131,7 +151,7 @@
                   outlined
                   label="Upgrade Info"
                   required
-                ></v-text-field>
+                />
               </v-col>
 
               <v-col
@@ -145,7 +165,7 @@
                   outlined
                   label="Subspace"
                   required
-                ></v-text-field>
+                />
               </v-col>
               <v-col
                 v-if="propType === 'Parameter Change Proposal'"
@@ -158,7 +178,7 @@
                   outlined
                   label="Key"
                   required
-                ></v-text-field>
+                />
               </v-col>
               <v-col
                 v-if="propType === 'Parameter Change Proposal'"
@@ -171,12 +191,12 @@
                   outlined
                   label="Value"
                   required
-                ></v-text-field>
+                />
               </v-col>
             </v-row>
             <span
-              v-if="propType === 'Parameter Change Proposal'"
               v-for="(textField, i) in textFields"
+              v-if="propType === 'Parameter Change Proposal'"
               :key="i"
             >
               <!-- <v-text-field
@@ -193,7 +213,10 @@
                   v-if="propType === 'Parameter Change Proposal'"
                   cols="12"
                 >
-                  <v-btn @click="remove(i)" class="error">
+                  <v-btn
+                    class="error"
+                    @click="remove(i)"
+                  >
                     <v-icon large> mdi-delete-forever-outline </v-icon>
                   </v-btn>
                 </v-col>
@@ -208,7 +231,7 @@
                     outlined
                     label="Subspace"
                     required
-                  ></v-text-field>
+                  />
                 </v-col>
                 <v-col
                   v-if="propType === 'Parameter Change Proposal'"
@@ -221,7 +244,7 @@
                     outlined
                     label="Key"
                     required
-                  ></v-text-field>
+                  />
                 </v-col>
                 <v-col
                   v-if="propType === 'Parameter Change Proposal'"
@@ -234,19 +257,25 @@
                     outlined
                     label="Value"
                     required
-                  ></v-text-field>
+                  />
                 </v-col>
               </v-row>
             </span>
-            <v-btn v-if="propType === 'Parameter Change Proposal'" @click="add"
-              >add</v-btn
+            <v-btn
+              v-if="propType === 'Parameter Change Proposal'"
+              @click="add"
             >
+              add
+            </v-btn>
           </v-container>
         </v-card-text>
         <v-card-actions>
-          <v-spacer></v-spacer>
+          <v-spacer />
 
-          <v-btn color="#00b786" @click="createProposalv1Beta">
+          <v-btn
+            color="#00b786"
+            @click="createProposalv1Beta"
+          >
             Submit proposal
           </v-btn>
         </v-card-actions>

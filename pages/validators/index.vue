@@ -19,17 +19,22 @@
         </v-col>
       </v-row>-->
 
-        <v-row justify="space-around" class="data-row">
+        <v-row
+          justify="space-around"
+          class="data-row"
+        >
           <v-col>
             <v-card class="accent">
               <v-card-title class="headline">
                 <v-col class="mt-2">
                   <h4 class="icon">
-                    <img src="icon/wallet.png" />
+                    <img src="icon/wallet.png">
                     &ensp; Wallet value
                   </h4>
                 </v-col>
-                <v-col class="text-right"> ${{ totalWalletPrice }} </v-col>
+                <v-col class="text-right">
+                  ${{ totalWalletPrice }}
+                </v-col>
               </v-card-title>
             </v-card>
           </v-col>
@@ -39,7 +44,7 @@
               <v-card-title class="headline">
                 <v-col class="mt-2">
                   <h4 class="icon">
-                    <img src="icon/validator.png" />
+                    <img src="icon/validator.png">
                     &ensp; Validators
                   </h4>
                 </v-col>
@@ -54,7 +59,7 @@
               <v-card-title class="headline">
                 <v-col class="mt-2">
                   <h4 class="icon">
-                    <img src="icon/tokens.png" />
+                    <img src="icon/tokens.png">
                     &ensp; Total Bonded
                   </h4>
                 </v-col>
@@ -67,17 +72,20 @@
         </v-row>
       </sequential-entrance>
 
-      <sequential-entrance fromBottom>
+      <sequential-entrance from-bottom>
         <v-row justify="space-around">
           <v-col>
-            <v-row class="mb-2" justify="space-around">
-              <v-col class="text-h6 text-md-h5 text-lg-h4"> </v-col>
+            <v-row
+              class="mb-2"
+              justify="space-around"
+            >
+              <v-col class="text-h6 text-md-h5 text-lg-h4" />
               <v-col>
                 <UndelegateModal
                   class="text-right"
-                  :chainIdProps="cosmosConfig[chainId].coinLookup.addressPrefix"
-                  :amountAvailable="balances / 1000000"
-                  :coinIcon="cosmosConfig[chainId].coinLookup.icon"
+                  :chain-id-props="cosmosConfig[chainId].coinLookup.addressPrefix"
+                  :amount-available="balances / 1000000"
+                  :coin-icon="cosmosConfig[chainId].coinLookup.icon"
                   :selected="selected"
                 />
               </v-col>
@@ -85,18 +93,20 @@
 
             <v-card class="accent">
               <v-card-title class="headline">
-                <v-icon class="mr-2">mdi-wallet-outline</v-icon> Wallet
+                <v-icon class="mr-2">
+                  mdi-wallet-outline
+                </v-icon> Wallet
                 delegations
                 <v-spacer />
                 <ClaimAllModal
                   v-if="rewards.amount > 0"
-                  :amountClaimAll="(rewards.amount / 1000000).toFixed(6)"
-                  :getAllDelegation="delegations"
+                  :amount-claim-all="(rewards.amount / 1000000).toFixed(6)"
+                  :get-all-delegation="delegations"
                 />
               </v-card-title>
               <v-card-text class="text-h5">
                 <v-simple-table class="accent">
-                  <template v-slot:default>
+                  <template #default>
                     <thead>
                       <tr>
                         <!-- <th>
@@ -108,12 +118,15 @@
                         <th>Reward</th>
                         <th>Undelegate</th>
                         <th>Redelegate</th>
-                        <th></th>
+                        <th />
                       </tr>
                     </thead>
 
                     <tbody>
-                      <tr v-for="item in delegations" :key="item.validatorName">
+                      <tr
+                        v-for="item in delegations"
+                        :key="item.validatorName"
+                      >
                         <!-- <td>
                         <v-checkbox
                           v-model="selected"
@@ -147,7 +160,9 @@
                             :to="'/validators/' + item.op_address"
                             class="linkFormat"
                           >
-                            <v-icon class="mr-2">mdi-shield-check</v-icon>
+                            <v-icon class="mr-2">
+                              mdi-shield-check
+                            </v-icon>
                             {{ item.validatorName }}
                           </router-link>
                         </td>
@@ -175,28 +190,30 @@
                             color="#00b786"
                             @click="getReward(item.op_address)"
                           >
-                            <v-icon class="mr-2">mdi-download</v-icon> Claim
+                            <v-icon class="mr-2">
+                              mdi-download
+                            </v-icon> Claim
                           </v-btn>
                           <RedelegateModal
                             class="ma-2"
-                            :chainIdProps="
+                            :chain-id-props="
                               cosmosConfig[chainId].coinLookup.addressPrefix
                             "
-                            :addressFrom="item.op_address"
-                            :amountRe="item.delegated / 1000000"
-                            :validatorName="item.validatorName"
-                            :coinIcon="cosmosConfig[chainId].coinLookup.icon"
+                            :address-from="item.op_address"
+                            :amount-re="item.delegated / 1000000"
+                            :validator-name="item.validatorName"
+                            :coin-icon="cosmosConfig[chainId].coinLookup.icon"
                           />
                           <UndelegateSingleModal
                             class="ma-2"
-                            :chainIdProps="
+                            :chain-id-props="
                               cosmosConfig[chainId].coinLookup.addressPrefix
                             "
-                            :addressFrom="item.op_address"
-                            :amountUn="item.delegated / 1000000"
-                            :amountTotalUn="item.delegated"
-                            :validatorName="item.validatorName"
-                            :coinIcon="cosmosConfig[chainId].coinLookup.icon"
+                            :address-from="item.op_address"
+                            :amount-un="item.delegated / 1000000"
+                            :amount-total-un="item.delegated"
+                            :validator-name="item.validatorName"
+                            :coin-icon="cosmosConfig[chainId].coinLookup.icon"
                           />
                         </td>
                       </tr>
@@ -208,12 +225,20 @@
           </v-col>
         </v-row>
       </sequential-entrance>
-      <sequential-entrance v-if="dataLoaded" fromBottom>
-        <v-row justify="space-around" class="mt-4 data-row">
+      <sequential-entrance
+        v-if="dataLoaded"
+        from-bottom
+      >
+        <v-row
+          justify="space-around"
+          class="mt-4 data-row"
+        >
           <v-col>
             <v-card class="accent">
               <v-card-title class="headline">
-                <v-icon class="mr-2">mdi-wallet-outline</v-icon> Wallet
+                <v-icon class="mr-2">
+                  mdi-wallet-outline
+                </v-icon> Wallet
                 Undelegates
               </v-card-title>
               <!-- {{ allUnbonding }} -->
@@ -222,14 +247,16 @@
                 :items="allUnbonding"
                 :items-per-page="5"
                 class="elevation-1 accent"
-              ></v-data-table>
+              />
             </v-card>
           </v-col>
 
           <v-col>
             <v-card class="accent">
               <v-card-title class="headline">
-                <v-icon class="mr-2">mdi-wallet-outline</v-icon> Wallet
+                <v-icon class="mr-2">
+                  mdi-wallet-outline
+                </v-icon> Wallet
                 Redelegates
               </v-card-title>
               <!-- {{ allRedelegate }} -->
@@ -238,20 +265,29 @@
                 :items="allRedelegate"
                 :items-per-page="5"
                 class="elevation-1 accent"
-              ></v-data-table>
+              />
             </v-card>
           </v-col>
         </v-row>
       </sequential-entrance>
-      <sequential-entrance fromBottom>
-        <v-row class="mt-4" justify="space-around">
+      <sequential-entrance from-bottom>
+        <v-row
+          class="mt-4"
+          justify="space-around"
+        >
           <v-col>
             <v-card class="accent">
               <v-card-title class="headline">
-                <v-icon class="mr-2">mdi-wallet-outline</v-icon> All validators
+                <v-icon class="mr-2">
+                  mdi-wallet-outline
+                </v-icon> All validators
 
                 <v-spacer />
-                <v-btn-toggle v-model="getStatus" borderless color="#00b786">
+                <v-btn-toggle
+                  v-model="getStatus"
+                  borderless
+                  color="#00b786"
+                >
                   <v-btn value="all">
                     <span class="hidden-sm-and-down">All</span>
                   </v-btn>
@@ -262,7 +298,7 @@
                 </v-btn-toggle>
               </v-card-title>
               <v-card-text>
-                <AllValidators :getStatus="getStatus" />
+                <AllValidators :get-status="getStatus" />
               </v-card-text>
             </v-card>
           </v-col>
@@ -366,7 +402,7 @@ export default {
           gas: "200000",
         };
 
-        var returnWaiting = notifWaiting(this.$toast);
+        const returnWaiting = notifWaiting(this.$toast);
         try {
           const result = await client.withdrawRewards(
             accounts[0].address,

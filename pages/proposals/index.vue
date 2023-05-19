@@ -1,12 +1,17 @@
 <template>
   <div>
     <sequential-entrance>
-      <v-row justify="space-around" class="mb-4 data-row">
+      <v-row
+        justify="space-around"
+        class="mb-4 data-row"
+      >
         <v-col>
           <v-card class="accent">
             <v-card-title class="headline">
               <v-col>
-                <h4 class="icon">Voting period</h4>
+                <h4 class="icon">
+                  Voting period
+                </h4>
               </v-col>
               <v-col class="text-right">
                 {{ paramsVoting.voting_period }}
@@ -18,7 +23,9 @@
           <v-card class="accent">
             <v-card-title class="headline">
               <v-col>
-                <h4 class="icon">&ensp; Min deposite</h4>
+                <h4 class="icon">
+                  &ensp; Min deposite
+                </h4>
               </v-col>
               <v-col class="text-right">
                 {{ paramsDeposit.min_deposit }} BCNA
@@ -30,7 +37,9 @@
           <v-card class="accent">
             <v-card-title class="headline">
               <v-col>
-                <h4 class="icon">Max deposit period</h4>
+                <h4 class="icon">
+                  Max deposit period
+                </h4>
               </v-col>
               <v-col class="text-right">
                 {{ paramsDeposit.max_deposit_period }}
@@ -44,14 +53,14 @@
     <v-card class="accent">
       <v-card-title>
         All proposals
-        <v-spacer></v-spacer>
+        <v-spacer />
         <v-text-field
           v-model="search"
           append-icon="mdi-magnify"
           label="Search"
           single-line
           hide-details
-        ></v-text-field>
+        />
       </v-card-title>
       <v-data-table
         class="accent"
@@ -69,28 +78,55 @@
         </template>
         <template #item.status="{ item }">
           <td v-if="item.status === 'PROPOSAL_STATUS_PASSED'">
-            <v-chip class="ma-2" color="green" text-color="white" label>
-              <v-icon class="mr-1">mdi-checkbox-marked-circle</v-icon>
+            <v-chip
+              class="ma-2"
+              color="green"
+              text-color="white"
+              label
+            >
+              <v-icon class="mr-1">
+                mdi-checkbox-marked-circle
+              </v-icon>
               Proposal Passed
             </v-chip>
           </td>
           <td v-if="item.status === 'PROPOSAL_STATUS_REJECTED'">
-            <v-chip class="ma-2" color="red" text-color="white" label>
-              <v-icon class="mr-1">mdi-delete-forever</v-icon>
+            <v-chip
+              class="ma-2"
+              color="red"
+              text-color="white"
+              label
+            >
+              <v-icon class="mr-1">
+                mdi-delete-forever
+              </v-icon>
               Proposal Rejected
             </v-chip>
           </td>
           <td v-if="item.status === 'PROPOSAL_STATUS_VOTING_PERIOD'">
             <!--{{ item.status }}-->
-            <v-chip class="ma-2" text-color="white" color="blue" label>
-              <v-icon class="mr-1"> mdi-alarm-check </v-icon>
+            <v-chip
+              class="ma-2"
+              text-color="white"
+              color="blue"
+              label
+            >
+              <v-icon class="mr-1">
+                mdi-alarm-check
+              </v-icon>
               Voting Period
             </v-chip>
           </td>
           <td v-if="item.status === 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
             <!--{{ item.status }}-->
-            <v-chip class="ma-2" text-color="white" label>
-              <v-icon class="mr-1"> mdi-cash-fast </v-icon>
+            <v-chip
+              class="ma-2"
+              text-color="white"
+              label
+            >
+              <v-icon class="mr-1">
+                mdi-cash-fast
+              </v-icon>
               Deposit Period
             </v-chip>
           </td>
@@ -98,8 +134,12 @@
 
         <template #item.submit_time="{ item }">
           <v-tooltip top>
-            <template v-slot:activator="{ on, attrs }">
-              <span class="mt-n1" v-bind="attrs" v-on="on">{{
+            <template #activator="{ on, attrs }">
+              <span
+                class="mt-n1"
+                v-bind="attrs"
+                v-on="on"
+              >{{
                 item.submit_time | timeFromNow
               }}</span>
             </template>
@@ -111,8 +151,12 @@
         <template #item.voting_start_time="{ item }">
           <td>
             <v-tooltip top>
-              <template v-slot:activator="{ on, attrs }">
-                <span class="mt-n1" v-bind="attrs" v-on="on">{{
+              <template #activator="{ on, attrs }">
+                <span
+                  class="mt-n1"
+                  v-bind="attrs"
+                  v-on="on"
+                >{{
                   item.submit_time | timeFromNow
                 }}</span>
               </template>
@@ -125,8 +169,12 @@
         <template #item.voting_end_time="{ item }">
           <td v-if="item.status !== 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
             <v-tooltip top>
-              <template v-slot:activator="{ on, attrs }">
-                <span class="mt-n1" v-bind="attrs" v-on="on">{{
+              <template #activator="{ on, attrs }">
+                <span
+                  class="mt-n1"
+                  v-bind="attrs"
+                  v-on="on"
+                >{{
                   item.voting_end_time | timeFromNow
                 }}</span>
               </template>
@@ -137,16 +185,19 @@
           </td>
           <td v-else>
             <v-tooltip top>
-              <template v-slot:activator="{ on, attrs }">
-                <span class="mt-n1" v-bind="attrs" v-on="on"
-                  >{{
-                    {
-                      submit: item.submit_time,
-                      secondes: paramsDeposit.max_deposit_seconde,
-                    }
-                      | formatDateDeposite
-                      | timeFromNow
-                  }}
+              <template #activator="{ on, attrs }">
+                <span
+                  class="mt-n1"
+                  v-bind="attrs"
+                  v-on="on"
+                >{{
+                  {
+                    submit: item.submit_time,
+                    secondes: paramsDeposit.max_deposit_seconde,
+                  }
+                    | formatDateDeposite
+                    | timeFromNow
+                }}
                 </span>
               </template>
               <span>
@@ -163,7 +214,12 @@
           </td>
         </template>
         <template #item.myvote="{ item }">
-          <v-btn class="ma-2" disabled> View my vote (soon) </v-btn>
+          <v-btn
+            class="ma-2"
+            disabled
+          >
+            View my vote (soon)
+          </v-btn>
         </template>
       </v-data-table>
     </v-card>
@@ -274,7 +330,7 @@ export default {
       cosmosConfig[0].apiURL + `/cosmos/gov/v1beta1/proposals`
     );
 
-    let setFinalPropos = [];
+    const setFinalPropos = [];
     allProposals.data.proposals.forEach((item) => {
       setFinalPropos.push(item);
     });

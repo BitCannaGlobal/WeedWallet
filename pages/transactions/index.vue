@@ -1,24 +1,33 @@
 <template>
   <div>
-    <v-card v-if="logged" class="mt-2 mx-auto" color="#000000">
+    <v-card
+      v-if="logged"
+      class="mt-2 mx-auto"
+      color="#000000"
+    >
       <v-row justify="space-around">
         <v-col>
-          <v-card class="accent" min-height="400">
+          <v-card
+            class="accent"
+            min-height="400"
+          >
             <v-card-title class="headline">
               <!--<v-icon class="mr-2">mdi-wallet-outline</v-icon> Wallet amount-->
-              <h4 class="icon">&ensp; Transactions historical</h4>
+              <h4 class="icon">
+                &ensp; Transactions historical
+              </h4>
             </v-card-title>
             <v-card-text class="text-h5">
               <v-skeleton-loader
                 v-if="firstLoad"
                 :loading="loading"
                 type="table"
-              ></v-skeleton-loader>
+              />
               <v-expansion-panels>
                 <v-expansion-panel
-                  style="background: #090909; color: white"
                   v-for="item in rpcAllTxs"
                   :key="item.timestamp"
+                  style="background: #090909; color: white"
                 >
                   <v-expansion-panel-header v-slot="{ open }">
                     <v-row no-gutters>
@@ -27,13 +36,19 @@
                           <v-img
                             :src="'../transactions/' + item.messageInfo.icon"
                             :alt="item.messageInfo.typeReadable"
-                          ></v-img>
+                          />
                         </v-avatar>
                       </v-col>
-                      <v-col cols="2" class="mt-4">
+                      <v-col
+                        cols="2"
+                        class="mt-4"
+                      >
                         {{ item.timestamp | formatDate }}
                       </v-col>
-                      <v-col cols="8" class="text--secondary">
+                      <v-col
+                        cols="8"
+                        class="text--secondary"
+                      >
                         <v-fade-transition leave-absolute>
                           <span v-if="open">
                             <v-chip
@@ -46,7 +61,11 @@
                               {{ item.messageInfo.typeReadable }}
                             </v-chip>
                           </span>
-                          <v-row v-else no-gutters style="width: 100%">
+                          <v-row
+                            v-else
+                            no-gutters
+                            style="width: 100%"
+                          >
                             <v-col cols="3">
                               <v-chip
                                 class="mt-3"
@@ -58,7 +77,10 @@
                                 {{ item.messageInfo.typeReadable }}
                               </v-chip>
                             </v-col>
-                            <v-col cols="9" class="mt-4">
+                            <v-col
+                              cols="9"
+                              class="mt-4"
+                            >
                               {{ item.txhash }}
                             </v-col>
                           </v-row>
@@ -73,12 +95,18 @@
                       "
                     >
                       <v-simple-table class="accent">
-                        <template v-slot:default>
+                        <template #default>
                           <thead>
                             <tr>
-                              <th class="text-left">From</th>
-                              <th class="text-left">To</th>
-                              <th class="text-left">Amount</th>
+                              <th class="text-left">
+                                From
+                              </th>
+                              <th class="text-left">
+                                To
+                              </th>
+                              <th class="text-left">
+                                Amount
+                              </th>
                             </tr>
                           </thead>
                           <tbody>
@@ -98,16 +126,22 @@
                     <template
                       v-if="
                         item.messageInfo.type ===
-                        '/cosmos.staking.v1beta1.MsgDelegate'
+                          '/cosmos.staking.v1beta1.MsgDelegate'
                       "
                     >
                       <v-simple-table class="accent">
-                        <template v-slot:default>
+                        <template #default>
                           <thead>
                             <tr>
-                              <th class="text-left">From</th>
-                              <th class="text-left">To validator</th>
-                              <th class="text-left">Amount</th>
+                              <th class="text-left">
+                                From
+                              </th>
+                              <th class="text-left">
+                                To validator
+                              </th>
+                              <th class="text-left">
+                                Amount
+                              </th>
                             </tr>
                           </thead>
                           <tbody>
@@ -116,7 +150,9 @@
                                 {{ item.messageInfo.msgData.delegator_address }}
                               </td>
                               <td>
-                                <v-icon class="mr-2">mdi-shield-check</v-icon>
+                                <v-icon class="mr-2">
+                                  mdi-shield-check
+                                </v-icon>
                                 {{ item.messageInfo.msgData.validator_address }}
                               </td>
                               <td class="green--text">
@@ -131,21 +167,27 @@
                     <template
                       v-if="
                         item.messageInfo.type ===
-                        '/cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward'
+                          '/cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward'
                       "
                     >
                       <v-simple-table class="accent">
-                        <template v-slot:default>
+                        <template #default>
                           <thead>
                             <tr>
-                              <th class="text-left">From validator</th>
-                              <th class="text-left">To delegator</th>
+                              <th class="text-left">
+                                From validator
+                              </th>
+                              <th class="text-left">
+                                To delegator
+                              </th>
                             </tr>
                           </thead>
                           <tbody>
                             <tr>
                               <td>
-                                <v-icon class="mr-2">mdi-shield-check</v-icon>
+                                <v-icon class="mr-2">
+                                  mdi-shield-check
+                                </v-icon>
                                 {{ item.messageInfo.msgData.validator_address }}
                               </td>
                               <td>
@@ -162,12 +204,18 @@
                       "
                     >
                       <v-simple-table class="accent">
-                        <template v-slot:default>
+                        <template #default>
                           <thead>
                             <tr>
-                              <th class="text-left">proposal_id</th>
-                              <th class="text-left">option</th>
-                              <th class="text-left">metadata</th>
+                              <th class="text-left">
+                                proposal_id
+                              </th>
+                              <th class="text-left">
+                                option
+                              </th>
+                              <th class="text-left">
+                                metadata
+                              </th>
                             </tr>
                           </thead>
                           <tbody>
@@ -179,7 +227,7 @@
                                 <v-chip
                                   v-if="
                                     item.messageInfo.msgData.option ===
-                                    'VOTE_OPTION_YES'
+                                      'VOTE_OPTION_YES'
                                   "
                                   class="ma-2"
                                   color="green"
@@ -191,7 +239,7 @@
                                 <v-chip
                                   v-if="
                                     item.messageInfo.msgData.option ===
-                                    'VOTE_OPTION_NO'
+                                      'VOTE_OPTION_NO'
                                   "
                                   class="ma-2"
                                   color="red"
@@ -203,7 +251,7 @@
                                 <v-chip
                                   v-if="
                                     item.messageInfo.msgData.option ===
-                                    'VOTE_OPTION_ABSTAIN'
+                                      'VOTE_OPTION_ABSTAIN'
                                   "
                                   class="ma-2"
                                   color="red"
@@ -215,7 +263,7 @@
                                 <v-chip
                                   v-if="
                                     item.messageInfo.msgData.option ===
-                                    'VOTE_OPTION_NO_WITH_VETO'
+                                      'VOTE_OPTION_NO_WITH_VETO'
                                   "
                                   class="ma-2"
                                   color="orange"
@@ -236,12 +284,18 @@
                       "
                     >
                       <v-simple-table class="accent">
-                        <template v-slot:default>
+                        <template #default>
                           <thead>
                             <tr>
-                              <th class="text-left">proposal_id</th>
-                              <th class="text-left">option</th>
-                              <th class="text-left">metadata</th>
+                              <th class="text-left">
+                                proposal_id
+                              </th>
+                              <th class="text-left">
+                                option
+                              </th>
+                              <th class="text-left">
+                                metadata
+                              </th>
                             </tr>
                           </thead>
                           <tbody>
@@ -259,15 +313,19 @@
                     <template
                       v-if="
                         item.messageInfo.type ===
-                        '/cosmos.gov.v1beta1.MsgDeposit'
+                          '/cosmos.gov.v1beta1.MsgDeposit'
                       "
                     >
                       <v-simple-table class="accent">
-                        <template v-slot:default>
+                        <template #default>
                           <thead>
                             <tr>
-                              <th class="text-left">Proposal Id</th>
-                              <th class="text-left">Deposit Amount</th>
+                              <th class="text-left">
+                                Proposal Id
+                              </th>
+                              <th class="text-left">
+                                Deposit Amount
+                              </th>
                             </tr>
                           </thead>
                           <tbody>
@@ -287,21 +345,27 @@
                     <template
                       v-if="
                         item.messageInfo.type ===
-                        '/cosmos.staking.v1beta1.MsgUndelegate'
+                          '/cosmos.staking.v1beta1.MsgUndelegate'
                       "
                     >
                       <v-simple-table class="accent">
-                        <template v-slot:default>
+                        <template #default>
                           <thead>
                             <tr>
-                              <th class="text-left">From validator</th>
-                              <th class="text-left">Amount</th>
+                              <th class="text-left">
+                                From validator
+                              </th>
+                              <th class="text-left">
+                                Amount
+                              </th>
                             </tr>
                           </thead>
                           <tbody>
                             <tr>
                               <td>
-                                <v-icon class="mr-2">mdi-shield-check</v-icon>
+                                <v-icon class="mr-2">
+                                  mdi-shield-check
+                                </v-icon>
                                 {{ item.messageInfo.msgData.validator_address }}
                               </td>
                               <td>
@@ -316,26 +380,36 @@
                     <template
                       v-if="
                         item.messageInfo.type ===
-                        '/cosmos.staking.v1beta1.MsgBeginRedelegate'
+                          '/cosmos.staking.v1beta1.MsgBeginRedelegate'
                       "
                     >
                       <v-simple-table class="accent">
-                        <template v-slot:default>
+                        <template #default>
                           <thead>
                             <tr>
-                              <th class="text-left">From validator</th>
-                              <th class="text-left">To validator</th>
-                              <th class="text-left">Amount</th>
+                              <th class="text-left">
+                                From validator
+                              </th>
+                              <th class="text-left">
+                                To validator
+                              </th>
+                              <th class="text-left">
+                                Amount
+                              </th>
                             </tr>
                           </thead>
                           <tbody>
                             <tr>
                               <td>
-                                <v-icon class="mr-2">mdi-shield-check</v-icon>
+                                <v-icon class="mr-2">
+                                  mdi-shield-check
+                                </v-icon>
                                 {{ item.messageInfo.msgData.from }}
                               </td>
                               <td>
-                                <v-icon class="mr-2">mdi-shield-check</v-icon>
+                                <v-icon class="mr-2">
+                                  mdi-shield-check
+                                </v-icon>
                                 {{ item.messageInfo.msgData.to }}
                               </td>
                               <td>
@@ -404,7 +478,7 @@ import { reverse, sortBy, uniq, uniqWith, set } from "lodash";
 import relativeTime from "dayjs/plugin/relativeTime";
 dayjs.extend(relativeTime);
 
-var tendermintRpc = require("@cosmjs/tendermint-rpc");
+const tendermintRpc = require("@cosmjs/tendermint-rpc");
 import { decodeTxRaw } from "@cosmjs/proto-signing";
 const {
   toAscii,
@@ -413,7 +487,7 @@ const {
   fromUtf8,
   fromRfc3339,
 } = require("@cosmjs/encoding");
-var {
+const {
   buildQuery,
 } = require("@cosmjs/tendermint-rpc/build/tendermint34/requests.js");
 
@@ -565,7 +639,7 @@ export default {
       }, []);
     },
     getMessageType(msg) {
-      let typeReadable = setMsg(
+      const typeReadable = setMsg(
         msg,
         this.accounts[0].address,
         "",

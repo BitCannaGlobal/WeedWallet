@@ -1,22 +1,41 @@
 <template>
   <div>
-    <v-dialog v-model="dialog" max-width="500px" v-if="selectedDelegation">
-      <template v-slot:activator="{ on, attrs }">
-        <v-btn dark v-bind="attrs" v-on="on" color="orange">
-          <v-icon class="mr-2">mdi-download</v-icon>
+    <v-dialog
+      v-if="selectedDelegation"
+      v-model="dialog"
+      max-width="500px"
+    >
+      <template #activator="{ on, attrs }">
+        <v-btn
+          dark
+          v-bind="attrs"
+          color="orange"
+          v-on="on"
+        >
+          <v-icon class="mr-2">
+            mdi-download
+          </v-icon>
           Undelegate {{ selectedDelegation }}
           {{ config[0].coinLookup.viewDenom }}
         </v-btn>
       </template>
-      <v-card class="accent" min-height="300">
+      <v-card
+        class="accent"
+        min-height="300"
+      >
         <v-card-title>
           <span class="text-h5">Send transaction</span>
-          <v-spacer></v-spacer>
-          <v-icon class="mr-2" @click="dialog = false">mdi-close-circle</v-icon>
+          <v-spacer />
+          <v-icon
+            class="mr-2"
+            @click="dialog = false"
+          >
+            mdi-close-circle
+          </v-icon>
         </v-card-title>
         <v-card-text>
           <v-simple-table>
-            <template v-slot:default>
+            <template #default>
               <tbody>
                 <tr>
                   <td>Rewards</td>
@@ -30,7 +49,7 @@
           </v-simple-table>
         </v-card-text>
         <v-card-actions>
-          <v-spacer></v-spacer>
+          <v-spacer />
           <v-btn
             :disabled="!dislableSend"
             :loading="loading"
@@ -121,11 +140,11 @@ export default {
   watch: {
     // whenever question changes, this function will run
     selected(newSelected, oldSelected) {
-      let delegation = this.delegations;
+      const delegation = this.delegations;
       let selectedDelegation = 0;
-      let finalUndelegate = [];
+      const finalUndelegate = [];
       newSelected.forEach(async (item) => {
-        let findDelegation = delegation.find(
+        const findDelegation = delegation.find(
           (element) => element.op_address === item
         );
         selectedDelegation += Number(findDelegation.share);
@@ -155,7 +174,7 @@ export default {
       (async () => {
         this.dialogStepper = true;
         // Send notification
-        var returnWaiting = notifWaiting(this.$toast);
+        const returnWaiting = notifWaiting(this.$toast);
         this.loading = true;
 
         const chainId = cosmosConfig[this.chainId].chainId;
@@ -171,7 +190,7 @@ export default {
         const MsgUndelegate = defaultRegistryTypes[20][1]; // MsgWithdrawDelegatorReward
         console.log(defaultRegistryTypes[20][1]);
 
-        let myAccount = this.accounts[0].address;
+        const myAccount = this.accounts[0].address;
         const copieUndelegate = [];
         this.finalUndelegate.forEach(function (item) {
           const amount = {

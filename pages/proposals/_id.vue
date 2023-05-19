@@ -1,7 +1,19 @@
 <template>
-  <v-row v-if="$fetchState.pending" justify="center" align="center"></v-row>
-  <v-row v-else-if="$fetchState.error" justify="center" align="center"></v-row>
-  <v-row v-else justify="center" align="center">
+  <v-row
+    v-if="$fetchState.pending"
+    justify="center"
+    align="center"
+  />
+  <v-row
+    v-else-if="$fetchState.error"
+    justify="center"
+    align="center"
+  />
+  <v-row
+    v-else
+    justify="center"
+    align="center"
+  >
     <!-- If deposit period -->
     <v-col
       v-if="proposalData.proposal.status === 'PROPOSAL_STATUS_DEPOSIT_PERIOD'"
@@ -10,41 +22,63 @@
       md="10"
     >
       <v-row>
-        <v-col cols="12" md="8">
-          <v-card dark class="accent">
+        <v-col
+          cols="12"
+          md="8"
+        >
+          <v-card
+            dark
+            class="accent"
+          >
             <v-card-title>
               #{{ proposalData.proposal.proposal_id }}
               {{ proposalData.proposal.content.title }}
-              <v-spacer></v-spacer>
+              <v-spacer />
               End time:
               {{ proposalData.proposal.deposit_end_time | formatDate }}
             </v-card-title>
             <v-card-text>
               <div
                 v-html="$md.render(proposalData.proposal.content.description)"
-              ></div>
+              />
               <!-- {{  proposalData.proposal.content.description }} -->
             </v-card-text>
           </v-card>
-          <v-card dark class="accent mt-4"> test </v-card>
+          <v-card
+            dark
+            class="accent mt-4"
+          >
+            test
+          </v-card>
         </v-col>
-        <v-col cols="12" md="4">
-          <v-card dark class="accent">
-            <v-card-title
-              ><span class="text-h5">Deposite detail</span></v-card-title
-            >
+        <v-col
+          cols="12"
+          md="4"
+        >
+          <v-card
+            dark
+            class="accent"
+          >
+            <v-card-title>
+              <span class="text-h5">Deposite detail</span>
+            </v-card-title>
             <v-card-text>
               <ChartsProposalDeposite
                 :total_deposit="proposalData.proposal.total_deposit[0].amount"
                 :min_deposit="paramsDeposit.min_deposit"
               />
-              <br />
+              <br>
 
               <v-simple-table class="accent">
                 <tbody>
                   <tr>
                     <td>
-                      <v-icon color="#b3ffeb" small> mdi-circle </v-icon>
+                      <v-icon
+                        color="#b3ffeb"
+                        small
+                      >
+                        mdi-circle
+                      </v-icon>
                       Minimum Deposit
                     </td>
                     <td>
@@ -54,7 +88,12 @@
                   </tr>
                   <tr>
                     <td>
-                      <v-icon color="#33ffc9" small> mdi-circle </v-icon>
+                      <v-icon
+                        color="#33ffc9"
+                        small
+                      >
+                        mdi-circle
+                      </v-icon>
                       Total Deposit
                     </td>
                     <td>
@@ -66,13 +105,18 @@
                   </tr>
                   <tr>
                     <td>
-                      <v-icon color="#00b383" small> mdi-circle </v-icon>
+                      <v-icon
+                        color="#00b383"
+                        small
+                      >
+                        mdi-circle
+                      </v-icon>
                       Deposit Remaining
                     </td>
                     <td>
                       {{
                         paramsDeposit.min_deposit -
-                        proposalData.proposal.total_deposit[0].amount / 1000000
+                          proposalData.proposal.total_deposit[0].amount / 1000000
                       }}
                       {{ cosmosConfig[chainId].coinLookup.viewDenom }}
                     </td>
@@ -86,10 +130,13 @@
                     outlined
                     label="Deposit (bcna)"
                     required
-                  ></v-text-field>
+                  />
                 </v-col>
               </v-row>
-              <v-btn color="#00b786" @click="submitDeposit">
+              <v-btn
+                color="#00b786"
+                @click="submitDeposit"
+              >
                 Submit deposit
               </v-btn>
             </v-card-text>
@@ -97,66 +144,100 @@
         </v-col>
       </v-row>
     </v-col>
-    <v-col v-else cols="12" sm="8" md="10">
+    <v-col
+      v-else
+      cols="12"
+      sm="8"
+      md="10"
+    >
       <v-item-group>
         <v-container>
           <v-row>
-            <v-col cols="12" md="12">
-              <v-card dark height="65">
+            <v-col
+              cols="12"
+              md="12"
+            >
+              <v-card
+                dark
+                height="65"
+              >
                 <v-card-title>
                   #{{ proposalData.proposal.proposal_id }}
                   {{ proposalData.proposal.content.title }}
-                  <v-spacer></v-spacer>
+                  <v-spacer />
                   <td
                     v-if="
                       proposalData.proposal.status === 'PROPOSAL_STATUS_PASSED'
                     "
                   >
-                    <v-chip color="green" text-color="white" label>
-                      <v-icon class="mr-1">mdi-checkbox-marked-circle</v-icon>
+                    <v-chip
+                      color="green"
+                      text-color="white"
+                      label
+                    >
+                      <v-icon class="mr-1">
+                        mdi-checkbox-marked-circle
+                      </v-icon>
                       Proposal Passed
                     </v-chip>
                   </td>
                   <td
                     v-if="
                       proposalData.proposal.status ===
-                      'PROPOSAL_STATUS_REJECTED'
+                        'PROPOSAL_STATUS_REJECTED'
                     "
                   >
-                    <v-chip color="red" text-color="white" label>
-                      <v-icon class="mr-1">mdi-delete-forever</v-icon>
+                    <v-chip
+                      color="red"
+                      text-color="white"
+                      label
+                    >
+                      <v-icon class="mr-1">
+                        mdi-delete-forever
+                      </v-icon>
                       Proposal Rejected
                     </v-chip>
                   </td>
                   <td
                     v-if="
                       proposalData.proposal.status ===
-                      'PROPOSAL_STATUS_VOTING_PERIOD'
+                        'PROPOSAL_STATUS_VOTING_PERIOD'
                     "
                   >
                     <!--{{ item.status }}-->
                     <SendProposalModal
-                      :chainIdProps="
+                      :chain-id-props="
                         cosmosConfig[chainId].coinLookup.addressPrefix
                       "
-                      :coinIcon="cosmosConfig[chainId].coinLookup.icon"
-                      :idProposal="id"
-                      :cardsVote="cards"
+                      :coin-icon="cosmosConfig[chainId].coinLookup.icon"
+                      :id-proposal="id"
+                      :cards-vote="cards"
                     />
-                    <v-chip text-color="white" color="blue" label>
-                      <v-icon class="mr-1"> mdi-alarm-check </v-icon>
+                    <v-chip
+                      text-color="white"
+                      color="blue"
+                      label
+                    >
+                      <v-icon class="mr-1">
+                        mdi-alarm-check
+                      </v-icon>
                       Voting Period
                     </v-chip>
                   </td>
                   <td
                     v-if="
                       proposalData.proposal.status ===
-                      'PROPOSAL_STATUS_DEPOSIT_PERIOD'
+                        'PROPOSAL_STATUS_DEPOSIT_PERIOD'
                     "
                   >
                     <!--{{ item.status }}-->
-                    <v-chip text-color="white" label>
-                      <v-icon class="mr-1"> mdi-cash-fast </v-icon>
+                    <v-chip
+                      text-color="white"
+                      label
+                    >
+                      <v-icon class="mr-1">
+                        mdi-cash-fast
+                      </v-icon>
                       Deposit Period
                     </v-chip>
                   </td>
@@ -166,17 +247,23 @@
           </v-row>
 
           <v-row>
-            <v-col cols="12" md="4">
-              <v-card dark height="480">
+            <v-col
+              cols="12"
+              md="4"
+            >
+              <v-card
+                dark
+                height="480"
+              >
                 <v-card-title>Proposal result</v-card-title>
                 <v-card-text>
                   <client-only>
                     <Doughnut
                       v-if="
                         getTally.tally.yes > 0 ||
-                        getTally.tally.no > 0 ||
-                        getTally.tally.abstain > 0 ||
-                        getTally.tally.no_with_veto > 0
+                          getTally.tally.no > 0 ||
+                          getTally.tally.abstain > 0 ||
+                          getTally.tally.no_with_veto > 0
                       "
                       :data="chartData"
                     />
@@ -190,15 +277,21 @@
                 </v-card-text>
               </v-card>
             </v-col>
-            <v-col cols="12" md="8">
-              <v-card dark height="480">
+            <v-col
+              cols="12"
+              md="8"
+            >
+              <v-card
+                dark
+                height="480"
+              >
                 <v-card-title>
                   Proposal info
-                  <v-spacer></v-spacer>
+                  <v-spacer />
                   <v-chip
                     v-if="
                       proposalData.proposal.content['@type'] ===
-                      '/cosmos.gov.v1beta1.TextProposal'
+                        '/cosmos.gov.v1beta1.TextProposal'
                     "
                     color="#00b786"
                     outlined
@@ -208,7 +301,7 @@
                   <v-chip
                     v-if="
                       proposalData.proposal.content['@type'] ===
-                      '/cosmos.distribution.v1beta1.CommunityPoolSpendProposal'
+                        '/cosmos.distribution.v1beta1.CommunityPoolSpendProposal'
                     "
                     color="#00b786"
                     outlined
@@ -218,7 +311,7 @@
                   <v-chip
                     v-if="
                       proposalData.proposal.content['@type'] ===
-                      '/cosmos.upgrade.v1beta1.SoftwareUpgradeProposal'
+                        '/cosmos.upgrade.v1beta1.SoftwareUpgradeProposal'
                     "
                     color="#00b786"
                     outlined
@@ -228,7 +321,7 @@
                 </v-card-title>
                 <v-card-text>
                   <v-simple-table>
-                    <template v-slot:default>
+                    <template #default>
                       <tbody>
                         <tr
                           v-if="proposalData.proposal.total_deposit.length > 0"
@@ -237,7 +330,7 @@
                           <td>
                             {{
                               proposalData.proposal?.total_deposit[0].amount /
-                              1000000
+                                1000000
                             }}
                             {{ cosmosConfig[chainId].coinLookup.viewDenom }}
                           </td>
@@ -272,14 +365,14 @@
                     </template>
                   </v-simple-table>
 
-                  <br /><br /><br /><br />
+                  <br><br><br><br>
                   <!-- {{proposalData.proposal}} -->
                   <v-stepper>
                     <v-stepper-header dark>
                       <v-stepper-step
                         v-if="
                           proposalData.proposal.status !==
-                          'PROPOSAL_STATUS_DEPOSIT_PERIOD'
+                            'PROPOSAL_STATUS_DEPOSIT_PERIOD'
                         "
                         step="1"
                         complete
@@ -288,30 +381,43 @@
                         Created
                       </v-stepper-step>
 
-                      <v-divider></v-divider>
+                      <v-divider />
 
-                      <v-stepper-step step="2" complete color="#00b786">
+                      <v-stepper-step
+                        step="2"
+                        complete
+                        color="#00b786"
+                      >
                         Deposit Period Ends
                       </v-stepper-step>
 
-                      <v-divider></v-divider>
+                      <v-divider />
 
-                      <v-stepper-step step="3" complete color="#00b786">
+                      <v-stepper-step
+                        step="3"
+                        complete
+                        color="#00b786"
+                      >
                         Voting Period Starts
                       </v-stepper-step>
 
-                      <v-divider></v-divider>
+                      <v-divider />
 
                       <v-stepper-step
-                        step="4"
                         v-if="
                           proposalData.proposal.status ===
-                          'PROPOSAL_STATUS_VOTING_PERIOD'
+                            'PROPOSAL_STATUS_VOTING_PERIOD'
                         "
+                        step="4"
                       >
                         Voting Period Ends
                       </v-stepper-step>
-                      <v-stepper-step step="4" complete color="#00b786" v-else>
+                      <v-stepper-step
+                        v-else
+                        step="4"
+                        complete
+                        color="#00b786"
+                      >
                         Voting Period Ends
                       </v-stepper-step>
                     </v-stepper-header>
@@ -357,14 +463,24 @@
                     >
                       Quorum reached
                     </div>
-                    <div v-else class="ml-10 text-red">Quorum not reached</div>
+                    <div
+                      v-else
+                      class="ml-10 text-red"
+                    >
+                      Quorum not reached
+                    </div>
                   </v-progress-linear>
                   <v-simple-table>
-                    <template v-slot:default>
+                    <template #default>
                       <tbody>
                         <tr>
                           <td>
-                            <v-icon color="#00b786" small> mdi-circle </v-icon>
+                            <v-icon
+                              color="#00b786"
+                              small
+                            >
+                              mdi-circle
+                            </v-icon>
                             Total Bounded
                           </td>
                           <td>
@@ -373,7 +489,12 @@
                         </tr>
                         <tr>
                           <td>
-                            <v-icon color="#00b786" small> mdi-circle </v-icon>
+                            <v-icon
+                              color="#00b786"
+                              small
+                            >
+                              mdi-circle
+                            </v-icon>
                             Quorum needed
                           </td>
                           <td>
@@ -385,7 +506,12 @@
                         </tr>
                         <tr>
                           <td>
-                            <v-icon color="#14FFC0" small> mdi-circle </v-icon>
+                            <v-icon
+                              color="#14FFC0"
+                              small
+                            >
+                              mdi-circle
+                            </v-icon>
                             Quorum actual
                           </td>
                           <td>
@@ -429,14 +555,19 @@
                       ).toFixed(2)
                     "
                     class="mb-10"
-                  ></v-progress-linear>
+                  />
 
                   <v-simple-table>
-                    <template v-slot:default>
+                    <template #default>
                       <tbody>
                         <tr v-if="getTally.tally.yes > 0">
                           <td>
-                            <v-icon color="#00b786" small> mdi-circle </v-icon>
+                            <v-icon
+                              color="#00b786"
+                              small
+                            >
+                              mdi-circle
+                            </v-icon>
                             Voted yes
                           </td>
                           <td>
@@ -454,7 +585,12 @@
                         </tr>
                         <tr v-else>
                           <td>
-                            <v-icon color="#00b786" small> mdi-circle </v-icon>
+                            <v-icon
+                              color="#00b786"
+                              small
+                            >
+                              mdi-circle
+                            </v-icon>
                             Voted yes
                           </td>
                           <td>0 %</td>
@@ -462,7 +598,12 @@
                         </tr>
                         <tr v-if="getTally.tally.no > 0">
                           <td>
-                            <v-icon color="error" small> mdi-circle </v-icon>
+                            <v-icon
+                              color="error"
+                              small
+                            >
+                              mdi-circle
+                            </v-icon>
                             Voted no
                           </td>
                           <td>
@@ -480,7 +621,12 @@
                         </tr>
                         <tr v-else>
                           <td>
-                            <v-icon color="error" small> mdi-circle </v-icon>
+                            <v-icon
+                              color="error"
+                              small
+                            >
+                              mdi-circle
+                            </v-icon>
                             Voted no
                           </td>
                           <td>0 %</td>
@@ -488,7 +634,12 @@
                         </tr>
                         <tr v-if="getTally.tally.no_with_veto > 0">
                           <td>
-                            <v-icon color="#14FFC0" small> mdi-circle </v-icon>
+                            <v-icon
+                              color="#14FFC0"
+                              small
+                            >
+                              mdi-circle
+                            </v-icon>
                             No With Veto
                           </td>
                           <td>
@@ -508,7 +659,12 @@
                         </tr>
                         <tr v-else>
                           <td>
-                            <v-icon color="#14FFC0" small> mdi-circle </v-icon>
+                            <v-icon
+                              color="#14FFC0"
+                              small
+                            >
+                              mdi-circle
+                            </v-icon>
                             No With Veto
                           </td>
                           <td>0 %</td>
@@ -527,7 +683,10 @@
               proposalData.proposal.status === 'PROPOSAL_STATUS_VOTING_PERIOD'
             "
           >
-            <v-col cols="12" md="12">
+            <v-col
+              cols="12"
+              md="12"
+            >
               <v-card dark>
                 <v-card-title>Voters </v-card-title>
                 <v-card-text>
@@ -584,7 +743,10 @@
           </v-row>
 
           <v-row>
-            <v-col cols="12" md="128">
+            <v-col
+              cols="12"
+              md="128"
+            >
               <v-card dark>
                 <v-card-title>Proposal description</v-card-title>
                 <v-card-text>
@@ -592,7 +754,7 @@
                     v-html="
                       $md.render(proposalData.proposal.content.description)
                     "
-                  ></div>
+                  />
                 </v-card-text>
               </v-card>
             </v-col>
@@ -662,7 +824,7 @@ export default {
       "totalBonded",
     ]),
     totalTally() {
-      let totalTally =
+      const totalTally =
         Number(this.getTally.tally.yes) +
         Number(this.getTally.tally.no) +
         Number(this.getTally.tally.no_with_veto) +
@@ -691,6 +853,16 @@ export default {
         ],
       };
     },
+  },
+  async mounted() {
+    //await this.$store.dispatch('data/getSingleProposal', this.$route.params.id)
+    //await this.$store.dispatch('keplr/checkLogin')
+    //console.log(this.$route.params.id)
+    await this.$store.dispatch("keplr/checkLogin");
+    this.id = this.$route.params.id;
+    await this.$store.dispatch("data/getProposalParamsDeposit");
+    await this.$store.dispatch("data/getProposalDeposits", this.id);
+    await this.$store.dispatch("data/getProposalQuorum");
   },
 
   methods: {
@@ -749,7 +921,7 @@ export default {
       if (this.$refs.form.validate() === true) {
         (async () => {
           // Send notification
-          var returnWaiting = notifWaiting(this.$toast);
+          const returnWaiting = notifWaiting(this.$toast);
           this.loading = true;
 
           const chainId = cosmosConfig[this.chainId].chainId;
@@ -826,16 +998,6 @@ export default {
         this.$route.params.id +
         "/tally"
     ).then((res) => res.json());
-  },
-  async mounted() {
-    //await this.$store.dispatch('data/getSingleProposal', this.$route.params.id)
-    //await this.$store.dispatch('keplr/checkLogin')
-    //console.log(this.$route.params.id)
-    await this.$store.dispatch("keplr/checkLogin");
-    this.id = this.$route.params.id;
-    await this.$store.dispatch("data/getProposalParamsDeposit");
-    await this.$store.dispatch("data/getProposalDeposits", this.id);
-    await this.$store.dispatch("data/getProposalQuorum");
   },
   filters: {
     formatDate: (dateStr) =>

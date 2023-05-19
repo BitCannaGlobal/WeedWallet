@@ -2,7 +2,11 @@
   <div class="p-2 border border-gray-500 mt-4">
     <client-only>
       <!--    {{ amount }}-->
-      <Doughnut :data="chartData" :width="width" :height="height" />
+      <Doughnut
+        :data="chartData"
+        :width="width"
+        :height="height"
+      />
     </client-only>
   </div>
 </template>

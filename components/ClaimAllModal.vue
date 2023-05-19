@@ -1,32 +1,73 @@
 <template>
-  <v-dialog v-model="dialog" max-width="900px">
-    <template v-slot:activator="{ on, attrs }">
-      <v-btn class="mr-4" color="#00b786" v-bind="attrs" v-on="on">
-        <v-icon class="mr-2">mdi-download</v-icon> Claim all
+  <v-dialog
+    v-model="dialog"
+    max-width="900px"
+  >
+    <template #activator="{ on, attrs }">
+      <v-btn
+        class="mr-4"
+        color="#00b786"
+        v-bind="attrs"
+        v-on="on"
+      >
+        <v-icon class="mr-2">
+          mdi-download
+        </v-icon> Claim all
       </v-btn>
     </template>
     <v-card>
       <v-card-title>
-        <span v-if="step1" class="text-h5">Claim all</span>
-        <span v-if="step2" class="text-h5">Check transaction </span>
-        <span v-if="step3" class="text-h5">Wait from keplr</span>
-        <span v-if="step4" class="text-h5">Transaction send!</span>
-        <v-spacer></v-spacer>
-        <v-icon class="mr-2" @click="dialog = false">mdi-close-circle</v-icon>
+        <span
+          v-if="step1"
+          class="text-h5"
+        >Claim all</span>
+        <span
+          v-if="step2"
+          class="text-h5"
+        >Check transaction </span>
+        <span
+          v-if="step3"
+          class="text-h5"
+        >Wait from keplr</span>
+        <span
+          v-if="step4"
+          class="text-h5"
+        >Transaction send!</span>
+        <v-spacer />
+        <v-icon
+          class="mr-2"
+          @click="dialog = false"
+        >
+          mdi-close-circle
+        </v-icon>
       </v-card-title>
       <v-card-text>
-        <v-form v-if="step1" ref="form" v-model="dislableSend" lazy-validation>
+        <v-form
+          v-if="step1"
+          ref="form"
+          v-model="dislableSend"
+          lazy-validation
+        >
           <v-container>
             <v-simple-table>
               <thead>
                 <tr>
-                  <th class="text-left">Validator name</th>
-                  <th class="text-left">Delegate</th>
-                  <th class="text-left">Amount rewarded</th>
+                  <th class="text-left">
+                    Validator name
+                  </th>
+                  <th class="text-left">
+                    Delegate
+                  </th>
+                  <th class="text-left">
+                    Amount rewarded
+                  </th>
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="item in delegations" :key="item.op_address">
+                <tr
+                  v-for="item in delegations"
+                  :key="item.op_address"
+                >
                   <td>{{ item.validatorName }}</td>
                   <!--<td>{{ item.op_address }}</td>-->
                   <td>
@@ -70,11 +111,15 @@
             </v-stepper>  -->
           </v-container>
         </v-form>
-        <v-form v-if="step2" ref="form" lazy-validation>
+        <v-form
+          v-if="step2"
+          ref="form"
+          lazy-validation
+        >
           <v-row>
             <v-col cols="12">
               <v-simple-table class="accent">
-                <template v-slot:default>
+                <template #default>
                   <tbody>
                     <tr>
                       <td>Amount</td>
@@ -86,7 +131,7 @@
                     </tr>
                     <tr>
                       <td>To</td>
-                      <td></td>
+                      <td />
                     </tr>
                     <tr>
                       <td>Memo</td>
@@ -107,24 +152,38 @@
         </v-form>
 
         <v-row v-if="step3">
-          <v-col cols="12" align="center" justify="center">
+          <v-col
+            cols="12"
+            align="center"
+            justify="center"
+          >
             <v-progress-circular
               :size="100"
               :width="10"
               color="#00b786"
               indeterminate
-            ></v-progress-circular>
+            />
           </v-col>
         </v-row>
         <v-row v-if="step4">
-          <v-col cols="12" align="center" justify="center">
-            <img src="accepted.png" />
+          <v-col
+            cols="12"
+            align="center"
+            justify="center"
+          >
+            <img src="accepted.png">
           </v-col>
         </v-row>
       </v-card-text>
       <v-card-actions>
-        <v-spacer></v-spacer>
-        <v-btn v-if="step2" color="#00b786" @click="returnStep"> Return </v-btn>
+        <v-spacer />
+        <v-btn
+          v-if="step2"
+          color="#00b786"
+          @click="returnStep"
+        >
+          Return
+        </v-btn>
         <v-btn
           v-if="step1"
           :disabled="!dislableSend"
@@ -222,12 +281,12 @@ export default {
             }),
           });
         });
-        let gasEstimation = await client.simulate(
+        const gasEstimation = await client.simulate(
           accounts[0].address,
           finalMsg,
           this.memo
         );
-        let usedFee = calculateFee(
+        const usedFee = calculateFee(
           Math.round(gasEstimation * cosmosConfig[this.chainId].feeMultiplier),
           GasPrice.fromString(
             cosmosConfig[this.chainId].gasPrice +

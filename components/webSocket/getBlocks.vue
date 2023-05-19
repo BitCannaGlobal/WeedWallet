@@ -5,9 +5,9 @@
     <v-list two-line>
       <template v-for="n in blockData">
         <v-list-item :key="n.data.block">
-          {{ n.data.block }}<br />
-          {{ n.data.hash }}<br />
-          {{ n.data.action }}<br />
+          {{ n.data.block }}<br>
+          {{ n.data.hash }}<br>
+          {{ n.data.action }}<br>
         </v-list-item>
       </template>
     </v-list>
@@ -28,14 +28,14 @@ export default {
   },
   async mounted() {
     this.$socket.$on("message", (data) => {
-      var finalData = JSON.parse(data.data.toString("utf-8"));
+      const finalData = JSON.parse(data.data.toString("utf-8"));
 
       if (finalData?.result.data) {
         // finalData.result.data.value.TxResult.result.log
-        let finalDataDecode = finalData.result.data;
-        let finalDataDecodeEvents = finalData.result.events;
+        const finalDataDecode = finalData.result.data;
+        const finalDataDecodeEvents = finalData.result.events;
         console.log(finalDataDecodeEvents);
-        let dataShow = {};
+        const dataShow = {};
 
         this.blockData.unshift({ data: dataShow });
         if (this.blockData.length > 5) {
@@ -44,7 +44,7 @@ export default {
       }
     });
   },
-  beforeDestroy() {
+  beforeUnmount() {
     this.$socketManager.close(1000);
   },
   methods: {},

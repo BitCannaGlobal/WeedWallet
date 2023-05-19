@@ -1,13 +1,18 @@
 <template>
   <v-container>
     <v-row class="mt-4">
-      <v-spacer></v-spacer>
+      <v-spacer />
 
       <v-switch
         v-model="viewJson"
         :label="viewJson ? 'View form' : 'View json'"
-      ></v-switch>
-      <v-col v-if="viewJson" cols="12" sm="12" md="12">
+      />
+      <v-col
+        v-if="viewJson"
+        cols="12"
+        sm="12"
+        md="12"
+      >
         <vue-json-pretty
           :data="jsonData"
           show-line
@@ -17,14 +22,19 @@
         />
       </v-col>
 
-      <v-col v-if="!viewJson" cols="12" sm="12" md="12">
+      <v-col
+        v-if="!viewJson"
+        cols="12"
+        sm="12"
+        md="12"
+      >
         <v-text-field
           v-model="selectPolicy"
           label="From address"
           required
           outlined
           disabled
-        ></v-text-field>
+        />
 
         <v-select
           v-model="valSelected"
@@ -32,7 +42,7 @@
           label="To validator"
           required
           outlined
-        ></v-select>
+        />
         <!--<v-text-field
           label="To validator"
           required
@@ -44,12 +54,23 @@
           :suffix="cosmosConfig[0].coinLookup.viewDenom"
           required
           outlined
-        ></v-text-field>
-        <v-btn elevation="2" @click="checkMsg">Check message</v-btn>
+        />
+        <v-btn
+          elevation="2"
+          @click="checkMsg"
+        >
+          Check message
+        </v-btn>
         <span v-if="showValidateData">
-          <v-icon v-if="validateData" color="teal"> mdi-check </v-icon>
+          <v-icon
+            v-if="validateData"
+            color="teal"
+          > mdi-check </v-icon>
 
-          <v-icon v-else color="red"> mdi-alert-circle </v-icon>
+          <v-icon
+            v-else
+            color="red"
+          > mdi-alert-circle </v-icon>
         </span>
       </v-col>
     </v-row>
@@ -73,10 +94,10 @@ const { Type, Field } = pkg;
 import cosmosConfig from "~/cosmos.config";
 
 export default {
-  props: ["from"],
   components: {
     VueJsonPretty,
   },
+  props: ["from"],
   data(props) {
     return {
       dialog: false,
@@ -115,7 +136,7 @@ export default {
   async mounted() {
     await this.$store.dispatch("data/getAllValidator");
 
-    let allValSelect = this.allValSelect;
+    const allValSelect = this.allValSelect;
     this.allValidators.forEach(async (item) => {
       allValSelect.push({
         text: item.description.moniker,

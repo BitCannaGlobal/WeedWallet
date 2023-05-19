@@ -1,10 +1,20 @@
 <template>
   <v-row>
-    <v-btn class="ml-5" dark icon @click.stop="dialog = true">
-      <v-icon color="darken-2"> mdi-vote-outline </v-icon>
+    <v-btn
+      class="ml-5"
+      dark
+      icon
+      @click.stop="dialog = true"
+    >
+      <v-icon color="darken-2">
+        mdi-vote-outline
+      </v-icon>
     </v-btn>
 
-    <v-dialog v-model="dialog" max-width="600px">
+    <v-dialog
+      v-model="dialog"
+      max-width="600px"
+    >
       <v-card>
         <v-card-title class="text-h5">
           Vote proposal #{{ propId }}
@@ -15,12 +25,15 @@
             <v-container>
               <v-row dense>
                 <v-col
-                  class="mx-auto"
                   v-for="card in cards"
                   :key="card.title"
+                  class="mx-auto"
                   :cols="card.flex"
                 >
-                  <v-item :value="card" v-slot="{ active, toggle }">
+                  <v-item
+                    v-slot="{ active, toggle }"
+                    :value="card"
+                  >
                     <v-card
                       :color="active ? 'primary' : ''"
                       class="d-flex align-center"
@@ -29,7 +42,7 @@
                       <v-btn icon>
                         <v-icon>mdi-vote-outline</v-icon>
                       </v-btn>
-                      <v-card-title v-text="card.title"></v-card-title>
+                      <v-card-title v-text="card.title" />
                     </v-card>
                   </v-item>
                 </v-col>
@@ -39,9 +52,15 @@
         </v-card-text>
 
         <v-card-actions>
-          <v-spacer></v-spacer>
+          <v-spacer />
 
-          <v-btn class="mb-5" dark @click="voteGroup"> Vote </v-btn>
+          <v-btn
+            class="mb-5"
+            dark
+            @click="voteGroup"
+          >
+            Vote
+          </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>

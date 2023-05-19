@@ -1,30 +1,58 @@
 <template>
   <div>
-    <v-dialog v-model="dialog" max-width="500px">
-      <template v-slot:activator="{ on, attrs }">
+    <v-dialog
+      v-model="dialog"
+      max-width="500px"
+    >
+      <template #activator="{ on, attrs }">
         <v-btn
           v-if="type === 'simpleSend'"
           large
           block
           v-bind="attrs"
-          v-on="on"
           class="mt-2 white--text"
           color="#0FB786"
+          v-on="on"
         >
           Send
         </v-btn>
-        <v-btn v-else dark v-bind="attrs" v-on="on" color="#00b786">
-          <v-icon class="mr-2">mdi-send-circle</v-icon> Send
+        <v-btn
+          v-else
+          dark
+          v-bind="attrs"
+          color="#00b786"
+          v-on="on"
+        >
+          <v-icon class="mr-2">
+            mdi-send-circle
+          </v-icon> Send
         </v-btn>
       </template>
       <v-card class="accent">
         <v-card-title>
-          <span v-if="step1" class="text-h5">Send transaction</span>
-          <span v-if="step2" class="text-h5">Check transaction </span>
-          <span v-if="step3" class="text-h5">Wait from keplr</span>
-          <span v-if="step4" class="text-h5">Transaction send!</span>
-          <v-spacer></v-spacer>
-          <v-icon class="mr-2" @click="dialog = false">mdi-close-circle</v-icon>
+          <span
+            v-if="step1"
+            class="text-h5"
+          >Send transaction</span>
+          <span
+            v-if="step2"
+            class="text-h5"
+          >Check transaction </span>
+          <span
+            v-if="step3"
+            class="text-h5"
+          >Wait from keplr</span>
+          <span
+            v-if="step4"
+            class="text-h5"
+          >Transaction send!</span>
+          <v-spacer />
+          <v-icon
+            class="mr-2"
+            @click="dialog = false"
+          >
+            mdi-close-circle
+          </v-icon>
         </v-card-title>
         <v-card-text>
           <v-form
@@ -36,9 +64,15 @@
             <v-row>
               <v-col cols="12">
                 <v-col class="text-right">
-                  <v-chip @click="getQuarter"> 1/4 </v-chip>
-                  <v-chip @click="getHalf"> 1/2 </v-chip>
-                  <v-chip @click="getMax"> Max </v-chip>
+                  <v-chip @click="getQuarter">
+                    1/4
+                  </v-chip>
+                  <v-chip @click="getHalf">
+                    1/2
+                  </v-chip>
+                  <v-chip @click="getMax">
+                    Max
+                  </v-chip>
                 </v-col>
 
                 <v-text-field
@@ -49,14 +83,14 @@
                   :rules="amountRules"
                   type="text"
                 >
-                  <template v-slot:append>
+                  <template #append>
                     <img
                       width="24"
                       height="24"
                       :srcset="coinIcon"
                       alt=""
                       :class="`rounded-xl`"
-                    />
+                    >
                   </template>
                 </v-text-field>
 
@@ -67,7 +101,7 @@
                   required
                   outlined
                   dense
-                ></v-text-field>
+                />
 
                 <v-text-field
                   v-model="memo"
@@ -75,15 +109,19 @@
                   required
                   outlined
                   dense
-                ></v-text-field>
+                />
               </v-col>
             </v-row>
           </v-form>
-          <v-form v-if="step2" ref="form" lazy-validation>
+          <v-form
+            v-if="step2"
+            ref="form"
+            lazy-validation
+          >
             <v-row>
               <v-col cols="12">
                 <v-simple-table class="accent">
-                  <template v-slot:default>
+                  <template #default>
                     <tbody>
                       <tr>
                         <td>Amount</td>
@@ -92,8 +130,12 @@
                           {{ cosmosConfig[chainId].coinLookup.viewDenom }}
                           <!-- <span>Fee are automaticly deducted</span> -->
 
-                          <v-tooltip v-if="feeDeducted" color="black" top>
-                            <template v-slot:activator="{ on, attrs }">
+                          <v-tooltip
+                            v-if="feeDeducted"
+                            color="black"
+                            top
+                          >
+                            <template #activator="{ on, attrs }">
                               <v-icon
                                 class="mt-n1"
                                 color="#00b786"
@@ -132,25 +174,37 @@
           </v-form>
 
           <v-row v-if="step3">
-            <v-col cols="12" align="center" justify="center">
+            <v-col
+              cols="12"
+              align="center"
+              justify="center"
+            >
               <v-progress-circular
                 :size="100"
                 :width="10"
                 color="#00b786"
                 indeterminate
-              ></v-progress-circular>
+              />
             </v-col>
           </v-row>
           <v-row v-if="step4">
-            <v-col cols="12" align="center" justify="center">
-              <img src="accepted.png" />
+            <v-col
+              cols="12"
+              align="center"
+              justify="center"
+            >
+              <img src="accepted.png">
             </v-col>
           </v-row>
         </v-card-text>
         <v-card-actions>
-          <v-spacer></v-spacer>
+          <v-spacer />
 
-          <v-btn v-if="step2" color="#00b786" @click="returnStep">
+          <v-btn
+            v-if="step2"
+            color="#00b786"
+            @click="returnStep"
+          >
             Return
           </v-btn>
           <v-btn
@@ -205,8 +259,8 @@ function prefixValidation(address) {
   }
 }
 function countPlaces(num) {
-  var sep = String(23.32).match(/\D/)[0];
-  var b = String(num).split(sep);
+  const sep = String(23.32).match(/\D/)[0];
+  const b = String(num).split(sep);
   return b[1] ? b[1].length : 0;
 }
 export default {
@@ -314,12 +368,12 @@ export default {
           }),
         };
 
-        let gasEstimation = await client.simulate(
+        const gasEstimation = await client.simulate(
           this.accounts[0].address,
           [finalMsg],
           this.memo
         );
-        let usedFee = calculateFee(
+        const usedFee = calculateFee(
           Math.round(gasEstimation * cosmosConfig[this.chainId].feeMultiplier),
           GasPrice.fromString(
             cosmosConfig[this.chainId].gasPrice +

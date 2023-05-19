@@ -1,24 +1,39 @@
 <template>
-  <v-app class="white" id="inspire">
+  <v-app
+    id="inspire"
+    class="white"
+  >
     <v-navigation-drawer
+      v-if="pageNow !== '/login'"
       v-model="drawer"
       app
       fixed
       class="accent"
-      v-if="pageNow !== '/login'"
     >
       <v-sheet class="accent pa-4">
         <div v-if="logged">
-          <v-avatar class="mb-2" size="64">
+          <v-avatar
+            class="mb-2"
+            size="64"
+          >
             <img
               alt="user"
               src="https://res.cloudinary.com/stargaze/image/upload/w_700/yzsrwjxcsjzx17acr90i.jpg"
-            />
+            >
           </v-avatar>
           <span class="ml-2"> {{ accounts[0].walletName }}</span>
         </div>
-        <v-btn v-if="!logged" block @click="connectKeplr">
-          <img class="mr-2" src="/keplr.png" width="20" height="20" />
+        <v-btn
+          v-if="!logged"
+          block
+          @click="connectKeplr"
+        >
+          <img
+            class="mr-2"
+            src="/keplr.png"
+            width="20"
+            height="20"
+          >
           Connect Keplr
         </v-btn>
       </v-sheet>
@@ -26,19 +41,23 @@
       <v-list nav>
         <v-list-item
           v-for="[icon, text, url] in links"
+          v-if="logged"
           :key="url"
           link
           :to="url"
-          v-if="logged"
           class="tile white--text"
         >
           <v-list-item-content>
-            <v-list-item-title class="white--text">{{
-              text
-            }}</v-list-item-title>
+            <v-list-item-title class="white--text">
+              {{
+                text
+              }}
+            </v-list-item-title>
           </v-list-item-content>
           <v-list-item-icon>
-            <v-icon color="#00b786">{{ icon }}</v-icon>
+            <v-icon color="#00b786">
+              {{ icon }}
+            </v-icon>
           </v-list-item-icon>
         </v-list-item>
       </v-list>
@@ -70,21 +89,47 @@
               </v-list-item-content>
             </v-list-item>
           </v-list>-->
-      <v-footer class="mb-8 justify-center pl-3" fixed>
-        <v-btn class="mb-2" block @click="logoutNow">Logout </v-btn>
+      <v-footer
+        class="mb-8 justify-center pl-3"
+        fixed
+      >
+        <v-btn
+          class="mb-2"
+          block
+          @click="logoutNow"
+        >
+          Logout
+        </v-btn>
       </v-footer>
-      <v-footer class="justify-center pl-0" fixed>
-        <v-icon class="heart" color="green darken-2" small> mdi-circle </v-icon>
+      <v-footer
+        class="justify-center pl-0"
+        fixed
+      >
+        <v-icon
+          class="heart"
+          color="green darken-2"
+          small
+        >
+          mdi-circle
+        </v-icon>
         <span class="ml-1">Block: {{ blockNow }}</span>
       </v-footer>
     </v-navigation-drawer>
 
-    <v-app-bar v-if="logged" app class="accent">
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+    <v-app-bar
+      v-if="logged"
+      app
+      class="accent"
+    >
+      <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
       My address:
 
-      <v-tooltip content-class="custom-tooltip" color="grey" bottom>
-        <template v-slot:activator="{ on, attrs }">
+      <v-tooltip
+        content-class="custom-tooltip"
+        color="grey"
+        bottom
+      >
+        <template #activator="{ on, attrs }">
           <v-chip
             class="ml-3"
             color="#00b786"
@@ -97,19 +142,27 @@
             {{ accounts[0].address }}
           </v-chip>
         </template>
-        <span
-          ><qr-code class="mb-2 mt-2" :text="accounts[0].address"></qr-code
-        ></span>
+        <span><qr-code
+          class="mb-2 mt-2"
+          :text="accounts[0].address"
+        /></span>
       </v-tooltip>
-      <span v-if="isCopied" class="ml-2">Address copied!</span>
-      <v-spacer></v-spacer>
+      <span
+        v-if="isCopied"
+        class="ml-2"
+      >Address copied!</span>
+      <v-spacer />
       <!-- <v-switch
         v-model="switch1"
         class=" mt-6"
         :label="`Simple/Pro: ${switch1.toString()}`"
       ></v-switch> -->
 
-      <v-btn-toggle v-model="switch1" borderless color="#00b786">
+      <v-btn-toggle
+        v-model="switch1"
+        borderless
+        color="#00b786"
+      >
         <v-btn value="true">
           <span class="hidden-sm-and-down">Pro</span>
         </v-btn>
@@ -120,12 +173,18 @@
       </v-btn-toggle>
     </v-app-bar>
     <v-main>
-      <v-container class="py-8 px-6" fluid>
-        <Nuxt :vueMode="switch1.toString()" />
+      <v-container
+        class="py-8 px-6"
+        fluid
+      >
+        <Nuxt :vue-mode="switch1.toString()" />
       </v-container>
     </v-main>
     <v-footer padless>
-      <v-col class="text-center" cols="12">
+      <v-col
+        class="text-center"
+        cols="12"
+      >
         {{ new Date().getFullYear() }} — <strong>WeedWallet</strong> —
         <v-menu
           v-model="menu"
@@ -133,8 +192,13 @@
           :nudge-width="200"
           offset-x
         >
-          <template v-slot:activator="{ on, attrs }">
-            <span color="#00b786" dark v-bind="attrs" v-on="on">
+          <template #activator="{ on, attrs }">
+            <span
+              color="#00b786"
+              dark
+              v-bind="attrs"
+              v-on="on"
+            >
               V{{ version }}
             </span>
           </template>
@@ -146,7 +210,7 @@
                   <img
                     src="https://pbs.twimg.com/profile_images/1455116847024586757/T9o06sNM_400x400.png"
                     alt="WeedWallet"
-                  />
+                  >
                 </v-list-item-avatar>
 
                 <v-list-item-content>
@@ -156,10 +220,10 @@
               </v-list-item>
             </v-list>
 
-            <v-divider></v-divider>
+            <v-divider />
 
             <v-simple-table>
-              <template v-slot:default>
+              <template #default>
                 <tbody class="accent">
                   <tr>
                     <td>RPC</td>
@@ -178,7 +242,7 @@
             </v-simple-table>
 
             <v-card-actions>
-              <v-spacer></v-spacer>
+              <v-spacer />
             </v-card-actions>
           </v-card>
         </v-menu>
@@ -286,7 +350,7 @@ export default {
     }, 5000);
 
     window.addEventListener("keplr_keystorechange", async () => {
-      var payload = { key1: cosmosConfig[0], key2: 0 };
+      const payload = { key1: cosmosConfig[0], key2: 0 };
       await this.$store.dispatch("keplr/connectWallet", payload);
       await this.$store.dispatch("data/refresh", this.accounts[0].address);
       await this.$store.dispatch("data/getAllBalances");
@@ -294,7 +358,7 @@ export default {
   },
   methods: {
     connectKeplr: async function (event) {
-      var payload = { key1: cosmosConfig[0], key2: this.chainId };
+      const payload = { key1: cosmosConfig[0], key2: this.chainId };
       await this.$store.dispatch("keplr/connectWallet", payload);
       console.log(this.accounts[0].address);
       //await this.$store.dispatch('data/getbitcannaId', this.accounts[0].address)

@@ -1,25 +1,34 @@
 <template>
   <div>
-    <v-card class="mx-auto accent" max-width="1200" min-height="500">
+    <v-card
+      class="mx-auto accent"
+      max-width="1200"
+      min-height="500"
+    >
       <v-img
         height="200"
         src="https://pbs.twimg.com/profile_banners/602625556/1649007099/1500x500"
-      ></v-img>
+      />
       <v-row style="margin: 2.5%; position: absolute; top: 130px">
         <v-list-item>
           <v-list-item-avatar size="100">
             <img
               src="https://pbs.twimg.com/profile_images/1455116847024586757/T9o06sNM_400x400.png"
               alt="John"
-            />
+            >
           </v-list-item-avatar>
           <v-list-item-content>
-            <v-list-item-title class="title" style="margin-top: 20px">{{
-              validatorDetails.description?.moniker
-            }}</v-list-item-title>
+            <v-list-item-title
+              class="title"
+              style="margin-top: 20px"
+            >
+              {{
+                validatorDetails.description?.moniker
+              }}
+            </v-list-item-title>
             <v-list-item-subtitle>{{ validatorAddr }}</v-list-item-subtitle>
           </v-list-item-content>
-          <v-spacer></v-spacer>
+          <v-spacer />
           <!--          <v-btn
             class="mt-4 mr-2"
             elevation="2"
@@ -28,27 +37,27 @@
           <div class="mt-2">
             <DelegateModal
               v-if="logged"
-              :chainIdProps="cosmosConfig[chainId].coinLookup.addressPrefix"
-              :addressTo="validatorAddr"
-              :validatorName="validatorDetails.description?.moniker"
+              :chain-id-props="cosmosConfig[chainId].coinLookup.addressPrefix"
+              :address-to="validatorAddr"
+              :validator-name="validatorDetails.description?.moniker"
               :balances="balances"
             />
             <UndelegateSingleModal
               v-if="logged"
-              :chainIdProps="cosmosConfig[chainId].coinLookup.addressPrefix"
-              :addressFrom="validatorAddr"
-              :amountUn="validatorDelegations / 1000000"
-              :amountTotalUn="myTotalUnDelegation"
-              :validatorName="validatorDetails.description?.moniker"
-              :coinIcon="cosmosConfig[chainId].coinLookup.icon"
+              :chain-id-props="cosmosConfig[chainId].coinLookup.addressPrefix"
+              :address-from="validatorAddr"
+              :amount-un="validatorDelegations / 1000000"
+              :amount-total-un="myTotalUnDelegation"
+              :validator-name="validatorDetails.description?.moniker"
+              :coin-icon="cosmosConfig[chainId].coinLookup.icon"
             />
             <RedelegateModal
               v-if="logged"
-              :chainIdProps="cosmosConfig[chainId].coinLookup.addressPrefix"
-              :addressFrom="validatorAddr"
-              :amountRe="validatorDelegations / 1000000"
-              :validatorName="validatorDetails.description?.moniker"
-              :coinIcon="cosmosConfig[chainId].coinLookup.icon"
+              :chain-id-props="cosmosConfig[chainId].coinLookup.addressPrefix"
+              :address-from="validatorAddr"
+              :amount-re="validatorDelegations / 1000000"
+              :validator-name="validatorDetails.description?.moniker"
+              :coin-icon="cosmosConfig[chainId].coinLookup.icon"
             />
           </div>
           <!--<v-btn
@@ -65,7 +74,7 @@
         <v-row>
           <v-col>
             <v-simple-table class="accent">
-              <template v-slot:default>
+              <template #default>
                 <tbody>
                   <tr>
                     <td>Status</td>
@@ -106,15 +115,19 @@
           </v-col>
           <v-col>
             <ChartsPropsValidator
-              :totalProps="totalProps"
-              :totalVoted="totalVoted"
+              :total-props="totalProps"
+              :total-voted="totalVoted"
             />
           </v-col>
         </v-row>
       </v-row>
     </v-card>
 
-    <v-card class="mt-4 mx-auto" color="#000000" max-width="1200">
+    <v-card
+      class="mt-4 mx-auto"
+      color="#000000"
+      max-width="1200"
+    >
       <v-row justify="space-around">
         <v-col>
           <v-card class="accent">
@@ -148,7 +161,10 @@
       </v-row>
     </v-card>
 
-    <v-card class="pa-8 mt-4 mx-auto accent" max-width="1200">
+    <v-card
+      class="pa-8 mt-4 mx-auto accent"
+      max-width="1200"
+    >
       <v-sheet
         color="#000000"
         class="pa-2 mt-4 mx-auto"
@@ -157,11 +173,11 @@
       >
         <v-row justify="space-around">
           <v-col class="ml-4">
-            Consensus Pubkey<br />
+            Consensus Pubkey<br>
             {{ validatorDetails.consensus_pubkey?.key }}
           </v-col>
           <v-col>
-            tokens<br />
+            tokens<br>
             {{ (validatorDetails.tokens / 1000000).toFixed(2) }}
             {{ cosmosConfig[chainId].coinLookup.viewDenom }}
           </v-col>
@@ -174,17 +190,27 @@
         height="60"
       >
         <v-row justify="space-around">
-          <v-col class="ml-4"> test </v-col>
+          <v-col class="ml-4">
+            test
+          </v-col>
           <v-col> test </v-col>
         </v-row>
       </v-sheet>
       <!--{{ validatorDetails }}-->
     </v-card>
 
-    <v-card v-if="logged" class="mt-4 mx-auto" color="#000000" max-width="1200">
+    <v-card
+      v-if="logged"
+      class="mt-4 mx-auto"
+      color="#000000"
+      max-width="1200"
+    >
       <v-row justify="space-around">
         <v-col>
-          <v-card class="accent" min-height="400">
+          <v-card
+            class="accent"
+            min-height="400"
+          >
             <v-card-title class="headline">
               <!--<v-icon class="mr-2">mdi-wallet-outline</v-icon> Wallet amount-->
               <h4 class="icon">
@@ -195,12 +221,18 @@
             <v-card-text class="text-h5">
               <template>
                 <v-simple-table class="accent">
-                  <template v-slot:default>
+                  <template #default>
                     <thead>
                       <tr>
-                        <th class="text-left">Block</th>
-                        <th class="text-left">Tx hash</th>
-                        <th class="text-left">Amount delegate</th>
+                        <th class="text-left">
+                          Block
+                        </th>
+                        <th class="text-left">
+                          Tx hash
+                        </th>
+                        <th class="text-left">
+                          Amount delegate
+                        </th>
                       </tr>
                     </thead>
                     <tbody>
@@ -223,7 +255,10 @@
           </v-card>
         </v-col>
         <v-col>
-          <v-card class="accent" min-height="400">
+          <v-card
+            class="accent"
+            min-height="400"
+          >
             <v-card-title class="headline">
               <h4 class="icon">
                 <!--<img src="icon/tokens.png" />-->
@@ -233,12 +268,18 @@
             <v-card-text class="text-h5">
               <template>
                 <v-simple-table class="accent">
-                  <template v-slot:default>
+                  <template #default>
                     <thead>
                       <tr>
-                        <th class="text-left">Block</th>
-                        <th class="text-left">Tx hash</th>
-                        <th class="text-left">Amount delegate</th>
+                        <th class="text-left">
+                          Block
+                        </th>
+                        <th class="text-left">
+                          Tx hash
+                        </th>
+                        <th class="text-left">
+                          Amount delegate
+                        </th>
                       </tr>
                     </thead>
                     <tbody>
@@ -273,7 +314,7 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 dayjs.extend(relativeTime);
 
-var tendermintRpc = require("@cosmjs/tendermint-rpc");
+const tendermintRpc = require("@cosmjs/tendermint-rpc");
 import cosmosConfig from "~/cosmos.config";
 
 export default {
