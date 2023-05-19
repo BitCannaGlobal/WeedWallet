@@ -33,10 +33,10 @@ export const mutations = {
   setLoading(state, loading) {
     state.loading = loading;
   },
-  setLogged(state, status) {
+  setLogged(state) {
     state.logged = true;
   },
-  setLogout(state, loading) {
+  setLogout(state) {
     (state.accounts = []),
       (state.initialized = false),
       (state.error = undefined),
@@ -46,11 +46,11 @@ export const mutations = {
 };
 
 export const actions = {
-  async logout({ commit, dispatch }, trys = 0) {
+  async logout({ commit }) {
     nuxtStorage.localStorage.removeItem("accounts");
     commit("setLogout");
   },
-  async checkLogin({ commit, state }, trys = 0) {
+  async checkLogin({ commit }) {
     /*console.log(state.accounts.length)
     if (state.accounts.length !== 0) {
       // commit('setLogged', 'true')
@@ -68,13 +68,13 @@ export const actions = {
       console.log("No session!");
     }
   },
-  async changeKeplrAccount({ commit, dispatch }, trys = 0) {
+  async changeKeplrAccount({ commit }) {
     window.addEventListener(
       "keplr_keystorechange",
       () => loadEdit(this),
       false
     );
-    async function loadEdit(store) {
+    async function loadEdit() {
       const chainId = cosmosConfig[0].chainId;
       await window.keplr.enable(chainId);
       const offlineSigner = window.getOfflineSigner(chainId);
@@ -84,7 +84,7 @@ export const actions = {
       return account;
     }
   },
-  async connectWallet({ commit, dispatch }, chainId) {
+  async connectWallet({ commit }, chainId) {
     var returnAcount = await connectKeplrSuggest(chainId.key1);
     console.log(returnAcount);
     commit("setAccounts", {

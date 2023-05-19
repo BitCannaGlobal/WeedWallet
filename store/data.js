@@ -1,9 +1,9 @@
 import axios from "axios";
 import moment from "moment";
-import { createProtobufRpcClient, QueryClient } from "@cosmjs/stargate";
+//import { createProtobufRpcClient, QueryClient } from "@cosmjs/stargate";
 import { Tendermint34Client } from "@cosmjs/tendermint-rpc";
 import { buildQuery } from "@cosmjs/tendermint-rpc/build/tendermint34/requests.js";
-import { toAscii, toHex } from "@cosmjs/encoding";
+import { toHex } from "@cosmjs/encoding";
 import cosmosConfig from "~/cosmos.config";
 
 export const state = () => ({
@@ -63,7 +63,7 @@ export const mutations = {
 
 export const actions = {
   // this is never awaited in the code
-  async refresh({ dispatch, state }, address) {
+  async refresh({ dispatch }, address) {
     const calls = [
       dispatch("getSdkVersion"),
       dispatch("getWalletInfo", address),
@@ -72,7 +72,7 @@ export const actions = {
     ];
     await Promise.all(calls);
   },
-  async changeLayout({ commit, state }, value) {
+  async changeLayout({ commit }, value) {
     commit("setLayout", value);
   },
   async getBlockNow({ commit, state }) {
@@ -82,7 +82,7 @@ export const actions = {
     );
     commit("setBlockNow", getBlock.data.block.header.height);
   },
-  async getPriceNow({ commit, state }) {
+  async getPriceNow({ commit }) {
     const getPrice = await axios("/api/price");
     commit("setPriceNow", getPrice.data.bitcanna.usd.toFixed(5));
   },
@@ -115,8 +115,9 @@ export const actions = {
     const client = await Tendermint34Client.connect(
       cosmosConfig[state.chainId].rpcURL
     );
-    const queryClient = new QueryClient(client);
-    const rpcClient = createProtobufRpcClient(queryClient);
+    // const queryClient = new QueryClient(client);
+    // const rpcClient = createProtobufRpcClient(queryClient);
+    // commit("setRpcClient", rpcClient);
     commit("setRpcClient", client);
   },
   async getDelegatorDataRpc({ commit, state }, data) {
@@ -216,7 +217,7 @@ export const actions = {
     return accountInfo;
   },
 
-  async getAllTxs({ commit, state }, address) {
+  async getAllTxs({ commit }, address) {
     const resultSender = await axios(
       cosmosConfig[0].apiURL +
         "/cosmos/tx/v1beta1/txs?events=message.sender=%27" +
@@ -410,11 +411,8 @@ export const actions = {
 
       item.name = foundName.member.metadata;
     });
-
-    let saveProps = [];
+ 
     singleProposals.data.proposal.messages.forEach((item) => {
-      let typeReadable = "";
-      let finalAmount = "";
 
       switch (item["@type"]) {
         case "/cosmos.bank.v1beta1.MsgSend":
@@ -448,13 +446,13 @@ export const actions = {
     commit("setProposalAllVote", allVotes.data.votes);
   },
 
-  async getSingleProposalVote({ commit, state }, proposalId) {
+/*   async getSingleProposalVote({ state }, proposalId) {
     const allProposals = await axios(
       cosmosConfig[state.chainId].apiURL +
         "/cosmos/group/v1/votes_by_proposal/" +
         proposalId
     );
-  },
+  }, */
 
   async getAllValidator({ commit, state }) {
     const allVal = await axios(
@@ -473,7 +471,7 @@ export const actions = {
 
     commit("setFinalMsgProp", saveMsgs);
   },
-  async resetFinalMsgProp({ commit, state }) {
+  async resetFinalMsgProp({ commit }) {
     commit("setFinalMsgProp", []);
   },
 
@@ -507,8 +505,7 @@ export const actions = {
     var duration = moment.duration(
       paramsDeposit.data.voting_params.voting_period.replace("s", ""),
       "seconds"
-    );
-    const days = duration.days();
+    ); 
     const hours = duration.hours();
     const minutes = duration.minutes();
 
@@ -518,7 +515,7 @@ export const actions = {
     commit("setParamsVoting", saveParams);
   },
 
-  async getProposalDeposits({ commit, state }, idProposal) {
+/*   async getProposalDeposits({ state }, idProposal) {
     // https://lcd-devnet-6.bitcanna.io/cosmos/gov/v1beta1/proposals/27/deposits
     const proposalDeposits = await axios(
       cosmosConfig[state.chainId].apiURL +
@@ -528,7 +525,7 @@ export const actions = {
     );
 
     // commit('setParamsVoting', saveParams)
-  },
+  }, */
 
   async getChartProposalData({ commit, state }, proposalId) {
     const allProposals = await axios(
@@ -617,7 +614,7 @@ export const actions = {
     commit("setValidatorDetails", validatorDetails.data.validator);
   },
   async getValidatorDelegation({ commit, state }, data) {
-    const validatorDelegation = await axios(
+    await axios(
       cosmosConfig[state.chainId].apiURL +
         "/cosmos/staking/v1beta1/validators/" +
         data.validatorAddr +

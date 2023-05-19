@@ -1,3 +1,4 @@
+/* eslint-disable */
 import Vue from "vue";
 import { Bar, Doughnut, Line, PolarArea, Radar } from "vue-chartjs";
 
