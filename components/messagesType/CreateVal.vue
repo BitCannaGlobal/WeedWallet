@@ -183,41 +183,26 @@
 </template>
 <script>
 import { mapState } from "vuex";
-import axios from "axios";
-import { coins } from "@cosmjs/launchpad";
 import {
-  SigningStargateClient,
-  MsgCreateValidatorEncodeObject,
-} from "@cosmjs/stargate";
-import { Registry, DirectSecp256k1HdWallet, coin } from "@cosmjs/proto-signing";
-import {
-  cosmos,
-  cosmosProtoRegistry,
-  cosmosAminoConverters,
+  cosmos
 } from "interchain46";
 import VueJsonPretty from "vue-json-pretty";
 import "vue-json-pretty/lib/styles.css";
-import pkg from "protobufjs";
-const { Type, Field } = pkg;
 import bech32 from "bech32";
 
 import { PubKey as CosmosCryptoEd25519Pubkey } from "cosmjs-types/cosmos/crypto/ed25519/keys";
-import {
-  MsgBeginRedelegate,
-  MsgCreateValidator,
-  MsgDelegate,
-  MsgEditValidator,
-  MsgUndelegate,
-} from "cosmjs-types/cosmos/staking/v1beta1/tx";
-
 import cosmosConfig from "~/cosmos.config";
-const { MsgSend } = cosmos.bank.v1beta1;
 
 export default {
   components: {
     VueJsonPretty,
   },
-  props: ["from"],
+  props: {
+    from: {
+      type: String,
+      required: true,
+    },
+  },
   data(props) {
     return {
       dialog: false,
@@ -253,7 +238,7 @@ export default {
     ...mapState("data", ["finalMsgProp", "infoGroupId"]),
   },
   watch: {
-    from(newData, oldData) {
+    from(newData) {
       const decode = bech32.decode(newData);
       const valAddrBech32 = bech32.encode("osmovaloper", decode.words);
       console.log(valAddrBech32);
@@ -261,7 +246,7 @@ export default {
       this.formDelegatorAddress = newData;
       this.formValidatorAddress = valAddrBech32;
     },
-    viewJson(newData, oldData) {
+    viewJson() {
       const { send } = cosmos.bank.v1beta1.MessageComposer.withTypeUrl;
       const msgSend = send({
         fromAddress: this.selectPolicy,
@@ -294,8 +279,7 @@ export default {
 
           console.log(msgSend) */
       const { MsgCreateValidator } = cosmos.staking.v1beta1;
-      const { createValidator } =
-        cosmos.staking.v1beta1.MessageComposer.withTypeUrl;
+ 
 
       const MsgCreateValidatorEncodeObject = {
         typeUrl: "/cosmos.staking.v1beta1.MsgCreateValidator",

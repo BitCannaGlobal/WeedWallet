@@ -225,8 +225,6 @@
 
 <script>
 import { mapState } from "vuex";
-import { bech32 } from "bech32";
-import { notifWaiting, notifError, notifSuccess } from "~/libs/notifications";
 import cosmosConfig from "~/cosmos.config";
 import {
   defaultRegistryTypes,
@@ -285,6 +283,15 @@ export default {
     cosmosConfig: cosmosConfig,
     validatorList: [],
   }),
+  computed: {
+    ...mapState("keplr", [`accounts`]),
+    ...mapState("data", ["chainId", `balances`, "allValidators"]),
+    enableModal: function () {
+      let isDeleg = false;
+      if (this.amountRe !== 0) isDeleg = true;
+      return isDeleg;
+    },
+  },
   watch: {
     dialog(value) {
       if (value) {
@@ -295,15 +302,6 @@ export default {
         this.addressTo = "";
         this.amount = "";
       }
-    },
-  },
-  computed: {
-    ...mapState("keplr", [`accounts`]),
-    ...mapState("data", ["chainId", `balances`, "allValidators"]),
-    enableModal: function () {
-      let isDeleg = false;
-      if (this.amountRe !== 0) isDeleg = true;
-      return isDeleg;
     },
   },
   async mounted() {
@@ -425,15 +423,6 @@ export default {
           const amountFinal = {
             denom: cosmosConfig[this.chainId].coinLookup.chainDenom,
             amount: convertAmount.toString(),
-          };
-          const fee = {
-            amount: [
-              {
-                denom: cosmosConfig[this.chainId].coinLookup.chainDenom,
-                amount: "5000",
-              },
-            ],
-            gas: "300000", // Need more gas for redelegation!
           };
           const MsgBeginRedelegate = defaultRegistryTypes[16][1]; // MsgBeginRedelegate
           const reDelegateMsg = {

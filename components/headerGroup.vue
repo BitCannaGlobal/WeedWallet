@@ -97,18 +97,7 @@
 <script>
 import { mapState } from "vuex";
 import axios from "axios";
-import { coins } from "@cosmjs/launchpad";
-import { SigningStargateClient, AminoTypes } from "@cosmjs/stargate";
-import { Registry, DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
-import {
-  cosmos,
-  cosmosProtoRegistry,
-  cosmosAminoConverters,
-} from "interchain46";
-import pkg from "protobufjs";
-const { Type, Field } = pkg;
 import cosmosConfig from "~/cosmos.config";
-import { notifWaiting, notifError, notifSuccess } from "~/libs/notifications";
 
 export default {
   data() {

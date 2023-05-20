@@ -12,12 +12,11 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
 export default {
   props: {
     amount: {
       type: Number,
-      default: "0",
+      default: 0,
     },
     totalDelegated: {
       type: String,

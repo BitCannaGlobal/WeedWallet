@@ -251,13 +251,6 @@ function bech32Validation(address) {
     return false;
   }
 }
-function prefixValidation(address) {
-  if (address && address.startsWith(this.network.addressPrefix)) {
-    return true;
-  } else {
-    return false;
-  }
-}
 function countPlaces(num) {
   const sep = String(23.32).match(/\D/)[0];
   const b = String(num).split(sep);

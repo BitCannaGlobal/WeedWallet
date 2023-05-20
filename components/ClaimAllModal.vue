@@ -209,7 +209,6 @@
 
 <script>
 import { mapState } from "vuex";
-import { notifWaiting, notifError, notifSuccess } from "~/libs/notifications";
 import cosmosConfig from "~/cosmos.config";
 import {
   defaultRegistryTypes,
@@ -221,7 +220,7 @@ import {
 
 export default {
   props: ["chainIdProps", "amountClaimAll", "getAllDelegation"],
-  data: (instance) => ({
+  data: () => ({
     dialog: false,
     dialogStepper: false,
     e1: 1,

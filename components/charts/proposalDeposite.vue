@@ -12,14 +12,13 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
 export default {
   props: {
-    total_deposit: {
+    totalDeposit: {
       type: String,
       default: "0",
     },
-    min_deposit: {
+    minDeposit: {
       type: String,
       default: "0",
     },

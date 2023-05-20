@@ -215,8 +215,7 @@ import {
   assertIsDeliverTxSuccess,
   SigningStargateClient,
   GasPrice,
-  calculateFee,
-  parseCoins,
+  calculateFee
 } from "@cosmjs/stargate";
 
 function countPlaces(num) {
@@ -270,6 +269,10 @@ export default {
     loading: false,
     cosmosConfig: cosmosConfig,
   }),
+  computed: {
+    ...mapState("keplr", [`accounts`]),
+    ...mapState("data", ["chainId"]),
+  },
   watch: {
     dialog(value) {
       if (value) {
@@ -280,10 +283,6 @@ export default {
         this.amountFinal = "";
       }
     },
-  },
-  computed: {
-    ...mapState("keplr", [`accounts`]),
-    ...mapState("data", ["chainId"]),
   },
   methods: {
     getMax() {

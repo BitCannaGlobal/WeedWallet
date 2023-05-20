@@ -78,26 +78,23 @@
 </template>
 <script>
 import { mapState } from "vuex";
-import axios from "axios";
-import { coins } from "@cosmjs/launchpad";
-import { SigningStargateClient } from "@cosmjs/stargate";
-import { Registry, DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
 import {
-  cosmos,
-  cosmosProtoRegistry,
-  cosmosAminoConverters,
+  cosmos
 } from "interchain46";
 import VueJsonPretty from "vue-json-pretty";
 import "vue-json-pretty/lib/styles.css";
-import pkg from "protobufjs";
-const { Type, Field } = pkg;
 import cosmosConfig from "~/cosmos.config";
 
 export default {
   components: {
     VueJsonPretty,
   },
-  props: ["from"],
+  props: {
+    from: {
+      type: String,
+      required: true,
+    },
+  },
   data(props) {
     return {
       dialog: false,
@@ -112,11 +109,14 @@ export default {
       cosmosConfig: cosmosConfig,
     };
   },
+  computed: {
+    ...mapState("data", [`allValidators`]),
+  },  
   watch: {
-    from(newData, oldData) {
+    from(newData) {
       this.selectPolicy = newData;
     },
-    viewJson(newData, oldData) {
+    viewJson() {
       const { delegate } = cosmos.staking.v1beta1.MessageComposer.withTypeUrl;
 
       const msgDelegate = delegate({
@@ -129,9 +129,6 @@ export default {
       console.log(msgDelegate);
       this.jsonData = msgDelegate;
     },
-  },
-  computed: {
-    ...mapState("data", [`allValidators`]),
   },
   async mounted() {
     await this.$store.dispatch("data/getAllValidator");
