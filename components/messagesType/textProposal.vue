@@ -68,30 +68,26 @@
 </template>
 <script>
 import { mapState } from "vuex";
-import axios from "axios";
-import { coins } from "@cosmjs/launchpad";
-import { SigningStargateClient } from "@cosmjs/stargate";
-import { Registry, DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
 import {
-  cosmos,
-  cosmosProtoRegistry,
-  cosmosAminoConverters,
+  cosmos
 } from "interchain46";
 import VueJsonPretty from "vue-json-pretty";
 import "vue-json-pretty/lib/styles.css";
-import pkg from "protobufjs";
-const { Type, Field } = pkg;
 import cosmosConfig from "~/cosmos.config";
 const { MsgSend } = cosmos.bank.v1beta1;
-const { TextProposal } = cosmos.gov.v1beta1;
-const { MsgExecLegacyContent } = cosmos.gov.v1;
 
 export default {
   components: {
     VueJsonPretty,
   },
-  props: ["from"],
-  data(props) {
+  props: {
+    // Without options, just type reference
+    from: {
+      type: String,
+      required: true,
+    },
+  },
+  data() {
     return {
       dialog: false,
       textProp: "",
@@ -106,7 +102,7 @@ export default {
     ...mapState("data", ["finalMsgProp"]),
   },
   watch: {
-    viewJson(newData, oldData) {
+    viewJson() {
       const { send } = cosmos.bank.v1beta1.MessageComposer.withTypeUrl;
       const msgSend = send({
         fromAddress: this.textProp,

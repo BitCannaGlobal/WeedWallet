@@ -218,39 +218,37 @@
                 &ensp; My Delegation historical
               </h4>
             </v-card-title>
-            <v-card-text class="text-h5">
-              <template>
-                <v-simple-table class="accent">
-                  <template #default>
-                    <thead>
-                      <tr>
-                        <th class="text-left">
-                          Block
-                        </th>
-                        <th class="text-left">
-                          Tx hash
-                        </th>
-                        <th class="text-left">
-                          Amount delegate
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr
-                        v-for="item in myDelegatorData.delegationsRpc"
-                        :key="item.hashDecoded"
-                      >
-                        <td>{{ item.height }}</td>
-                        <td>{{ item.hashDecoded | truncate }}</td>
-                        <td class="green--text">
-                          {{ item.amount / 1000000 }}
-                          {{ cosmosConfig[chainId].coinLookup.viewDenom }}
-                        </td>
-                      </tr>
-                    </tbody>
-                  </template>
-                </v-simple-table>
-              </template>
+            <v-card-text class="text-h5"> 
+              <v-simple-table class="accent">
+                <template #default>
+                  <thead>
+                    <tr>
+                      <th class="text-left">
+                        Block
+                      </th>
+                      <th class="text-left">
+                        Tx hash
+                      </th>
+                      <th class="text-left">
+                        Amount delegate
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr
+                      v-for="item in myDelegatorData.delegationsRpc"
+                      :key="item.hashDecoded"
+                    >
+                      <td>{{ item.height }}</td>
+                      <td>{{ truncate(item.hashDecoded) }}</td>
+                      <td class="green--text">
+                        {{ item.amount / 1000000 }}
+                        {{ cosmosConfig[chainId].coinLookup.viewDenom }}
+                      </td>
+                    </tr>
+                  </tbody>
+                </template>
+              </v-simple-table> 
             </v-card-text>
           </v-card>
         </v-col>
@@ -266,38 +264,36 @@
               </h4>
             </v-card-title>
             <v-card-text class="text-h5">
-              <template>
-                <v-simple-table class="accent">
-                  <template #default>
-                    <thead>
-                      <tr>
-                        <th class="text-left">
-                          Block
-                        </th>
-                        <th class="text-left">
-                          Tx hash
-                        </th>
-                        <th class="text-left">
-                          Amount delegate
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr
-                        v-for="item in myDelegatorData.unDelegateRpc"
-                        :key="item.hashDecoded"
-                      >
-                        <td>{{ item.height }}</td>
-                        <td>{{ item.hashDecoded | truncate }}</td>
-                        <td class="red--text">
-                          {{ item.amount / 1000000 }}
-                          {{ cosmosConfig[chainId].coinLookup.viewDenom }}
-                        </td>
-                      </tr>
-                    </tbody>
-                  </template>
-                </v-simple-table>
-              </template>
+              <v-simple-table class="accent">
+                <template #default>
+                  <thead>
+                    <tr>
+                      <th class="text-left">
+                        Block
+                      </th>
+                      <th class="text-left">
+                        Tx hash
+                      </th>
+                      <th class="text-left">
+                        Amount delegate
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr
+                      v-for="item in myDelegatorData.unDelegateRpc"
+                      :key="item.hashDecoded"
+                    >
+                      <td>{{ item.height }}</td>
+                      <td>{{ truncate(item.hashDecoded) }}</td>
+                      <td class="red--text">
+                        {{ item.amount / 1000000 }}
+                        {{ cosmosConfig[chainId].coinLookup.viewDenom }}
+                      </td>
+                    </tr>
+                  </tbody>
+                </template>
+              </v-simple-table>
             </v-card-text>
           </v-card>
         </v-col>
@@ -313,8 +309,6 @@ import bech32 from "bech32";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 dayjs.extend(relativeTime);
-
-const tendermintRpc = require("@cosmjs/tendermint-rpc");
 import cosmosConfig from "~/cosmos.config";
 
 export default {
@@ -326,8 +320,7 @@ export default {
     delegationsRpc: [],
     unDelegateRpc: [],
     myTotalDelegation: "",
-    myTotalUnDelegation: "",
-    cosmosConfig: cosmosConfig,
+    myTotalUnDelegation: ""
   }),
   computed: {
     ...mapState("keplr", [`accounts`, "logged"]),
@@ -349,7 +342,7 @@ export default {
       const finalApr = this.aprNow * rewardFactor;
       return finalApr;
     },
-    lastUpdate(date) {
+    lastUpdate() {
       const fromNow = (date) => dayjs(date).fromNow();
       return fromNow;
     },
@@ -391,15 +384,9 @@ export default {
   },
   methods: {
     async getTxDate(height) {
-      const client = await tendermintRpc.Tendermint34Client.connect(
-        cosmosConfig[0].rpcURL
-      );
-      //console.log(height)
       const block = await this.rpcClient.block(Number(height));
       return block.block.header.time;
     },
-  },
-  filters: {
     truncate(
       fullStr,
       strLen = 8,
@@ -414,7 +401,7 @@ export default {
         separator +
         fullStr.substr(fullStr.length - backChars)
       );
-    },
-  },
+    },    
+  }
 };
 </script>

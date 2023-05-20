@@ -2,23 +2,6 @@
   <v-row>
     <v-col cols="12">
       <sequential-entrance>
-        <!--<v-row justify="space-around">
-        <v-col>
-          <v-card class="accent">
-            <v-card-title class="headline">
-
-              <h4 class="icon">
-                <img src="icon/wallet.png" />
-                &ensp; Wallet value
-              </h4>
-            </v-card-title>
-            <v-card-text class="text-right text-h5">
-             $ {{ ((balances / 1000000) * priceNow).toFixed(3) }}
-            </v-card-text>
-          </v-card>
-        </v-col>
-      </v-row>-->
-
         <v-row
           justify="space-around"
           class="data-row"
@@ -310,7 +293,6 @@
 
 <script>
 import { mapState } from "vuex";
-import axios from "axios";
 
 import cosmosConfig from "~/cosmos.config";
 import { notifWaiting, notifError, notifSuccess } from "~/libs/notifications";

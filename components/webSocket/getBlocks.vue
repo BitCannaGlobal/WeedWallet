@@ -3,13 +3,14 @@
     <v-subheader>Live Tx's</v-subheader>
     <!--{{ blockData }}-->
     <v-list two-line>
-      <template v-for="n in blockData">
-        <v-list-item :key="n.data.block">
-          {{ n.data.block }}<br>
-          {{ n.data.hash }}<br>
-          {{ n.data.action }}<br>
-        </v-list-item>
-      </template>
+      <v-list-item 
+        v-for="n in blockData" 
+        :key="n.data.block"
+      >
+        {{ n.data.block }}<br>
+        {{ n.data.hash }}<br>
+        {{ n.data.action }}<br>
+      </v-list-item> 
     </v-list>
   </div>
 </template>
@@ -32,7 +33,6 @@ export default {
 
       if (finalData?.result.data) {
         // finalData.result.data.value.TxResult.result.log
-        const finalDataDecode = finalData.result.data;
         const finalDataDecodeEvents = finalData.result.events;
         console.log(finalDataDecodeEvents);
         const dataShow = {};

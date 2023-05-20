@@ -4,6 +4,7 @@ export function setMsg(msg, addrGet, timestamp, allVal) {
   let color = "";
   let icon = "";
   let foundVal = "";
+  let foundVal2 = "";
   let msgData = Object;
 
   switch (msg["@type"]) {
@@ -98,7 +99,7 @@ export function setMsg(msg, addrGet, timestamp, allVal) {
       foundVal = allVal.find(
         (element) => element.op_address === msg.validator_src_address
       );
-      let foundVal2 = allVal.find(
+      foundVal2 = allVal.find(
         (element) => element.op_address === msg.validator_dst_address
       );
       type = msg["@type"];

@@ -1,3 +1,4 @@
+<!-- eslint-disable -->
 <template>
   <div>
     <sequential-entrance>
@@ -144,7 +145,7 @@
               }}</span>
             </template>
             <span>
-              {{ item.submit_time | formatDate }}
+              {{ formatDate(item.submit_time) }}
             </span>
           </v-tooltip>
         </template>
@@ -161,7 +162,7 @@
                 }}</span>
               </template>
               <span>
-                {{ item.submit_time | formatDate }}
+                {{ formatDate(item.submit_time) }}
               </span>
             </v-tooltip>
           </td>
@@ -179,7 +180,7 @@
                 }}</span>
               </template>
               <span>
-                {{ item.voting_end_time | formatDate }}
+                {{ formatDate(item.voting_end_time) }}
               </span>
             </v-tooltip>
           </td>
@@ -285,6 +286,7 @@
   </div>
 </template>
 <script>
+/* eslint-disable */
 import { mapState } from "vuex";
 import axios from "axios";
 import moment from "moment";
@@ -340,9 +342,9 @@ export default {
     await this.$store.dispatch("data/getProposalParamsDeposit");
     await this.$store.dispatch("data/getProposalParamsVoting");
   },
-  filters: {
-    formatDate: (dateStr) =>
-      Intl.DateTimeFormat("us-EN", {
+  methods: {
+    formatDate(dateStr) {
+      return Intl.DateTimeFormat("us-EN", {
         year: "numeric",
         month: "numeric",
         day: "numeric",
@@ -350,8 +352,10 @@ export default {
         minute: "numeric",
         second: "numeric",
         hour12: false,
-      }).format(new Date(dateStr)),
-
+      }).format(new Date(dateStr))
+    }, 
+  },
+  filters: {
     formatDateDeposite(dateStr) {
       return moment(dateStr.submit).add(dateStr.secondes, "s");
     },
@@ -373,5 +377,3 @@ export default {
   transform-style: preserve-3d;
 }
 </style>
-
-<!--====  End of PROJECTS  ====-->

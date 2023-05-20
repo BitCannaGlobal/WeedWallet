@@ -99,9 +99,7 @@
   </div>
 </template>
 <script>
-import { mapState } from "vuex";
 import axios from "axios";
-
 import cosmosConfig from "~/cosmos.config";
 
 export default {

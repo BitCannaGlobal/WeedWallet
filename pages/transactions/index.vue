@@ -43,7 +43,7 @@
                         cols="2"
                         class="mt-4"
                       >
-                        {{ item.timestamp | formatDate }}
+                        {{ formatDate(item.timestamp) }}
                       </v-col>
                       <v-col
                         cols="8"
@@ -472,27 +472,11 @@
 import { mapState } from "vuex";
 
 import axios from "axios";
-import bech32 from "bech32";
 import dayjs from "dayjs";
-import { reverse, sortBy, uniq, uniqWith, set } from "lodash";
+import { reverse, sortBy, uniqWith } from "lodash";
 import relativeTime from "dayjs/plugin/relativeTime";
 dayjs.extend(relativeTime);
-
-const tendermintRpc = require("@cosmjs/tendermint-rpc");
-import { decodeTxRaw } from "@cosmjs/proto-signing";
-const {
-  toAscii,
-  toHex,
-  fromHex,
-  fromUtf8,
-  fromRfc3339,
-} = require("@cosmjs/encoding");
-const {
-  buildQuery,
-} = require("@cosmjs/tendermint-rpc/build/tendermint34/requests.js");
-
 import { setMsg } from "~/libs/msgType";
-
 import cosmosConfig from "~/cosmos.config";
 
 export default {
@@ -647,25 +631,8 @@ export default {
       );
       return typeReadable;
     },
-  },
-  filters: {
-    truncate(
-      fullStr,
-      strLen = 16,
-      separator = ".....",
-      frontChars = 10,
-      backChars = 10
-    ) {
-      if (fullStr.length <= strLen) return fullStr;
-
-      return (
-        fullStr.substr(0, frontChars) +
-        separator +
-        fullStr.substr(fullStr.length - backChars)
-      );
-    },
-    formatDate: (dateStr) =>
-      Intl.DateTimeFormat("us-EN", {
+    formatDate(dateStr) {
+      return Intl.DateTimeFormat("us-EN", {
         year: "numeric",
         month: "numeric",
         day: "numeric",
@@ -673,7 +640,9 @@ export default {
         minute: "numeric",
         second: "numeric",
         hour12: false,
-      }).format(new Date(dateStr)),
+      }).format(new Date(dateStr))
+    },    
   },
+
 };
 </script>
