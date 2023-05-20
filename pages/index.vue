@@ -347,8 +347,7 @@
               <div>
                 <h3>{{ group[0].section }}</h3>
                 <v-card
-                  v-for="item in group"
-                  :key="group[0].section"
+                  v-for="item in group" 
                   class="ma-2 pa-4 accent"
                   width="700"
                   min-height="50"
@@ -368,7 +367,7 @@
                         {{ item.final.typeReadable }}
                       </v-chip>
                       <br>
-                      {{ item.final.timestamp | formatDate }}
+                      {{ formatDate(item.final.timestamp) }}
                     </v-col>
                     <v-col
                       v-if="item.final.msgData.amount"
@@ -477,14 +476,10 @@
 
 <script>
 import { mapState } from "vuex";
-import axios from "axios";
 import dayjs from "dayjs";
 import { reverse, sortBy, orderBy, uniqWith, groupBy } from "lodash";
-
 import { setMsg } from "~/libs/msgType";
-
 import cosmosConfig from "~/cosmos.config";
-import { notifWaiting, notifError, notifSuccess } from "~/libs/notifications";
 
 const categories = [
   {
@@ -505,11 +500,10 @@ const categories = [
 
 export default {
   layout: "blog",
-  data: (ins) => ({
+  data: () => ({
     cosmosConfig: cosmosConfig,
     rpcAllTxs: "",
   }),
-  watch: {},
   computed: {
     ...mapState("keplr", [
       `accounts`,
@@ -533,6 +527,8 @@ export default {
       "totalUnbound",
       "totalWalletPrice",
       "totalWallet",
+      "validators",
+      "validatorsLoaded"
     ]),
   },
   watch: {},
@@ -561,7 +557,7 @@ export default {
       }, []);
     },
     groupedEvents() {
-      if (this.allTxsLoaded) {
+      if (this.allTxsLoaded && this.validatorsLoaded) {
         const test = orderBy(
           groupBy(this.categorizedEvents(), "section"),
           (group) => group[0].final.timestamp,
@@ -616,13 +612,11 @@ export default {
       });
     },
     getMessageType(msg, timestamp) {
-      const typeReadable = setMsg(msg, this.accounts[0].address, timestamp);
+      const typeReadable = setMsg(msg, this.accounts[0].address, timestamp, this.validators);
       return typeReadable;
     },
-  },
-  filters: {
-    formatDate: (dateStr) =>
-      Intl.DateTimeFormat("us-EN", {
+    formatDate(dateStr) {
+      return Intl.DateTimeFormat("us-EN", {
         year: "numeric",
         month: "numeric",
         day: "numeric",
@@ -630,8 +624,9 @@ export default {
         minute: "numeric",
         second: "numeric",
         hour12: false,
-      }).format(new Date(dateStr)),
-  },
+      }).format(new Date(dateStr))
+    },      
+  }
 };
 </script>
 <style>

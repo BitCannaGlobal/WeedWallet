@@ -1,3 +1,4 @@
+<!-- eslint-disable -->
 <template>
   <v-row
     v-if="$fetchState.pending"
@@ -35,7 +36,7 @@
               {{ proposalData.proposal.content.title }}
               <v-spacer />
               End time:
-              {{ proposalData.proposal.deposit_end_time | formatDate }}
+              {{ formatDate(proposalData.proposal.deposit_end_time) }}
             </v-card-title>
             <v-card-text>
               <div
@@ -171,7 +172,7 @@
                     "
                   >
                     <v-chip
-                      color="green"
+                      color="#00b786"
                       text-color="white"
                       label
                     >
@@ -339,8 +340,7 @@
                           <td>Deposit End Time</td>
                           <td>
                             {{
-                              proposalData.proposal.deposit_end_time
-                                | formatDate
+                              formatDate(proposalData.proposal.deposit_end_time)
                             }}
                           </td>
                         </tr>
@@ -348,8 +348,7 @@
                           <td>Voting Start</td>
                           <td>
                             {{
-                              proposalData.proposal.voting_start_time
-                                | formatDate
+                              formatDate(proposalData.proposal.voting_start_time)
                             }}
                           </td>
                         </tr>
@@ -357,7 +356,7 @@
                           <td>Voting End</td>
                           <td>
                             {{
-                              proposalData.proposal.voting_end_time | formatDate
+                              formatDate(proposalData.proposal.voting_end_time)
                             }}
                           </td>
                         </tr>
@@ -767,8 +766,6 @@
 
 <script>
 import { mapState } from "vuex";
-const { SigningCosmosClient } = require("@cosmjs/launchpad");
-import { DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
 import {
   assertIsBroadcastTxSuccess,
   SigningStargateClient,
@@ -801,18 +798,35 @@ export default {
       { text: "Option", value: "options[0].option" },
       // { text: 'Voting power', value: 'options[0].weight' }
     ],
-    items: [
-      {
-        id: 1,
-        name: "Applications :",
-        children: [
-          { id: 2, name: "Calendar : app" },
-          { id: 3, name: "Chrome : app" },
-          { id: 4, name: "Webstorm : app" },
-        ],
-      },
-    ],
   }),
+  async fetch() {
+    this.proposalData = await fetch(
+      cosmosConfig[this.chainId].apiURL +
+        `/cosmos/gov/v1beta1/proposals/` +
+        this.$route.params.id
+    ).then((res) => res.json());
+
+    this.proposalDeposits = await fetch(
+      cosmosConfig[this.chainId].apiURL +
+        "/cosmos/gov/v1beta1/proposals/" +
+        this.$route.params.id +
+        "/deposits"
+    ).then((res) => res.json());
+
+    this.getVoters = await fetch(
+      cosmosConfig[this.chainId].apiURL +
+        "/cosmos/gov/v1beta1/proposals/" +
+        this.$route.params.id +
+        "/votes"
+    ).then((res) => res.json());
+
+    this.getTally = await fetch(
+      cosmosConfig[this.chainId].apiURL +
+        "/cosmos/gov/v1beta1/proposals/" +
+        this.$route.params.id +
+        "/tally"
+    ).then((res) => res.json());
+  },  
   computed: {
     ...mapState("keplr", [`accounts`]),
     ...mapState("data", [
@@ -861,7 +875,6 @@ export default {
     await this.$store.dispatch("keplr/checkLogin");
     this.id = this.$route.params.id;
     await this.$store.dispatch("data/getProposalParamsDeposit");
-    await this.$store.dispatch("data/getProposalDeposits", this.id);
     await this.$store.dispatch("data/getProposalQuorum");
   },
 
@@ -971,37 +984,8 @@ export default {
         })();
       }
     },
-  },
-  async fetch() {
-    this.proposalData = await fetch(
-      cosmosConfig[this.chainId].apiURL +
-        `/cosmos/gov/v1beta1/proposals/` +
-        this.$route.params.id
-    ).then((res) => res.json());
-    this.proposalDeposits = await fetch(
-      cosmosConfig[this.chainId].apiURL +
-        "/cosmos/gov/v1beta1/proposals/" +
-        this.$route.params.id +
-        "/deposits"
-    ).then((res) => res.json());
-    this.getVoters = await fetch(
-      cosmosConfig[this.chainId].apiURL +
-        "/cosmos/gov/v1beta1/proposals/" +
-        this.$route.params.id +
-        "/votes"
-    ).then((res) => res.json());
-    console.log(this.proposalData);
-
-    this.getTally = await fetch(
-      cosmosConfig[this.chainId].apiURL +
-        "/cosmos/gov/v1beta1/proposals/" +
-        this.$route.params.id +
-        "/tally"
-    ).then((res) => res.json());
-  },
-  filters: {
-    formatDate: (dateStr) =>
-      Intl.DateTimeFormat("us-EN", {
+    formatDate(dateStr) {
+      return Intl.DateTimeFormat("us-EN", {
         year: "numeric",
         month: "numeric",
         day: "numeric",
@@ -1009,7 +993,8 @@ export default {
         minute: "numeric",
         second: "numeric",
         hour12: false,
-      }).format(new Date(dateStr)),
-  },
+      }).format(new Date(dateStr))
+    },     
+  }
 };
 </script>

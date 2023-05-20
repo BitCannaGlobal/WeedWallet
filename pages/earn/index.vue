@@ -56,9 +56,9 @@
                           :key="i"
                         >
                           <v-list-item-content>
-                            <v-list-item-title
-                              v-text="item.text"
-                            />
+                            <v-list-item-title>
+                              {{ item.text }}
+                            </v-list-item-title>
                           </v-list-item-content>
                         </v-list-item>
                       </v-list-item-group>
@@ -120,9 +120,7 @@
                           :key="i"
                         >
                           <v-list-item-content>
-                            <v-list-item-title
-                              v-text="item.text"
-                            />
+                            <v-list-item-title>{{ item.text }}</v-list-item-title> 
                           </v-list-item-content>
                         </v-list-item>
                       </v-list-item-group>

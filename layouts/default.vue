@@ -38,10 +38,13 @@
         </v-btn>
       </v-sheet>
 
-      <v-list nav>
+      <v-list
+        v-if="logged"
+        nav
+      >
         <v-list-item
-          v-for="[icon, text, url] in links"
-          v-if="logged"
+          
+          v-for="[icon, text, url] in links"          
           :key="url"
           link
           :to="url"
@@ -253,7 +256,6 @@
 
 <script>
 import { mapState } from "vuex";
-import axios from "axios";
 import cosmosConfig from "~/cosmos.config";
 import pjson from "~/package";
 
@@ -299,7 +301,7 @@ export default {
       deep: true,
       immediate: true,
     },
-    async switch1(newQuestion, oldQuestion) {
+    async switch1(newQuestion) {
       console.log(newQuestion);
       let finalView = "";
       if (newQuestion === "true") {
@@ -357,10 +359,9 @@ export default {
     });
   },
   methods: {
-    connectKeplr: async function (event) {
+    connectKeplr: async function () {
       const payload = { key1: cosmosConfig[0], key2: this.chainId };
       await this.$store.dispatch("keplr/connectWallet", payload);
-      console.log(this.accounts[0].address);
       //await this.$store.dispatch('data/getbitcannaId', this.accounts[0].address)
       this.address = this.accounts[0].address;
       await this.$store.dispatch("data/refresh", this.accounts[0].address);

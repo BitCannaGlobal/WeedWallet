@@ -194,9 +194,8 @@
                 />
               </v-col>
             </v-row>
-            <span
-              v-for="(textField, i) in textFields"
-              v-if="propType === 'Parameter Change Proposal'"
+            <span 
+              v-for="(textField, i) in textFields"              
               :key="i"
             >
               <!-- <v-text-field
@@ -285,33 +284,23 @@
 </template>
 <script>
 import { mapState } from "vuex";
-import axios from "axios";
 import { coins } from "@cosmjs/launchpad";
 import {
   SigningStargateClient,
-  AminoTypes,
   defaultRegistryTypes,
   GasPrice,
   assertIsDeliverTxSuccess,
 } from "@cosmjs/stargate";
-import { Registry } from "@cosmjs/proto-signing";
-import {
-  cosmos,
-  cosmosProtoRegistry,
-  cosmosAminoConverters,
-} from "interchain46";
 import { Any } from "cosmjs-types/google/protobuf/any";
 import { TextProposal } from "cosmjs-types/cosmos/gov/v1beta1/gov";
 import { CommunityPoolSpendProposal } from "cosmjs-types/cosmos/distribution/v1beta1/distribution";
 import {
-  SoftwareUpgradeProposal,
-  Plan,
+  SoftwareUpgradeProposal
 } from "cosmjs-types/cosmos/upgrade/v1beta1/upgrade";
 import Long from "long";
 // import { ParameterChangeProposal, ParamChange } from "cosmjs-types/cosmos/params/v1beta1/params";
 
 import cosmosConfig from "~/cosmos.config";
-import { notifWaiting, notifError, notifSuccess } from "~/libs/notifications";
 
 export default {
   data: () => ({

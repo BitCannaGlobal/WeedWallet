@@ -65,7 +65,10 @@ import { mapState } from "vuex";
 import cosmosConfig from "~/cosmos.config";
 
 export default {
-  props: ["enable"],
+  props: {
+    // Without options, just type reference
+    enable: Boolean
+  },
   data: () => ({
     config: cosmosConfig,
     txData: [],
@@ -74,7 +77,7 @@ export default {
     ...mapState("data", ["chainId"]),
   },
   watch: {
-    enable(newData, oldData) {
+    enable(newData) {
       console.log(newData);
       //         if (newData === false) {
       //           this.$socketManager.close(1000)
@@ -89,7 +92,6 @@ export default {
       if (finalData?.result.data) {
         this.rightDrawer = true;
         // finalData.result.data.value.TxResult.result.log
-        const finalDataDecode = finalData.result.data;
         const finalDataDecodeEvents = finalData.result.events;
         console.log(finalDataDecodeEvents);
         const dataShow = {};

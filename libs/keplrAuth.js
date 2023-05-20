@@ -1,6 +1,3 @@
-// import cosmosConfig from '~/cosmos.config'
-const cosmosConfig = require("~/cosmos.config");
-
 module.exports = {
   async connectKeplrSuggest(dataChain) {
     // Keplr extension injects the offline signer that is compatible with cosmJS.

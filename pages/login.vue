@@ -141,7 +141,7 @@ export default {
   */
   },
   methods: {
-    connectKeplr: async function (event) {
+    connectKeplr: async function () {
       const payload = { key1: cosmosConfig[0], key2: this.chainId };
       await this.$store.dispatch("keplr/connectWallet", payload);
       console.log(this.accounts[0].address);
