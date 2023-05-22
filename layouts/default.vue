@@ -248,7 +248,7 @@ export default {
     isCopied: false,
     links: [
       ["mdi-chevron-right", "Portfolio", "/"],
-      ["mdi-chevron-right", "Earn", "/earn"],
+      // ["mdi-chevron-right", "Earn", "/earn"],
       ["mdi-chevron-right", "Validators", "/validators"],
       ["mdi-chevron-right", "Proposals", "/proposals"],
       // ['mdi-wallet-outline', 'Ibc manager', '/ibc'],
@@ -256,6 +256,7 @@ export default {
       ["mdi-chevron-right", "Transactions", "/transactions"],
       ["mdi-chevron-right", "My NFT's", "/nfts"],
       ["mdi-chevron-right", "Create proposal", "/create-proposal"],
+      ["mdi-download", "Get bcna", "/get-bcna"],
     ],
   }),
   computed: {
