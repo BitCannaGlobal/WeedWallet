@@ -23,6 +23,7 @@
                 :loading="loading"
                 type="table"
               />
+              
               <v-expansion-panels>
                 <v-expansion-panel
                   v-for="item in rpcAllTxs"

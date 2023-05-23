@@ -121,10 +121,6 @@ export default {
         },
       ],
     };
-    const options = {
-      responsive: true,
-      maintainAspectRatio: true,
-    };
     this.pricedata = dataChart;
     this.loaded = true;
     this.loading = false;

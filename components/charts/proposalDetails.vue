@@ -12,14 +12,13 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
 export default {
   props: {
-    total_deposit: {
+    totalDeposit: {
       type: String,
       default: "0",
     },
-    min_deposit: {
+    minDeposit: {
       type: String,
       default: "0",
     },
@@ -60,8 +59,8 @@ export default {
           {
             label: "test",
             data: [
-              this.total_deposit / 1000000,
-              this.min_deposit / 1000000 - this.total_deposit / 1000000,
+              this.totalDeposit / 1000000,
+              this.minDeposit / 1000000 - this.total_deposit / 1000000,
             ],
             backgroundColor: ["#33ffc9", "#00b383", "#00b383", "#004d38"],
             //borderColor: '#00b786',

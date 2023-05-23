@@ -8,6 +8,7 @@
       v-model="drawer"
       app
       fixed
+      floating
       class="accent"
     >
       <v-sheet class="accent pa-4">
@@ -64,47 +65,21 @@
           </v-list-item-icon>
         </v-list-item>
       </v-list>
-      <!--          <v-list nav class="accent">
-            <v-list-item
-              link
-              v-if="!logged"
-              to="/login"
-            >
-              <v-list-item-icon>
-                <v-icon>mdi-wallet-outline</v-icon>
-              </v-list-item-icon>
-              <v-list-item-content>
-                <v-list-item-title>Login</v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-          </v-list>
-          <v-list nav class="accent">
-            <v-list-item
-              link
-              v-if="!logged"
-              to="/explorer"
-            >
-              <v-list-item-icon>
-                <v-icon>mdi-search-web</v-icon>
-              </v-list-item-icon>
-              <v-list-item-content>
-                <v-list-item-title>Explorer</v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-          </v-list>-->
+ 
       <v-footer
-        class="mb-8 justify-center pl-3"
+        class="accent mb-8 justify-center pl-3"
         fixed
       >
         <v-btn
-          class="mb-2"
+          class="mb-6"
           block
           @click="logoutNow"
         >
           Logout
         </v-btn>
-      </v-footer>
+      </v-footer> 
       <v-footer
+        min-height="48"
         class="justify-center pl-0"
         fixed
       >
@@ -116,7 +91,7 @@
           mdi-circle
         </v-icon>
         <span class="ml-1">Block: {{ blockNow }}</span>
-      </v-footer>
+      </v-footer> 
     </v-navigation-drawer>
 
     <v-app-bar
@@ -273,7 +248,7 @@ export default {
     isCopied: false,
     links: [
       ["mdi-chevron-right", "Portfolio", "/"],
-      ["mdi-chevron-right", "Earn", "/earn"],
+      // ["mdi-chevron-right", "Earn", "/earn"],
       ["mdi-chevron-right", "Validators", "/validators"],
       ["mdi-chevron-right", "Proposals", "/proposals"],
       // ['mdi-wallet-outline', 'Ibc manager', '/ibc'],
@@ -281,6 +256,7 @@ export default {
       ["mdi-chevron-right", "Transactions", "/transactions"],
       ["mdi-chevron-right", "My NFT's", "/nfts"],
       ["mdi-chevron-right", "Create proposal", "/create-proposal"],
+      ["mdi-download", "Get bcna", "/get-bcna"],
     ],
   }),
   computed: {

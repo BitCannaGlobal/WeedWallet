@@ -66,7 +66,6 @@
 
 <script>
 import { mapState } from "vuex";
-import { bech32 } from "bech32";
 import { notifWaiting, notifError, notifSuccess } from "~/libs/notifications";
 import cosmosConfig from "~/cosmos.config";
 import {
@@ -75,22 +74,6 @@ import {
   defaultRegistryTypes,
 } from "@cosmjs/stargate";
 
-function bech32Validation(address) {
-  try {
-    const words = bech32.decode(address);
-    Buffer.from(bech32.fromWords(words.words)).toString(`hex`);
-    return true;
-  } catch (error) {
-    return false;
-  }
-}
-function prefixValidation(address) {
-  if (address && address.startsWith(this.network.addressPrefix)) {
-    return true;
-  } else {
-    return false;
-  }
-}
 export default {
   props: [
     "chainIdProps",
@@ -139,7 +122,7 @@ export default {
   },
   watch: {
     // whenever question changes, this function will run
-    selected(newSelected, oldSelected) {
+    selected(newSelected) {
       const delegation = this.delegations;
       let selectedDelegation = 0;
       const finalUndelegate = [];

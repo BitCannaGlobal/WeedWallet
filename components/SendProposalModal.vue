@@ -55,7 +55,9 @@
                           <v-btn icon>
                             <v-icon>mdi-vote-outline</v-icon>
                           </v-btn>
-                          <v-card-title v-text="card.title" />
+                          <v-card-title>
+                            {{ card.title }}
+                          </v-card-title>
                         </v-card>
                       </v-item>
                     </v-col>

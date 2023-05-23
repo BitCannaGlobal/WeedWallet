@@ -65,8 +65,8 @@
             </v-card-title>
             <v-card-text>
               <ChartsProposalDeposite
-                :total_deposit="proposalData.proposal.total_deposit[0].amount"
-                :min_deposit="paramsDeposit.min_deposit"
+                :totalDeposit="proposalData.proposal.total_deposit[0].amount"
+                :minDeposit="paramsDeposit.min_deposit"
               />
               <br>
 

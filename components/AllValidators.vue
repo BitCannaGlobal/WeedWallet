@@ -60,8 +60,6 @@
 
 <script>
 import { mapState } from "vuex";
-const { SigningCosmosClient } = require("@cosmjs/launchpad");
-import { DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
 import {
   assertIsBroadcastTxSuccess,
   SigningStargateClient,
@@ -96,6 +94,10 @@ export default {
       cosmosConfig: cosmosConfig,
     };
   },
+  computed: {
+    ...mapState("data", ["chainId", `balances`, "validators"]),
+    ...mapState("keplr", [`logged`]),
+  },  
   watch: {
     getStatus: function (val) {
       if (val === "active") {
@@ -107,10 +109,6 @@ export default {
         this.finalValidators = this.validators;
       }
     },
-  },
-  computed: {
-    ...mapState("data", ["chainId", `balances`, "validators"]),
-    ...mapState("keplr", [`logged`]),
   },
   async mounted() {
     // console.log(this.validators)
@@ -126,7 +124,7 @@ export default {
     }
   },
   methods: {
-    filterOnlyCapsText(value, search, item) {
+    filterOnlyCapsText(value, search) {
       return (
         value != null &&
         search != null &&
@@ -138,7 +136,7 @@ export default {
       if (this.$refs.form.validate() === true) {
         (async () => {
           // Send notification
-          var returnWaiting = notifWaiting(this.$toast);
+          const returnWaiting = notifWaiting(this.$toast);
           this.loading = true;
 
           const chainId = cosmosConfig[this.chainId].chainId;
@@ -164,7 +162,7 @@ export default {
             ],
             gas: "200000",
           };
-          var returnWaiting = notifWaiting(this.$toast);
+          //var returnWaiting = notifWaiting(this.$toast);
 
           try {
             const result = await client.delegateTokens(

@@ -277,17 +277,6 @@ export default {
     loadingInput: false,
     cosmosConfig: cosmosConfig,
   }),
-  watch: {
-    dialog(value) {
-      if (value) {
-        this.step1 = true;
-        this.step2 = false;
-        this.step3 = false;
-        this.step4 = false;
-        this.amount = "";
-      }
-    },
-  },
   computed: {
     ...mapState("keplr", [`accounts`]),
     ...mapState("data", ["chainId", `balances`]),
@@ -297,6 +286,17 @@ export default {
       if (this.amountTotalUn !== "0") isDeleg = true;
 
       return isDeleg;
+    },
+  },
+  watch: {
+    dialog(value) {
+      if (value) {
+        this.step1 = true;
+        this.step2 = false;
+        this.step3 = false;
+        this.step4 = false;
+        this.amount = "";
+      }
     },
   },
   methods: {

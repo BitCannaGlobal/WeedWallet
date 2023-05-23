@@ -42,7 +42,7 @@
                       <v-btn icon>
                         <v-icon>mdi-vote-outline</v-icon>
                       </v-btn>
-                      <v-card-title v-text="card.title" />
+                      <v-card-title>{{ card.title }}</v-card-title>
                     </v-card>
                   </v-item>
                 </v-col>
@@ -67,17 +67,24 @@
   </v-row>
 </template>
 <script>
-import { mapState } from "vuex";
-import axios from "axios";
 import { coins } from "@cosmjs/launchpad";
 import { SigningStargateClient } from "@cosmjs/stargate";
-import { Registry, DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
+import { Registry } from "@cosmjs/proto-signing";
 import pkg from "protobufjs";
 const { Type, Field } = pkg;
 import cosmosConfig from "~/cosmos.config";
 
-export default {
-  props: ["addressAdmin", "propId"],
+export default { 
+  props: {
+    addressAdmin: {
+      type: String,
+      default: "",
+    },
+    propId: {
+      type: Number,
+      default: 0,
+    }  
+  },  
   data() {
     return {
       dialog: false,
@@ -88,22 +95,18 @@ export default {
       cards: [
         {
           title: "Yes",
-          src: "https://cdn.vuetifyjs.com/images/cards/house.jpg",
           flex: 5,
         },
         {
           title: "No",
-          src: "https://cdn.vuetifyjs.com/images/cards/road.jpg",
           flex: 5,
         },
         {
           title: "NoWithVeto",
-          src: "https://cdn.vuetifyjs.com/images/cards/plane.jpg",
           flex: 5,
         },
         {
           title: "Abstain",
-          src: "https://cdn.vuetifyjs.com/images/cards/plane.jpg",
           flex: 5,
         },
       ],

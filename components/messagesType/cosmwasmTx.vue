@@ -72,38 +72,24 @@
 </template>
 <script>
 import { mapState } from "vuex";
-import axios from "axios";
-import { coins } from "@cosmjs/launchpad";
-import { SigningStargateClient, AminoTypes } from "@cosmjs/stargate";
-import { Registry, DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
-import {
-  cosmWasmTypes,
-  MsgExecuteContractEncodeObject,
-} from "@cosmjs/cosmwasm-stargate";
 import { toUtf8 } from "@cosmjs/encoding";
-
-// const tx_4 = require("cosmjs-types/cosmwasm/wasm/v1/tx");
 import {
-  MsgExecuteContract,
-  MsgStoreCode,
+  MsgExecuteContract
 } from "cosmjs-types/cosmwasm/wasm/v1/tx";
-
-import {
-  cosmos,
-  cosmosProtoRegistry,
-  cosmosAminoConverters,
-} from "interchain46";
 import VueJsonPretty from "vue-json-pretty";
 import "vue-json-pretty/lib/styles.css";
-import pkg from "protobufjs";
-const { Type, Field } = pkg;
 import cosmosConfig from "~/cosmos.config";
 
 export default {
   components: {
     VueJsonPretty,
   },
-  props: ["from"],
+  props: {
+    from: {
+      type: String,
+      required: true,
+    },
+  },
   data(props) {
     return {
       dialog: false,
@@ -118,11 +104,14 @@ export default {
       cosmosConfig: cosmosConfig,
     };
   },
+  computed: {
+    ...mapState("data", [`allValidators`]),
+  },
   watch: {
-    from(newData, oldData) {
+    from(newData) {
       this.selectPolicy = newData;
     },
-    viewJson(newData, oldData) {
+    viewJson() {
       const executeContractMsg = {
         typeUrl: "/cosmwasm.wasm.v1.MsgExecuteContract",
         value: MsgExecuteContract.fromPartial({
@@ -140,12 +129,6 @@ export default {
 
       this.jsonData = executeContractMsg;
     },
-  },
-  computed: {
-    ...mapState("data", [`allValidators`]),
-  },
-  async mounted() {
-    // console.log(tx_4)
   },
   methods: {
     async checkMsg() {
