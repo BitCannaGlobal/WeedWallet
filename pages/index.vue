@@ -261,7 +261,7 @@
       cols="12"
     >
       <v-col class="ml-6 mb-6 text-h6 text-md-h5 text-lg-h4">
-        atmon3r's portfolio
+        {{ accounts[0].walletName }}'s portfolio
       </v-col>
 
       <sequential-entrance>
