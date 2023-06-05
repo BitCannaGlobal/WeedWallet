@@ -270,7 +270,7 @@
                   v-model="orderVal"
                   color="#00b786"
                   :label="`View ${getStatus.toString()}`"
-                ></v-switch>
+                />
 
                 <!-- <v-btn-toggle
                   v-model="getStatus"

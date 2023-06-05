@@ -38,96 +38,44 @@
               </v-card-actions>        
             </v-card>
           </sequential-entrance>
-          <sequential-entrance from-left>
-            <v-row>
-              <v-col
-                cols="12"
-                md="6"
-              >
-                <v-item>
-                  <v-card
-                    class="pa-2 mb-4" 
-                    dark
-                    height="200"
-                    href="https://app.osmosis.zone/pool/571"
-                    target="_blank"
-                  >
-                    <v-card-title>osmosis.zone</v-card-title>
-                    <div class="parent"> 
-                      <div class="child child2">
-                        <v-img
-                          height="90"
-                          width="90"
-                          class="ml-8"
-                          src="https://app.osmosis.zone/tokens/bcna.svg"
-                        />
-                      </div>  
-                      <div class="child">
-                        <v-img
-                          height="90"
-                          width="90"
-                          class="ml-8"        
-                          src="https://app.osmosis.zone/tokens/atom.svg"
-                        /> 
-                      </div>
-                    </div>
-                    <v-card-actions class="pt-0">
-                      <v-spacer />
-                      <v-btn
-                        text
-                        color="teal accent-4" 
-                      >
-                        Buy on pool 571
-                      </v-btn>
-                    </v-card-actions>  
-                  </v-card>
-                </v-item>
-              </v-col>
-              <v-col
-                cols="12"
-                md="6"
-              >
-                <v-item>
-                  <v-card
-                    class="pa-2 mb-4" 
-                    dark
-                    height="200"
-                    href="https://app.osmosis.zone/pool/572"
-                    target="_blank"
-                  >
-                    <v-card-title>osmosis.zone</v-card-title>
-                    <div class="parent"> 
-                      <div class="child child2">
-                        <v-img
-                          height="90"
-                          width="90"
-                          class="ml-8"
-                          src="https://app.osmosis.zone/tokens/bcna.svg"
-                        />
-                      </div>  
-                      <div class="child">
-                        <v-img
-                          height="90"
-                          width="90"
-                          class="ml-8"        
-                          src="https://app.osmosis.zone/tokens/osmo.svg"
-                        /> 
-                      </div>
-                    </div>
-                    <v-card-actions class="pt-0">
-                      <v-spacer />
-                      <v-btn
-                        text
-                        color="teal accent-4" 
-                      >
-                        Buy on pool 572
-                      </v-btn>
-                    </v-card-actions>  
-                  </v-card>
-                </v-item>
-              </v-col>
-            </v-row>
+          <sequential-entrance>
+            <v-card          
+              dark 
+              class="pa-2 mb-4" 
+              href="https://app.osmosis.zone/?from=USDC&to=BCNA"
+              target="_blank"
+            >
+              <v-card-title>osmosis.zone</v-card-title>   
+              <div class="parent"> 
+                <div class="child child2">
+                  <v-img
+                    height="90"
+                    width="90"
+                    class="ml-8"
+                    src="https://app.osmosis.zone/tokens/bcna.svg"
+                  />
+                </div>  
+                <div class="child">
+                  <v-img
+                    height="90"
+                    width="90"
+                    class="ml-8"        
+                    src="https://app.osmosis.zone/tokens/usdc.svg"
+                  /> 
+                </div>
+              </div>
+              <v-card-actions class="pt-0">
+                <v-spacer />
+                <v-btn
+                  text
+                  color="teal accent-4" 
+                >
+                  Buy on osmosis
+                </v-btn>
+              </v-card-actions>        
+            </v-card>
           </sequential-entrance>
+ 
           <sequential-entrance>
             <v-card          
               dark 
