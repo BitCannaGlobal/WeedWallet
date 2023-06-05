@@ -329,7 +329,7 @@
                           >
                         </v-avatar>
                         <br><br>
-                        <span class="mt-2"> atmon3r's portfolio</span> <br>
+                        <span class="mt-2"> {{ accounts[0].walletName }}'s portfolio</span> <br>
                         <span class="text-caption">
                           {{ accounts[0]?.address }}
                         </span>
@@ -415,14 +415,19 @@
                   </v-col>
                   <v-col class="mt-2 text-right">
                     <span class="text-h6 text-md-h5 text-lg-h4">
-                      <v-btn
+                      <!-- <v-btn
                         large
                         min-width="200"
                         class="mt-2 white--text"
                         color="#0FB786"
                       >
                         Stake
-                      </v-btn>
+                      </v-btn> -->
+                      <DelegateHomeModal
+                        v-if="logged"
+                        :chain-id-props="cosmosConfig[chainId].coinLookup.addressPrefix"
+                        :balances="balances"
+                      />                      
                     </span>
                   </v-col>
                 </v-row>
@@ -455,13 +460,19 @@
                   </v-col>
                   <v-col class="mt-2 text-right">
                     <span class="text-h6 text-md-h5 text-lg-h4">
-                      <v-btn
+                      <!--                       <v-btn
                         large
                         min-width="200"
                         class="mt-2 white--text"
                       >
                         Claim
-                      </v-btn>
+                      </v-btn> -->
+                      <ClaimAllModal
+                        v-if="rewards.amount > 0"
+                        :amount-claim-all="(rewards.amount / 1000000).toFixed(6)"
+                        :get-all-delegation="delegations"
+                        :home-page="true"
+                      />                      
                     </span>
                   </v-col>
                 </v-row>
