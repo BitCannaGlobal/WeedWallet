@@ -381,6 +381,31 @@
                     <template
                       v-if="
                         item.messageInfo.type ===
+                          '/cosmos.gov.v1beta1.MsgSubmitProposal'
+                      "
+                    >
+                      <v-simple-table class="accent">
+                        <template #default>
+                          <thead>
+                            <tr>
+                              <th class="text-left">
+                                Proposal Id
+                              </th> 
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td>
+                                {{ item.messageInfo.msgData.proposal_id }}
+                              </td> 
+                            </tr>
+                          </tbody>
+                        </template>
+                      </v-simple-table>
+                    </template>                    
+                    <template
+                      v-if="
+                        item.messageInfo.type ===
                           '/cosmos.staking.v1beta1.MsgBeginRedelegate'
                       "
                     >
