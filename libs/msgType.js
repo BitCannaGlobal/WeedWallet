@@ -72,6 +72,12 @@ export function setMsg(msg, addrGet, timestamp, allVal) {
         proposal_id: msg.proposal_id,
         option: msg.option
       }      */
+      break;      
+    case "/cosmos.gov.v1beta1.MsgSubmitProposal":
+      type = msg["@type"];
+      typeReadable = "Submit Proposal";
+      color = "#00b786";
+      icon = "Unknown.svg"; 
       break;
     case "/cosmos.gov.v1beta1.MsgVote":
       type = msg["@type"];
