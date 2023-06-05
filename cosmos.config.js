@@ -18,6 +18,7 @@ export default [
     sg721: 'stars1w4dff5myjyzymk8tkpjrzj6gnv352hcdpt2dszweqnff927a9xmqc7e0gv'
   },*/
   {
+    website: "https://wallet-testnet.bitcanna.io",
     chainId: "bitcanna-dev-1",
     name: "Bitcanna-testnet-1",
     desc: "Bitcanna-testnet",

@@ -171,7 +171,7 @@
             align="center"
             justify="center"
           >
-            <img src="https://weedwallet-6.bitcanna.io/accepted.png">
+            <img :src="cosmosConfig[0].website + '/accepted.png'">
           </v-col>
         </v-row>
       </v-card-text>
