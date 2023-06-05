@@ -15,7 +15,7 @@
       >
         <v-icon class="mr-2">
           mdi-cube-send
-        </v-icon> Delegate token
+        </v-icon> Delegate BitCanna
       </v-btn>
     </template>
     <v-card class="accent">
@@ -174,7 +174,7 @@
             align="center"
             justify="center"
           >
-            <img src="https://weedwallet-6.bitcanna.io/accepted.png">
+            <img src="accepted.png">
           </v-col>
         </v-row>
       </v-card-text>
@@ -284,10 +284,12 @@ export default {
         this.step3 = false;
         this.step4 = false;
         this.amountFinal = "";
+        this.addressTo = ''
       }
     },
   },
   async mounted() {
+    
     await this.$store.dispatch("data/getAllValidator");
     const selectValidatorList = [];
     this.allValidators.forEach((item) => {
@@ -433,7 +435,7 @@ export default {
             this.eError = false;
             this.loading = false;
             this.step3 = false;
-            this.step2 = true;
+            //this.step2 = true;
           } finally {
             await new Promise((resolve) => setTimeout(resolve, 4000));
             this.dialog = false;
