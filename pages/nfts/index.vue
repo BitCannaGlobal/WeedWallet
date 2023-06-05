@@ -22,10 +22,17 @@
                   </h4>
                 </v-card-title>
                 <v-card-text class="text-right text-h5">
+                  <div v-if="collectionDataLoaded">
                   {{
                     collectionData.data?.collection.floorPrice / 1000000
-                  }}
-                  STARS
+                  }}      
+                  STARS            
+                  </div> 
+                  <v-progress-circular
+                    v-else
+                    indeterminate
+                    color="#00b786"
+                  ></v-progress-circular>                 
                 </v-card-text>
               </v-card>
             </v-col>
@@ -38,10 +45,17 @@
                   </h4>
                 </v-card-title>
                 <v-card-text class="text-right text-h5">
+                  <div v-if="collectionDataLoaded">
                   {{
                     collectionData.data?.collection.stats.bestOffer / 1000000
-                  }}
-                  STARS
+                  }}      
+                  STARS            
+                  </div> 
+                  <v-progress-circular
+                    v-else
+                    indeterminate
+                    color="#00b786"
+                  ></v-progress-circular>                  
                 </v-card-text>
               </v-card>
             </v-col>
@@ -54,7 +68,14 @@
                   </h4>
                 </v-card-title>
                 <v-card-text class="text-right text-h5">
-                  {{ collectionData.data?.collection.numTokensAlive }} Buddhead
+                  <div v-if="collectionDataLoaded">
+                    {{ collectionData.data?.collection.numTokensAlive }} Buddhead
+                  </div>
+                  <v-progress-circular
+                    v-else
+                    indeterminate
+                    color="#00b786"
+                  ></v-progress-circular>                   
                 </v-card-text>
               </v-card>
             </v-col>
@@ -67,10 +88,17 @@
                   </h4>
                 </v-card-title>
                 <v-card-text class="text-right text-h5">
+                  <div v-if="collectionDataLoaded">
                   {{
                     collectionData.data?.collection.numTokensForSale
                   }}
                   Buddhead
+                  </div>
+                  <v-progress-circular
+                    v-else
+                    indeterminate
+                    color="#00b786"
+                  ></v-progress-circular>                   
                 </v-card-text>
               </v-card>
             </v-col>
@@ -87,6 +115,7 @@
         <v-col />
       </v-row>
     </sequential-entrance>
+
     <sequential-entrance>
       <!--<h1>Buddhead collection</h1>-->
       <div
@@ -94,6 +123,14 @@
         :key="index.id"
         class="mt-4 mr-4 card"
       >
+    <v-skeleton-loader
+      v-if="loading"
+      :loading="loading"
+      class="mx-auto"
+      max-width="300"
+      height="500"
+      type="image"
+    ></v-skeleton-loader>
         <!-- Image à la une -->
         <div class="card-image">
           <img :src="index.url">
@@ -139,6 +176,8 @@ export default {
     collectionUrl:
       "https://app.stargaze.zone/launchpad/stars1cpzvvmlrc9lcw3q5yrznax0uk5h6xww2d4ch9xve4xu8mfvgw2kqepnwd2",
     collectionData: "",
+    collectionDataLoaded: false,
+    loading: true,
   }),
   computed: {
     ...mapState("keplr", [`accounts`, "logged"]),
@@ -179,6 +218,7 @@ export default {
         }
       });
     }
+    this.loading = false;
 
     let finalData = [];
     await axios
@@ -201,6 +241,8 @@ export default {
         //         });
       });
     this.collectionData = finalData;
+    this.collectionDataLoaded = true;
+    
   },
   updated() {
     this.watchWindowSize();
@@ -282,4 +324,5 @@ export default {
   padding: 15px 20px;
   box-sizing: border-box;
 }
+.v-skeleton-loader__image.v-skeleton-loader__bone { height: 100%; }
 </style>
