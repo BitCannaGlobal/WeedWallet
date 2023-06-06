@@ -88,11 +88,25 @@
                   :rules="addressToRules"
                   item-text="name"
                   item-value="address"
-                  :items="validatorList"
+                  :items="validatorListSearch"
                   label="Redelegate to"
                   dense
                   outlined
-                />
+                >
+                  <template #prepend-item>
+                    <v-list-item>
+                      <v-list-item-content>
+                        <v-text-field
+                          v-model="searchTerm"
+                          outlined
+                          placeholder="Search validator"
+                          @input="searchVal"
+                        />
+                      </v-list-item-content>
+                    </v-list-item>
+                    <v-divider class="mt-2" />
+                  </template>                
+                </v-select>
                 <v-text-field
                   v-model="memo"
                   label="Memo"
@@ -188,7 +202,7 @@
             align="center"
             justify="center"
           >
-            <img src="https://weedwallet-6.bitcanna.io/accepted.png">
+            <img :src="cosmosConfig[0].website + '/accepted.png'">
           </v-col>
         </v-row>
       </v-card-text>
@@ -283,6 +297,8 @@ export default {
     loadingInput: false,
     cosmosConfig: cosmosConfig,
     validatorList: [],
+    validatorListSearch: [],
+    searchTerm: "",
   }),
   computed: {
     ...mapState("keplr", [`accounts`]),
@@ -291,7 +307,7 @@ export default {
       let isDeleg = false;
       if (this.amountRe !== 0) isDeleg = true;
       return isDeleg;
-    },
+    },  
   },
   watch: {
     dialog(value) {
@@ -317,6 +333,7 @@ export default {
       }
     });
     this.validatorList = selectValidatorList;
+    this.validatorListSearch = this.validatorList;
   },
   methods: {
     getMax() {
@@ -328,6 +345,17 @@ export default {
     getQuarter() {
       this.amount = (this.amountRe / 4).toFixed(6);
     },
+    searchVal() {
+      if (!this.searchTerm) {
+        this.validatorListSearch = this.validatorList;
+      }
+      this.validatorListSearch = this.validatorList.filter((fruit) => {
+        console.log(fruit.name);
+        console.log(this.searchTerm);
+        
+        return fruit.name.toLowerCase().indexOf(this.searchTerm.toLowerCase()) > -1;
+      });
+    }, 
     async validate() {
       if (this.$refs.form.validate() === true) {
         this.step1 = false;

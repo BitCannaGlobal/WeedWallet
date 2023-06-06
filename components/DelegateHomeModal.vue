@@ -80,11 +80,25 @@
                   :rules="addressToRules"
                   item-text="name"
                   item-value="address"
-                  :items="validatorList"
+                  :items="validatorListSearch"
                   label="Delegate to"
                   dense
                   outlined
-                />
+                >
+                  <template #prepend-item>
+                    <v-list-item>
+                      <v-list-item-content>
+                        <v-text-field
+                          v-model="searchTerm"
+                          outlined
+                          placeholder="Search validator"
+                          @input="searchVal"
+                        />
+                      </v-list-item-content>
+                    </v-list-item>
+                    <v-divider class="mt-2" />
+                  </template> 
+                </v-select>
                 <v-text-field
                   v-model="memo"
                   label="Memo"
@@ -273,10 +287,12 @@ export default {
     loading: false,
     cosmosConfig: cosmosConfig,
     validatorList: [],
+    validatorListSearch: [],
+    searchTerm: "",    
   }),
   computed: {
     ...mapState("keplr", [`accounts`]),
-    ...mapState("data", ["chainId", "allValidators"]),
+    ...mapState("data", ["chainId", "allValidators"]),   
   },
   watch: {
     dialog(value) {
@@ -301,6 +317,7 @@ export default {
       });
     });
     this.validatorList = selectValidatorList;
+    this.validatorListSearch = this.validatorList;
   },  
   methods: {
     getMax() {
@@ -312,6 +329,17 @@ export default {
     getQuarter() {
       this.amountFinal = (this.amount / 4).toFixed(6);
     },
+    searchVal() {
+      if (!this.searchTerm) {
+        this.validatorListSearch = this.validatorList;
+      }
+      this.validatorListSearch = this.validatorList.filter((fruit) => {
+        console.log(fruit.name);
+        console.log(this.searchTerm);
+        
+        return fruit.name.toLowerCase().indexOf(this.searchTerm.toLowerCase()) > -1;
+      });
+    },       
     async validate() {
       if (this.$refs.form.validate() === true) {
         this.step1 = false;
