@@ -23,16 +23,16 @@
                 </v-card-title>
                 <v-card-text class="text-right text-h5">
                   <div v-if="collectionDataLoaded">
-                  {{
-                    collectionData.data?.collection.floorPrice / 1000000
-                  }}      
-                  STARS            
+                    {{
+                      collectionData.data?.collection.floorPrice / 1000000
+                    }}      
+                    STARS            
                   </div> 
                   <v-progress-circular
                     v-else
                     indeterminate
                     color="#00b786"
-                  ></v-progress-circular>                 
+                  />                 
                 </v-card-text>
               </v-card>
             </v-col>
@@ -46,16 +46,16 @@
                 </v-card-title>
                 <v-card-text class="text-right text-h5">
                   <div v-if="collectionDataLoaded">
-                  {{
-                    collectionData.data?.collection.stats.bestOffer / 1000000
-                  }}      
-                  STARS            
+                    {{
+                      collectionData.data?.collection.stats.bestOffer / 1000000
+                    }}      
+                    STARS            
                   </div> 
                   <v-progress-circular
                     v-else
                     indeterminate
                     color="#00b786"
-                  ></v-progress-circular>                  
+                  />                  
                 </v-card-text>
               </v-card>
             </v-col>
@@ -75,7 +75,7 @@
                     v-else
                     indeterminate
                     color="#00b786"
-                  ></v-progress-circular>                   
+                  />                   
                 </v-card-text>
               </v-card>
             </v-col>
@@ -89,16 +89,16 @@
                 </v-card-title>
                 <v-card-text class="text-right text-h5">
                   <div v-if="collectionDataLoaded">
-                  {{
-                    collectionData.data?.collection.numTokensForSale
-                  }}
-                  Buddhead
+                    {{
+                      collectionData.data?.collection.numTokensForSale
+                    }}
+                    Buddhead
                   </div>
                   <v-progress-circular
                     v-else
                     indeterminate
                     color="#00b786"
-                  ></v-progress-circular>                   
+                  />                   
                 </v-card-text>
               </v-card>
             </v-col>
@@ -123,14 +123,14 @@
         :key="index.id"
         class="mt-4 mr-4 card"
       >
-    <v-skeleton-loader
-      v-if="loading"
-      :loading="loading"
-      class="mx-auto"
-      max-width="300"
-      height="500"
-      type="image"
-    ></v-skeleton-loader>
+        <v-skeleton-loader
+          v-if="loading"
+          :loading="loading"
+          class="mx-auto"
+          max-width="300"
+          height="500"
+          type="image"
+        />
         <!-- Image à la une -->
         <div class="card-image">
           <img :src="index.url">

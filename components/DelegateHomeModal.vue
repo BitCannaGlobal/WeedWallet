@@ -65,6 +65,7 @@
                     Max
                   </v-chip>
                 </v-col>
+                <span class="text-left">Available: {{ amount }} BCNA</span>
                 <v-text-field
                   v-model="amountFinal"
                   label="Amount to delegate*"
@@ -72,6 +73,7 @@
                   required
                   outlined
                   dense
+                  class="mt-4"
                 />
                 <v-select
                   v-model="addressTo"

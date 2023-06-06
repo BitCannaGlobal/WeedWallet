@@ -62,8 +62,9 @@
                   </v-chip>
                   <v-chip @click="getMax">
                     Max
-                  </v-chip>
+                  </v-chip>                  
                 </v-col>
+                <span class="text-left">Available: {{ amount }} BCNA</span>
                 <v-text-field
                   v-model="amountFinal"
                   label="Amount to delegate*"
@@ -71,6 +72,7 @@
                   required
                   outlined
                   dense
+                  class="mt-4"
                 />
                 <!-- <v-text-field
                   v-model="addressVal"

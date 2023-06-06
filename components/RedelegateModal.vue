@@ -63,7 +63,7 @@
                     Max
                   </v-chip>
                 </v-col>
-
+                <span class="text-left">Available: {{ amountRe }} BCNA</span>
                 <v-text-field
                   v-model="amount"
                   outlined
@@ -71,6 +71,7 @@
                   :rules="!loadingInput ? amountRules : ''"
                   type="text"
                   dense
+                  class="mt-4"
                 >
                   <template #append>
                     <img
@@ -319,13 +320,13 @@ export default {
   },
   methods: {
     getMax() {
-      this.amount = this.amountRe;
+      this.amount = (this.amountRe).toFixed(6);
     },
     getHalf() {
-      this.amount = this.amountRe / 2;
+      this.amount = (this.amountRe / 2).toFixed(6);
     },
     getQuarter() {
-      this.amount = this.amountRe / 4;
+      this.amount = (this.amountRe / 4).toFixed(6);
     },
     async validate() {
       if (this.$refs.form.validate() === true) {
