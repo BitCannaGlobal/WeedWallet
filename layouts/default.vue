@@ -344,7 +344,7 @@ export default {
       await this.$store.dispatch("data/getAllBalances");
     }, 5000);
 
-    let checkAllowed = cosmosConfig[0].addressAllowedProp.find(
+    const checkAllowed = cosmosConfig[0].addressAllowedProp.find(
       (element) => element === this.accounts[0].address
     );
     if (typeof checkAllowed !== "undefined") {

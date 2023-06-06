@@ -343,7 +343,7 @@ export default {
     },
   },
   beforeMount() {
-    let checkAllowed = cosmosConfig[0].addressAllowedProp.find(
+    const checkAllowed = cosmosConfig[0].addressAllowedProp.find(
       (element) => element === this.accounts[0].address
     );
     if (typeof checkAllowed === "undefined") {
