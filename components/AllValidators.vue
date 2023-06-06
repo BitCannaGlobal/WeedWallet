@@ -14,7 +14,8 @@
             class="accent"
             :headers="headers"
             :items="finalValidators"
-            :items-per-page="100"
+            :items-per-page="150"
+            hide-default-footer
           >
             <template #top />
             <template #item.status="{ item }">
