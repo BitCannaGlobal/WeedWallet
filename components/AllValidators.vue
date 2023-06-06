@@ -48,9 +48,15 @@
                 </v-icon> {{ item.name }}
               </router-link>
             </template>
+            <template #item.crate="{ item }">
+              <span>{{item.crate}}%</span>
+            </template>  
+            <template #item.votingPower="{ item }">
+              <span>{{item.votingPower}}%</span>
+            </template>
+                    
             <template #item.uptime="{ item }">
-              <span v-if="item.status === 'BOND_STATUS_BONDED'">100%</span>
-              <span v-else>0%</span>
+              <span>{{item.uptime}}%</span>
             </template>
           </v-data-table>
         </div>

@@ -586,15 +586,19 @@ export const actions = {
     });
     await Promise.all(
       allValidators.data.validators.map(async (item) => {
+        let upTime = 0;
+        if (item.status === 'BOND_STATUS_BONDED') {
+          upTime = 100;
+        }
         copieValidators.push({
           name: item.description.moniker,
           op_address: item.operator_address,
           crate:
-            (Number(item.commission.commission_rates.rate) * 100).toFixed(2) +
-            " %",
+            (Number(item.commission.commission_rates.rate) * 100).toFixed(2),
           website: item.description.website,
-          votingPower: ((item.tokens / totalBonded2) * 100).toFixed(2) + " %",
+          votingPower: ((item.tokens / totalBonded2) * 100).toFixed(2),
           status: item.status,
+          uptime: upTime,
         });
       })
     );
