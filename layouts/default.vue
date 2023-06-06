@@ -50,7 +50,7 @@
           link
           :to="url"
           class="tile white--text"
-        >
+        > 
           <v-list-item-content>
             <v-list-item-title class="white--text">
               {{
@@ -64,6 +64,22 @@
             </v-icon>
           </v-list-item-icon>
         </v-list-item>
+        <v-list-item
+          link
+          to="/create-proposal"
+          class="tile white--text"
+        > 
+          <v-list-item-content v-if="canCreateProposal">
+            <v-list-item-title class="white--text">
+              Create proposal
+            </v-list-item-title>
+          </v-list-item-content>
+          <v-list-item-icon v-if="canCreateProposal">
+            <v-icon color="#00b786">
+              mdi-chevron-right
+            </v-icon>
+          </v-list-item-icon>
+        </v-list-item>        
       </v-list>
  
       <v-footer
@@ -255,9 +271,10 @@ export default {
       // ['mdi-account-multiple', 'Groups manager', '/groups'],
       ["mdi-chevron-right", "Transactions", "/transactions"],
       ["mdi-chevron-right", "My NFT's", "/nfts"],
-      ["mdi-chevron-right", "Create proposal", "/create-proposal"],
+      //["mdi-chevron-right", "Create proposal", "/create-proposal"],
       ["mdi-download", "Get bcna", "/get-bcna"],
     ],
+    canCreateProposal: false,
   }),
   computed: {
     ...mapState("keplr", [
@@ -326,6 +343,13 @@ export default {
       await this.$store.dispatch("data/getApr");
       await this.$store.dispatch("data/getAllBalances");
     }, 5000);
+
+    let checkAllowed = cosmosConfig[0].addressAllowedProp.find(
+      (element) => element === this.accounts[0].address
+    );
+    if (typeof checkAllowed !== "undefined") {
+      this.canCreateProposal = true;
+    }   
 
     window.addEventListener("keplr_keystorechange", async () => {
       const payload = { key1: cosmosConfig[0], key2: 0 };

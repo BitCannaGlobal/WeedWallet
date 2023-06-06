@@ -342,9 +342,19 @@ export default {
       console.log(newdata);
     },
   },
+  beforeMount() {
+    let checkAllowed = cosmosConfig[0].addressAllowedProp.find(
+      (element) => element === this.accounts[0].address
+    );
+    if (typeof checkAllowed === "undefined") {
+      this.$router.push({ path: "/" });
+    }
+  },
   async mounted() {
     this.isSend = false;
     this.proposer = this.accounts[0].address;
+
+
   },
   methods: {
     add() {
