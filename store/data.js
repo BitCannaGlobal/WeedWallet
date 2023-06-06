@@ -458,7 +458,9 @@ export const actions = {
     const allVal = await axios(
       cosmosConfig[state.chainId].apiURL + "/cosmos/staking/v1beta1/validators"
     );
-    commit("setAllValidators", allVal.data.validators);
+    
+    var randomizeEntries = allVal.data.validators.sort(() => Math.random() - 0.5) 
+    commit("setAllValidators", randomizeEntries);
     commit("setValidatorsLoaded", true);
   },
 
