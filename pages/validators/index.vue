@@ -429,11 +429,11 @@ export default {
 };
 </script>
 <style>
-.v-dialog {
+/* .v-dialog {
   position: absolute;
   bottom: 0;
   right: 0;
-}
+} */
 
 .icon {
   display: inline-flex;
