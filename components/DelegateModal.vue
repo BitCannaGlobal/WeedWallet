@@ -64,7 +64,7 @@
                     Max
                   </v-chip>                  
                 </v-col>
-                <span class="text-left">Available: {{ amount }} BCNA</span>
+                <span class="text-left">Available: {{ balances / 1000000 }} BCNA</span>
                 <v-text-field
                   v-model="amountFinal"
                   label="Amount to delegate*"
@@ -231,7 +231,6 @@ export default {
     "chainIdProps",
     "addressTo",
     "validatorName",
-    "balances",
     "chainName",
   ],
   data: (instance) => ({
@@ -254,7 +253,6 @@ export default {
           'valoper"',
       // v => bech32Validation(v) || 'Bad address (not bech32) ' + bech32Validation(v),
     ],
-    amount: instance.balances / 1000000,
     amountFinal: "",
     amountRules: [
       (v) => !!v || "Amount is required",
@@ -273,7 +271,7 @@ export default {
   }),
   computed: {
     ...mapState("keplr", [`accounts`]),
-    ...mapState("data", ["chainId"]),
+    ...mapState("data", ["chainId", 'balances']),
   },
   watch: {
     dialog(value) {
@@ -288,13 +286,13 @@ export default {
   },
   methods: {
     getMax() {
-      this.amountFinal = this.amount;
+      this.amountFinal = (this.balances / 1000000);
     },
     getHalf() {
-      this.amountFinal = (this.amount / 2).toFixed(6);
+      this.amountFinal = ((this.balances / 1000000) / 2).toFixed(6);
     },
     getQuarter() {
-      this.amountFinal = (this.amount / 4).toFixed(6);
+      this.amountFinal = ((this.balances / 1000000) / 4).toFixed(6);
     },
     async validate() {
       if (this.$refs.form.validate() === true) {
@@ -313,7 +311,7 @@ export default {
           (element) => element[0] === "/cosmos.staking.v1beta1.MsgDelegate"
         );
 
-        const convertAmount = Math.round(this.amount * 1000000);
+        const convertAmount = Math.round(this.balances * 1000000);
         const amount = {
           denom: cosmosConfig[this.chainId].coinLookup.chainDenom,
           amount: convertAmount.toString(),
@@ -346,7 +344,7 @@ export default {
           this.balances / 1000000
         ) {
           this.amountFinal = (
-            Number(this.amount) -
+            Number(this.balances) -
             usedFee.amount[0].amount / 1000000
           ).toFixed(6);
           this.feeDeducted = true;

@@ -88,6 +88,7 @@
         fixed
       >
         <v-btn
+          v-if="logged"
           class="mb-6"
           block
           @click="logoutNow"
@@ -246,7 +247,7 @@
   </v-app>
 </template>
 
-<script>
+<script> 
 import { mapState } from "vuex";
 import cosmosConfig from "~/cosmos.config";
 import pjson from "~/package";
@@ -304,10 +305,13 @@ export default {
       await this.$store.dispatch("data/changeLayout", finalView);
     },
   },
-  async mounted() {
+  async beforeMount() {
     await this.$store.dispatch("keplr/checkLogin");
-
-    if (this.logged) {
+  },
+  async mounted() {
+    
+    console.log(this.logged)
+    if (this.logged === true) {
       await this.$store.dispatch("data/getPriceNow");
       await this.$store.dispatch(
         "data/getWalletInfo",
@@ -321,37 +325,37 @@ export default {
       await this.$store.dispatch("data/getAllValidators");
       await this.$store.dispatch("data/getApr");
       await this.$store.dispatch("data/getAllBalances");
+
+
+      this.$store.dispatch("data/getBlockNow");
+      this.$store.dispatch("data/getSdkVersion");
+      setInterval(async () => {
+        this.$store.dispatch("data/getBlockNow");
+        await this.$store.dispatch("data/getPriceNow");
+        await this.$store.dispatch(
+          "data/getWalletInfo",
+          this.accounts[0].address
+        );
+        await this.$store.dispatch(
+          "data/getDelegations",
+          this.accounts[0].address
+        );
+        await this.$store.dispatch("data/getAllTxs", this.accounts[0].address);
+        await this.$store.dispatch("data/getAllValidators");
+        await this.$store.dispatch("data/getApr");
+        await this.$store.dispatch("data/getAllBalances");
+      }, 5000);
+
+      const checkAllowed = cosmosConfig[0].addressAllowedProp.find(
+        (element) => element === this.accounts[0].address
+      );
+      if (typeof checkAllowed !== "undefined") {
+        this.canCreateProposal = true;
+      }   
     } else {
       //this.$router.push({path: "/login"})
       //return
     }
-
-    this.$store.dispatch("data/getBlockNow");
-    this.$store.dispatch("data/getSdkVersion");
-    setInterval(async () => {
-      this.$store.dispatch("data/getBlockNow");
-      await this.$store.dispatch("data/getPriceNow");
-      await this.$store.dispatch(
-        "data/getWalletInfo",
-        this.accounts[0].address
-      );
-      await this.$store.dispatch(
-        "data/getDelegations",
-        this.accounts[0].address
-      );
-      await this.$store.dispatch("data/getAllTxs", this.accounts[0].address);
-      await this.$store.dispatch("data/getAllValidators");
-      await this.$store.dispatch("data/getApr");
-      await this.$store.dispatch("data/getAllBalances");
-    }, 5000);
-
-    const checkAllowed = cosmosConfig[0].addressAllowedProp.find(
-      (element) => element === this.accounts[0].address
-    );
-    if (typeof checkAllowed !== "undefined") {
-      this.canCreateProposal = true;
-    }   
-
     window.addEventListener("keplr_keystorechange", async () => {
       const payload = { key1: cosmosConfig[0], key2: 0 };
       await this.$store.dispatch("keplr/connectWallet", payload);

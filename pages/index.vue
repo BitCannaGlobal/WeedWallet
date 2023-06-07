@@ -347,8 +347,9 @@
             <template v-for="group in groupedEvents()">
               <div>
                 <h3>{{ group[0].section }}</h3>
+                
                 <v-card
-                  v-for="item in group" 
+                  v-for="item in group"  
                   class="ma-2 pa-4 accent"
                   width="700"
                   min-height="50"
@@ -510,9 +511,7 @@
             <v-chip
               color="#00b786"
               outlined
-              label
-              v-bind="attrs"
-              v-on="on"
+              label 
               @click="copyAddr(accounts[0].address)"
             >
               {{ accounts[0]?.address }}
