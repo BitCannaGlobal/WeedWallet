@@ -239,8 +239,8 @@
                       v-for="item in myDelegatorData.delegationsRpc"
                       :key="item.hashDecoded"
                     >
-                      <td>{{ item.height }}</td>
-                      <td>{{ truncate(item.hashDecoded) }}</td>
+                      <td><a :href="'https://explorer.bitcanna.io/blocks/' + item.height" target="_blank">{{ item.height }}</a></td>
+                      <td><a :href="'https://explorer.bitcanna.io/transactions/' + item.hashDecoded" target="_blank">{{ truncate(item.hashDecoded) }}</a></td>
                       <td class="green--text">
                         {{ item.amount / 1000000 }}
                         {{ cosmosConfig[chainId].coinLookup.viewDenom }}
@@ -284,8 +284,8 @@
                       v-for="item in myDelegatorData.unDelegateRpc"
                       :key="item.hashDecoded"
                     >
-                      <td>{{ item.height }}</td>
-                      <td>{{ truncate(item.hashDecoded) }}</td>
+                      <td><a :href="'https://explorer.bitcanna.io/blocks/' + item.height" target="_blank">{{ item.height }}</a></td>
+                      <td><a :href="'https://explorer.bitcanna.io/transactions/' + item.hashDecoded" target="_blank">{{ truncate(item.hashDecoded) }}</a></td>
                       <td class="red--text">
                         {{ item.amount / 1000000 }}
                         {{ cosmosConfig[chainId].coinLookup.viewDenom }}
