@@ -339,21 +339,19 @@ export default {
   watch: {
     // whenever question changes, this function will run
     propType(newdata) {
-      console.log(newdata);
+      // console.log(newdata);
     },
   },
-  beforeMount() {
+  async mounted() {
+    await this.$store.dispatch("keplr/checkLogin");
+    this.isSend = false;
+    this.proposer = this.accounts[0].address;
     const checkAllowed = cosmosConfig[0].addressAllowedProp.find(
       (element) => element === this.accounts[0].address
     );
     if (typeof checkAllowed === "undefined") {
       this.$router.push({ path: "/" });
     }
-  },
-  async mounted() {
-    this.isSend = false;
-    this.proposer = this.accounts[0].address;
-
 
   },
   methods: {
