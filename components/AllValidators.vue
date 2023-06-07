@@ -49,14 +49,14 @@
               </router-link>
             </template>
             <template #item.crate="{ item }">
-              <span>{{item.crate}}%</span>
+              <span>{{ item.crate }}%</span>
             </template>  
             <template #item.votingPower="{ item }">
-              <span>{{item.votingPower}}%</span>
+              <span>{{ item.votingPower }}%</span>
             </template>
                     
             <template #item.uptime="{ item }">
-              <span>{{item.uptime}}%</span>
+              <span>{{ item.uptime }}%</span>
             </template>
           </v-data-table>
         </div>

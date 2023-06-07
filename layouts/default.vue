@@ -65,16 +65,17 @@
           </v-list-item-icon>
         </v-list-item>
         <v-list-item
+          v-if="canCreateProposal"
           link
           to="/create-proposal"
           class="tile white--text"
         > 
-          <v-list-item-content v-if="canCreateProposal">
+          <v-list-item-content>
             <v-list-item-title class="white--text">
               Create proposal
             </v-list-item-title>
           </v-list-item-content>
-          <v-list-item-icon v-if="canCreateProposal">
+          <v-list-item-icon>
             <v-icon color="#00b786">
               mdi-chevron-right
             </v-icon>
