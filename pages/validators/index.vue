@@ -216,7 +216,7 @@
           justify="space-around"
           class="mt-4 data-row"
         >
-          <v-col>
+          <v-col v-if="allUnbonding.length > 0">
             <v-card class="accent">
               <v-card-title class="headline">
                 <v-icon class="mr-2">
@@ -234,7 +234,7 @@
             </v-card>
           </v-col>
 
-          <v-col>
+          <v-col v-if="allRedelegate.length > 0">
             <v-card class="accent">
               <v-card-title class="headline">
                 <v-icon class="mr-2">

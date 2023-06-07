@@ -336,12 +336,6 @@ export default {
     ]),
     ...mapState("data", ["chainId"]),
   },
-  watch: {
-    // whenever question changes, this function will run
-    propType(newdata) {
-      // console.log(newdata);
-    },
-  },
   async mounted() {
     await this.$store.dispatch("keplr/checkLogin");
     this.isSend = false;
