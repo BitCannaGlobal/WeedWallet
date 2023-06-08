@@ -304,14 +304,20 @@ export default {
         const offlineSigner = await window.getOfflineSignerAuto(chainId);
         const client = await SigningStargateClient.connectWithSigner(
           cosmosConfig[this.chainId].rpcURL,
-          offlineSigner
+          offlineSigner,
+            {
+              gasPrice: GasPrice.fromString(
+                cosmosConfig[this.chainId].gasPrice +
+                  cosmosConfig[this.chainId].coinLookup.chainDenom
+              ),
+            }          
         );
 
         const foundMsgType = defaultRegistryTypes.find(
           (element) => element[0] === "/cosmos.staking.v1beta1.MsgDelegate"
         );
 
-        const convertAmount = Math.round(this.balances * 1000000);
+        const convertAmount = Math.round(this.amountFinal);
         const amount = {
           denom: cosmosConfig[this.chainId].coinLookup.chainDenom,
           amount: convertAmount.toString(),
@@ -336,15 +342,13 @@ export default {
               cosmosConfig[this.chainId].coinLookup.chainDenom
           )
         );
-
-        // console.log((usedFee.amount[0].amount / 1000000) + Number(this.amountFinal))
         // Recalculate fee if amount is too high
         if (
           usedFee.amount[0].amount / 1000000 + Number(this.amountFinal) >
           this.balances / 1000000
         ) {
           this.amountFinal = (
-            Number(this.balances) -
+            Number(this.balances / 1000000) -
             usedFee.amount[0].amount / 1000000
           ).toFixed(6);
           this.feeDeducted = true;
