@@ -30,7 +30,7 @@
                   :key="item.timestamp"
                   style="background: #090909; color: white"
                 >
-                  <v-expansion-panel-header v-slot="{ open }">
+                  <v-expansion-panel-header>
                     <v-row no-gutters>
                       <v-col cols="1">
                         <v-avatar class="mr-2">
@@ -51,19 +51,7 @@
                         class="text--secondary"
                       >
                         <v-fade-transition leave-absolute>
-                          <span v-if="open">
-                            <v-chip
-                              class="mt-3"
-                              :color="item.messageInfo.color"
-                              outlined
-                              label
-                              small
-                            >
-                              {{ item.messageInfo.typeReadable }}
-                            </v-chip>
-                          </span>
-                          <v-row
-                            v-else
+                          <v-row 
                             no-gutters
                             style="width: 100%"
                           >
@@ -129,7 +117,9 @@
                                   :href="'https://explorer.bitcanna.io/transactions/' + item.txhash"
                                   target="_blank"
                                   small
-                                >View in explorer</v-btn>                        
+                                >
+                                  View in explorer
+                                </v-btn>                        
                               </td>
                             </tr>
                           </tbody>
@@ -184,7 +174,9 @@
                                   :href="'https://explorer.bitcanna.io/transactions/' + item.txhash"
                                   target="_blank"
                                   small
-                                >View in explorer</v-btn>                        
+                                >
+                                  View in explorer
+                                </v-btn>                        
                               </td>
                             </tr>
                           </tbody>
@@ -231,7 +223,9 @@
                                   :href="'https://explorer.bitcanna.io/transactions/' + item.txhash"
                                   target="_blank"
                                   small
-                                >View in explorer</v-btn>                        
+                                >
+                                  View in explorer
+                                </v-btn>                        
                               </td>
                             </tr>
                           </tbody>
@@ -324,7 +318,9 @@
                                   :href="'https://explorer.bitcanna.io/transactions/' + item.txhash"
                                   target="_blank"
                                   small
-                                >View in explorer</v-btn>                        
+                                >
+                                  View in explorer
+                                </v-btn>                        
                               </td>
                             </tr>
                           </tbody>
@@ -369,7 +365,9 @@
                                   :href="'https://explorer.bitcanna.io/transactions/' + item.txhash"
                                   target="_blank"
                                   small
-                                >View in explorer</v-btn>                        
+                                >
+                                  View in explorer
+                                </v-btn>                        
                               </td>
                             </tr>
                           </tbody>
@@ -414,7 +412,9 @@
                                   :href="'https://explorer.bitcanna.io/transactions/' + item.txhash"
                                   target="_blank"
                                   small
-                                >View in explorer</v-btn>                        
+                                >
+                                  View in explorer
+                                </v-btn>                        
                               </td>
                             </tr>
                           </tbody>
@@ -462,7 +462,9 @@
                                   :href="'https://explorer.bitcanna.io/transactions/' + item.txhash"
                                   target="_blank"
                                   small
-                                >View in explorer</v-btn>                        
+                                >
+                                  View in explorer
+                                </v-btn>                        
                               </td>
                             </tr>
                           </tbody>
@@ -500,7 +502,9 @@
                                   :href="'https://explorer.bitcanna.io/transactions/' + item.txhash"
                                   target="_blank"
                                   small
-                                >View in explorer</v-btn>                        
+                                >
+                                  View in explorer
+                                </v-btn>                        
                               </td>
                             </tr>
                           </tbody>
@@ -532,8 +536,6 @@
                             </tr>
                           </thead>
                           <tbody>
-
-                            
                             <tr>
                               <td>
                                 <v-icon class="mr-2">
@@ -559,7 +561,9 @@
                                   :href="'https://explorer.bitcanna.io/transactions/' + item.txhash"
                                   target="_blank"
                                   small
-                                >View in explorer</v-btn>                        
+                                >
+                                  View in explorer
+                                </v-btn>                        
                               </td>
                             </tr>
                           </tbody>
