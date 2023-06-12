@@ -152,7 +152,8 @@
               </h4>
             </v-card-title>
             <v-card-text class="text-right text-h5">
-              {{ myDelegatorData.myTotalUnDelegation }}
+              {{ validatorUnDelegations / 1000000 }}
+             <!--  {{ myDelegatorData.myTotalUnDelegation }} -->
               {{ cosmosConfig[chainId].coinLookup.viewDenom }}
             </v-card-text>
           </v-card>
@@ -354,6 +355,7 @@ export default {
       "totalDelegated",
       "validatorDetails",
       "validatorDelegations",
+      "validatorUnDelegations",
     ]),
     validatorApr() {
       const rewardFactor =
@@ -402,6 +404,11 @@ export default {
         validatorAddr: this.validatorAddr,
         delegatorAddr: this.accounts[0].address,
       });
+      await this.$store.dispatch("data/getValidatorUnDelegations", {
+        validatorAddr: this.validatorAddr,
+        delegatorAddr: this.accounts[0].address,
+      });      
+      
     }
   },
   methods: {

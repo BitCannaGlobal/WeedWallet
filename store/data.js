@@ -35,6 +35,7 @@ export const state = () => ({
   totalWallet: "",
   totalWalletPrice: "",
   validatorDelegations: "",
+  validatorUnDelegations: "",
   paramsDeposit: "",
   paramsVoting: "",
   totalBonded: "",
@@ -637,10 +638,31 @@ export const actions = {
       .catch((error) => {
         console.log(error);
       });
-
-    /* const validatorDelegation = await axios(cosmosConfig[state.chainId].apiURL + '/cosmos/staking/v1beta1/validators/' + data.validatorAddr + '/delegations/' + data.delegatorAddr)
-    console.log(validatorDelegation.data.delegation_response.balance.amount) */
   },
+  async getValidatorUnDelegations({ commit, state }, data) {
+    await axios(
+      cosmosConfig[state.chainId].apiURL +
+        "/cosmos/staking/v1beta1/validators/" +
+        data.validatorAddr +
+        "/delegations/" +
+        data.delegatorAddr + '/unbonding_delegation'
+    )
+      .then((res) => {
+        let sumUndelegate = 0;
+        for (let i = 0; i < res.data.unbond.entries.length; i++) {
+          console.log(res.data.unbond.entries[i].initial_balance)
+          sumUndelegate += Number(res.data.unbond.entries[i].initial_balance);
+        }
+        commit(
+          "setValidatorUnDelegations",
+          sumUndelegate
+        );
+        return res.data;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  },  
   changeChaniId({ commit }, chainId) {
     commit("setChainId", chainId);
   },
