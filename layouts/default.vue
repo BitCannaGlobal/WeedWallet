@@ -370,7 +370,7 @@ export default {
       //await this.$store.dispatch('data/getbitcannaId', this.accounts[0].address)
       this.address = this.accounts[0].address;
       await this.$store.dispatch("data/refresh", this.accounts[0].address);
-
+      await this.$store.dispatch("data/initRpc");
       // this.$router.push({path: "/"})
     },
     logoutNow() {
