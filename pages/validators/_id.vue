@@ -34,13 +34,12 @@
             elevation="2"
             color="#00b786"
           >Delegate</v-btn>-->
-          <div class="mt-2">
+          <div class="mt-2"> 
             <DelegateModal
               v-if="logged"
               :chain-id-props="cosmosConfig[chainId].coinLookup.addressPrefix"
               :address-to="validatorAddr"
-              :validator-name="validatorDetails.description?.moniker"
-              :balances="balances"
+              :validator-name="validatorDetails.description?.moniker" 
             />
             <UndelegateSingleModal
               v-if="logged"
@@ -153,7 +152,8 @@
               </h4>
             </v-card-title>
             <v-card-text class="text-right text-h5">
-              {{ myDelegatorData.myTotalUnDelegation }}
+              {{ validatorUnDelegations / 1000000 }}
+             <!--  {{ myDelegatorData.myTotalUnDelegation }} -->
               {{ cosmosConfig[chainId].coinLookup.viewDenom }}
             </v-card-text>
           </v-card>
@@ -239,8 +239,18 @@
                       v-for="item in myDelegatorData.delegationsRpc"
                       :key="item.hashDecoded"
                     >
-                      <td>{{ item.height }}</td>
-                      <td>{{ truncate(item.hashDecoded) }}</td>
+                      <td>
+                        <a
+                          :href="'https://explorer.bitcanna.io/blocks/' + item.height"
+                          target="_blank"
+                        >{{ item.height }}</a>
+                      </td>
+                      <td>
+                        <a
+                          :href="'https://explorer.bitcanna.io/transactions/' + item.hashDecoded"
+                          target="_blank"
+                        >{{ truncate(item.hashDecoded) }}</a>
+                      </td>
                       <td class="green--text">
                         {{ item.amount / 1000000 }}
                         {{ cosmosConfig[chainId].coinLookup.viewDenom }}
@@ -284,8 +294,18 @@
                       v-for="item in myDelegatorData.unDelegateRpc"
                       :key="item.hashDecoded"
                     >
-                      <td>{{ item.height }}</td>
-                      <td>{{ truncate(item.hashDecoded) }}</td>
+                      <td>
+                        <a
+                          :href="'https://explorer.bitcanna.io/blocks/' + item.height"
+                          target="_blank"
+                        >{{ item.height }}</a>
+                      </td>
+                      <td>
+                        <a
+                          :href="'https://explorer.bitcanna.io/transactions/' + item.hashDecoded"
+                          target="_blank"
+                        >{{ truncate(item.hashDecoded) }}</a>
+                      </td>
                       <td class="red--text">
                         {{ item.amount / 1000000 }}
                         {{ cosmosConfig[chainId].coinLookup.viewDenom }}
@@ -335,6 +355,7 @@ export default {
       "totalDelegated",
       "validatorDetails",
       "validatorDelegations",
+      "validatorUnDelegations",
     ]),
     validatorApr() {
       const rewardFactor =
@@ -350,6 +371,7 @@ export default {
   watch: {},
 
   async beforeMount() {
+
     // TODO refactoring all data in vueX
     this.validatorAddr = this.$route.params.id;
     await this.$store.dispatch("data/getValidatorDetails", this.validatorAddr);
@@ -368,8 +390,10 @@ export default {
     );
     this.totalProps = totalProp.data.pagination.total;
     this.totalVoted = totalVoted.data.total;
+
   },
   async mounted() {
+    await this.$store.dispatch("keplr/checkLogin");
     if (this.logged) {
       await this.$store.dispatch("data/initRpc");
       await this.$store.dispatch("data/getDelegatorDataRpc", {
@@ -380,6 +404,11 @@ export default {
         validatorAddr: this.validatorAddr,
         delegatorAddr: this.accounts[0].address,
       });
+      await this.$store.dispatch("data/getValidatorUnDelegations", {
+        validatorAddr: this.validatorAddr,
+        delegatorAddr: this.accounts[0].address,
+      });      
+      
     }
   },
   methods: {

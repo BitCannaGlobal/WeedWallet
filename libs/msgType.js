@@ -68,11 +68,9 @@ export function setMsg(msg, addrGet, timestamp, allVal) {
       typeReadable = "Submit proposal";
       color = "#8555de";
       icon = "Unknown.svg";
-      /* msgData = {
-        proposal_id: msg.proposal_id,
-        option: msg.option
-      }      */
-      console.log(msg);
+      msgData = {
+        proposal_id: msg.proposal_id 
+      }
       break;
     case "/cosmos.gov.v1beta1.MsgVote":
       type = msg["@type"];
@@ -112,6 +110,24 @@ export function setMsg(msg, addrGet, timestamp, allVal) {
         amount: msg.amount.amount / 1000000,
       };
       break;
+    case "/cosmos.slashing.v1beta1.MsgUnjail":
+        type = msg["@type"];
+        typeReadable = "Unjail";
+        color = "#00b786";
+        icon = "Unknown.svg";
+      break;      
+    case "/cosmos.staking.v1beta1.MsgCreateValidator":
+        type = msg["@type"];
+        typeReadable = "Create Validator";
+        color = "#00b786";
+        icon = "Unknown.svg";
+      break;  
+    case "/cosmos.staking.v1beta1.MsgEditValidator":
+        type = msg["@type"];
+        typeReadable = "Edit Validator";
+        color = "#00b786";
+        icon = "Unknown.svg";
+      break;              
     case "/ibc.applications.transfer.v1.MsgTransfer":
       typeReadable = "IBC";
       color = "#00b786";

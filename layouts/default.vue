@@ -50,7 +50,7 @@
           link
           :to="url"
           class="tile white--text"
-        >
+        > 
           <v-list-item-content>
             <v-list-item-title class="white--text">
               {{
@@ -64,6 +64,23 @@
             </v-icon>
           </v-list-item-icon>
         </v-list-item>
+        <v-list-item
+          v-if="canCreateProposal"
+          link
+          to="/create-proposal"
+          class="tile white--text"
+        > 
+          <v-list-item-content>
+            <v-list-item-title class="white--text">
+              Create proposal
+            </v-list-item-title>
+          </v-list-item-content>
+          <v-list-item-icon>
+            <v-icon color="#00b786">
+              mdi-chevron-right
+            </v-icon>
+          </v-list-item-icon>
+        </v-list-item>        
       </v-list>
  
       <v-footer
@@ -71,6 +88,7 @@
         fixed
       >
         <v-btn
+          v-if="logged"
           class="mb-6"
           block
           @click="logoutNow"
@@ -229,7 +247,7 @@
   </v-app>
 </template>
 
-<script>
+<script> 
 import { mapState } from "vuex";
 import cosmosConfig from "~/cosmos.config";
 import pjson from "~/package";
@@ -255,9 +273,10 @@ export default {
       // ['mdi-account-multiple', 'Groups manager', '/groups'],
       ["mdi-chevron-right", "Transactions", "/transactions"],
       ["mdi-chevron-right", "My NFT's", "/nfts"],
-      ["mdi-chevron-right", "Create proposal", "/create-proposal"],
+      //["mdi-chevron-right", "Create proposal", "/create-proposal"],
       ["mdi-download", "Get bcna", "/get-bcna"],
     ],
+    canCreateProposal: false,
   }),
   computed: {
     ...mapState("keplr", [
@@ -286,10 +305,13 @@ export default {
       await this.$store.dispatch("data/changeLayout", finalView);
     },
   },
-  async mounted() {
+  async beforeMount() {
     await this.$store.dispatch("keplr/checkLogin");
-
-    if (this.logged) {
+  },
+  async mounted() {
+    
+    console.log(this.logged)
+    if (this.logged === true) {
       await this.$store.dispatch("data/getPriceNow");
       await this.$store.dispatch(
         "data/getWalletInfo",
@@ -303,30 +325,37 @@ export default {
       await this.$store.dispatch("data/getAllValidators");
       await this.$store.dispatch("data/getApr");
       await this.$store.dispatch("data/getAllBalances");
+
+
+      this.$store.dispatch("data/getBlockNow");
+      this.$store.dispatch("data/getSdkVersion");
+      setInterval(async () => {
+        this.$store.dispatch("data/getBlockNow");
+        await this.$store.dispatch("data/getPriceNow");
+        await this.$store.dispatch(
+          "data/getWalletInfo",
+          this.accounts[0].address
+        );
+        await this.$store.dispatch(
+          "data/getDelegations",
+          this.accounts[0].address
+        );
+        await this.$store.dispatch("data/getAllTxs", this.accounts[0].address);
+        await this.$store.dispatch("data/getAllValidators");
+        await this.$store.dispatch("data/getApr");
+        await this.$store.dispatch("data/getAllBalances");
+      }, 5000);
+
+      const checkAllowed = cosmosConfig[0].addressAllowedProp.find(
+        (element) => element === this.accounts[0].address
+      );
+      if (typeof checkAllowed !== "undefined") {
+        this.canCreateProposal = true;
+      }   
     } else {
       //this.$router.push({path: "/login"})
       //return
     }
-
-    this.$store.dispatch("data/getBlockNow");
-    this.$store.dispatch("data/getSdkVersion");
-    setInterval(async () => {
-      this.$store.dispatch("data/getBlockNow");
-      await this.$store.dispatch("data/getPriceNow");
-      await this.$store.dispatch(
-        "data/getWalletInfo",
-        this.accounts[0].address
-      );
-      await this.$store.dispatch(
-        "data/getDelegations",
-        this.accounts[0].address
-      );
-      await this.$store.dispatch("data/getAllTxs", this.accounts[0].address);
-      await this.$store.dispatch("data/getAllValidators");
-      await this.$store.dispatch("data/getApr");
-      await this.$store.dispatch("data/getAllBalances");
-    }, 5000);
-
     window.addEventListener("keplr_keystorechange", async () => {
       const payload = { key1: cosmosConfig[0], key2: 0 };
       await this.$store.dispatch("keplr/connectWallet", payload);
@@ -341,7 +370,7 @@ export default {
       //await this.$store.dispatch('data/getbitcannaId', this.accounts[0].address)
       this.address = this.accounts[0].address;
       await this.$store.dispatch("data/refresh", this.accounts[0].address);
-
+      await this.$store.dispatch("data/initRpc");
       // this.$router.push({path: "/"})
     },
     logoutNow() {

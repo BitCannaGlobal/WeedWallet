@@ -30,7 +30,7 @@
                   :key="item.timestamp"
                   style="background: #090909; color: white"
                 >
-                  <v-expansion-panel-header v-slot="{ open }">
+                  <v-expansion-panel-header>
                     <v-row no-gutters>
                       <v-col cols="1">
                         <v-avatar class="mr-2">
@@ -51,19 +51,7 @@
                         class="text--secondary"
                       >
                         <v-fade-transition leave-absolute>
-                          <span v-if="open">
-                            <v-chip
-                              class="mt-3"
-                              :color="item.messageInfo.color"
-                              outlined
-                              label
-                              small
-                            >
-                              {{ item.messageInfo.typeReadable }}
-                            </v-chip>
-                          </span>
-                          <v-row
-                            v-else
+                          <v-row 
                             no-gutters
                             style="width: 100%"
                           >
@@ -108,6 +96,9 @@
                               <th class="text-left">
                                 Amount
                               </th>
+                              <th class="text-left">
+                                View
+                              </th>
                             </tr>
                           </thead>
                           <tbody>
@@ -117,6 +108,18 @@
                               <td class="green--text">
                                 {{ item.messageInfo.msgData.amount }}
                                 {{ cosmosConfig[0].coinLookup.viewDenom }}
+                              </td>
+                              <td>
+                                <v-btn
+                                  class=" mr-2"
+                                  elevation="2"
+                                  color="#00b786"
+                                  :href="'https://explorer.bitcanna.io/transactions/' + item.txhash"
+                                  target="_blank"
+                                  small
+                                >
+                                  View in explorer
+                                </v-btn>                        
                               </td>
                             </tr>
                           </tbody>
@@ -143,6 +146,9 @@
                               <th class="text-left">
                                 Amount
                               </th>
+                              <th class="text-left">
+                                View
+                              </th>
                             </tr>
                           </thead>
                           <tbody>
@@ -159,6 +165,18 @@
                               <td class="green--text">
                                 {{ item.messageInfo.msgData.amount }}
                                 {{ cosmosConfig[0].coinLookup.viewDenom }}
+                              </td>
+                              <td>
+                                <v-btn
+                                  class=" mr-2"
+                                  elevation="2"
+                                  color="#00b786"
+                                  :href="'https://explorer.bitcanna.io/transactions/' + item.txhash"
+                                  target="_blank"
+                                  small
+                                >
+                                  View in explorer
+                                </v-btn>                        
                               </td>
                             </tr>
                           </tbody>
@@ -181,6 +199,9 @@
                               <th class="text-left">
                                 To delegator
                               </th>
+                              <th class="text-left">
+                                View
+                              </th>
                             </tr>
                           </thead>
                           <tbody>
@@ -193,6 +214,18 @@
                               </td>
                               <td>
                                 {{ item.messageInfo.msgData.delegator_address }}
+                              </td>
+                              <td>
+                                <v-btn
+                                  class=" mr-2"
+                                  elevation="2"
+                                  color="#00b786"
+                                  :href="'https://explorer.bitcanna.io/transactions/' + item.txhash"
+                                  target="_blank"
+                                  small
+                                >
+                                  View in explorer
+                                </v-btn>                        
                               </td>
                             </tr>
                           </tbody>
@@ -216,6 +249,9 @@
                               </th>
                               <th class="text-left">
                                 metadata
+                              </th>
+                              <th class="text-left">
+                                View
                               </th>
                             </tr>
                           </thead>
@@ -274,6 +310,18 @@
                                   NO WITH VETO
                                 </v-chip>
                               </td>
+                              <td>
+                                <v-btn
+                                  class=" mr-2"
+                                  elevation="2"
+                                  color="#00b786"
+                                  :href="'https://explorer.bitcanna.io/transactions/' + item.txhash"
+                                  target="_blank"
+                                  small
+                                >
+                                  View in explorer
+                                </v-btn>                        
+                              </td>
                             </tr>
                           </tbody>
                         </template>
@@ -297,6 +345,9 @@
                               <th class="text-left">
                                 metadata
                               </th>
+                              <th class="text-left">
+                                View
+                              </th>
                             </tr>
                           </thead>
                           <tbody>
@@ -306,6 +357,18 @@
                               </td>
                               <td>{{ item.messageInfo.msgData.option }}</td>
                               <td>{{ item.messageInfo.msgData.metadata }}</td>
+                              <td>
+                                <v-btn
+                                  class=" mr-2"
+                                  elevation="2"
+                                  color="#00b786"
+                                  :href="'https://explorer.bitcanna.io/transactions/' + item.txhash"
+                                  target="_blank"
+                                  small
+                                >
+                                  View in explorer
+                                </v-btn>                        
+                              </td>
                             </tr>
                           </tbody>
                         </template>
@@ -327,6 +390,9 @@
                               <th class="text-left">
                                 Deposit Amount
                               </th>
+                              <th class="text-left">
+                                View
+                              </th>
                             </tr>
                           </thead>
                           <tbody>
@@ -337,6 +403,18 @@
                               <td>
                                 {{ item.messageInfo.msgData.amount }}
                                 {{ cosmosConfig[0].coinLookup.viewDenom }}
+                              </td>
+                              <td>
+                                <v-btn
+                                  class=" mr-2"
+                                  elevation="2"
+                                  color="#00b786"
+                                  :href="'https://explorer.bitcanna.io/transactions/' + item.txhash"
+                                  target="_blank"
+                                  small
+                                >
+                                  View in explorer
+                                </v-btn>                        
                               </td>
                             </tr>
                           </tbody>
@@ -359,6 +437,9 @@
                               <th class="text-left">
                                 Amount
                               </th>
+                              <th class="text-left">
+                                View
+                              </th>
                             </tr>
                           </thead>
                           <tbody>
@@ -373,11 +454,63 @@
                                 {{ item.messageInfo.msgData.amount }}
                                 {{ cosmosConfig[0].coinLookup.viewDenom }}
                               </td>
+                              <td>
+                                <v-btn
+                                  class=" mr-2"
+                                  elevation="2"
+                                  color="#00b786"
+                                  :href="'https://explorer.bitcanna.io/transactions/' + item.txhash"
+                                  target="_blank"
+                                  small
+                                >
+                                  View in explorer
+                                </v-btn>                        
+                              </td>
                             </tr>
                           </tbody>
                         </template>
                       </v-simple-table>
                     </template>
+                    <template
+                      v-if="
+                        item.messageInfo.type ===
+                          '/cosmos.gov.v1beta1.MsgSubmitProposal'
+                      "
+                    >
+                      <v-simple-table class="accent">
+                        <template #default>
+                          <thead>
+                            <tr>
+                              <th class="text-left">
+                                Proposal Id
+                              </th> 
+                              <th class="text-left">
+                                View
+                              </th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td>
+                                {{ item.messageInfo.msgData.proposal_id }}
+                              </td> 
+                              <td>
+                                <v-btn
+                                  class=" mr-2"
+                                  elevation="2"
+                                  color="#00b786"
+                                  :href="'https://explorer.bitcanna.io/transactions/' + item.txhash"
+                                  target="_blank"
+                                  small
+                                >
+                                  View in explorer
+                                </v-btn>                        
+                              </td>
+                            </tr>
+                          </tbody>
+                        </template>
+                      </v-simple-table>
+                    </template>                    
                     <template
                       v-if="
                         item.messageInfo.type ===
@@ -397,6 +530,9 @@
                               <th class="text-left">
                                 Amount
                               </th>
+                              <th class="text-left">
+                                View
+                              </th> 
                             </tr>
                           </thead>
                           <tbody>
@@ -416,6 +552,18 @@
                               <td>
                                 {{ item.messageInfo.msgData.amount }}
                                 {{ cosmosConfig[0].coinLookup.viewDenom }}
+                              </td>
+                              <td>
+                                <v-btn
+                                  class=" mr-2"
+                                  elevation="2"
+                                  color="#00b786"
+                                  :href="'https://explorer.bitcanna.io/transactions/' + item.txhash"
+                                  target="_blank"
+                                  small
+                                >
+                                  View in explorer
+                                </v-btn>                        
                               </td>
                             </tr>
                           </tbody>

@@ -64,7 +64,7 @@
                     Max
                   </v-chip>
                 </v-col>
-
+                <span class="text-left">Available: {{ amountUn }} BCNA</span>
                 <v-text-field
                   v-model="amount"
                   outlined
@@ -72,6 +72,7 @@
                   :rules="!loadingInput ? amountRules : ''"
                   type="text"
                   dense
+                  class="mt-4"
                 >
                   <template #append>
                     <img

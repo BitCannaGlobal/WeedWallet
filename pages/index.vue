@@ -261,7 +261,7 @@
       cols="12"
     >
       <v-col class="ml-6 mb-6 text-h6 text-md-h5 text-lg-h4">
-        atmon3r's portfolio
+        {{ accounts[0].walletName }}'s portfolio
       </v-col>
 
       <sequential-entrance>
@@ -304,6 +304,7 @@
                           block
                           class="mt-2 green--text"
                           color="white"
+                          @click.stop="dialog = true"
                         >
                           Receive
                         </v-btn>
@@ -329,7 +330,7 @@
                           >
                         </v-avatar>
                         <br><br>
-                        <span class="mt-2"> atmon3r's portfolio</span> <br>
+                        <span class="mt-2"> {{ accounts[0].walletName }}'s portfolio</span> <br>
                         <span class="text-caption">
                           {{ accounts[0]?.address }}
                         </span>
@@ -346,8 +347,9 @@
             <template v-for="group in groupedEvents()">
               <div>
                 <h3>{{ group[0].section }}</h3>
+                
                 <v-card
-                  v-for="item in group" 
+                  v-for="item in group"  
                   class="ma-2 pa-4 accent"
                   width="700"
                   min-height="50"
@@ -415,14 +417,19 @@
                   </v-col>
                   <v-col class="mt-2 text-right">
                     <span class="text-h6 text-md-h5 text-lg-h4">
-                      <v-btn
+                      <!-- <v-btn
                         large
                         min-width="200"
                         class="mt-2 white--text"
                         color="#0FB786"
                       >
                         Stake
-                      </v-btn>
+                      </v-btn> -->
+                      <DelegateHomeModal
+                        v-if="logged"
+                        :chain-id-props="cosmosConfig[chainId].coinLookup.addressPrefix"
+                        :balances="balances"
+                      />                      
                     </span>
                   </v-col>
                 </v-row>
@@ -455,13 +462,19 @@
                   </v-col>
                   <v-col class="mt-2 text-right">
                     <span class="text-h6 text-md-h5 text-lg-h4">
-                      <v-btn
+                      <!--                       <v-btn
                         large
                         min-width="200"
                         class="mt-2 white--text"
                       >
                         Claim
-                      </v-btn>
+                      </v-btn> -->
+                      <ClaimAllModal
+                        v-if="rewards.amount > 0"
+                        :amount-claim-all="(rewards.amount / 1000000).toFixed(6)"
+                        :get-all-delegation="delegations"
+                        :home-page="true"
+                      />                      
                     </span>
                   </v-col>
                 </v-row>
@@ -471,6 +484,46 @@
         </v-row>
       </sequential-entrance>
     </v-col>
+
+    <v-row justify="center">
+      <v-dialog
+        id="qrcode"
+        v-model="dialog"
+        max-width="400"
+      >
+        <v-card>
+          <v-card-title class="text-h5">
+            Receive
+            <v-spacer />
+            <v-icon
+              class="mr-2"
+              @click="dialog = false"
+            >
+              mdi-close-circle
+            </v-icon>
+          </v-card-title>
+
+          <v-card-text align="center">
+            <span><qr-code
+              class="mb-2 mt-2"
+              :text="accounts[0]?.address"
+            /></span>
+            <v-chip
+              color="#00b786"
+              outlined
+              label 
+              @click="copyAddr(accounts[0].address)"
+            >
+              {{ accounts[0]?.address }}
+            </v-chip>
+            <span
+              v-if="isCopied"
+              class="ml-2"
+            >Address copied!</span>          
+          </v-card-text> 
+        </v-card>
+      </v-dialog>
+    </v-row>
   </v-row>
 </template>
 
@@ -503,6 +556,8 @@ export default {
   data: () => ({
     cosmosConfig: cosmosConfig,
     rpcAllTxs: "",
+    dialog: false,
+    isCopied: false,
   }),
   computed: {
     ...mapState("keplr", [
@@ -625,16 +680,24 @@ export default {
         second: "numeric",
         hour12: false,
       }).format(new Date(dateStr))
-    },      
+    },   
+    async copyAddr(text) {
+      await this.$copyText(text);
+      this.isCopied = true;
+      setTimeout(this.hideCopy, 4000);
+    },  
+    hideCopy() {
+      this.isCopied = false;
+    },
   }
 };
 </script>
 <style>
-.v-dialog {
+/* .v-dialog {
   position: absolute;
   bottom: 0;
   right: 0;
-}
+} */
 .icon {
   display: inline-flex;
   align-self: center;

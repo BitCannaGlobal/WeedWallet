@@ -3,8 +3,22 @@
     v-model="dialog"
     max-width="900px"
   >
-    <template #activator="{ on, attrs }">
+    <template #activator="{ on, attrs }"> 
       <v-btn
+        v-if="homePage"
+        large
+        min-width="200"
+        class="mt-2 white--text"
+        color="#0FB786"
+        v-bind="attrs"
+        v-on="on"
+      >
+        <v-icon class="mr-2">
+          mdi-download
+        </v-icon> Claim all
+      </v-btn>
+      <v-btn
+        v-else
         class="mr-4"
         color="#00b786"
         v-bind="attrs"
@@ -13,7 +27,7 @@
         <v-icon class="mr-2">
           mdi-download
         </v-icon> Claim all
-      </v-btn>
+      </v-btn>      
     </template>
     <v-card>
       <v-card-title>
@@ -219,7 +233,7 @@ import {
 } from "@cosmjs/stargate";
 
 export default {
-  props: ["chainIdProps", "amountClaimAll", "getAllDelegation"],
+  props: ["chainIdProps", "amountClaimAll", "getAllDelegation", "homePage"],
   data: () => ({
     dialog: false,
     dialogStepper: false,

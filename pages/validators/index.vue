@@ -216,7 +216,7 @@
           justify="space-around"
           class="mt-4 data-row"
         >
-          <v-col>
+          <v-col v-if="allUnbonding.length > 0">
             <v-card class="accent">
               <v-card-title class="headline">
                 <v-icon class="mr-2">
@@ -234,7 +234,7 @@
             </v-card>
           </v-col>
 
-          <v-col>
+          <v-col v-if="allRedelegate.length > 0">
             <v-card class="accent">
               <v-card-title class="headline">
                 <v-icon class="mr-2">
@@ -266,11 +266,17 @@
                 </v-icon> All validators
 
                 <v-spacer />
-                <v-btn-toggle
+                <v-switch
+                  v-model="orderVal"
+                  color="#00b786"
+                  :label="`View ${getStatus.toString()}`"
+                />
+
+                <!-- <v-btn-toggle
                   v-model="getStatus"
                   borderless
                   color="#00b786"
-                >
+                > 
                   <v-btn value="all">
                     <span class="hidden-sm-and-down">All</span>
                   </v-btn>
@@ -278,7 +284,7 @@
                   <v-btn value="active">
                     <span class="hidden-sm-and-down">Active</span>
                   </v-btn>
-                </v-btn-toggle>
+                </v-btn-toggle> -->
               </v-card-title>
               <v-card-text>
                 <AllValidators :get-status="getStatus" />
@@ -307,6 +313,9 @@ export default {
     selected: [],
     dataLoaded: false,
     getStatus: "active",
+    orderVal: true,
+    dislableBtnAll: false,
+    dislableBtnActive: true,
     headersUndbound: [
       {
         text: "From",
@@ -353,6 +362,15 @@ export default {
       "allRedelegate",
     ]),
   },
+  watch: {
+    orderVal: function (val) {  
+      if (val === true) {
+        this.getStatus = "active";
+      } else {
+        this.getStatus = "all";
+      }            
+    },
+  },  
   async mounted() {
     await this.$store.dispatch("keplr/checkLogin");
     if (!this.logged) {
@@ -411,11 +429,11 @@ export default {
 };
 </script>
 <style>
-.v-dialog {
+/* .v-dialog {
   position: absolute;
   bottom: 0;
   right: 0;
-}
+} */
 
 .icon {
   display: inline-flex;

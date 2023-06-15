@@ -35,6 +35,7 @@ export const state = () => ({
   totalWallet: "",
   totalWalletPrice: "",
   validatorDelegations: "",
+  validatorUnDelegations: "",
   paramsDeposit: "",
   paramsVoting: "",
   totalBonded: "",
@@ -458,7 +459,9 @@ export const actions = {
     const allVal = await axios(
       cosmosConfig[state.chainId].apiURL + "/cosmos/staking/v1beta1/validators"
     );
-    commit("setAllValidators", allVal.data.validators);
+    
+    var randomizeEntries = allVal.data.validators.sort(() => Math.random() - 0.5) 
+    commit("setAllValidators", randomizeEntries);
     commit("setValidatorsLoaded", true);
   },
 
@@ -584,15 +587,19 @@ export const actions = {
     });
     await Promise.all(
       allValidators.data.validators.map(async (item) => {
+        let upTime = 0;
+        if (item.status === 'BOND_STATUS_BONDED') {
+          upTime = 100;
+        }
         copieValidators.push({
           name: item.description.moniker,
           op_address: item.operator_address,
           crate:
-            (Number(item.commission.commission_rates.rate) * 100).toFixed(2) +
-            " %",
+            (Number(item.commission.commission_rates.rate) * 100).toFixed(2),
           website: item.description.website,
-          votingPower: ((item.tokens / totalBonded2) * 100).toFixed(2) + " %",
+          votingPower: ((item.tokens / totalBonded2) * 100).toFixed(2),
           status: item.status,
+          uptime: upTime,
         });
       })
     );
@@ -631,10 +638,31 @@ export const actions = {
       .catch((error) => {
         console.log(error);
       });
-
-    /* const validatorDelegation = await axios(cosmosConfig[state.chainId].apiURL + '/cosmos/staking/v1beta1/validators/' + data.validatorAddr + '/delegations/' + data.delegatorAddr)
-    console.log(validatorDelegation.data.delegation_response.balance.amount) */
   },
+  async getValidatorUnDelegations({ commit, state }, data) {
+    await axios(
+      cosmosConfig[state.chainId].apiURL +
+        "/cosmos/staking/v1beta1/validators/" +
+        data.validatorAddr +
+        "/delegations/" +
+        data.delegatorAddr + '/unbonding_delegation'
+    )
+      .then((res) => {
+        let sumUndelegate = 0;
+        for (let i = 0; i < res.data.unbond.entries.length; i++) {
+          console.log(res.data.unbond.entries[i].initial_balance)
+          sumUndelegate += Number(res.data.unbond.entries[i].initial_balance);
+        }
+        commit(
+          "setValidatorUnDelegations",
+          sumUndelegate
+        );
+        return res.data;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  },  
   changeChaniId({ commit }, chainId) {
     commit("setChainId", chainId);
   },

@@ -6,15 +6,16 @@
     <template #activator="{ on, attrs }">
       <br>
       <v-btn
-        class="ma-2"
-        dark
+        large
+        min-width="200"
+        class="mt-2 white--text"
+        color="#0FB786"
         v-bind="attrs"
-        color="#00b786"
         v-on="on"
       >
         <v-icon class="mr-2">
           mdi-cube-send
-        </v-icon> Delegate {{ chainName }}
+        </v-icon> Delegate BitCanna
       </v-btn>
     </template>
     <v-card class="accent">
@@ -22,7 +23,7 @@
         <span
           v-if="step1"
           class="text-h5"
-        >Delegate to {{ validatorName }}</span>
+        >Delegate token</span>
         <span
           v-if="step2"
           class="text-h5"
@@ -62,9 +63,9 @@
                   </v-chip>
                   <v-chip @click="getMax">
                     Max
-                  </v-chip>                  
+                  </v-chip>
                 </v-col>
-                <span class="text-left">Available: {{ balances / 1000000 }} BCNA</span>
+                <span class="text-left">Available: {{ amount }} BCNA</span>
                 <v-text-field
                   v-model="amountFinal"
                   label="Amount to delegate*"
@@ -74,14 +75,30 @@
                   dense
                   class="mt-4"
                 />
-                <!-- <v-text-field
-                  v-model="addressVal"
-                  label="Validator address*"
-                  :rules="addressRules"
-                  required
-                  outlined
+                <v-select
+                  v-model="addressTo"
+                  :rules="addressToRules"
+                  item-text="name"
+                  item-value="address"
+                  :items="validatorListSearch"
+                  label="Delegate to"
                   dense
-                ></v-text-field> -->
+                  outlined
+                >
+                  <template #prepend-item>
+                    <v-list-item>
+                      <v-list-item-content>
+                        <v-text-field
+                          v-model="searchTerm"
+                          outlined
+                          placeholder="Search validator"
+                          @input="searchVal"
+                        />
+                      </v-list-item-content>
+                    </v-list-item>
+                    <v-divider class="mt-2" />
+                  </template> 
+                </v-select>
                 <v-text-field
                   v-model="memo"
                   label="Memo"
@@ -133,7 +150,7 @@
                     </tr>
                     <tr>
                       <td>To</td>
-                      <td>{{ validatorName }}</td>
+                      <td>{{ addressTo }} <!-- {{ validatorName }} --></td>
                     </tr>
                     <tr>
                       <td>Memo</td>
@@ -173,7 +190,7 @@
             align="center"
             justify="center"
           >
-            <img :src="cosmosConfig[0].website + '/accepted.png'">
+            <img src="accepted.png">
           </v-col>
         </v-row>
       </v-card-text>
@@ -229,9 +246,7 @@ function countPlaces(num) {
 export default {
   props: [
     "chainIdProps",
-    "addressTo",
-    "validatorName",
-    "chainName",
+    "balances",
   ],
   data: (instance) => ({
     dialog: false,
@@ -242,8 +257,10 @@ export default {
     step4: false,
     feeDeducted: false,
     gasFee: {},
-    address: instance.addressFrom,
-    addressVal: instance.addressTo,
+    address: '',
+    addressVal: '',
+    addressTo: '',
+    addressToRules: [(v) => !!v || "Address to is required"],
     addressRules: [
       (v) => !!v || "Address is required",
       (v) =>
@@ -253,6 +270,7 @@ export default {
           'valoper"',
       // v => bech32Validation(v) || 'Bad address (not bech32) ' + bech32Validation(v),
     ],
+    amount: instance.balances / 1000000,
     amountFinal: "",
     amountRules: [
       (v) => !!v || "Amount is required",
@@ -268,10 +286,13 @@ export default {
     memo: "",
     loading: false,
     cosmosConfig: cosmosConfig,
+    validatorList: [],
+    validatorListSearch: [],
+    searchTerm: "",    
   }),
   computed: {
     ...mapState("keplr", [`accounts`]),
-    ...mapState("data", ["chainId", 'balances']),
+    ...mapState("data", ["chainId", "allValidators"]),   
   },
   watch: {
     dialog(value) {
@@ -281,19 +302,44 @@ export default {
         this.step3 = false;
         this.step4 = false;
         this.amountFinal = "";
+        this.addressTo = ''
       }
     },
   },
+  async mounted() {
+    
+    await this.$store.dispatch("data/getAllValidator");
+    const selectValidatorList = [];
+    this.allValidators.forEach((item) => {
+      selectValidatorList.push({
+        name: item.description.moniker,
+        address: item.operator_address,
+      });
+    });
+    this.validatorList = selectValidatorList;
+    this.validatorListSearch = this.validatorList;
+  },  
   methods: {
     getMax() {
-      this.amountFinal = (this.balances / 1000000);
+      this.amountFinal = this.amount;
     },
     getHalf() {
-      this.amountFinal = ((this.balances / 1000000) / 2).toFixed(6);
+      this.amountFinal = (this.amount / 2).toFixed(6);
     },
     getQuarter() {
-      this.amountFinal = ((this.balances / 1000000) / 4).toFixed(6);
+      this.amountFinal = (this.amount / 4).toFixed(6);
     },
+    searchVal() {
+      if (!this.searchTerm) {
+        this.validatorListSearch = this.validatorList;
+      }
+      this.validatorListSearch = this.validatorList.filter((fruit) => {
+        console.log(fruit.name);
+        console.log(this.searchTerm);
+        
+        return fruit.name.toLowerCase().indexOf(this.searchTerm.toLowerCase()) > -1;
+      });
+    },       
     async validate() {
       if (this.$refs.form.validate() === true) {
         this.step1 = false;
@@ -304,20 +350,14 @@ export default {
         const offlineSigner = await window.getOfflineSignerAuto(chainId);
         const client = await SigningStargateClient.connectWithSigner(
           cosmosConfig[this.chainId].rpcURL,
-          offlineSigner,
-            {
-              gasPrice: GasPrice.fromString(
-                cosmosConfig[this.chainId].gasPrice +
-                  cosmosConfig[this.chainId].coinLookup.chainDenom
-              ),
-            }          
+          offlineSigner
         );
 
         const foundMsgType = defaultRegistryTypes.find(
           (element) => element[0] === "/cosmos.staking.v1beta1.MsgDelegate"
         );
 
-        const convertAmount = Math.round(this.amountFinal);
+        const convertAmount = Math.round(this.amount * 1000000);
         const amount = {
           denom: cosmosConfig[this.chainId].coinLookup.chainDenom,
           amount: convertAmount.toString(),
@@ -326,7 +366,7 @@ export default {
           typeUrl: foundMsgType[0],
           value: foundMsgType[1].fromPartial({
             delegatorAddress: this.accounts[0].address,
-            validatorAddress: this.addressVal,
+            validatorAddress: this.addressTo,
             amount: amount,
           }),
         };
@@ -342,13 +382,15 @@ export default {
               cosmosConfig[this.chainId].coinLookup.chainDenom
           )
         );
+
+        // console.log((usedFee.amount[0].amount / 1000000) + Number(this.amountFinal))
         // Recalculate fee if amount is too high
         if (
           usedFee.amount[0].amount / 1000000 + Number(this.amountFinal) >
           this.balances / 1000000
         ) {
           this.amountFinal = (
-            Number(this.balances / 1000000) -
+            Number(this.amount) -
             usedFee.amount[0].amount / 1000000
           ).toFixed(6);
           this.feeDeducted = true;
@@ -395,7 +437,7 @@ export default {
           try {
             const result = await client.delegateTokens(
               accounts[0].address,
-              this.addressVal,
+              this.addressTo,
               amountFinal,
               1.3,
               this.memo
@@ -410,11 +452,11 @@ export default {
               accounts[0].address
             );
             await this.$store.dispatch("data/getDelegatorDataRpc", {
-              validator: this.addressVal,
+              validator: this.addressTo,
               delegator: accounts[0].address,
             });
             await this.$store.dispatch("data/getValidatorDelegation", {
-              validatorAddr: this.addressVal,
+              validatorAddr: this.addressTo,
               delegatorAddr: accounts[0].address,
             });
             // await this.$store.dispatch('data/refresh', accounts[0].address)
@@ -423,7 +465,7 @@ export default {
             this.eError = false;
             this.loading = false;
             this.step3 = false;
-            this.step2 = true;
+            //this.step2 = true;
           } finally {
             await new Promise((resolve) => setTimeout(resolve, 4000));
             this.dialog = false;

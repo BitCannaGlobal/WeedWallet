@@ -74,7 +74,7 @@
                     Max
                   </v-chip>
                 </v-col>
-
+                <span class="text-left">Available: {{ amountAvailable }} BCNA</span>
                 <v-text-field
                   v-model="amount"
                   outlined
@@ -82,6 +82,7 @@
                   label="Amount*"
                   :rules="amountRules"
                   type="text"
+                  class="mt-4"
                 >
                   <template #append>
                     <img
