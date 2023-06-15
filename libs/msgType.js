@@ -1,12 +1,13 @@
-export function setMsg(msg, addrGet, timestamp, allVal) {
+export function setMsg(msg, addrGet, timestamp, allVal, txHash) {
   let type = "";
   let typeReadable = "";
   let color = "";
   let icon = "";
   let foundVal = "";
   let foundVal2 = "";
+  let finalHash = "";
   let msgData = Object;
-
+  
   switch (msg["@type"]) {
     case "/cosmos.bank.v1beta1.MsgSend":
       if (msg.to_address === addrGet) {
@@ -16,6 +17,7 @@ export function setMsg(msg, addrGet, timestamp, allVal) {
 
       color = "#00b786";
       icon = "Send.svg";
+      finalHash = txHash;
       msgData = {
         from: msg.from_address,
         to: msg.to_address,
@@ -30,6 +32,7 @@ export function setMsg(msg, addrGet, timestamp, allVal) {
       typeReadable = "Delegate";
       color = "#f0a841";
       icon = "Stake.svg";
+      finalHash = txHash;
       msgData = {
         delegator_address: msg.delegator_address,
         validator_address: foundVal.name,
@@ -44,6 +47,7 @@ export function setMsg(msg, addrGet, timestamp, allVal) {
       typeReadable = "Claim reward";
       color = "#6fffa3";
       icon = "ClaimRewards.svg";
+      finalHash = txHash;
       msgData = {
         delegator_address: msg.delegator_address,
         validator_address: foundVal.name,
@@ -57,6 +61,7 @@ export function setMsg(msg, addrGet, timestamp, allVal) {
       typeReadable = "Unbound";
       color = "#f15249";
       icon = "Unstake.svg";
+      finalHash = txHash;
       msgData = {
         delegator_address: msg.delegator_address,
         validator_address: foundVal.name,
@@ -68,6 +73,7 @@ export function setMsg(msg, addrGet, timestamp, allVal) {
       typeReadable = "Submit proposal";
       color = "#8555de";
       icon = "Unknown.svg";
+      finalHash = txHash;
       msgData = {
         proposal_id: msg.proposal_id 
       }
@@ -77,6 +83,7 @@ export function setMsg(msg, addrGet, timestamp, allVal) {
       typeReadable = "Vote";
       color = "#00b786";
       icon = "Unknown.svg";
+      finalHash = txHash;
       msgData = {
         proposal_id: msg.proposal_id,
         option: msg.option,
@@ -88,6 +95,7 @@ export function setMsg(msg, addrGet, timestamp, allVal) {
       typeReadable = "Submit Deposit";
       color = "#00b786";
       icon = "Unknown.svg";
+      finalHash = txHash;
       msgData = {
         proposal_id: msg.proposal_id,
         amount: msg.amount[0].amount / 1000000,
@@ -104,6 +112,7 @@ export function setMsg(msg, addrGet, timestamp, allVal) {
       typeReadable = "Redelegate";
       color = "#00b786";
       icon = "Unknown.svg";
+      finalHash = txHash;
       msgData = {
         from: foundVal.name,
         to: foundVal2.name,
@@ -115,54 +124,64 @@ export function setMsg(msg, addrGet, timestamp, allVal) {
         typeReadable = "Unjail";
         color = "#00b786";
         icon = "Unknown.svg";
+        finalHash = txHash;
       break;      
     case "/cosmos.staking.v1beta1.MsgCreateValidator":
         type = msg["@type"];
         typeReadable = "Create Validator";
         color = "#00b786";
         icon = "Unknown.svg";
+        finalHash = txHash;
       break;  
     case "/cosmos.staking.v1beta1.MsgEditValidator":
         type = msg["@type"];
         typeReadable = "Edit Validator";
         color = "#00b786";
         icon = "Unknown.svg";
+        finalHash = txHash;
       break;              
     case "/ibc.applications.transfer.v1.MsgTransfer":
       typeReadable = "IBC";
       color = "#00b786";
       icon = "Unknown.svg";
+      finalHash = txHash;
       break;
     case "/cosmos.bank.v1beta1.MsgMultiSend":
       typeReadable = "MultiSend";
       color = "#00b786";
       icon = "Unknown.svg";
+      finalHash = txHash;
       break;
     case "/cosmos.group.v1.MsgCreateGroupWithPolicy":
       typeReadable = "Create Group With Policy";
       color = "#00b786";
       icon = "Unknown.svg";
+      finalHash = txHash;
       break;
     case "/cosmos.group.v1.MsgUpdateGroupMembers":
       typeReadable = "Update Group Members";
       color = "#00b786";
       icon = "Unknown.svg";
+      finalHash = txHash;
       break;
     case "/cosmos.group.v1.MsgCreateGroupPolicy":
       typeReadable = "Create Group Policy";
       color = "#00b786";
       icon = "Unknown.svg";
+      finalHash = txHash;
       break;
     case "/cosmos.group.v1.MsgSubmitProposal":
       typeReadable = "Submit Group Proposal";
       color = "#00b786";
       icon = "Unknown.svg";
+      finalHash = txHash;
       break;
     case "/cosmos.group.v1.MsgVote":
       type = msg["@type"];
       typeReadable = "Group Vote";
       color = "#8555de";
       icon = "Unknown.svg";
+      finalHash = txHash;
       msgData = {
         option: msg.option,
         proposal_id: msg.proposal_id,
@@ -173,10 +192,11 @@ export function setMsg(msg, addrGet, timestamp, allVal) {
       typeReadable = "Group Execute";
       color = "#00b786";
       icon = "Unknown.svg";
+      finalHash = txHash;
       break;
 
     default:
       console.log("Sorry, dont know " + msg["@type"] + ".");
-  }
-  return { type, typeReadable, color, icon, timestamp, msgData };
+  } 
+  return { type, typeReadable, color, icon, timestamp, finalHash, msgData };
 }

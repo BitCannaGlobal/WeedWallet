@@ -666,7 +666,7 @@ export default {
         };
       });
     },
-    getMessageType(msg, timestamp) {
+    getMessageType(msg, timestamp) { 
       const typeReadable = setMsg(msg, this.accounts[0].address, timestamp, this.validators);
       return typeReadable;
     },
