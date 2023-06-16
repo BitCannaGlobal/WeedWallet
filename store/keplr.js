@@ -57,11 +57,9 @@ export const actions = {
     } else {
       commit('setLogged', 'false')
     }*/
-    let getAccount = nuxtStorage.localStorage.getData("accounts");
-    console.log("check login");
+    let getAccount = nuxtStorage.localStorage.getData("accounts"); 
     // console.log(getAccount)
-    if (getAccount) {
-      console.log(getAccount);
+    if (getAccount) { 
       commit("setAccounts", getAccount);
       commit("setLogged", "true");
     } else {
@@ -85,8 +83,7 @@ export const actions = {
     }
   },
   async connectWallet({ commit }, chainId) {
-    var returnAcount = await connectKeplrSuggest(chainId.key1);
-    console.log(returnAcount);
+    var returnAcount = await connectKeplrSuggest(chainId.key1); 
     commit("setAccounts", {
       id: chainId.key1.name,
       walletName: returnAcount.getKey.name,

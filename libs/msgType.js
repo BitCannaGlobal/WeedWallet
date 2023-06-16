@@ -7,7 +7,7 @@ export function setMsg(msg, addrGet, timestamp, allVal, txHash) {
   let foundVal2 = "";
   let finalHash = "";
   let msgData = Object;
-  
+
   switch (msg["@type"]) {
     case "/cosmos.bank.v1beta1.MsgSend":
       if (msg.to_address === addrGet) {
@@ -197,6 +197,6 @@ export function setMsg(msg, addrGet, timestamp, allVal, txHash) {
 
     default:
       console.log("Sorry, dont know " + msg["@type"] + ".");
-  } 
+  }
   return { type, typeReadable, color, icon, timestamp, finalHash, msgData };
 }

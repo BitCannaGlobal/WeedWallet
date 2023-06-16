@@ -154,7 +154,7 @@
         :label="`Simple/Pro: ${switch1.toString()}`"
       ></v-switch> -->
 
-      <v-btn-toggle
+      <!-- <v-btn-toggle
         v-model="switch1"
         borderless
         color="#00b786"
@@ -166,7 +166,7 @@
         <v-btn value="false">
           <span class="hidden-sm-and-down">Simple</span>
         </v-btn>
-      </v-btn-toggle>
+      </v-btn-toggle> -->
     </v-app-bar>
     <v-main>
       <v-container
@@ -296,8 +296,7 @@ export default {
       deep: true,
       immediate: true,
     },
-    async switch1(newQuestion) {
-      console.log(newQuestion);
+    async switch1(newQuestion) { 
       let finalView = "";
       if (newQuestion === "true") {
         finalView = true;
@@ -309,8 +308,9 @@ export default {
     await this.$store.dispatch("keplr/checkLogin");
   },
   async mounted() {
-    
-    console.log(this.logged)
+     
+   
+
     if (this.logged === true) {
       await this.$store.dispatch("data/getPriceNow");
       await this.$store.dispatch(
@@ -322,7 +322,8 @@ export default {
         this.accounts[0].address
       );
       await this.$store.dispatch("data/getAllTxs", this.accounts[0].address);
-      await this.$store.dispatch("data/getAllValidators");
+      
+      // await this.$store.dispatch("data/getAllValidator");
       await this.$store.dispatch("data/getApr");
       await this.$store.dispatch("data/getAllBalances");
 

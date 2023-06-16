@@ -1,6 +1,263 @@
 <template>
   <v-row>
     <v-col
+      v-if="layout"
+      cols="12"
+    >
+      <sequential-entrance>
+        <v-row justify="space-around">
+          <v-col class="text-h6 text-md-h5 text-lg-h4">
+            Wallet Statistics
+          </v-col>
+          <v-col>
+            <SendModal
+              class="text-right"
+              :chain-id-props="cosmosConfig[chainId].coinLookup.addressPrefix"
+              :amount-available="balances / 1000000"
+              :coin-icon="cosmosConfig[chainId].coinLookup.icon"
+            />
+          </v-col>
+        </v-row>
+      </sequential-entrance>
+
+      <sequential-entrance>
+        <v-row justify="space-around">
+          <v-col>
+            <v-card class="accent">
+              <v-card-title class="headline">
+                <!--<v-icon class="mr-2">mdi-wallet-outline</v-icon> Wallet amount-->
+                <h4 class="icon">
+                  <v-img src="icon/wallet.png" />
+                  &ensp; Wallet value
+                </h4>
+              </v-card-title>
+              <v-card-text class="text-right text-h5">
+                ${{ totalWalletPrice }}
+                <v-tooltip top>
+                  <template #activator="{ on, attrs }">
+                    <v-icon
+                      class="mt-n1"
+                      color="#00b786"
+                      v-bind="attrs"
+                      v-on="on"
+                    >
+                      mdi-information-slab-circle-outline
+                    </v-icon>
+                  </template>
+                  <span>
+                    - Available<br>
+                    - Delegated<br>
+                    - Unbonding<br>
+                    - Reward<br>
+                  </span>
+                </v-tooltip>
+              </v-card-text>
+            </v-card>
+          </v-col>
+          <v-col>
+            <v-card class="accent">
+              <v-card-title class="headline">
+                <h4 class="icon">
+                  <img src="icon/tokens.png">
+                  &ensp; BCNA price
+                </h4>
+              </v-card-title>
+              <v-card-text class="text-right text-h5">
+                ${{ priceNow }}
+                <v-tooltip top>
+                  <template #activator="{ on, attrs }">
+                    <v-icon
+                      class="mt-n1"
+                      color="#00b786"
+                      v-bind="attrs"
+                      v-on="on"
+                    >
+                      mdi-information-slab-circle-outline
+                    </v-icon>
+                  </template>
+                  <span> Proudly powered by BCNAracle 💚 </span>
+                </v-tooltip>
+              </v-card-text>
+            </v-card>
+          </v-col>
+          <v-col>
+            <v-card class="accent">
+              <v-card-title class="headline">
+                <h4 class="icon">
+                  <img src="icon/apr.png">
+                  &ensp; APR
+                </h4>
+              </v-card-title>
+              <v-card-text class="text-right text-h5">
+                {{ aprNow }}%
+              </v-card-text>
+            </v-card>
+          </v-col>
+        </v-row>
+      </sequential-entrance>
+
+      <sequential-entrance from-bottom>
+        <v-row class="mt-4">
+          <v-col>
+            <v-card
+              class="accent"
+              min-height="400"
+            >
+              <v-card-title class="headline">
+                <v-icon class="mr-2">
+                  mdi-wallet-outline
+                </v-icon> Price history
+              </v-card-title>
+              <v-card-text>
+                <ChartsBar />
+              </v-card-text>
+            </v-card>
+          </v-col>
+          <v-col>
+            <v-card
+              class="accent"
+              min-height="400"
+            >
+              <v-card-title class="headline">
+                <v-icon class="mr-2">
+                  mdi-wallet-outline
+                </v-icon> Wallet
+                distribution
+              </v-card-title>
+              <v-card-text>
+                <v-row
+                  align="center"
+                  justify="center"
+                >
+                  <v-col>
+                    <ChartsDoughnut
+                      v-if="
+                        Number(balances) > 0 ||
+                          rewards.amount > 0 ||
+                          totalDelegated > 0 ||
+                          totalUnbound > 0
+                      "
+                      :amount="Number(balances)"
+                      :rewards-doughnut="rewards.amount"
+                      :total-delegated="totalDelegated"
+                      :total-unbound="totalUnbound"
+                    />
+                    <h2
+                      v-else
+                      class="mt-10 d-flex justify-center align-center fill-height"
+                    >
+                      No balance
+                    </h2>
+                  </v-col>
+                  <v-col>
+                    <v-simple-table class="accent">
+                      <tbody>
+                        <tr>
+                          <td>
+                            <v-icon
+                              color="#b3ffeb"
+                              small
+                            >
+                              mdi-circle
+                            </v-icon>
+                            Available
+                          </td>
+                          <td>
+                            {{ (balances / 1000000).toFixed(6) }}
+                            {{ cosmosConfig[chainId].coinLookup.viewDenom }}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <v-icon
+                              color="#33ffc9"
+                              small
+                            >
+                              mdi-circle
+                            </v-icon>
+                            Delegated
+                          </td>
+                          <td>
+                            {{ (totalDelegated / 1000000).toFixed(6) }}
+                            {{ cosmosConfig[chainId].coinLookup.viewDenom }}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <v-icon
+                              color="#00b383"
+                              small
+                            >
+                              mdi-circle
+                            </v-icon>
+                            Unbonding
+                          </td>
+                          <td>
+                            {{ (totalUnbound / 1000000).toFixed(6) }}
+                            {{ cosmosConfig[chainId].coinLookup.viewDenom }}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <v-icon
+                              color="#004d38"
+                              small
+                            >
+                              mdi-circle
+                            </v-icon>
+                            Staking Reward
+                          </td>
+                          <td>
+                            {{ (rewards.amount / 1000000).toFixed(6) }}
+                            {{ cosmosConfig[chainId].coinLookup.viewDenom }}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <v-icon
+                              color="#00b786"
+                              small
+                            >
+                              mdi-circle
+                            </v-icon>
+                            Total
+                          </td>
+                          <td>
+                            {{ totalWallet }}
+                            {{ cosmosConfig[chainId].coinLookup.viewDenom }}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </v-simple-table>
+                  </v-col>
+                </v-row>
+              </v-card-text>
+            </v-card>
+          </v-col>
+        </v-row>
+      </sequential-entrance>
+      <sequential-entrance />
+
+      <!--<v-row justify="space-around">
+
+        <v-col class="text-h6 text-md-h5 text-lg-h4">Your Stake</v-col>
+      </v-row>
+      <v-row justify="space-around">
+        <v-col>
+          <v-card class="accent">
+            <v-card-title class="headline">
+              <v-icon class="mr-2">mdi-wallet-outline</v-icon> All validators
+            </v-card-title>
+            <v-card-text>
+              <AllValidators />
+            </v-card-text>
+          </v-card>
+        </v-col>
+      </v-row>-->
+    </v-col>
+
+    <v-col
+      v-else
       cols="12"
     >
       <v-col class="ml-6 mb-6 text-h6 text-md-h5 text-lg-h4">
@@ -57,7 +314,7 @@
                   <v-col md="6">
                     <v-sheet
                       outlined
-                      color="white"
+                      color="#00b786"
                       rounded
                     >
                       <v-card
@@ -98,10 +355,11 @@
                   min-height="50"
                 >
                   <!-- {{ item }}  -->
-                  <v-row 
+                  <v-row
+                    justify="space-around"
                     class="data-row"
                   >
-                    <v-col cols="3">
+                    <v-col>
                       <v-chip
                         class="mb-2"
                         :color="item.final.color"
@@ -109,24 +367,15 @@
                         label
                       >
                         {{ item.final.typeReadable }}
-                      </v-chip> 
-                    </v-col>
-                    <v-col cols="4" class="mt-2">
+                      </v-chip>
+                      <br>
                       {{ formatDate(item.final.timestamp) }}
-                     
                     </v-col>
                     <v-col
-                    cols="2"
                       v-if="item.final.msgData.amount"
-                      class="mt-2 text-right"
+                      class="mt-4 text-right"
                     >
                       {{ item.final.msgData.amount }} BCNA
-                    </v-col>
-                    <v-col
-                    cols="2"
-                      v-else
-                      class="mt-2 text-right"
-                    > 
                     </v-col>
                   </v-row>
                 </v-card>
@@ -235,7 +484,9 @@
         </v-row>
       </sequential-entrance>
     </v-col>
-    <v-dialog
+
+    <v-row justify="center">
+      <v-dialog
         id="qrcode"
         v-model="dialog"
         max-width="400"
@@ -272,12 +523,12 @@
           </v-card-text> 
         </v-card>
       </v-dialog>
+    </v-row>
   </v-row>
 </template>
 
 <script>
 import { mapState } from "vuex";
-import axios from "axios";
 import dayjs from "dayjs";
 import { reverse, sortBy, orderBy, uniqWith, groupBy } from "lodash";
 import { setMsg } from "~/libs/msgType";
@@ -286,7 +537,8 @@ import cosmosConfig from "~/cosmos.config";
 const categories = [
   {
     section: "Today",
-    matcher: (event) => { 
+    matcher: (event) => {
+      console.log(dayjs(event.timestamp).isSame(dayjs(), "day"));
       // tests if the timestamp has the same day as today
       return dayjs(event.timestamp).isSame(dayjs(), "day");
     },
@@ -303,7 +555,7 @@ export default {
   layout: "blog",
   data: () => ({
     cosmosConfig: cosmosConfig,
-    rpcAllTxs: [],
+    rpcAllTxs: "",
     dialog: false,
     isCopied: false,
   }),
@@ -316,13 +568,20 @@ export default {
       `logout`,
     ]),
     ...mapState("data", [
-      "balances",
+      "layout",
       "chainId",
-      "totalWalletPrice",
+      "balances",
       "rewards",
       "delegations",
       "allTxs",
       "allTxsLoaded",
+      "priceNow",
+      "aprNow",
+      "totalDelegated",
+      "balancesPrice",
+      "totalUnbound",
+      "totalWalletPrice",
+      "totalWallet",
       "validators",
       "validatorsLoaded"
     ]),
@@ -330,33 +589,9 @@ export default {
   watch: {},
   async mounted() {
     await this.$store.dispatch("keplr/checkLogin");
-    await this.$store.dispatch("data/getAllValidators");
     if (!this.logged) {
       this.$router.push({ path: "/login" });
     }
-    const resultSender = await axios(
-        cosmosConfig[0].apiURL +
-          "/cosmos/tx/v1beta1/txs?events=message.sender=%27" +
-          this.accounts[0].address +
-          "%27&limit=" +
-          cosmosConfig[this.chainId].maxTxSender +
-          "&order_by=2"
-      );
-      const resultRecipient = await axios(
-        cosmosConfig[0].apiURL +
-          "/cosmos/tx/v1beta1/txs?events=transfer.recipient=%27" +
-          this.accounts[0].address +
-          "%27&limit=" +
-          cosmosConfig[this.chainId].maxTxSender +
-          "&order_by=2"
-      );
-      const finalTxs = resultSender.data.tx_responses.concat(
-        resultRecipient.data.tx_responses
-      );
-
-      this.rpcAllTxs = this.transactionsReducer(finalTxs);
-      this.loading = false;
-      this.firstLoad = false;
   },
 
   methods: {
@@ -388,7 +623,7 @@ export default {
       }
     },
     categorizedEvents() {
-      return this.rpcAllTxs.map((event) => {
+      return this.allTxs.map((event) => {
         // check if the tx is in Today, Yesterday or Last Week
         const dateString =
           ` (` + dayjs(event.timestamp).format("MMMM D, YYYY") + `)`;
@@ -445,7 +680,15 @@ export default {
         second: "numeric",
         hour12: false,
       }).format(new Date(dateStr))
+    },   
+    async copyAddr(text) {
+      await this.$copyText(text);
+      this.isCopied = true;
+      setTimeout(this.hideCopy, 4000);
     },  
+    hideCopy() {
+      this.isCopied = false;
+    },
   }
 };
 </script>

@@ -187,7 +187,6 @@ export const actions = {
       myTotalDelegation: (sumDelegation / 1000000).toFixed(2),
       myTotalUnDelegation: (sumUnDelegate / 1000000).toFixed(2),
     };
-    console.log(myFinalData);
     commit("setMyDelegatorData", myFinalData);
   },
   async getWalletInfo({ commit, state }, address) {
@@ -650,7 +649,6 @@ export const actions = {
       .then((res) => {
         let sumUndelegate = 0;
         for (let i = 0; i < res.data.unbond.entries.length; i++) {
-          console.log(res.data.unbond.entries[i].initial_balance)
           sumUndelegate += Number(res.data.unbond.entries[i].initial_balance);
         }
         commit(
