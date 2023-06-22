@@ -121,7 +121,7 @@
       <div
         v-for="index in myNft"
         :key="index.id"
-        class="mt-4 mr-4 card"
+        class="mt-4 mr-4 pa-4 card"
       >
         <v-skeleton-loader
           v-if="loading"
@@ -148,10 +148,10 @@
             <v-btn
               color="#00b786"
               :to="'/nfts/' + index.id"
+              block
+            x-large
             >
-              <v-icon class="mr-2">
-                mdi-download
-              </v-icon> View detail
+             Details
             </v-btn>
           </div>
         </div>
@@ -297,6 +297,7 @@ export default {
   width: 300px;
   background-color: #1c1d20;
   display: inline-block;
+  border-radius: 10px;
 }
 .card a {
   color: #333;
@@ -313,6 +314,7 @@ export default {
   position: absolute;
   top: 50%;
   left: 50%;
+  border-radius: 25px;
   transform: translate(-50%, -50%);
   transition-property: filter width;
   transition-duration: 0.3s;

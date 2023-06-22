@@ -281,6 +281,14 @@ export const actions = {
     );
 
     let totalDelegated = 0;
+    let totalBonded2 = 0;
+    const allValidators = await axios(
+      cosmosConfig[state.chainId].apiURL + "/cosmos/staking/v1beta1/validators"
+    );
+    await allValidators.data.validators.forEach(async (item) => {
+      totalBonded2 += Number(item.tokens);
+    });
+    
     await getDelegations.data.rewards.forEach(function (item) {
       let foundDelegByValidator =
         getValidatorInfo.data.delegation_responses.find(
@@ -332,8 +340,7 @@ export const actions = {
         finalRewardAmount = 0;
       } else {
         finalRewardAmount = (item.reward[0].amount / 1000000).toFixed(6);
-      }
-
+      } 
       copieRewards.push({
         validatorName: foundValidatorMainInfo?.description.moniker,
         op_address: foundDelegByValidator.delegation.validator_address,
@@ -343,6 +350,8 @@ export const actions = {
         unDelegations: foundUnDelegations,
         reDelegations: foundRedelegations,
         status: foundValidatorMainInfo?.status,
+        commission: (foundValidatorMainInfo?.commission.commission_rates.rate * 100).toFixed(2),
+        votingPower: ((foundValidatorMainInfo.tokens / totalBonded2) * 100).toFixed(2),
       });
       totalDelegated += Number(foundDelegByValidator.balance.amount);
     });
@@ -590,6 +599,10 @@ export const actions = {
         if (item.status === 'BOND_STATUS_BONDED') {
           upTime = 100;
         }
+
+        const rewardFactor = 1 - item.commission.commission_rates.rate
+        const finalApr = state.aprNow * rewardFactor
+        console.log(state.aprNow)
         copieValidators.push({
           name: item.description.moniker,
           op_address: item.operator_address,
@@ -599,6 +612,7 @@ export const actions = {
           votingPower: ((item.tokens / totalBonded2) * 100).toFixed(2),
           status: item.status,
           uptime: upTime,
+          validatorApr: finalApr.toFixed(2),
         });
       })
     );

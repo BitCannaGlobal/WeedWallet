@@ -2,7 +2,9 @@
   <div>
     <v-dialog
       v-model="dialog"
-      max-width="500px"
+      max-width="600px"
+      overlay-opacity="0.8"
+      overlay-color="#000000"
     >
       <template #activator="{ on, attrs }">
         <v-btn
@@ -28,7 +30,7 @@
           </v-icon> Send
         </v-btn>
       </template>
-      <v-card class="accent">
+      <v-card color="#161819">
         <v-card-title>
           <span
             v-if="step1"
@@ -51,7 +53,7 @@
             class="mr-2"
             @click="dialog = false"
           >
-            mdi-close-circle
+            mdi-close
           </v-icon>
         </v-card-title>
         <v-card-text>
@@ -63,7 +65,7 @@
           >
             <v-row>
               <v-col cols="12">
-                <v-col class="text-right">
+                <!-- <v-col class="text-right">
                   <v-chip @click="getQuarter">
                     1/4
                   </v-chip>
@@ -73,43 +75,57 @@
                   <v-chip @click="getMax">
                     Max
                   </v-chip>
-                </v-col>
+                </v-col> -->
                 <span class="text-left">Available: {{ amountAvailable }} BCNA</span>
+                <br><br>
+                <h3 class="mt-1 ml-1 mb-1">
+                  Address*
+                </h3>
+                <v-text-field
+                  v-model="address"
+                  :rules="addressRules"
+                  background-color="#0F0F0F"
+                  required                    
+                  flat 
+                  solo
+                />
+                <h3 class="ml-1 mb-1">
+                  Amount*
+                </h3>
                 <v-text-field
                   v-model="amount"
-                  outlined
-                  dense
-                  label="Amount*"
+                  flat 
+                  solo
                   :rules="amountRules"
                   type="text"
-                  class="mt-4"
+                  background-color="#0F0F0F"
                 >
                   <template #append>
-                    <img
+                    <!-- <img
                       width="24"
                       height="24"
                       :srcset="coinIcon"
                       alt=""
                       :class="`rounded-xl`"
+                    > -->
+                    <v-chip
+                      label
+                      small
+                      @click="getMax"
                     >
+                      Max
+                    </v-chip>
                   </template>
                 </v-text-field>
-
-                <v-text-field
-                  v-model="address"
-                  label="Address*"
-                  :rules="addressRules"
-                  required
-                  outlined
-                  dense
-                />
-
+                <h3 class="ml-1 mb-1">
+                  Memo (Optional)
+                </h3>
                 <v-text-field
                   v-model="memo"
-                  label="Memo"
+                  background-color="#0F0F0F"
                   required
-                  outlined
-                  dense
+                  flat 
+                  solo
                 />
               </v-col>
             </v-row>
@@ -119,17 +135,64 @@
             ref="form"
             lazy-validation
           >
-            <v-row>
-              <v-col cols="12">
-                <v-simple-table class="accent">
+            <v-sheet
+              outlined
+              color="gray"
+              rounded
+            >
+              <v-card
+                color="#1C1D20"
+                class="pa-2"
+                outlined
+                tile 
+              >
+                <v-list-item two-line>
+                  <v-list-item-content>        
+                    <v-list-item-subtitle class="mb-2">
+                      <h3>Transaction</h3>
+                    </v-list-item-subtitle>
+                    <v-list-item-title>
+                      <h3>${{ (amount * priceNow).toFixed(2) }}</h3><!--  ({{ priceNow }}) -->
+                    </v-list-item-title>
+                    <v-list-item-title>
+                      <h3>{{ amount }} {{ cosmosConfig[chainId].coinLookup.viewDenom }}</h3>
+                    </v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>
+                <v-list-item two-line>
+                  <v-list-item-content>        
+                    <v-list-item-subtitle class="mb-2">
+                      <h3>Gas/fee</h3>
+                    </v-list-item-subtitle>
+                    <v-list-item-title>
+                      <h3>
+                        {{ gasFee.gas }} / {{ gasFee.fee / 1000000 }}
+                        {{ cosmosConfig[chainId].coinLookup.viewDenom }}
+                      </h3>
+                    </v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>
+                <v-list-item
+                  v-if="memo !== ''"
+                  two-line
+                >
+                  <v-list-item-content>        
+                    <v-list-item-subtitle class="mb-2">
+                      <h3>Memo</h3>
+                    </v-list-item-subtitle>
+                    <v-list-item-title>
+                      <h3>{{ memo }}</h3>
+                    </v-list-item-title> 
+                  </v-list-item-content>
+                </v-list-item>    
+                <!-- <v-simple-table class="accent">
                   <template #default>
                     <tbody>
                       <tr>
                         <td>Amount</td>
                         <td>
                           {{ amount }}
-                          {{ cosmosConfig[chainId].coinLookup.viewDenom }}
-                          <!-- <span>Fee are automaticly deducted</span> -->
+                          {{ cosmosConfig[chainId].coinLookup.viewDenom }} 
 
                           <v-tooltip
                             v-if="feeDeducted"
@@ -169,8 +232,22 @@
                       </tr>
                     </tbody>
                   </template>
-                </v-simple-table>
-              </v-col>
+                </v-simple-table> -->
+              </v-card>
+            </v-sheet>      
+            <h3 class="mt-4 ml-1 mb-2">
+              Memo (Optional)
+            </h3>
+            <v-text-field
+              v-model="memo"              
+              background-color="#0F0F0F"
+              required
+              flat 
+              solo
+            /> 
+  
+            <v-row>
+              <v-col cols="12" />
             </v-row>
           </v-form>
 
@@ -180,12 +257,14 @@
               align="center"
               justify="center"
             >
-              <v-progress-circular
-                :size="100"
-                :width="10"
-                color="#00b786"
-                indeterminate
-              />
+            <v-img
+                max-height="102"
+                max-width="102"
+                src="icons/pending.svg"
+              ></v-img>
+              <br />
+              <h3>Transaction pending</h3> 
+              <h4>Your transaction is waiting to get approved on the blockchain.</h4>
             </v-col>
           </v-row>
           <v-row v-if="step4">
@@ -194,18 +273,46 @@
               align="center"
               justify="center"
             >
-              <img src="accepted.png">
+            <v-img
+                max-height="102"
+                max-width="102"
+                src="icons/approved.svg"
+              ></v-img>
+              <br />
+              <h3>Transaction approved</h3> 
+              <h4>Your transaction has been approved on the blockchain.</h4>
             </v-col>
           </v-row>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer />
-
           <v-btn
             v-if="step2"
+            :disabled="!dislableSend"
+            :loading="loading"
             color="#00b786"
-            @click="returnStep"
+            block
+            class="mt-1"
+            x-large
+            @click="validatestep2"            
           >
+            Send tx
+            <v-icon
+              right
+            >
+              mdi-arrow-right-thick
+            </v-icon>            
+          </v-btn>
+          <v-btn
+            v-if="step2"
+            color="#1C1D20"
+            block
+            class="mt-4"
+            x-large
+            @click="returnStep"
+          >            
+            <v-icon
+              left
+            >
+              mdi-arrow-left-thick
+            </v-icon> 
             Return
           </v-btn>
           <v-btn
@@ -213,19 +320,20 @@
             :disabled="!dislableSend"
             :loading="loading"
             color="#00b786"
+            block
+            x-large
             @click="validate"
           >
             Next step
+            <v-icon
+              right
+            >
+              mdi-arrow-right-thick
+            </v-icon>             
           </v-btn>
-          <v-btn
-            v-if="step2"
-            :disabled="!dislableSend"
-            :loading="loading"
-            color="#00b786"
-            @click="validatestep2"
-          >
-            Send tx
-          </v-btn>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer />
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -298,7 +406,7 @@ export default {
   }),
   computed: {
     ...mapState("keplr", [`accounts`]),
-    ...mapState("data", ["chainId", `balances`]),
+    ...mapState("data", ["chainId", `balances`, 'priceNow']),
   },
   watch: {
     dialog(value) {
@@ -307,8 +415,8 @@ export default {
         this.step2 = false;
         this.step3 = false;
         this.step4 = false;
-        this.address = "";
-        this.amount = "";
+        this.address = "bcna1sw8xa00s68szlyvgp8l2fzqj95w5gjm5auc3le";
+        this.amount = "1";
       }
     },
   },
@@ -450,7 +558,7 @@ export default {
             this.step2 = true;
           } finally {
             await new Promise((resolve) => setTimeout(resolve, 4000));
-            this.dialog = false;
+            //this.dialog = false;
           }
         })();
       }
@@ -471,10 +579,5 @@ export default {
   100% {
     transform: rotateY(0deg);
   }
-}
-
-.invertColor {
-  -webkit-filter: invert(1);
-  filter: invert(1);
 }
 </style>

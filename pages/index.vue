@@ -3,8 +3,8 @@
     <v-col
       cols="12"
     >
-      <v-col class="ml-6 mb-6 text-h6 text-md-h5 text-lg-h4">
-        {{ accounts[0].walletName }}'s portfolio
+      <v-col class="ml-6 mb-6">
+        <h1>{{ accounts[0].walletName }}'s portfolio</h1>
       </v-col>
 
       <sequential-entrance>
@@ -21,15 +21,15 @@
                 <v-row>
                   <v-col md="6">
                     Main account<br>
-                    <span class="text-h6 text-md-h5 text-lg-h4">
+                    <h1 class="mt-2 carmenBold">
                       {{ (balances / 1000000).toFixed(2) }}
                       {{ cosmosConfig[chainId].coinLookup.viewDenom }}
-                    </span>
-                    <br>
-                    <span class="text-h6"> ${{ totalWalletPrice }} </span>
-                    <br>
+                    </h1>
+                    <h3 class="mt-2">
+                      ${{ totalWalletPrice }}
+                    </h3>
 
-                    <v-row class="mt-1">
+                    <v-row class="mt-2">
                       <v-col md="6">
                         <SendModal
                           class="text-right"
@@ -66,12 +66,12 @@
                         tile
                         height="160"
                       >
-                        <v-avatar>
-                          <img
-                            src="logo-bcna.png"
-                            alt="bcna"
-                          >
-                        </v-avatar>
+                        <img
+                          src="BCNA-LOGO-C.svg"
+                          alt="bcna"
+                          height="40"
+                          width="40"
+                        >
                         <br><br>
                         <span class="mt-2"> {{ accounts[0].walletName }}'s portfolio</span> <br>
                         <span class="text-caption">
@@ -84,12 +84,12 @@
               </v-card-text>
             </v-card>
 
-            <v-col class="mt-4 ml-8 mb-6 text-h6 text-md-h5 text-lg-h4">
-              Transactions
+            <v-col class="mt-4 ml-9 mb-6">
+              <h1>Transactions</h1>
             </v-col>
             <template v-for="group in groupedEvents()">
               <div>
-                <h3>{{ group[0].section }}</h3>
+                <h3 class="ml-2">{{ group[0].section }}</h3>
                 
                 <v-card
                   v-for="item in group"  
@@ -111,23 +111,24 @@
                         {{ item.final.typeReadable }}
                       </v-chip> 
                     </v-col>
-                    <v-col cols="4" class="mt-2">
+                    <v-col
+                      cols="4"
+                      class="mt-2"
+                    >
                       {{ formatDate(item.final.timestamp) }}
-                     
                     </v-col>
                     <v-col
-                    cols="2"
                       v-if="item.final.msgData.amount"
+                      cols="2"
                       class="mt-2 text-right"
                     >
                       {{ item.final.msgData.amount }} BCNA
                     </v-col>
                     <v-col
-                    cols="2"
                       v-else
+                      cols="2"
                       class="mt-2 text-right"
-                    > 
-                    </v-col>
+                    />
                   </v-row>
                 </v-card>
                 <!-- {{ group }} -->
@@ -157,14 +158,14 @@
               <v-card-text>
                 <v-row>
                   <v-col class="mt-2">
-                    <span class="text-h6 text-md-h5 text-lg-h4">
-                      Available to stake
+                    <span>
+                      <h1>Available to stake</h1>
                     </span>
                     <br>
-                    <span class="text-h6">
+                    <h2>
                       {{ (balances / 1000000).toFixed(6) }}
                       {{ cosmosConfig[chainId].coinLookup.viewDenom }}
-                    </span>
+                    </h2>
                   </v-col>
                   <v-col class="mt-2 text-right">
                     <span class="text-h6 text-md-h5 text-lg-h4">
@@ -202,14 +203,14 @@
               <v-card-text>
                 <v-row>
                   <v-col class="mt-2">
-                    <span class="text-h6 text-md-h5 text-lg-h4">
-                      Your rewards
+                    <span>
+                      <h1>Your rewards</h1>
                     </span>
                     <br>
-                    <span class="text-h6">
+                    <h2>
                       {{ (rewards.amount / 1000000).toFixed(6) }}
                       {{ cosmosConfig[chainId].coinLookup.viewDenom }}
-                    </span>
+                    </h2>
                   </v-col>
                   <v-col class="mt-2 text-right">
                     <span class="text-h6 text-md-h5 text-lg-h4">
@@ -236,42 +237,42 @@
       </sequential-entrance>
     </v-col>
     <v-dialog
-        id="qrcode"
-        v-model="dialog"
-        max-width="400"
-      >
-        <v-card>
-          <v-card-title class="text-h5">
-            Receive
-            <v-spacer />
-            <v-icon
-              class="mr-2"
-              @click="dialog = false"
-            >
-              mdi-close-circle
-            </v-icon>
-          </v-card-title>
+      id="qrcode"
+      v-model="dialog"
+      max-width="400"
+    >
+      <v-card>
+        <v-card-title class="text-h5">
+          Receive
+          <v-spacer />
+          <v-icon
+            class="mr-2"
+            @click="dialog = false"
+          >
+            mdi-close-circle
+          </v-icon>
+        </v-card-title>
 
-          <v-card-text align="center">
-            <span><qr-code
-              class="mb-2 mt-2"
-              :text="accounts[0]?.address"
-            /></span>
-            <v-chip
-              color="#00b786"
-              outlined
-              label 
-              @click="copyAddr(accounts[0].address)"
-            >
-              {{ accounts[0]?.address }}
-            </v-chip>
-            <span
-              v-if="isCopied"
-              class="ml-2"
-            >Address copied!</span>          
-          </v-card-text> 
-        </v-card>
-      </v-dialog>
+        <v-card-text align="center">
+          <span><qr-code
+            class="mb-2 mt-2"
+            :text="accounts[0]?.address"
+          /></span>
+          <v-chip
+            color="#00b786"
+            outlined
+            label 
+            @click="copyAddr(accounts[0].address)"
+          >
+            {{ accounts[0]?.address }}
+          </v-chip>
+          <span
+            v-if="isCopied"
+            class="ml-2"
+          >Address copied!</span>          
+        </v-card-text> 
+      </v-card>
+    </v-dialog>
   </v-row>
 </template>
 

@@ -11,7 +11,7 @@ export function setMsg(msg, addrGet, timestamp, allVal, txHash) {
   switch (msg["@type"]) {
     case "/cosmos.bank.v1beta1.MsgSend":
       if (msg.to_address === addrGet) {
-        typeReadable = "Payment Received";
+        typeReadable = "Received";
       } else typeReadable = "Send";
       type = msg["@type"];
 

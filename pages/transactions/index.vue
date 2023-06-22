@@ -37,14 +37,14 @@
           > 
             <v-expansion-panel-header>
               <v-row no-gutters>
-                <v-col cols="1">
+<!--                 <v-col cols="1">
                   <v-avatar class="mr-2">
                     <v-img
                       :src="'../transactions/' + item.final.icon"
                       :alt="item.final.typeReadable"
                     />
                   </v-avatar>
-                </v-col>
+                </v-col> -->
                 <!-- <v-col
                         cols="2"
                         class="mt-4"
@@ -83,8 +83,58 @@
                   align="right"
                   cols="5"
                   class="mt-4"
-                >
-                  <div class="mr-4">
+                > 
+ <!--                  <div class="mr-4" v-if="item.final.msgData.option">
+                    <v-chip
+                            v-if="
+                              item.final.msgData.option ===
+                                'VOTE_OPTION_YES'
+                            "
+                            class="ma-2"
+                            color="green"
+                            outlined
+                            label
+                          >
+                            YES
+                          </v-chip>
+                          <v-chip
+                            v-if="
+                              item.final.msgData.option ===
+                                'VOTE_OPTION_NO'
+                            "
+                            class="ma-2"
+                            color="red"
+                            outlined
+                            label
+                          >
+                            NO
+                          </v-chip>
+                          <v-chip
+                            v-if="
+                              item.final.msgData.option ===
+                                'VOTE_OPTION_ABSTAIN'
+                            "
+                            class="ma-2"
+                            color="red"
+                            outlined
+                            label
+                          >
+                            ABSTAIN
+                          </v-chip>
+                          <v-chip
+                            v-if="
+                              item.final.msgData.option ===
+                                'VOTE_OPTION_NO_WITH_VETO'
+                            "
+                            class="ma-2"
+                            color="orange"
+                            outlined
+                            label
+                          >
+                            NO WITH VETO
+                          </v-chip> 
+                  </div> -->
+                  <div class="mr-4" v-if="item.final.msgData.amount">
                     {{ item.final.msgData.amount }} {{ cosmosConfig[0].coinLookup.viewDenom }}
                   </div>
                 </v-col>                       
@@ -127,7 +177,7 @@
                             class=" mr-2"
                             elevation="2"
                             color="#333333"
-                            :href="'https://explorer.bitcanna.io/transactions/' + item.txhash"
+                            :href="'https://explorer.bitcanna.io/transactions/' + item.final.finalHash"
                             target="_blank"
                             small
                           >
@@ -184,7 +234,7 @@
                             class=" mr-2"
                             elevation="2"
                             color="#333333"
-                            :href="'https://explorer.bitcanna.io/transactions/' + item.txhash"
+                            :href="'https://explorer.bitcanna.io/transactions/' + item.final.finalHash"
                             target="_blank"
                             small
                           >
@@ -233,7 +283,7 @@
                             class=" mr-2"
                             elevation="2"
                             color="#333333"
-                            :href="'https://explorer.bitcanna.io/transactions/' + item.txhash"
+                            :href="'https://explorer.bitcanna.io/transactions/' + item.final.finalHash"
                             target="_blank"
                             small
                           >
@@ -261,14 +311,12 @@
                           option
                         </th>
                         <th class="text-left">
-                          metadata
-                        </th>
-                        <th class="text-left">
                           View
                         </th>
                       </tr>
                     </thead>
                     <tbody>
+                      {{ item  }}
                       <tr>
                         <td>
                           #{{ item.final.msgData.proposal_id }}
@@ -328,7 +376,7 @@
                             class=" mr-2"
                             elevation="2"
                             color="#333333"
-                            :href="'https://explorer.bitcanna.io/transactions/' + item.txhash"
+                            :href="'https://explorer.bitcanna.io/transactions/' + item.final.finalHash"
                             target="_blank"
                             small
                           >
@@ -375,7 +423,7 @@
                             class=" mr-2"
                             elevation="2"
                             color="#333333"
-                            :href="'https://explorer.bitcanna.io/transactions/' + item.txhash"
+                            :href="'https://explorer.bitcanna.io/transactions/' + item.final.finalHash"
                             target="_blank"
                             small
                           >
@@ -422,7 +470,7 @@
                             class=" mr-2"
                             elevation="2"
                             color="#333333"
-                            :href="'https://explorer.bitcanna.io/transactions/' + item.txhash"
+                            :href="'https://explorer.bitcanna.io/transactions/' + item.final.finalHash"
                             target="_blank"
                             small
                           >
@@ -472,7 +520,7 @@
                             class=" mr-2"
                             elevation="2"
                             color="#333333"
-                            :href="'https://explorer.bitcanna.io/transactions/' + item.txhash"
+                            :href="'https://explorer.bitcanna.io/transactions/' + item.final.finalHash"
                             target="_blank"
                             small
                           >
@@ -512,7 +560,7 @@
                             class=" mr-2"
                             elevation="2"
                             color="#333333"
-                            :href="'https://explorer.bitcanna.io/transactions/' + item.txhash"
+                            :href="'https://explorer.bitcanna.io/transactions/' + item.final.finalHash"
                             target="_blank"
                             small
                           >
@@ -571,7 +619,7 @@
                             class=" mr-2"
                             elevation="2"
                             color="#333333"
-                            :href="'https://explorer.bitcanna.io/transactions/' + item.txhash"
+                            :href="'https://explorer.bitcanna.io/transactions/' + item.final.finalHash"
                             target="_blank"
                             small
                           >
@@ -705,7 +753,7 @@
                                   class=" mr-2"
                                   elevation="2"
                                   color="#00b786"
-                                  :href="'https://explorer.bitcanna.io/transactions/' + item.txhash"
+                                  :href="'https://explorer.bitcanna.io/transactions/' + item.final.finalHash"
                                   target="_blank"
                                   small
                                 >

@@ -13,13 +13,64 @@
           <v-img
             alt="Cosmofolio Logo"
             src="logo-bcna.png"
-            max-height="60"
-            max-width="60"
+            max-height="120"
+            max-width="120"
           />
         </div>
         <br>
-
         <v-card
+          class="mt-10" 
+          color="#161819"
+        >
+          <v-card-title>Connect your wallet</v-card-title>
+          <v-card 
+            class="ma-4 mb-4 pa-4" 
+            color="#292929"
+            @click="connectKeplr"
+          >
+            <!-- {{ item }}  -->
+            <v-row>
+              <v-col cols="3">
+                <v-img
+                  alt="bcna"
+                  src="keplr.svg"
+                  height="32"
+                  width="32"
+                />
+              </v-col>
+              <v-col
+                cols="6" 
+                class="d-flex justify-center align-center"
+              >
+                Keplr Connect
+              </v-col>
+            </v-row>
+          </v-card>  
+          <v-card 
+            class="ma-4 mb-4 pa-4" 
+            color="#292929"
+          >
+            <!-- {{ item }}  -->
+            <v-row>
+              <v-col cols="3">
+                <v-img
+                  alt="bcna"
+                  src="cosmosstation.svg"
+                  height="32"
+                  width="32"  
+                />
+              </v-col>
+              <v-col
+                cols="6" 
+                class="d-flex justify-center align-center"
+              >
+                Cosmostation Connect
+              </v-col>
+            </v-row>
+          </v-card>                
+          <v-card-actions />
+        </v-card>
+        <!-- <v-card
           class="mt-10"
           height="100%"
         >
@@ -72,36 +123,7 @@
               </v-list-item>
             </v-list>
           </v-card-actions>
-        </v-card>
-        <!--<v-card>
-        <v-card-title class="headline justify-center">
-          Keplr login
-        </v-card-title>
-        <v-card-text>
-          <v-list-item v-for="item in accounts" :key="item.address" two-line>
-            <v-list-item-content>
-              <v-list-item-title>{{ item.id }}</v-list-item-title>
-              <v-list-item-subtitle>{{ item.address }}</v-list-item-subtitle>
-            </v-list-item-content>
-          </v-list-item>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer />
-          <v-btn
-            v-on:click="connectKeplr"
-            block
-
-          >
-          <img
-            class="mr-2"
-            src="/keplr.png"
-            width="20"
-            height="20"
-          >
-          Connect Keplr wallet
-          </v-btn>
-        </v-card-actions>
-      </v-card>-->
+        </v-card> -->
       </v-col>
     </v-row>
   </v-container>
