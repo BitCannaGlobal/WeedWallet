@@ -558,7 +558,7 @@ export default {
             this.step2 = true;
           } finally {
             await new Promise((resolve) => setTimeout(resolve, 4000));
-            //this.dialog = false;
+            this.dialog = false;
           }
         })();
       }

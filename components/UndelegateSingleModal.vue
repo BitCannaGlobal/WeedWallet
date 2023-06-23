@@ -495,8 +495,8 @@ export default {
             this.step3 = false;
             this.step2 = true;
           } finally {
-            //await new Promise((resolve) => setTimeout(resolve, 4000));
-            // this.dialog = false;
+            await new Promise((resolve) => setTimeout(resolve, 4000));
+            this.dialog = false;
           }
         })();
       }
