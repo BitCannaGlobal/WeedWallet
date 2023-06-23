@@ -415,8 +415,8 @@ export default {
         this.step2 = false;
         this.step3 = false;
         this.step4 = false;
-        this.address = "bcna1sw8xa00s68szlyvgp8l2fzqj95w5gjm5auc3le";
-        this.amount = "1";
+        this.address = "";
+        this.amount = "";
       }
     },
   },
