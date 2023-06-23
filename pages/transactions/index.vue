@@ -640,7 +640,43 @@
       </div>
     </template>
 
+    <v-dialog
+      id="qrcode"
+      v-model="dialog"
+      max-width="400"
+    >
+      <v-card>
+        <v-card-title class="text-h5">
+          Receive
+          <v-spacer />
+          <v-icon
+            class="mr-2"
+            @click="dialog = false"
+          >
+            mdi-close-circle
+          </v-icon>
+        </v-card-title>
 
+        <v-card-text align="center">
+          <span><qr-code
+            class="mb-2 mt-2"
+            :text="accounts[0]?.address"
+          /></span>
+          <v-chip
+            color="#00b786"
+            outlined
+            label 
+            @click="copyAddr(accounts[0].address)"
+          >
+            {{ accounts[0]?.address }}
+          </v-chip>
+          <span
+            v-if="isCopied"
+            class="ml-2"
+          >Address copied!</span>          
+        </v-card-text> 
+      </v-card>
+    </v-dialog>
  
   </div>
 </template>
@@ -685,6 +721,8 @@ export default {
     rpcAllTxs: [],
     loading: true,
     firstLoad: true,
+    dialog: false,
+    isCopied: false,
   }),
   computed: {
     ...mapState("keplr", [`accounts`, "logged"]),
@@ -901,7 +939,15 @@ export default {
         second: "numeric",
         hour12: false,
       }).format(new Date(dateStr))
-    },    
+    }, 
+    async copyAddr(text) {
+      await this.$copyText(text);
+      this.isCopied = true;
+      setTimeout(this.hideCopy, 4000);
+    },  
+    hideCopy() {
+      this.isCopied = false;
+    },   
   },
 
 };
