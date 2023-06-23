@@ -29,7 +29,7 @@
         </v-icon> Claim all
       </v-btn>      
     </template>
-    <v-card>
+    <v-card color="#161819">
       <v-card-title>
         <span
           v-if="step1"
@@ -62,7 +62,6 @@
           v-model="dislableSend"
           lazy-validation
         >
-          <v-container>
             <v-simple-table>
               <thead>
                 <tr>
@@ -123,14 +122,66 @@
                 </v-stepper-step>
               </v-stepper-header> 
             </v-stepper>  -->
-          </v-container>
         </v-form>
         <v-form
           v-if="step2"
           ref="form"
           lazy-validation
         >
-          <v-row>
+        <v-sheet
+              outlined
+              color="gray"
+              rounded
+            >
+              <v-card
+                color="#1C1D20"
+                class="pa-2"
+                outlined
+                tile 
+              >
+                <v-list-item two-line>
+                  <v-list-item-content>        
+                    <v-list-item-subtitle class="mb-2">
+                      <h3>Gas/fee</h3>
+                    </v-list-item-subtitle>
+                    <v-list-item-title>
+                      <h3>
+                        {{ gasFee.gas }} / {{ gasFee.fee / 1000000 }}
+                        {{ cosmosConfig[chainId].coinLookup.viewDenom }}
+                      </h3>
+                    </v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>
+                <v-list-item
+                  v-if="memo !== ''"
+                  two-line
+                >
+                  <v-list-item-content>        
+                    <v-list-item-subtitle class="mb-2">
+                      <h3>Memo</h3>
+                    </v-list-item-subtitle>
+                    <v-list-item-title>
+                      <h3>{{ memo }}</h3>
+                    </v-list-item-title> 
+                  </v-list-item-content>
+                </v-list-item>      
+              </v-card>
+            </v-sheet>      
+            <h3 class="mt-4 ml-1 mb-2">
+              Memo (Optional)
+            </h3>
+            <v-text-field
+              v-model="memo"              
+              background-color="#0F0F0F"
+              required
+              flat 
+              solo
+            /> 
+  
+            <v-row>
+              <v-col cols="12" />
+            </v-row>    
+<!--           <v-row>
             <v-col cols="12">
               <v-simple-table class="accent">
                 <template #default>
@@ -140,7 +191,6 @@
                       <td>
                         {{ amount }}
                         {{ cosmosConfig[chainId].coinLookup.viewDenom }}
-                        <!-- <span>Fee are automaticly deducted</span> -->
                       </td>
                     </tr>
                     <tr>
@@ -162,7 +212,7 @@
                 </template>
               </v-simple-table>
             </v-col>
-          </v-row>
+          </v-row> -->
         </v-form>
 
         <v-row v-if="step3">
@@ -171,12 +221,14 @@
             align="center"
             justify="center"
           >
-            <v-progress-circular
-              :size="100"
-              :width="10"
-              color="#00b786"
-              indeterminate
-            />
+          <v-img
+                max-height="102"
+                max-width="102"
+                src="icons/pending.svg"
+              ></v-img>
+              <br />
+              <h3>Transaction pending</h3> 
+              <h4>Your transaction is waiting to get approved on the blockchain.</h4>
           </v-col>
         </v-row>
         <v-row v-if="step4">
@@ -185,15 +237,22 @@
             align="center"
             justify="center"
           >
-            <img src="accepted.png">
+          <v-img
+                max-height="102"
+                max-width="102"
+                src="icons/approved.svg"
+              ></v-img>
+              <br />
+              <h3>Transaction approved</h3> 
+              <h4>Your transaction has been approved on the blockchain.</h4>
           </v-col>
         </v-row>
-      </v-card-text>
-      <v-card-actions>
-        <v-spacer />
         <v-btn
           v-if="step2"
-          color="#00b786"
+          color="#1C1D20"
+            block
+            x-large
+            class="mt-4"
           @click="returnStep"
         >
           Return
@@ -203,6 +262,9 @@
           :disabled="!dislableSend"
           :loading="loading"
           color="#00b786"
+            block
+            x-large
+            class="mt-4"
           @click="validate"
         >
           Next step
@@ -212,10 +274,17 @@
           :disabled="!dislableSend"
           :loading="loading"
           color="#00b786"
+            block
+            x-large
+            class="mt-4"
           @click="validatestep2"
         >
-          Send tx
+          Get reward
         </v-btn>
+      </v-card-text>
+      <v-card-actions>
+        <v-spacer />
+
       </v-card-actions>
     </v-card>
   </v-dialog>
