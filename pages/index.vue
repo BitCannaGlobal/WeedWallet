@@ -451,6 +451,14 @@ export default {
         hour12: false,
       }).format(new Date(dateStr))
     },  
+    async copyAddr(text) {
+      await this.$copyText(text);
+      this.isCopied = true;
+      setTimeout(this.hideCopy, 4000);
+    },  
+    hideCopy() {
+      this.isCopied = false;
+    },
   }
 };
 </script>
