@@ -33,8 +33,8 @@ export default [
     feeMultiplier: 1.5,
     gasPrice: 0.025,
     coingeckoId: "bitcanna",
-    maxTxSender: 20,
-    maxTxRecipient: 20,
+    maxTxSender: 5,
+    maxTxRecipient: 5,
     addressAllowedProp: [
       'bcna1csyzlg52g2kd8e0xd6f6elckydhr93ukc3wmqt', // R
       'bcna153hxvnx24h07aptul43fsuyeq7kgt2erequ6us', // R

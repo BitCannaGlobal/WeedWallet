@@ -84,8 +84,12 @@
               </v-card-text>
             </v-card>
 
-            <v-col class="mt-4 ml-9 mb-6">
-              <h1>Transactions</h1>
+            <v-col class="mt-4 ml-9 mb-6"> 
+              <h1 style="text-align:left; float:left;" >Transactions</h1>
+              <p class="mt-4 mr-10" style="text-align:right;">
+                <a target="_blank" :href="'https://explorer.bitcanna.io/accounts/' + accounts[0]?.address">See all transactions</a>
+              </p>
+              
             </v-col>
             <template v-for="group in groupedEvents()">
               <div>
