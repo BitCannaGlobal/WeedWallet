@@ -52,39 +52,39 @@
           v-model="dislableSend"
           lazy-validation
         > 
-            <v-row>
-              <v-col cols="12">
-                <span class="text-left">Available: {{ amountUn }} BCNA</span>
-                <v-text-field
-                  v-model="amount"
-                  label="Amount*"
-                  :rules="!loadingInput ? amountRules : ''"
-                  type="text"
-                  class="mt-4"
-                  background-color="#0F0F0F"
-                  flat 
-                  solo
-                >
-                  <template #append>
-                    <v-chip
-                      label
-                      small
-                      @click="getMax"
-                    >
-                      Max
-                    </v-chip>
-                  </template>
-                </v-text-field>
-                <v-text-field
-                  v-model="memo"
-                  label="Memo"
-                  required
-                  background-color="#0F0F0F"
-                  flat 
-                  solo
-                />
-              </v-col>
-            </v-row> 
+          <v-row>
+            <v-col cols="12">
+              <span class="text-left">Available: {{ amountUn }} BCNA</span>
+              <v-text-field
+                v-model="amount"
+                label="Amount*"
+                :rules="!loadingInput ? amountRules : ''"
+                type="text"
+                class="mt-4"
+                background-color="#0F0F0F"
+                flat 
+                solo
+              >
+                <template #append>
+                  <v-chip
+                    label
+                    small
+                    @click="getMax"
+                  >
+                    Max
+                  </v-chip>
+                </template>
+              </v-text-field>
+              <v-text-field
+                v-model="memo"
+                label="Memo"
+                required
+                background-color="#0F0F0F"
+                flat 
+                solo
+              />
+            </v-col>
+          </v-row> 
         </v-form>
         <v-form
           v-if="step2"
@@ -93,69 +93,68 @@
         >
           <v-row>
             <v-col cols="12">
-
               <v-sheet
-              outlined
-              color="gray"
-              rounded
-            >
-              <v-card
-                color="#1C1D20"
-                class="pa-2"
                 outlined
-                tile 
+                color="gray"
+                rounded
               >
-              <v-list-item two-line>
-                  <v-list-item-content>        
-                    <v-list-item-subtitle class="mb-2">
-                      <h3>Amount</h3>
-                    </v-list-item-subtitle>
-                    <v-list-item-title>
-                      <h3>{{ amount }} {{ cosmosConfig[chainId].coinLookup.viewDenom }}</h3>
-                    </v-list-item-title>
-                  </v-list-item-content>
-                </v-list-item>
-                <v-list-item two-line>
-                  <v-list-item-content>        
-                    <v-list-item-subtitle class="mb-2">
-                      <h3>From</h3>
-                    </v-list-item-subtitle>
-                    <v-list-item-title>
-                      <h3>{{ validatorName }}</h3>
-                    </v-list-item-title>
-                  </v-list-item-content>
-                </v-list-item>                              
-                <v-list-item two-line>
-                  <v-list-item-content>        
-                    <v-list-item-subtitle class="mb-2">
-                      <h3>Gas/fee</h3>
-                    </v-list-item-subtitle>
-                    <v-list-item-title>
-                      <h3>
-                        {{ gasFee.gas }} / {{ gasFee.fee / 1000000 }}
-                        {{ cosmosConfig[chainId].coinLookup.viewDenom }}
-                      </h3>
-                    </v-list-item-title>
-                  </v-list-item-content>
-                </v-list-item>
-                <v-list-item
-                  v-if="memo !== ''"
-                  two-line
+                <v-card
+                  color="#1C1D20"
+                  class="pa-2"
+                  outlined
+                  tile 
                 >
-                  <v-list-item-content>        
-                    <v-list-item-subtitle class="mb-2">
-                      <h3>Memo</h3>
-                    </v-list-item-subtitle>
-                    <v-list-item-title>
-                      <h3>{{ memo }}</h3>
-                    </v-list-item-title> 
-                  </v-list-item-content>
-                </v-list-item>  
-              </v-card>
-            </v-sheet>  
+                  <v-list-item two-line>
+                    <v-list-item-content>        
+                      <v-list-item-subtitle class="mb-2">
+                        <h3>Amount</h3>
+                      </v-list-item-subtitle>
+                      <v-list-item-title>
+                        <h3>{{ amount }} {{ cosmosConfig[chainId].coinLookup.viewDenom }}</h3>
+                      </v-list-item-title>
+                    </v-list-item-content>
+                  </v-list-item>
+                  <v-list-item two-line>
+                    <v-list-item-content>        
+                      <v-list-item-subtitle class="mb-2">
+                        <h3>From</h3>
+                      </v-list-item-subtitle>
+                      <v-list-item-title>
+                        <h3>{{ validatorName }}</h3>
+                      </v-list-item-title>
+                    </v-list-item-content>
+                  </v-list-item>                              
+                  <v-list-item two-line>
+                    <v-list-item-content>        
+                      <v-list-item-subtitle class="mb-2">
+                        <h3>Gas/fee</h3>
+                      </v-list-item-subtitle>
+                      <v-list-item-title>
+                        <h3>
+                          {{ gasFee.gas }} / {{ gasFee.fee / 1000000 }}
+                          {{ cosmosConfig[chainId].coinLookup.viewDenom }}
+                        </h3>
+                      </v-list-item-title>
+                    </v-list-item-content>
+                  </v-list-item>
+                  <v-list-item
+                    v-if="memo !== ''"
+                    two-line
+                  >
+                    <v-list-item-content>        
+                      <v-list-item-subtitle class="mb-2">
+                        <h3>Memo</h3>
+                      </v-list-item-subtitle>
+                      <v-list-item-title>
+                        <h3>{{ memo }}</h3>
+                      </v-list-item-title> 
+                    </v-list-item-content>
+                  </v-list-item>  
+                </v-card>
+              </v-sheet>  
 
 
-<!--               <v-simple-table class="accent">
+              <!--               <v-simple-table class="accent">
                 <template #default>
                   <tbody>
                     <tr>
@@ -213,14 +212,14 @@
             align="center"
             justify="center"
           >
-          <v-img
-                max-height="102"
-                max-width="102"
-                src="icons/pending.svg"
-              ></v-img>
-              <br />
-              <h3>Transaction pending</h3> 
-              <h4>Your transaction is waiting to get approved on the blockchain.</h4>
+            <v-img
+              max-height="102"
+              max-width="102"
+              src="icons/pending.svg"
+            />
+            <br>
+            <h3>Transaction pending</h3> 
+            <h4>Your transaction is waiting to get approved on the blockchain.</h4>
           </v-col>
         </v-row>
         <v-row v-if="step4">
@@ -229,14 +228,14 @@
             align="center"
             justify="center"
           >
-          <v-img
-                max-height="102"
-                max-width="102"
-                src="icons/approved.svg"
-              ></v-img>
-              <br />
-              <h3>Transaction approved</h3> 
-              <h4>Your transaction has been approved on the blockchain.</h4>
+            <v-img
+              max-height="102"
+              max-width="102"
+              src="icons/approved.svg"
+            />
+            <br>
+            <h3>Transaction approved</h3> 
+            <h4>Your transaction has been approved on the blockchain.</h4>
           </v-col>
         </v-row>
         <v-btn
@@ -275,7 +274,6 @@
       </v-card-text>
       <v-card-actions>
         <v-spacer />
-
       </v-card-actions>
     </v-card>
   </v-dialog>

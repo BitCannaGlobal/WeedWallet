@@ -257,12 +257,12 @@
               align="center"
               justify="center"
             >
-            <v-img
+              <v-img
                 max-height="102"
                 max-width="102"
                 src="icons/pending.svg"
-              ></v-img>
-              <br />
+              />
+              <br>
               <h3>Transaction pending</h3> 
               <h4>Your transaction is waiting to get approved on the blockchain.</h4>
             </v-col>
@@ -273,12 +273,12 @@
               align="center"
               justify="center"
             >
-            <v-img
+              <v-img
                 max-height="102"
                 max-width="102"
                 src="icons/approved.svg"
-              ></v-img>
-              <br />
+              />
+              <br>
               <h3>Transaction approved</h3> 
               <h4>Your transaction has been approved on the blockchain.</h4>
             </v-col>

@@ -51,135 +51,134 @@
           v-model="dislableSend"
           lazy-validation
         > 
-            <v-row>
-              <v-col cols="12">
- 
-                <span class="text-left">Available: {{ amount }} BCNA</span>
-                <br><br> 
-                <h3 class="mt-1 ml-1 ">
-                  Amount to delegate*
-                </h3>
-                <v-text-field
-                  v-model="amountFinal" 
-                  :rules="amountRules"
-                  required
-                  flat 
-                  solo
-                  background-color="#0F0F0F"
-                  class="mt-1"
-                >
+          <v-row>
+            <v-col cols="12">
+              <span class="text-left">Available: {{ amount }} BCNA</span>
+              <br><br> 
+              <h3 class="mt-1 ml-1 ">
+                Amount to delegate*
+              </h3>
+              <v-text-field
+                v-model="amountFinal" 
+                :rules="amountRules"
+                required
+                flat 
+                solo
+                background-color="#0F0F0F"
+                class="mt-1"
+              >
                 <template #append>
-                    <!-- <img
+                  <!-- <img
                       width="24"
                       height="24"
                       :srcset="coinIcon"
                       alt=""
                       :class="`rounded-xl`"
                     > -->
-                    <v-chip
-                      label
-                      small
-                      @click="getMax"
-                    >
-                      Max
-                    </v-chip>
-                  </template>
-                </v-text-field>
-                <h3 class="mt-1 ml-1 mb-1">
-                  Delegate to*
-                </h3>
-                <v-select
-                  v-model="addressTo"
-                  :rules="addressToRules"
-                  item-text="name"
-                  item-value="address"
-                  :items="validatorListSearch" 
-                  flat 
-                  solo
-                  background-color="#0F0F0F"
-                >
-                  <template #prepend-item>
-                    <v-list-item>
-                      <v-list-item-content>
-                        <v-text-field
-                          v-model="searchTerm"
-                          outlined
-                          placeholder="Search validator"
-                          @input="searchVal"
-                        />
-                      </v-list-item-content>
-                    </v-list-item>
-                    <v-divider class="mt-2" />
-                  </template> 
-                </v-select>
-                <h3 class="mt-1 ml-1 mb-1">
-                  Memo
-                </h3>
-                <v-text-field
-                  v-model="memo"
-                  required
-                  flat 
-                  solo
-                  background-color="#0F0F0F"
-                />
-              </v-col>
-            </v-row> 
+                  <v-chip
+                    label
+                    small
+                    @click="getMax"
+                  >
+                    Max
+                  </v-chip>
+                </template>
+              </v-text-field>
+              <h3 class="mt-1 ml-1 mb-1">
+                Delegate to*
+              </h3>
+              <v-select
+                v-model="addressTo"
+                :rules="addressToRules"
+                item-text="name"
+                item-value="address"
+                :items="validatorListSearch" 
+                flat 
+                solo
+                background-color="#0F0F0F"
+              >
+                <template #prepend-item>
+                  <v-list-item>
+                    <v-list-item-content>
+                      <v-text-field
+                        v-model="searchTerm"
+                        outlined
+                        placeholder="Search validator"
+                        @input="searchVal"
+                      />
+                    </v-list-item-content>
+                  </v-list-item>
+                  <v-divider class="mt-2" />
+                </template> 
+              </v-select>
+              <h3 class="mt-1 ml-1 mb-1">
+                Memo
+              </h3>
+              <v-text-field
+                v-model="memo"
+                required
+                flat 
+                solo
+                background-color="#0F0F0F"
+              />
+            </v-col>
+          </v-row> 
         </v-form>
         <v-form
           v-if="step2"
           ref="form"
           lazy-validation
         >
-        <v-sheet
+          <v-sheet
+            outlined
+            color="gray"
+            rounded
+          >
+            <v-card
+              color="#1C1D20"
+              class="pa-2"
               outlined
-              color="gray"
-              rounded
+              tile 
             >
-              <v-card
-                color="#1C1D20"
-                class="pa-2"
-                outlined
-                tile 
-              >
               <v-list-item two-line>
-                  <v-list-item-content>        
-                    <v-list-item-subtitle class="mb-2">
-                      <h3>Delegate to</h3>
-                    </v-list-item-subtitle>
-                    <v-list-item-title>
-                      <h3>{{ valName }}</h3> 
-                    </v-list-item-title>
-                  </v-list-item-content>
-                </v-list-item>
-                <v-list-item two-line>
-                  <v-list-item-content>        
-                    <v-list-item-subtitle class="mb-2">
-                      <h3>Amount</h3>
-                    </v-list-item-subtitle>
-                    <v-list-item-title>
-                      <h3>
-                        {{ amountFinal }}
-                        {{ cosmosConfig[chainId].coinLookup.viewDenom }}                        
-                      </h3> 
-                    </v-list-item-title>
-                  </v-list-item-content>
-                </v-list-item>                
-                <v-list-item two-line>
-                  <v-list-item-content>        
-                    <v-list-item-subtitle class="mb-2">
-                      <h3>Gas/fee</h3>
-                    </v-list-item-subtitle>
-                    <v-list-item-title>
-                      <h3>
-                        {{ gasFee.gas }} / {{ gasFee.fee / 1000000 }}
-                        {{ cosmosConfig[chainId].coinLookup.viewDenom }}
-                      </h3>
-                    </v-list-item-title>
-                  </v-list-item-content>
-                </v-list-item>
-              </v-card>
-            </v-sheet>  
- <!--          <v-row>
+                <v-list-item-content>        
+                  <v-list-item-subtitle class="mb-2">
+                    <h3>Delegate to</h3>
+                  </v-list-item-subtitle>
+                  <v-list-item-title>
+                    <h3>{{ valName }}</h3> 
+                  </v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+              <v-list-item two-line>
+                <v-list-item-content>        
+                  <v-list-item-subtitle class="mb-2">
+                    <h3>Amount</h3>
+                  </v-list-item-subtitle>
+                  <v-list-item-title>
+                    <h3>
+                      {{ amountFinal }}
+                      {{ cosmosConfig[chainId].coinLookup.viewDenom }}                        
+                    </h3> 
+                  </v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>                
+              <v-list-item two-line>
+                <v-list-item-content>        
+                  <v-list-item-subtitle class="mb-2">
+                    <h3>Gas/fee</h3>
+                  </v-list-item-subtitle>
+                  <v-list-item-title>
+                    <h3>
+                      {{ gasFee.gas }} / {{ gasFee.fee / 1000000 }}
+                      {{ cosmosConfig[chainId].coinLookup.viewDenom }}
+                    </h3>
+                  </v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+            </v-card>
+          </v-sheet>  
+          <!--          <v-row>
             <v-col cols="12">
               <v-simple-table class="accent">
                 <template #default>
@@ -239,14 +238,14 @@
             align="center"
             justify="center"
           >
-          <v-img
-                max-height="102"
-                max-width="102"
-                src="icons/pending.svg"
-              ></v-img>
-              <br />
-              <h3>Transaction pending</h3> 
-              <h4>Your transaction is waiting to get approved on the blockchain.</h4>
+            <v-img
+              max-height="102"
+              max-width="102"
+              src="icons/pending.svg"
+            />
+            <br>
+            <h3>Transaction pending</h3> 
+            <h4>Your transaction is waiting to get approved on the blockchain.</h4>
           </v-col>
         </v-row>
         <v-row v-if="step4">
@@ -255,22 +254,22 @@
             align="center"
             justify="center"
           >
-          <v-img
-                max-height="102"
-                max-width="102"
-                src="icons/approved.svg"
-              ></v-img>
-              <br />
-              <h3>Transaction approved</h3> 
-              <h4>Your transaction has been approved on the blockchain.</h4>
+            <v-img
+              max-height="102"
+              max-width="102"
+              src="icons/approved.svg"
+            />
+            <br>
+            <h3>Transaction approved</h3> 
+            <h4>Your transaction has been approved on the blockchain.</h4>
           </v-col>
         </v-row>
         <v-btn
           v-if="step2"
           color="#1C1D20"
           block
-            x-large
-            class="mt-4"
+          x-large
+          class="mt-4"
           @click="returnStep"
         >
           Return
@@ -281,8 +280,8 @@
           :loading="loading"
           color="#00b786"
           block
-            x-large
-            class="mt-4"
+          x-large
+          class="mt-4"
           @click="validate"
         >
           Next step
@@ -293,8 +292,8 @@
           :loading="loading"
           color="#00b786"
           block
-            x-large
-            class="mt-4"
+          x-large
+          class="mt-4"
           @click="validatestep2"
         >
           Delegate

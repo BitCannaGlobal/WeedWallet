@@ -149,9 +149,9 @@
               color="#00b786"
               :to="'/nfts/' + index.id"
               block
-            x-large
+              x-large
             >
-             Details
+              Details
             </v-btn>
           </div>
         </div>

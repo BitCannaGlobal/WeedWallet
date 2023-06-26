@@ -162,12 +162,24 @@
                 Undelegates
               </v-card-title>
               <!-- {{ allUnbonding }} -->
+
+ 
+
+
+
               <v-data-table
                 :headers="headersUndbound"
                 :items="allUnbonding"
                 :items-per-page="5"
                 class="elevation-1 accent"
-              />
+              >
+                <template #item.entries[0].balance="{ item }">
+                  {{ item.entries[0].balance / 1000000 }} {{ cosmosConfig[0].coinLookup.viewDenom }}
+                </template>  
+                <template #item.entries[0].completion_time="{ item }">
+                  {{ formatDate(item.entries[0].completion_time) }} 
+                </template>  
+              </v-data-table>
             </v-card>
           </v-col>
 
@@ -185,7 +197,14 @@
                 :items="allRedelegate"
                 :items-per-page="5"
                 class="elevation-1 accent"
-              />
+              >
+                <template #item.entries[0].balance="{ item }">
+                  {{ item.entries[0].balance / 1000000 }} {{ cosmosConfig[0].coinLookup.viewDenom }}
+                </template>
+                <template #item.entries[0].redelegation_entry.completion_time="{ item }">
+                  {{ formatDate(item.entries[0].redelegation_entry.completion_time) }} 
+                </template>  
+              </v-data-table>
             </v-card>
           </v-col>
         </v-row>
@@ -416,7 +435,7 @@ export default {
         value: "validator_address",
       },
       { text: "Amount", value: "entries[0].balance" },
-      { text: "completion_time", value: "entries[0].completion_time" },
+      { text: "Completion Time", value: "entries[0].completion_time" },
     ],
     headersRedelegate: [
       {
@@ -427,7 +446,7 @@ export default {
       },
       { text: "Amount", value: "entries[0].balance" },
       {
-        text: "completion_time",
+        text: "Completion Time",
         value: "entries[0].redelegation_entry.completion_time",
       },
     ],
@@ -539,6 +558,17 @@ export default {
         }
       })();
     },
+    formatDate(dateStr) {
+      return Intl.DateTimeFormat("us-EN", {
+        year: "numeric",
+        month: "numeric",
+        day: "numeric",
+        hour: "numeric",
+        minute: "numeric",
+        second: "numeric",
+        hour12: false,
+      }).format(new Date(dateStr))
+    }, 
   },
 };
 </script>

@@ -62,39 +62,39 @@
           v-model="dislableSend"
           lazy-validation
         >
-            <v-simple-table>
-              <thead>
-                <tr>
-                  <th class="text-left">
-                    Validator name
-                  </th>
-                  <th class="text-left">
-                    Delegate
-                  </th>
-                  <th class="text-left">
-                    Amount rewarded
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr
-                  v-for="item in delegations"
-                  :key="item.op_address"
-                >
-                  <td>{{ item.validatorName }}</td>
-                  <!--<td>{{ item.op_address }}</td>-->
-                  <td>
-                    {{ (item.delegated / 1000000).toFixed(6) }}
-                    {{ cosmosConfig[chainId].coinLookup.viewDenom }}
-                  </td>
-                  <td>
-                    {{ item.reward }}
-                    {{ cosmosConfig[chainId].coinLookup.viewDenom }}
-                  </td>
-                </tr>
-              </tbody>
-            </v-simple-table>
-            <!-- <v-stepper v-model="e1" v-if="dialogStepper">
+          <v-simple-table>
+            <thead>
+              <tr>
+                <th class="text-left">
+                  Validator name
+                </th>
+                <th class="text-left">
+                  Delegate
+                </th>
+                <th class="text-left">
+                  Amount rewarded
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                v-for="item in delegations"
+                :key="item.op_address"
+              >
+                <td>{{ item.validatorName }}</td>
+                <!--<td>{{ item.op_address }}</td>-->
+                <td>
+                  {{ (item.delegated / 1000000).toFixed(6) }}
+                  {{ cosmosConfig[chainId].coinLookup.viewDenom }}
+                </td>
+                <td>
+                  {{ item.reward }}
+                  {{ cosmosConfig[chainId].coinLookup.viewDenom }}
+                </td>
+              </tr>
+            </tbody>
+          </v-simple-table>
+          <!-- <v-stepper v-model="e1" v-if="dialogStepper">
               <v-stepper-header>
                 <v-stepper-step
                   :complete="e1 > 1"
@@ -128,60 +128,60 @@
           ref="form"
           lazy-validation
         >
-        <v-sheet
+          <v-sheet
+            outlined
+            color="gray"
+            rounded
+          >
+            <v-card
+              color="#1C1D20"
+              class="pa-2"
               outlined
-              color="gray"
-              rounded
+              tile 
             >
-              <v-card
-                color="#1C1D20"
-                class="pa-2"
-                outlined
-                tile 
+              <v-list-item two-line>
+                <v-list-item-content>        
+                  <v-list-item-subtitle class="mb-2">
+                    <h3>Gas/fee</h3>
+                  </v-list-item-subtitle>
+                  <v-list-item-title>
+                    <h3>
+                      {{ gasFee.gas }} / {{ gasFee.fee / 1000000 }}
+                      {{ cosmosConfig[chainId].coinLookup.viewDenom }}
+                    </h3>
+                  </v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+              <v-list-item
+                v-if="memo !== ''"
+                two-line
               >
-                <v-list-item two-line>
-                  <v-list-item-content>        
-                    <v-list-item-subtitle class="mb-2">
-                      <h3>Gas/fee</h3>
-                    </v-list-item-subtitle>
-                    <v-list-item-title>
-                      <h3>
-                        {{ gasFee.gas }} / {{ gasFee.fee / 1000000 }}
-                        {{ cosmosConfig[chainId].coinLookup.viewDenom }}
-                      </h3>
-                    </v-list-item-title>
-                  </v-list-item-content>
-                </v-list-item>
-                <v-list-item
-                  v-if="memo !== ''"
-                  two-line
-                >
-                  <v-list-item-content>        
-                    <v-list-item-subtitle class="mb-2">
-                      <h3>Memo</h3>
-                    </v-list-item-subtitle>
-                    <v-list-item-title>
-                      <h3>{{ memo }}</h3>
-                    </v-list-item-title> 
-                  </v-list-item-content>
-                </v-list-item>      
-              </v-card>
-            </v-sheet>      
-            <h3 class="mt-4 ml-1 mb-2">
-              Memo (Optional)
-            </h3>
-            <v-text-field
-              v-model="memo"              
-              background-color="#0F0F0F"
-              required
-              flat 
-              solo
-            /> 
+                <v-list-item-content>        
+                  <v-list-item-subtitle class="mb-2">
+                    <h3>Memo</h3>
+                  </v-list-item-subtitle>
+                  <v-list-item-title>
+                    <h3>{{ memo }}</h3>
+                  </v-list-item-title> 
+                </v-list-item-content>
+              </v-list-item>      
+            </v-card>
+          </v-sheet>      
+          <h3 class="mt-4 ml-1 mb-2">
+            Memo (Optional)
+          </h3>
+          <v-text-field
+            v-model="memo"              
+            background-color="#0F0F0F"
+            required
+            flat 
+            solo
+          /> 
   
-            <v-row>
-              <v-col cols="12" />
-            </v-row>    
-<!--           <v-row>
+          <v-row>
+            <v-col cols="12" />
+          </v-row>    
+          <!--           <v-row>
             <v-col cols="12">
               <v-simple-table class="accent">
                 <template #default>
@@ -221,14 +221,14 @@
             align="center"
             justify="center"
           >
-          <v-img
-                max-height="102"
-                max-width="102"
-                src="icons/pending.svg"
-              ></v-img>
-              <br />
-              <h3>Transaction pending</h3> 
-              <h4>Your transaction is waiting to get approved on the blockchain.</h4>
+            <v-img
+              max-height="102"
+              max-width="102"
+              src="icons/pending.svg"
+            />
+            <br>
+            <h3>Transaction pending</h3> 
+            <h4>Your transaction is waiting to get approved on the blockchain.</h4>
           </v-col>
         </v-row>
         <v-row v-if="step4">
@@ -237,22 +237,22 @@
             align="center"
             justify="center"
           >
-          <v-img
-                max-height="102"
-                max-width="102"
-                src="icons/approved.svg"
-              ></v-img>
-              <br />
-              <h3>Transaction approved</h3> 
-              <h4>Your transaction has been approved on the blockchain.</h4>
+            <v-img
+              max-height="102"
+              max-width="102"
+              src="icons/approved.svg"
+            />
+            <br>
+            <h3>Transaction approved</h3> 
+            <h4>Your transaction has been approved on the blockchain.</h4>
           </v-col>
         </v-row>
         <v-btn
           v-if="step2"
           color="#1C1D20"
-            block
-            x-large
-            class="mt-4"
+          block
+          x-large
+          class="mt-4"
           @click="returnStep"
         >
           Return
@@ -262,9 +262,9 @@
           :disabled="!dislableSend"
           :loading="loading"
           color="#00b786"
-            block
-            x-large
-            class="mt-4"
+          block
+          x-large
+          class="mt-4"
           @click="validate"
         >
           Next step
@@ -274,9 +274,9 @@
           :disabled="!dislableSend"
           :loading="loading"
           color="#00b786"
-            block
-            x-large
-            class="mt-4"
+          block
+          x-large
+          class="mt-4"
           @click="validatestep2"
         >
           Get reward
@@ -284,7 +284,6 @@
       </v-card-text>
       <v-card-actions>
         <v-spacer />
-
       </v-card-actions>
     </v-card>
   </v-dialog>

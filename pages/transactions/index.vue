@@ -37,7 +37,7 @@
           > 
             <v-expansion-panel-header>
               <v-row no-gutters>
-<!--                 <v-col cols="1">
+                <!--                 <v-col cols="1">
                   <v-avatar class="mr-2">
                     <v-img
                       :src="'../transactions/' + item.final.icon"
@@ -84,7 +84,7 @@
                   cols="5"
                   class="mt-4"
                 > 
- <!--                  <div class="mr-4" v-if="item.final.msgData.option">
+                  <!--                  <div class="mr-4" v-if="item.final.msgData.option">
                     <v-chip
                             v-if="
                               item.final.msgData.option ===
@@ -134,7 +134,10 @@
                             NO WITH VETO
                           </v-chip> 
                   </div> -->
-                  <div class="mr-4" v-if="item.final.msgData.amount">
+                  <div
+                    v-if="item.final.msgData.amount"
+                    class="mr-4"
+                  >
                     {{ item.final.msgData.amount }} {{ cosmosConfig[0].coinLookup.viewDenom }}
                   </div>
                 </v-col>                       
@@ -316,7 +319,7 @@
                       </tr>
                     </thead>
                     <tbody>
-                      {{ item  }}
+                      {{ item }}
                       <tr>
                         <td>
                           #{{ item.final.msgData.proposal_id }}
@@ -677,7 +680,6 @@
         </v-card-text> 
       </v-card>
     </v-dialog>
- 
   </div>
 </template>
 

@@ -74,17 +74,16 @@
         </v-card-title>
 
         <v-card-text class="mt-6">
- 
-            <div 
-              class="fill-height d-flex"
-            >
-              <img
-                src="BCNA-LOGO-C.svg"
-                alt="BitCanna"
-                height="40"
-                width="40"
-              > 
-              <span class="text-h6 mt-2 ml-8">{{ selectedValidator.name }}</span>
+          <div 
+            class="fill-height d-flex"
+          >
+            <img
+              src="BCNA-LOGO-C.svg"
+              alt="BitCanna"
+              height="40"
+              width="40"
+            > 
+            <span class="text-h6 mt-2 ml-8">{{ selectedValidator.name }}</span>
           </div> 
 
 
@@ -134,8 +133,7 @@
             :chain-id-props="cosmosConfig[chainId].coinLookup.addressPrefix"
             :address-to="selectedValidator.op_address"
             :validator-name="validatorDetails.description?.moniker" 
-          /> 
- 
+          />
         </v-card-text>
 
         <v-card-actions> 
