@@ -15,6 +15,8 @@
             <v-spacer />
           </v-row>
           <v-divider class="mb-6" />
+          <ChartsBar />
+          <br /><br />
           <v-row>
             <v-col 
               cols="12"
