@@ -23,7 +23,8 @@
                     Main account<br>
                     <h1 class="mt-2 carmenBold">
                       {{ (balances / 1000000).toFixed(2) }}
-                      {{ cosmosConfig[chainId].coinLookup.viewDenom }}
+                      {{ cosmosConfig[chainId].coinLookup.viewDenom }} 
+                      <v-icon @click="walletDistribution = !walletDistribution">mdi-information-outline</v-icon>
                     </h1>
                     <h3 class="mt-2">
                       ${{ totalWalletPrice }}
@@ -81,6 +82,74 @@
                     </v-sheet>
                   </v-col>
                 </v-row>
+                <v-divider class="mt-6 mb-6" v-if="walletDistribution" />
+ 
+                  <v-row no-gutters v-if="walletDistribution">
+                    <v-col 
+                      cols="12"
+                      sm="6"
+                    >
+                    <v-icon
+                      color="#0EB584"
+                      small
+                      class="mt-n1"
+                    >
+                      mdi-circle
+                    </v-icon>
+                    Available
+                      {{ (balances / 1000000).toFixed(6) }}
+                      {{ cosmosConfig[chainId].coinLookup.viewDenom }} 
+                      <br />
+                      <v-icon
+                      color="#79FFD8"
+                      small
+                      class="mt-n1"
+                    >
+                      mdi-circle
+                    </v-icon>                      
+                    Delegated
+                      {{ (totalDelegated / 1000000).toFixed(6) }}
+                      {{ cosmosConfig[chainId].coinLookup.viewDenom }}   
+                      <br />
+                      <v-icon
+                      color="#FFFFFF"
+                      small
+                      class="mt-n1"
+                    >
+                      mdi-circle
+                    </v-icon>                      
+                    Vested
+                      0
+                      {{ cosmosConfig[chainId].coinLookup.viewDenom }}  
+                    </v-col>
+                    <v-col 
+                      cols="12"
+                      sm="6"
+                    >
+                    <v-icon
+                      color="#FF7E7E"
+                      small
+                      class="mt-n1"
+                    >
+                      mdi-circle
+                    </v-icon>
+                    Unbouding
+                      {{ (totalUnbound / 1000000).toFixed(6) }}
+                      {{ cosmosConfig[chainId].coinLookup.viewDenom }} 
+                      <br />
+                      <v-icon
+                      color="#006C4C"
+                      small
+                      class="mt-n1"
+                    >
+                      mdi-circle
+                    </v-icon>
+                    Rewards
+                      {{ (rewards.amount / 1000000).toFixed(6) }}
+                      {{ cosmosConfig[chainId].coinLookup.viewDenom }} 
+                    </v-col>
+ 
+                  </v-row> 
               </v-card-text>
             </v-card>
 
@@ -320,6 +389,7 @@ export default {
     rpcAllTxs: [],
     dialog: false,
     isCopied: false,
+    walletDistribution: false
   }),
   computed: {
     ...mapState("keplr", [
@@ -338,7 +408,9 @@ export default {
       "allTxs",
       "allTxsLoaded",
       "validators",
-      "validatorsLoaded"
+      "validatorsLoaded",
+      "totalDelegated",
+      "totalUnbound",
     ]),
   },
   watch: {},
