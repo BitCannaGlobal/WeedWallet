@@ -1,13 +1,12 @@
 <template>
   <v-dialog
     v-model="dialog"
-    max-width="900px"
+    max-width="600px"
   >
     <template #activator="{ on, attrs }"> 
       <v-btn
         v-if="homePage"
-        large
-        min-width="200"
+        large 
         class="mt-2 white--text"
         color="#0FB786"
         v-bind="attrs"
@@ -61,8 +60,9 @@
           ref="form"
           v-model="dislableSend"
           lazy-validation
+          
         >
-          <v-simple-table>
+          <v-simple-table class="accent">
             <thead>
               <tr>
                 <th class="text-left">
