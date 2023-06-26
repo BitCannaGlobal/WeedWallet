@@ -238,7 +238,7 @@
     </sequential-entrance>
 
 
-    <v-card class="accent">
+<!--     <v-card class="accent">
       <v-card-title>
         All proposals
         <v-spacer />
@@ -291,8 +291,7 @@
               Proposal Rejected
             </v-chip>
           </td>
-          <td v-if="item.status === 'PROPOSAL_STATUS_VOTING_PERIOD'">
-            <!--{{ item.status }}-->
+          <td v-if="item.status === 'PROPOSAL_STATUS_VOTING_PERIOD'"> 
             <v-chip
               class="ma-2"
               text-color="white"
@@ -305,8 +304,7 @@
               Voting Period
             </v-chip>
           </td>
-          <td v-if="item.status === 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
-            <!--{{ item.status }}-->
+          <td v-if="item.status === 'PROPOSAL_STATUS_DEPOSIT_PERIOD'"> 
             <v-chip
               class="ma-2"
               text-color="white"
@@ -410,7 +408,7 @@
           </v-btn>
         </template>
       </v-data-table>
-    </v-card>
+    </v-card> -->
 
 <v-dialog
       v-model="dialog"
