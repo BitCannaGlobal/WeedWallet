@@ -683,7 +683,7 @@
               outlined
               tile 
             >
-                <v-list-item two-line v-if="finalVote">
+                <v-list-item two-line >
                   <v-list-item-content>        
                     <v-list-item-subtitle class="mb-2">
                       <h3>Vote</h3>
@@ -759,7 +759,7 @@
           
           
           <v-btn  
-          v-if="selectedProposal.status === 'PROPOSAL_STATUS_VOTING_PERIOD'"
+            v-if="selectedProposal.status === 'PROPOSAL_STATUS_VOTING_PERIOD' && !step2 && !step3 && !step4"
             color="#00b786"
             block
             class="mt-4"
@@ -876,7 +876,7 @@ export default {
         this.step2 = false;
         this.step3 = false;
         this.step4 = false;
-        this.finalVote = false;
+        this.finalVote = '';
         this.finalVoteId = false;
       }
     },
