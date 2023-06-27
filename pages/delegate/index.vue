@@ -289,9 +289,11 @@
                   Your reward {{ selectedValidator.reward }}
                 </v-col>
                 <v-col md="3">
-                  <v-btn @click="getReward(selectedValidator.op_address)">
-                    claim
-                  </v-btn>
+                  <SoloRewardModal 
+                    :validator-name="selectedValidator.validatorName"
+                    :op-address="selectedValidator.op_address"
+                    :total-reward="selectedValidator?.reward" 
+                  />
                 </v-col>
               </v-row>
             </v-col>
