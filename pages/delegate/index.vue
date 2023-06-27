@@ -488,6 +488,7 @@ export default {
     },
   },  
   async mounted() {
+
     await this.$store.dispatch("keplr/checkLogin");
     if (!this.logged) {
       this.$router.push({ path: "/login" });
@@ -495,7 +496,27 @@ export default {
     }
     await this.$store.dispatch("data/getDelegations", this.accounts[0].address);
     this.dataLoaded = true;
+    /* console.log($nuxt.$route.hash)
+    if ($nuxt.$route.hash) {
+      const validatorsId = $nuxt.$route.hash.replace("#", "");
+      const foundValidator = this.validators.find(
+        (element) => element.op_address === validatorsId
+      );
 
+      await this.$store.dispatch("data/getValidatorDetails", foundValidator.op_address);
+
+        await this.$store.dispatch("data/getValidatorDelegation", {
+          validatorAddr: foundValidator.op_address,
+          delegatorAddr: this.accounts[0].address,
+        });
+        await this.$store.dispatch("data/getValidatorUnDelegations", {
+          validatorAddr: foundValidator.op_address,
+          delegatorAddr: this.accounts[0].address,
+        });  
+        console.log(foundValidator)
+      this.dialog = true
+      this.selectedValidator = foundValidator; 
+    } */ 
     
   },
   methods: {

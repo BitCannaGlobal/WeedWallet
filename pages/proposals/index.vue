@@ -987,10 +987,22 @@ export default {
     },    
   },
   async mounted() {
+
+
     // List of proposal from the blockchain
     const allProposals = await axios(
       cosmosConfig[0].apiURL + `/cosmos/gov/v1beta1/proposals`
     );
+ 
+    if ($nuxt.$route.hash) {
+      const proposalId = $nuxt.$route.hash.replace("#", "");
+      const foundProp = allProposals.data.proposals.find(
+        (element) => element.proposal_id === proposalId
+      );       
+      this.dialog = true
+      this.selectedProposal = foundProp   
+      this.dataLoaded = true;
+    }    
 
     const setFinalPropos = [];
     allProposals.data.proposals.forEach((item) => {
@@ -1127,14 +1139,12 @@ export default {
         Number(data.yes) +
         Number(data.no) +
         Number(data.no_with_veto) +
-        Number(data.abstain);
-      console.log(totalTally);
+        Number(data.abstain); 
       return totalTally;
     },
     async setSelectProposal(proposal) {
       this.dialog = true
-      this.selectedProposal = proposal  
-      console.log(proposal)
+      this.selectedProposal = proposal   
       this.dataLoaded = true;
     },
     formatDate(dateStr) {
