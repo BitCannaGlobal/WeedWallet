@@ -163,7 +163,7 @@
               >
                 <a
                   target="_blank"
-                  :href="'https://explorer.bitcanna.io/accounts/' + accounts[0]?.address"
+                  href="https://wallet-testnet.bitcanna.io/transactions"
                 >See all transactions</a>
               </p>
             </v-col>
@@ -425,7 +425,7 @@ export default {
           "/cosmos/tx/v1beta1/txs?events=message.sender=%27" +
           this.accounts[0].address +
           "%27&limit=" +
-          cosmosConfig[this.chainId].maxTxSender +
+          cosmosConfig[this.chainId].maxTxSenderHome +
           "&order_by=2"
       );
       const resultRecipient = await axios(
@@ -433,7 +433,7 @@ export default {
           "/cosmos/tx/v1beta1/txs?events=transfer.recipient=%27" +
           this.accounts[0].address +
           "%27&limit=" +
-          cosmosConfig[this.chainId].maxTxSender +
+          cosmosConfig[this.chainId].maxTxRecipientHome +
           "&order_by=2"
       );
       const finalTxs = resultSender.data.tx_responses.concat(

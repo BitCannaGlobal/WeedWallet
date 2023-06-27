@@ -830,7 +830,7 @@ export default {
           "/cosmos/tx/v1beta1/txs?events=transfer.recipient=%27" +
           this.accounts[0].address +
           "%27&limit=" +
-          cosmosConfig[this.chainId].maxTxSender +
+          cosmosConfig[this.chainId].maxTxRecipient +
           "&order_by=2"
       );
       const finalTxs = resultSender.data.tx_responses.concat(
