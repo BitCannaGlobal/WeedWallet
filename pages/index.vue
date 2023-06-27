@@ -194,10 +194,9 @@
                 class="mt-4 mr-10"
                 style="text-align:right;"
               >
-                <a
-                  target="_blank"
-                  href="https://wallet-testnet.bitcanna.io/transactions"
-                >See all transactions</a>
+              <NuxtLink to="/transactions"> 
+                See all transactions 
+              </NuxtLink>
               </p>
             </v-col>
             <template v-for="group in groupedEvents()">
