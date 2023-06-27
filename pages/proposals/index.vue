@@ -630,8 +630,7 @@
                       rounded
                     >
                       <v-card
-                        :color="active ? 'primary' : ''"
-                        color="#1C1D20"
+                        :color="active ? 'primary' : ''" 
                         class="pa-2"
                         outlined
                         tile 
@@ -646,7 +645,9 @@
                           width="10"
                         ></v-sheet>
                       </v-col>
-                        <v-col md="10">{{ n.title }}</v-col>
+                        <v-col md="10"  
+                          :class="active ? 'black--text text--lighten-1 mt-1' : 'white--text text--lighten-1 mt-1'" 
+                        >{{ n.title }}</v-col>
                       </v-row>
                       </v-card>
                     </v-sheet>
