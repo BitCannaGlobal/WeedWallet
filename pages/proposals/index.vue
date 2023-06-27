@@ -473,8 +473,27 @@
                           width="10"
                         ></v-sheet>
                       </v-col>
-                        <v-col md="10">Yes<br />
-                        {{selectedProposal.final_tally_result?.yes}}%
+                        <v-col md="10">Yes<br /> 
+                          <span
+                            v-if="
+                              selectedProposal.final_tally_result?.yes > 0 ||
+                              selectedProposal.final_tally_result?.no > 0 ||
+                              selectedProposal.final_tally_result?.abstain > 0 ||
+                              selectedProposal.final_tally_result?.no_with_veto > 0
+                            "
+                          >
+                            {{
+                              (
+                                (Number(selectedProposal.final_tally_result?.yes) * 100) /
+                                (Number(selectedProposal.final_tally_result?.yes) +
+                                  Number(selectedProposal.final_tally_result?.no) +
+                                  Number(selectedProposal.final_tally_result?.abstain) +
+                                  Number(selectedProposal.final_tally_result?.no_with_veto))
+                              ).toFixed(2)
+                            }}
+                            % 
+                          </span>
+                          <span v-else>0%</span>
                         </v-col>
                       </v-row>
                       </v-card>
@@ -500,7 +519,28 @@
                         ></v-sheet>
                       </v-col>
                         <v-col md="10">No with veto<br />
-                        {{selectedProposal.final_tally_result?.no_with_veto}}%
+                          <span
+                            v-if="
+                              selectedProposal.final_tally_result?.yes > 0 ||
+                              selectedProposal.final_tally_result?.no > 0 ||
+                              selectedProposal.final_tally_result?.abstain > 0 ||
+                              selectedProposal.final_tally_result?.no_with_veto > 0
+                            "
+                          >
+                          {{
+                              (
+                                (Number(selectedProposal.final_tally_result?.no_with_veto) * 100) /
+                                (Number(selectedProposal.final_tally_result?.yes) +
+                                  Number(selectedProposal.final_tally_result?.no) +
+                                  Number(selectedProposal.final_tally_result?.abstain) +
+                                  Number(selectedProposal.final_tally_result?.no_with_veto))
+                              ).toFixed(2)
+                            }}
+                            %  
+                          </span>
+                          <span
+                            v-else  
+                          >0%</span> 
                         </v-col>
                       </v-row>
 
@@ -532,7 +572,28 @@
                         ></v-sheet>
                       </v-col>
                         <v-col md="10">No<br />
-                        {{selectedProposal.final_tally_result?.no}}%
+                          <span
+                            v-if="
+                              selectedProposal.final_tally_result?.yes > 0 ||
+                              selectedProposal.final_tally_result?.no > 0 ||
+                              selectedProposal.final_tally_result?.abstain > 0 ||
+                              selectedProposal.final_tally_result?.no_with_veto > 0
+                            "
+                          >
+                          {{
+                              (
+                                (Number(selectedProposal.final_tally_result?.no) * 100) /
+                                (Number(selectedProposal.final_tally_result?.yes) +
+                                  Number(selectedProposal.final_tally_result?.no) +
+                                  Number(selectedProposal.final_tally_result?.abstain) +
+                                  Number(selectedProposal.final_tally_result?.no_with_veto))
+                              ).toFixed(2)
+                            }}
+                            %  
+                            </span>
+                            <span
+                              v-else  
+                            >0%</span> 
                         </v-col>
                       </v-row>
 
@@ -559,7 +620,27 @@
                         ></v-sheet>
                       </v-col>
                         <v-col md="10">Abstain<br />
-                        {{selectedProposal.final_tally_result?.abstain}}%
+                          <span
+                            v-if="
+                              selectedProposal.final_tally_result?.yes > 0 ||
+                              selectedProposal.final_tally_result?.no > 0 ||
+                              selectedProposal.final_tally_result?.abstain > 0 ||
+                              selectedProposal.final_tally_result?.no_with_veto > 0
+                            "
+                          >{{
+                              (
+                                (Number(selectedProposal.final_tally_result?.abstain) * 100) /
+                                (Number(selectedProposal.final_tally_result?.yes) +
+                                  Number(selectedProposal.final_tally_result?.no) +
+                                  Number(selectedProposal.final_tally_result?.abstain) +
+                                  Number(selectedProposal.final_tally_result?.no_with_veto))
+                              ).toFixed(2)
+                            }}
+                            %   
+                          </span>
+                          <span
+                            v-else
+                          >0%</span>
                         </v-col>
                       </v-row>
 
