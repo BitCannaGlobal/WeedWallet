@@ -340,7 +340,7 @@
                         Total stake
                       </v-list-item-subtitle>
                       <v-list-item-title class="text-h6 subtitle-2">
-                        {{ selectedValidator.delegated / 1000000 }}
+                        {{ validatorDelegations / 1000000 }}
                         {{ cosmosConfig[0].coinLookup.viewDenom }}
                       </v-list-item-title>
                     </v-list-item-content>
