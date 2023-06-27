@@ -23,8 +23,7 @@
                     Main account<br>
                     <h1 class="mt-2 carmenBold">
                       {{ (balances / 1000000).toFixed(2) }}
-                      {{ cosmosConfig[chainId].coinLookup.viewDenom }} 
-                      <v-icon @click="walletDistribution = !walletDistribution">mdi-information-outline</v-icon>
+                      {{ cosmosConfig[chainId].coinLookup.viewDenom }}  
                     </h1>
                     <h3 class="mt-2">
                       ${{ totalWalletPrice }}
@@ -82,73 +81,107 @@
                     </v-sheet>
                   </v-col>
                 </v-row>
+                <v-row class="justify-end">
+                <v-icon 
+                  class="mt-n1 mr-2"
+                  @click="walletDistribution = !walletDistribution"
+                >
+                mdi-chevron-down
+                </v-icon>   
+              </v-row>              
                 <v-divider class="mt-6 mb-6" v-if="walletDistribution" />
  
                   <v-row no-gutters v-if="walletDistribution">
                     <v-col 
                       cols="12"
                       sm="6"
-                    >
-                    <v-icon
-                      color="#0EB584"
-                      small
-                      class="mt-n1"
-                    >
-                      mdi-circle
-                    </v-icon>
-                    Available
-                      {{ (balances / 1000000).toFixed(6) }}
-                      {{ cosmosConfig[chainId].coinLookup.viewDenom }} 
-                      <br />
-                      <v-icon
-                      color="#79FFD8"
-                      small
-                      class="mt-n1"
-                    >
-                      mdi-circle
-                    </v-icon>                      
-                    Delegated
-                      {{ (totalDelegated / 1000000).toFixed(6) }}
-                      {{ cosmosConfig[chainId].coinLookup.viewDenom }}   
-                      <br />
-                      <v-icon
-                      color="#FFFFFF"
-                      small
-                      class="mt-n1"
-                    >
-                      mdi-circle
-                    </v-icon>                      
-                    Vested
-                      0
-                      {{ cosmosConfig[chainId].coinLookup.viewDenom }}  
+                    >                   
+                      <v-row no-gutters>
+                        <v-col> 
+                            <v-icon
+                              color="#0EB584"
+                              small
+                              class="mt-n1"
+                            >
+                              mdi-circle
+                            </v-icon>
+                            Available 
+                        </v-col>
+                        <v-col> 
+                          {{ (balances / 1000000).toFixed(6) }}
+                          {{ cosmosConfig[chainId].coinLookup.viewDenom }}  
+                        </v-col>
+                      </v-row>
+                      <v-row no-gutters>
+                        <v-col> 
+                            <v-icon
+                              color="#79FFD8"
+                              small
+                              class="mt-n1"
+                            >
+                              mdi-circle
+                            </v-icon>
+                            Delegated 
+                        </v-col>
+                        <v-col> 
+                          {{ (totalDelegated / 1000000).toFixed(6) }}
+                          {{ cosmosConfig[chainId].coinLookup.viewDenom }}  
+                        </v-col>
+                      </v-row>
+                      <v-row no-gutters>
+                        <v-col> 
+                            <v-icon
+                              color="#FFFFFF"
+                              small
+                              class="mt-n1"
+                            >
+                              mdi-circle
+                            </v-icon>
+                            Vested 
+                        </v-col>
+                        <v-col> 
+                          0
+                          {{ cosmosConfig[chainId].coinLookup.viewDenom }}  
+                        </v-col>
+                      </v-row>  
                     </v-col>
                     <v-col 
                       cols="12"
                       sm="6"
                     >
-                    <v-icon
-                      color="#FF7E7E"
-                      small
-                      class="mt-n1"
-                    >
-                      mdi-circle
-                    </v-icon>
-                    Unbouding
-                      {{ (totalUnbound / 1000000).toFixed(6) }}
-                      {{ cosmosConfig[chainId].coinLookup.viewDenom }} 
-                      <br />
-                      <v-icon
-                      color="#006C4C"
-                      small
-                      class="mt-n1"
-                    >
-                      mdi-circle
-                    </v-icon>
-                    Rewards
-                      {{ (rewards.amount / 1000000).toFixed(6) }}
-                      {{ cosmosConfig[chainId].coinLookup.viewDenom }} 
-                    </v-col>
- 
+                      <v-row no-gutters>
+                          <v-col> 
+                              <v-icon
+                                color="#FF7E7E"
+                                small
+                                class="mt-n1"
+                              >
+                                mdi-circle
+                              </v-icon>
+                              Unbouding 
+                          </v-col>
+                          <v-col> 
+                            {{ (totalUnbound / 1000000).toFixed(6) }} 
+                            {{ cosmosConfig[chainId].coinLookup.viewDenom }}  
+                          </v-col>
+                      </v-row> 
+                      <v-row no-gutters>
+                          <v-col> 
+                              <v-icon
+                                color="#006C4C"
+                                small
+                                class="mt-n1"
+                              >
+                                mdi-circle
+                              </v-icon>
+                              Rewards 
+                          </v-col>
+                          <v-col> 
+                            {{ (rewards.amount / 1000000).toFixed(6) }}
+                            {{ cosmosConfig[chainId].coinLookup.viewDenom }}  
+                          </v-col>
+                      </v-row>  
+                    </v-col> 
                   </v-row> 
               </v-card-text>
             </v-card>
