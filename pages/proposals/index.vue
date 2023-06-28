@@ -859,7 +859,8 @@
             block
             class="mt-4"
             x-large   
-            @click="validatestep2(selectedProposal)"         
+            @click="validatestep2(selectedProposal)" 
+            :disabled="!finalVote"        
           >
             Vote
             <v-icon
@@ -958,6 +959,7 @@ export default {
         this.step4 = false;
         this.finalVote = '';
         this.finalVoteId = '';
+        this.selected = '';
       }
     },
     selected(value) {
