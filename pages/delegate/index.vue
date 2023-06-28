@@ -286,7 +286,7 @@
                   md="6"
                   class="ml-2"
                 >
-                  Your reward {{ selectedValidator.reward }}
+                  Your reward {{ validatorRewards }}
                 </v-col>
                 <v-col md="3">
                   <SoloRewardModal 
@@ -353,7 +353,7 @@
                         Rewards
                       </v-list-item-subtitle>
                       <v-list-item-title class="text-h6">
-                        {{ selectedValidator.reward }}
+                        {{ validatorRewards }}
                         {{ cosmosConfig[0].coinLookup.viewDenom }}
                       </v-list-item-title>
                     </v-list-item-content>
@@ -476,6 +476,7 @@ export default {
       "validatorDetails",
       "validatorDelegations",
       "validatorUnDelegations",
+      "validatorRewards",
     ]),
   },
   watch: {
@@ -535,6 +536,10 @@ export default {
           validatorAddr: validator.op_address,
           delegatorAddr: this.accounts[0].address,
         });  
+        await this.$store.dispatch("data/getValidatorRewards", {
+            validatorAddr: validator.op_address,
+            delegatorAddr: this.accounts[0].address,
+        }); 
       }
     },
     getReward(addrValidator) {

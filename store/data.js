@@ -36,6 +36,7 @@ export const state = () => ({
   totalWalletPrice: "",
   validatorDelegations: "",
   validatorUnDelegations: "",
+  validatorRewards: "",
   paramsDeposit: "",
   paramsVoting: "",
   totalBonded: "",
@@ -675,6 +676,27 @@ export const actions = {
         console.log(error);
       });
   },  
+  async getValidatorRewards({ commit, state }, data) {
+    await axios(
+      // /cosmos/distribution/v1beta1/delegators/bcna13jawsn574rf3f0u5rhu7e8n6sayx5gkwgusz73/rewards/bcnavaloper1zvxldjgetj5u9wah0t8fnz229533xzsmm645gy
+      cosmosConfig[state.chainId].apiURL +
+        "/cosmos/distribution/v1beta1/delegators/" +
+        data.delegatorAddr +
+        "/rewards/" +
+        data.validatorAddr
+    )
+      .then((res) => {
+        console.log(res.data)
+        commit(
+          "setValidatorRewards",
+          (res.data.rewards[0].amount / 1000000).toFixed(6)
+        );
+        return res.data;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  },
   changeChaniId({ commit }, chainId) {
     commit("setChainId", chainId);
   },

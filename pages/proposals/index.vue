@@ -957,7 +957,7 @@ export default {
         this.step3 = false;
         this.step4 = false;
         this.finalVote = '';
-        this.finalVoteId = false;
+        this.finalVoteId = '';
       }
     },
     selected(value) {

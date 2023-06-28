@@ -257,11 +257,13 @@ export default {
             ""
           );
           assertIsDeliverTxSuccess(result);
- 
+          this.step3 = false;
+          this.step4 = true;
           await this.$store.dispatch(
             "data/getDelegations",
             accounts[0].address
           );
+          this.$store.commit("data/setValidatorRewards", 0.000000);
         } catch (error) {
             console.error(error);
             this.eError = false;
