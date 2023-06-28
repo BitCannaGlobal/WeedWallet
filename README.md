@@ -13,7 +13,7 @@
 
 ## About The Wallet
 
-![](https://hackmd.io/_uploads/rk7x9eqS2.png)
+![](https://miro.medium.com/v2/resize:fit:4800/format:webp/1*6OPpDYowRWDtK6bnMG0Dnw.png)
 
 Our WeedWallet is exclusively for the use of the BitCanna blockchain. This webwallet runs on Cosmos SDK 0.46.* and is compatible with the BitCanna devnet-1. It allows to use the main functionalities of Cosmos (send, receive, delegate, undelegate, redelegate, vote) and to display the main data of a BitCanna wallet.
 
