@@ -72,7 +72,7 @@
                       </v-list-item-subtitle>
                       <v-list-item-title>
                         <h3>
-                          {{ totalReward }}
+                          {{ validatorRewards }}
                           {{ cosmosConfig[chainId].coinLookup.viewDenom }}                        
                         </h3> 
                       </v-list-item-title>
@@ -201,7 +201,7 @@ export default {
   }),
   computed: {
     ...mapState("keplr", [`accounts`]),
-    ...mapState("data", ["chainId", 'balances']),
+    ...mapState("data", ["chainId", 'balances', 'validatorRewards']),
   },
   watch: {
     dialog(value) {
@@ -259,6 +259,7 @@ export default {
           assertIsDeliverTxSuccess(result);
           this.step3 = false;
           this.step4 = true;
+          this.loading = false;
           await this.$store.dispatch(
             "data/getDelegations",
             accounts[0].address
