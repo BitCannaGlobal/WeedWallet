@@ -5,12 +5,12 @@
     max-height="1200px"
   >
     <template #activator="{ on, attrs }">
- 
       <v-btn
         v-bind="attrs"
         block 
         v-on="on"
-      > Claim
+      >
+        Claim
       </v-btn>
     </template>
     <v-card color="#161819">
@@ -77,8 +77,7 @@
                         </h3> 
                       </v-list-item-title>
                     </v-list-item-content>
-                  </v-list-item>                
- 
+                  </v-list-item>
                 </v-card>
               </v-sheet> 
             </v-col>
@@ -142,11 +141,9 @@
 import { mapState } from "vuex";
 import cosmosConfig from "~/cosmos.config";
 import {
-  defaultRegistryTypes,
   assertIsDeliverTxSuccess,
   SigningStargateClient,
-  GasPrice,
-  calculateFee
+  GasPrice
 } from "@cosmjs/stargate";
 
 function countPlaces(num) {

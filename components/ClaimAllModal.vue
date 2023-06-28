@@ -60,7 +60,6 @@
           ref="form"
           v-model="dislableSend"
           lazy-validation
-          
         >
           <v-simple-table class="accent">
             <thead>

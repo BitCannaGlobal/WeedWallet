@@ -20,38 +20,36 @@
           <v-row justify="space-around">
             <v-col>
               <v-card class="accent">
-
-
- 
-                <v-card-text >
+                <v-card-text>
                   <v-row>
                     <v-col
                       cols="12"
                       md="3"
                     > 
-                    <v-avatar
-                      color="#BABE5B"
-                      size="56"
-                    ></v-avatar>
-              
+                      <v-avatar
+                        color="#BABE5B"
+                        size="56"
+                      />
                     </v-col>
                     <v-col
                       cols="7" 
                     > 
-                    <h4>
-                      Floor Price
-                    </h4>
-                    <div v-if="collectionDataLoaded">
-                      <h2>{{
-                        collectionData.data?.collection.floorPrice / 1000000
-                      }}      
-                      STARS </h2>           
-                    </div> 
-                    <v-progress-circular
-                      v-else
-                      indeterminate
-                      color="#00b786"
-                    />   
+                      <h4>
+                        Floor Price
+                      </h4>
+                      <div v-if="collectionDataLoaded">
+                        <h2>
+                          {{
+                            collectionData.data?.collection.floorPrice / 1000000
+                          }}      
+                          STARS
+                        </h2>           
+                      </div> 
+                      <v-progress-circular
+                        v-else
+                        indeterminate
+                        color="#00b786"
+                      />   
                     </v-col>
                   </v-row>           
                 </v-card-text>
@@ -65,31 +63,30 @@
                       cols="12"
                       md="3"
                     > 
-                    <v-avatar
-                      color="#BABE5B"
-                      size="56"
-                    ></v-avatar>
-              
+                      <v-avatar
+                        color="#BABE5B"
+                        size="56"
+                      />
                     </v-col>
                     <v-col
                       cols="7" 
                     > 
-                    <h4>
-                      Best Offer
-                    </h4>
-                    <div v-if="collectionDataLoaded">
-                      <h2>
-                        {{
-                          collectionData.data?.collection.stats.bestOffer / 1000000
-                        }}      
-                        STARS   
-                      </h2>           
-                    </div> 
-                    <v-progress-circular
-                      v-else
-                      indeterminate
-                      color="#00b786"
-                    />   
+                      <h4>
+                        Best Offer
+                      </h4>
+                      <div v-if="collectionDataLoaded">
+                        <h2>
+                          {{
+                            collectionData.data?.collection.stats.bestOffer / 1000000
+                          }}      
+                          STARS   
+                        </h2>           
+                      </div> 
+                      <v-progress-circular
+                        v-else
+                        indeterminate
+                        color="#00b786"
+                      />   
                     </v-col>
                   </v-row>  
                 </v-card-text>
@@ -103,28 +100,27 @@
                       cols="12"
                       md="3"
                     > 
-                    <v-avatar
-                      color="#BABE5B"
-                      size="56"
-                    ></v-avatar>
-              
+                      <v-avatar
+                        color="#BABE5B"
+                        size="56"
+                      />
                     </v-col>
                     <v-col
                       cols="7" 
                     > 
-                    <h4>
-                      Tokens Alive
-                    </h4>
-                    <div v-if="collectionDataLoaded">
-                      <h2>
-                        {{ collectionData.data?.collection.numTokensAlive }} Buddhead   
-                      </h2>           
-                    </div> 
-                    <v-progress-circular
-                      v-else
-                      indeterminate
-                      color="#00b786"
-                    />   
+                      <h4>
+                        Tokens Alive
+                      </h4>
+                      <div v-if="collectionDataLoaded">
+                        <h2>
+                          {{ collectionData.data?.collection.numTokensAlive }} Buddhead   
+                        </h2>           
+                      </div> 
+                      <v-progress-circular
+                        v-else
+                        indeterminate
+                        color="#00b786"
+                      />   
                     </v-col>
                   </v-row>  
                 </v-card-text>
@@ -138,31 +134,30 @@
                       cols="12"
                       md="3"
                     > 
-                    <v-avatar
-                      color="#BABE5B"
-                      size="56"
-                    ></v-avatar>
-              
+                      <v-avatar
+                        color="#BABE5B"
+                        size="56"
+                      />
                     </v-col>
                     <v-col
                       cols="7" 
                     > 
-                    <h4>
-                      Tokens For Sale
-                    </h4>
-                    <div v-if="collectionDataLoaded">
-                      <h2>
-                        {{
-                          collectionData.data?.collection.numTokensForSale
-                        }}
-                        Buddhead  
-                      </h2>           
-                    </div> 
-                    <v-progress-circular
-                      v-else
-                      indeterminate
-                      color="#00b786"
-                    />   
+                      <h4>
+                        Tokens For Sale
+                      </h4>
+                      <div v-if="collectionDataLoaded">
+                        <h2>
+                          {{
+                            collectionData.data?.collection.numTokensForSale
+                          }}
+                          Buddhead  
+                        </h2>           
+                      </div> 
+                      <v-progress-circular
+                        v-else
+                        indeterminate
+                        color="#00b786"
+                      />   
                     </v-col>
                   </v-row>  
                 </v-card-text>

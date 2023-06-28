@@ -82,107 +82,113 @@
                   </v-col>
                 </v-row>
                 <v-row class="justify-end">
-                <v-icon 
-                  class="mt-n1 mr-2"
-                  @click="walletDistribution = !walletDistribution"
-                >
-                mdi-chevron-down
-                </v-icon>   
-              </v-row>              
-                <v-divider class="mt-6 mb-6" v-if="walletDistribution" />
+                  <v-icon 
+                    class="mt-n1 mr-2"
+                    @click="walletDistribution = !walletDistribution"
+                  >
+                    mdi-chevron-down
+                  </v-icon>   
+                </v-row>              
+                <v-divider
+                  v-if="walletDistribution"
+                  class="mt-6 mb-6"
+                />
  
-                  <v-row no-gutters v-if="walletDistribution">
-                    <v-col 
-                      cols="12"
-                      sm="6"
-                    >                   
-                      <v-row no-gutters>
-                        <v-col> 
-                            <v-icon
-                              color="#0EB584"
-                              small
-                              class="mt-n1"
-                            >
-                              mdi-circle
-                            </v-icon>
-                            Available 
-                        </v-col>
-                        <v-col> 
-                          {{ (balances / 1000000).toFixed(6) }}
-                          {{ cosmosConfig[chainId].coinLookup.viewDenom }}  
-                        </v-col>
-                      </v-row>
-                      <v-row no-gutters>
-                        <v-col> 
-                            <v-icon
-                              color="#79FFD8"
-                              small
-                              class="mt-n1"
-                            >
-                              mdi-circle
-                            </v-icon>
-                            Delegated 
-                        </v-col>
-                        <v-col> 
-                          {{ (totalDelegated / 1000000).toFixed(6) }}
-                          {{ cosmosConfig[chainId].coinLookup.viewDenom }}  
-                        </v-col>
-                      </v-row>
-                      <v-row no-gutters>
-                        <v-col> 
-                            <v-icon
-                              color="#FFFFFF"
-                              small
-                              class="mt-n1"
-                            >
-                              mdi-circle
-                            </v-icon>
-                            Vested 
-                        </v-col>
-                        <v-col> 
-                          0
-                          {{ cosmosConfig[chainId].coinLookup.viewDenom }}  
-                        </v-col>
-                      </v-row>  
-                    </v-col>
-                    <v-col 
-                      cols="12"
-                      sm="6"
-                    >
-                      <v-row no-gutters>
-                          <v-col> 
-                              <v-icon
-                                color="#FF7E7E"
-                                small
-                                class="mt-n1"
-                              >
-                                mdi-circle
-                              </v-icon>
-                              Unbouding 
-                          </v-col>
-                          <v-col> 
-                            {{ (totalUnbound / 1000000).toFixed(6) }} 
-                            {{ cosmosConfig[chainId].coinLookup.viewDenom }}  
-                          </v-col>
-                      </v-row> 
-                      <v-row no-gutters>
-                          <v-col> 
-                              <v-icon
-                                color="#006C4C"
-                                small
-                                class="mt-n1"
-                              >
-                                mdi-circle
-                              </v-icon>
-                              Rewards 
-                          </v-col>
-                          <v-col> 
-                            {{ (rewards.amount / 1000000).toFixed(6) }}
-                            {{ cosmosConfig[chainId].coinLookup.viewDenom }}  
-                          </v-col>
-                      </v-row>  
-                    </v-col> 
-                  </v-row> 
+                <v-row
+                  v-if="walletDistribution"
+                  no-gutters
+                >
+                  <v-col 
+                    cols="12"
+                    sm="6"
+                  >                   
+                    <v-row no-gutters>
+                      <v-col> 
+                        <v-icon
+                          color="#0EB584"
+                          small
+                          class="mt-n1"
+                        >
+                          mdi-circle
+                        </v-icon>
+                        Available 
+                      </v-col>
+                      <v-col> 
+                        {{ (balances / 1000000).toFixed(6) }}
+                        {{ cosmosConfig[chainId].coinLookup.viewDenom }}  
+                      </v-col>
+                    </v-row>
+                    <v-row no-gutters>
+                      <v-col> 
+                        <v-icon
+                          color="#79FFD8"
+                          small
+                          class="mt-n1"
+                        >
+                          mdi-circle
+                        </v-icon>
+                        Delegated 
+                      </v-col>
+                      <v-col> 
+                        {{ (totalDelegated / 1000000).toFixed(6) }}
+                        {{ cosmosConfig[chainId].coinLookup.viewDenom }}  
+                      </v-col>
+                    </v-row>
+                    <v-row no-gutters>
+                      <v-col> 
+                        <v-icon
+                          color="#FFFFFF"
+                          small
+                          class="mt-n1"
+                        >
+                          mdi-circle
+                        </v-icon>
+                        Vested 
+                      </v-col>
+                      <v-col> 
+                        0
+                        {{ cosmosConfig[chainId].coinLookup.viewDenom }}  
+                      </v-col>
+                    </v-row>  
+                  </v-col>
+                  <v-col 
+                    cols="12"
+                    sm="6"
+                  >
+                    <v-row no-gutters>
+                      <v-col> 
+                        <v-icon
+                          color="#FF7E7E"
+                          small
+                          class="mt-n1"
+                        >
+                          mdi-circle
+                        </v-icon>
+                        Unbouding 
+                      </v-col>
+                      <v-col> 
+                        {{ (totalUnbound / 1000000).toFixed(6) }} 
+                        {{ cosmosConfig[chainId].coinLookup.viewDenom }}  
+                      </v-col>
+                    </v-row> 
+                    <v-row no-gutters>
+                      <v-col> 
+                        <v-icon
+                          color="#006C4C"
+                          small
+                          class="mt-n1"
+                        >
+                          mdi-circle
+                        </v-icon>
+                        Rewards 
+                      </v-col>
+                      <v-col> 
+                        {{ (rewards.amount / 1000000).toFixed(6) }}
+                        {{ cosmosConfig[chainId].coinLookup.viewDenom }}  
+                      </v-col>
+                    </v-row>  
+                  </v-col> 
+                </v-row> 
               </v-card-text>
             </v-card>
 
@@ -194,9 +200,9 @@
                 class="mt-4 mr-10"
                 style="text-align:right;"
               >
-              <NuxtLink to="/transactions"> 
-                See all transactions 
-              </NuxtLink>
+                <NuxtLink to="/transactions"> 
+                  See all transactions 
+                </NuxtLink>
               </p>
             </v-col>
             <template v-for="group in groupedEvents()">

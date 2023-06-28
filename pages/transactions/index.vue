@@ -7,7 +7,10 @@
       <v-spacer /> 
       <p class="mr-4 mt-4">
         Only showing last 100 transactions (50 incoming, 50 outgoing), for full history visit our 
-        <a target="_blank" :href="'https://explorer.bitcanna.io/accounts/' + accounts[0].address">explorer</a>
+        <a
+          target="_blank"
+          :href="'https://explorer.bitcanna.io/accounts/' + accounts[0].address"
+        >explorer</a>
       </p>
       <SendModal
         class="text-right mr-4"

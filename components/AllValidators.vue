@@ -146,12 +146,7 @@
 
 <script>
 import { mapState } from "vuex";
-import {
-  assertIsBroadcastTxSuccess,
-  SigningStargateClient,
-} from "@cosmjs/stargate";
 import cosmosConfig from "~/cosmos.config";
-import { notifWaiting, notifError, notifSuccess } from "~/libs/notifications";
 
 export default {
   name: "Validators",
