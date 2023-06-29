@@ -1011,7 +1011,6 @@ export default {
     allProposals.data.proposals.forEach((item) => {
       setFinalPropos.push(item);
     });
-    console.log(setFinalPropos);
     this.proposals = setFinalPropos.reverse();
 
     await this.$store.dispatch("data/getProposalParamsDeposit");
@@ -1021,7 +1020,6 @@ export default {
   methods: {
     async validate(proposal) {
       if (this.$refs.form.validate() === true) {
-        console.log(this.accounts)
         this.step1 = false;
         this.step2 = true;
         // Fee claculation
@@ -1068,7 +1066,6 @@ export default {
               cosmosConfig[this.chainId].coinLookup.chainDenom
           )
         );
-        console.log(usedFee)
         this.gasFee = { fee: usedFee.amount[0].amount, gas: usedFee.gas };
         /* 
         // Recalculate fee if amount is too high
@@ -1088,9 +1085,7 @@ export default {
         this.gasFee = { fee: usedFee.amount[0].amount, gas: usedFee.gas }; */
       }
     },
-    async validatestep2(proposal) {
-      console.log("vote!");
- 
+    async validatestep2(proposal) { 
 
       const chainId = cosmosConfig[this.chainId].chainId;
       await window.keplr.enable(chainId);
@@ -1117,8 +1112,6 @@ export default {
           option: this.finalVoteId,
         }),
       };
-
-      console.log(finalMsg);
       try {
         this.step2 = false;
         this.step3 = true;
@@ -1128,7 +1121,6 @@ export default {
           "auto",
           this.memo
         );
-        console.log(result);
         this.step3 = false;
         this.step4 = true;
       } catch (error) {
