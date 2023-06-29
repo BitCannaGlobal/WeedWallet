@@ -64,7 +64,7 @@
                 cols="6" 
                 class="d-flex justify-center align-center"
               >
-                Cosmostation Connect
+                Cosmostation Connect (coming soon)
               </v-col>
             </v-row>
           </v-card>                

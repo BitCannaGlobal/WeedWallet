@@ -164,7 +164,7 @@
                         >
                           mdi-circle
                         </v-icon>
-                        Unbouding 
+                        Unbonding 
                       </v-col>
                       <v-col> 
                         {{ (totalUnbound / 1000000).toFixed(6) }} 

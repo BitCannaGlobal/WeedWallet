@@ -76,7 +76,7 @@
               <v-card     
                 height="95"      
                 dark 
-                class="pa-4 mb-4" 
+                class="pa-4 mb-4 ml-3" 
                 href="https://app.osmosis.zone/?from=USDC&to=BCNA"
                 target="_blank"
               >

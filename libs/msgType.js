@@ -11,7 +11,7 @@ export function setMsg(msg, addrGet, timestamp, allVal, txHash) {
   switch (msg["@type"]) {
     case "/cosmos.bank.v1beta1.MsgSend":
       if (msg.to_address === addrGet) {
-        typeReadable = "Received";
+        typeReadable = "Receive";
       } else typeReadable = "Send";
       type = msg["@type"];
 
@@ -58,7 +58,7 @@ export function setMsg(msg, addrGet, timestamp, allVal, txHash) {
         (element) => element.op_address === msg.validator_address
       );
       type = msg["@type"];
-      typeReadable = "Unbound";
+      typeReadable = "Unbond";
       color = "#f15249";
       icon = "Unstake.svg";
       finalHash = txHash;

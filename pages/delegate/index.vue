@@ -317,7 +317,7 @@
                   <v-list-item two-line>
                     <v-list-item-content>        
                       <v-list-item-subtitle class="mb-2 subtitle-1">
-                        Commition rate
+                        Commission rate
                       </v-list-item-subtitle>
                       <v-list-item-title class="text-h6 subtitle-2">
                         {{ selectedValidator.commission }}%
