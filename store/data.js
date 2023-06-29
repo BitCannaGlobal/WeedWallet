@@ -278,13 +278,13 @@ export const actions = {
     );
     const getValidatorMainInfo = await axios(
       cosmosConfig[state.chainId].apiURL +
-        "/cosmos/staking/v1beta1/validators?pagination.limit=200"
+        "/cosmos/staking/v1beta1/validators?pagination.limit=250"
     );
 
     let totalDelegated = 0;
     let totalBonded2 = 0;
     const allValidators = await axios(
-      cosmosConfig[state.chainId].apiURL + "/cosmos/staking/v1beta1/validators"
+      cosmosConfig[state.chainId].apiURL + "/cosmos/staking/v1beta1/validators?pagination.limit=250"
     );
     await allValidators.data.validators.forEach(async (item) => {
       totalBonded2 += Number(item.tokens);
@@ -386,7 +386,7 @@ export const actions = {
       parseFloat(state.totalUnbound) +
       parseFloat(state.totalDelegated);
 
-    commit("setTotalWallet", (sum / 1000000).toFixed(6));
+    commit("setTotalWallet", (sum / 1000000).toFixed(2));
     commit(
       "setTotalWalletPrice",
       ((sum / 1000000) * state.priceNow).toFixed(4)
@@ -466,7 +466,7 @@ export const actions = {
 
   async getAllValidator({ commit, state }) {
     const allVal = await axios(
-      cosmosConfig[state.chainId].apiURL + "/cosmos/staking/v1beta1/validators"
+      cosmosConfig[state.chainId].apiURL + "/cosmos/staking/v1beta1/validators?pagination.limit=250"
     );
     
     var randomizeEntries = allVal.data.validators.sort(() => Math.random() - 0.5) 
@@ -573,7 +573,7 @@ export const actions = {
 
   async getProposalQuorum({ commit, state }) {
     const allDelegations = await axios(
-      cosmosConfig[state.chainId].apiURL + "/cosmos/staking/v1beta1/validators"
+      cosmosConfig[state.chainId].apiURL + "/cosmos/staking/v1beta1/validators?pagination.limit=250"
     );
 
     let totalBonded = 0;
@@ -587,7 +587,7 @@ export const actions = {
   async getAllValidators({ commit, state }) {
     var copieValidators = [];
     const allValidators = await axios(
-      cosmosConfig[state.chainId].apiURL + "/cosmos/staking/v1beta1/validators"
+      cosmosConfig[state.chainId].apiURL + "/cosmos/staking/v1beta1/validators?pagination.limit=250"
     );
 
     let totalBonded2 = 0;

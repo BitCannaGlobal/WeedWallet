@@ -22,7 +22,7 @@
                   <v-col md="6">
                     Main account<br>
                     <h1 class="mt-2 carmenBold">
-                      {{ (balances / 1000000).toFixed(2) }}
+                      {{ totalWallet }}
                       {{ cosmosConfig[chainId].coinLookup.viewDenom }}  
                     </h1>
                     <h3 class="mt-2">
@@ -440,6 +440,7 @@ export default {
     ...mapState("data", [
       "balances",
       "chainId",
+      "totalWallet",
       "totalWalletPrice",
       "rewards",
       "delegations",

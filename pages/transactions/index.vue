@@ -326,7 +326,6 @@
                       </tr>
                     </thead>
                     <tbody>
-                      {{ item }}
                       <tr>
                         <td>
                           #{{ item.final.msgData.proposal_id }}
