@@ -110,6 +110,6 @@ export default {
   server: {
     // default: localhost
     host: "0",
-    port: 3000,
+    port: 4200,
   },
 };
