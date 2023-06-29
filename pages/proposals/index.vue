@@ -1,19 +1,21 @@
 <!-- eslint-disable -->
 <template>
   <div>
- 
-    <h3 class="mb-2">Active proposals</h3>
-    <v-row> 
+      <h1>
+        Proposals 
+      </h1>
+      <v-spacer /> 
+      <v-divider class="mb-6" />
+    <h3 class="mb-8">Active proposals</h3>
+      <v-row> 
         <v-col
-        v-for="item in proposals"
+          v-for="item in proposals"
           :key="item.voting_end_time"
           cols="6"
           md="6"
-          v-if="item.status === 'PROPOSAL_STATUS_VOTING_PERIOD'"
-          
+          v-if="item.status === 'PROPOSAL_STATUS_VOTING_PERIOD'"          
         >
-        <v-item>
-            
+        <v-item>            
             <v-card
               dark 
               class="accent"
@@ -28,10 +30,6 @@
                   {{ formatDate(item.voting_end_time) }}
                 </v-col> 
                 <v-col cols="6" align="right"> 
-
-
- 
-
 
            <td v-if="item.status === 'PROPOSAL_STATUS_PASSED'">
             <v-chip
@@ -124,8 +122,11 @@
             </v-card-text>
             </v-card>          
           </v-item>        
-      </v-col>   
+      </v-col> 
+       
       </v-row> 
+
+
       <h3 class="mt-4 mb-2">Past proposals</h3>
     <sequential-entrance fromBottom>
       

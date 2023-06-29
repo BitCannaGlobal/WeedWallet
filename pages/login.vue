@@ -5,9 +5,9 @@
       align="center"
     >
       <v-col
-        cols="4"
-        sm="4"
-        md="4"
+        cols="12"
+        sm="12"
+        md="5"
       >
         <div class="mt-10 row justify-center">
           <v-img
@@ -21,6 +21,7 @@
         <v-card
           class="mt-10" 
           color="#161819"
+          max-width="700px"
         >
           <v-card-title>Connect your wallet</v-card-title>
           <v-card 
@@ -64,7 +65,7 @@
                 cols="6" 
                 class="d-flex justify-center align-center"
               >
-                Cosmostation Connect (coming soon)
+                Cosmostation Connect (soon)
               </v-col>
             </v-row>
           </v-card>                
