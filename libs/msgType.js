@@ -194,6 +194,39 @@ export function setMsg(msg, addrGet, timestamp, allVal, txHash) {
       icon = "Unknown.svg";
       finalHash = txHash;
       break;
+    // Feegrant
+    case "/cosmos.feegrant.v1beta1.MsgGrantAllowance":
+      typeReadable = "Fee Grant";
+      color = "#00b786";
+      icon = "Unknown.svg";
+      finalHash = txHash;
+      break;
+    case "/cosmos.feegrant.v1beta1.MsgRevokeAllowance":
+      typeReadable = "Revoke Fee Grant";
+      color = "#00b786";
+      icon = "Unknown.svg";
+      finalHash = txHash;
+      break;
+    // ibc
+    case "/ibc.applications.transfer.v1.MsgTransfer":
+      typeReadable = "Ibc Transfer";
+      color = "#00b786";
+      icon = "Unknown.svg";
+      finalHash = txHash;
+      break;
+    case "/ibc.core.channel.v1.MsgRecvPacket":
+      typeReadable = "Ibc Recv Packet";
+      color = "#00b786";
+      icon = "Unknown.svg";
+      finalHash = txHash;
+      break;
+    case "/ibc.core.channel.v1.MsgTimeout":
+      typeReadable = "Ibc Timeout";
+      color = "#00b786";
+      icon = "Unknown.svg";
+      finalHash = txHash;
+      break;
+      
 
     default:
       console.log("Sorry, dont know " + msg["@type"] + ".");
