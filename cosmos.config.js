@@ -1,5 +1,5 @@
 export default [
- {
+/* {
     chainId: 'bitcanna-1',
     name: 'BitCanna',
     desc: 'BitCanna',
@@ -24,8 +24,9 @@ export default [
       'bcna1tqywev6xmvrnagfq57c0h5susdy3l789rumufz', // R
       'bcna13jawsn574rf3f0u5rhu7e8n6sayx5gkwgusz73' // J
     ]
-  },
-    /*  website: "https://wallet-testnet.bitcanna.io",
+  }, */
+  {
+    website: "https://wallet-testnet.bitcanna.io",
     chainId: "bitcanna-dev-1",
     name: "Bitcanna-testnet-1",
     desc: "Bitcanna-testnet",
@@ -50,5 +51,5 @@ export default [
       'bcna1tqywev6xmvrnagfq57c0h5susdy3l789rumufz', // R
       'bcna13jawsn574rf3f0u5rhu7e8n6sayx5gkwgusz73' // J
     ]
-  },*/
+  },
 ];
