@@ -35,7 +35,7 @@ export function setMsg(msg, addrGet, timestamp, allVal, txHash) {
       finalHash = txHash;
       msgData = {
         delegator_address: msg.delegator_address,
-        validator_address: foundVal.name,
+        validator_address: foundVal?.name,
         amount: msg.amount.amount / 1000000,
       };
       break;
@@ -50,7 +50,7 @@ export function setMsg(msg, addrGet, timestamp, allVal, txHash) {
       finalHash = txHash;
       msgData = {
         delegator_address: msg.delegator_address,
-        validator_address: foundVal.name,
+        validator_address: foundVal?.name,
       };
       break;
     case "/cosmos.staking.v1beta1.MsgUndelegate":
@@ -64,7 +64,7 @@ export function setMsg(msg, addrGet, timestamp, allVal, txHash) {
       finalHash = txHash;
       msgData = {
         delegator_address: msg.delegator_address,
-        validator_address: foundVal.name,
+        validator_address: foundVal?.name,
         amount: msg.amount.amount / 1000000,
       };
       break;
@@ -220,13 +220,26 @@ export function setMsg(msg, addrGet, timestamp, allVal, txHash) {
       icon = "Unknown.svg";
       finalHash = txHash;
       break;
+    case "/ibc.core.client.v1.MsgUpdateClient":
+      typeReadable = "Ibc Update Client";
+      color = "#00b786";
+      icon = "Unknown.svg";
+      finalHash = txHash;
+      break;      
+           
     case "/ibc.core.channel.v1.MsgTimeout":
       typeReadable = "Ibc Timeout";
       color = "#00b786";
       icon = "Unknown.svg";
       finalHash = txHash;
       break;
-      
+    case "/cosmos.distribution.v1beta1.MsgWithdrawValidatorCommission":
+      typeReadable = "Val Commission";
+      color = "#00b786";
+      icon = "Unknown.svg";
+      finalHash = txHash;
+      break;      
+           
 
     default:
       console.log("Sorry, dont know " + msg["@type"] + ".");
