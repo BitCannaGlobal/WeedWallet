@@ -154,7 +154,6 @@ export default {
     ...mapState("data", [`chainId`]),
   },
   async mounted() {
-    // console.log(this.logged)
 
     await this.$store.dispatch("keplr/checkLogin");
     /* if (!this.logged) {
@@ -167,7 +166,6 @@ export default {
     connectKeplr: async function () {
       const payload = { key1: cosmosConfig[0], key2: this.chainId };
       await this.$store.dispatch("keplr/connectWallet", payload);
-      console.log(this.accounts[0].address);
       //await this.$store.dispatch('data/getbitcannaId', this.accounts[0].address)
       this.address = this.accounts[0].address;
       await this.$store.dispatch("data/refresh", this.accounts[0].address);

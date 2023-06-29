@@ -488,7 +488,6 @@ export default {
               this.memo
             );
             assertIsDeliverTxSuccess(result);
-            console.log(result);
             this.step3 = false;
             this.step4 = true;
             this.loading = false;

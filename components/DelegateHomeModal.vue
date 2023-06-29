@@ -68,13 +68,6 @@
                 class="mt-1"
               >
                 <template #append>
-                  <!-- <img
-                      width="24"
-                      height="24"
-                      :srcset="coinIcon"
-                      alt=""
-                      :class="`rounded-xl`"
-                    > -->
                   <v-chip
                     label
                     small
@@ -411,10 +404,7 @@ export default {
       if (!this.searchTerm) {
         this.validatorListSearch = this.validatorList;
       }
-      this.validatorListSearch = this.validatorList.filter((val) => {
-        console.log(val.name);
-        console.log(this.searchTerm);
-        
+      this.validatorListSearch = this.validatorList.filter((val) => {        
         return val.name.toLowerCase().indexOf(this.searchTerm.toLowerCase()) > -1;
       });
     },       
@@ -526,7 +516,6 @@ export default {
               this.memo
             );
             assertIsDeliverTxSuccess(result);
-            console.log(result);
             this.step3 = false;
             this.step4 = true;
             this.loading = false;

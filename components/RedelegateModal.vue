@@ -499,16 +499,6 @@ export default {
               cosmosConfig[this.chainId].coinLookup.chainDenom
           )
         );
-        console.log(usedFee);
-        console.log(usedFee.amount[0].amount / 1000000 + Number(this.amount));
-        // Recalculate fee if amount is too high
-        /* if ((usedFee.amount[0].amount / 1000000) + Number(this.amount) > (this.balances /1000000)) {
-            this.amount = (Number(this.amount) - (usedFee.amount[0].amount / 1000000)).toFixed(6)
-            this.feeDeducted = true
-          } else {
-            this.feeDeducted = false
-          } */
-
         this.gasFee = { fee: usedFee.amount[0].amount, gas: usedFee.gas };
       }
     },
@@ -554,7 +544,6 @@ export default {
               amount: amountFinal,
             }),
           };
-          console.log(reDelegateMsg);
           try {
             const result = await client.signAndBroadcast(
               accounts[0].address,

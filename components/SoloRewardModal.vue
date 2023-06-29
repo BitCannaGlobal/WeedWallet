@@ -246,7 +246,6 @@ export default {
         };
  
         try {
-          console.log(this.opAddress)
           const result = await client.withdrawRewards(
             accounts[0].address,
             this.opAddress,

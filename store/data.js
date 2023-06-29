@@ -603,7 +603,6 @@ export const actions = {
 
         const rewardFactor = 1 - item.commission.commission_rates.rate
         const finalApr = state.aprNow * rewardFactor
-        console.log(state.aprNow)
         copieValidators.push({
           name: item.description.moniker,
           op_address: item.operator_address,
@@ -686,7 +685,6 @@ export const actions = {
         data.validatorAddr
     )
       .then((res) => {
-        console.log(res.data)
         commit(
           "setValidatorRewards",
           (res.data.rewards[0].amount / 1000000).toFixed(6)

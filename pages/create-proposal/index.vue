@@ -363,8 +363,6 @@ export default {
     },
 
     async createProposalv1Beta() {
-      console.log(CommunityPoolSpendProposal);
-
       const chainId = cosmosConfig[this.chainId].chainId;
       await window.keplr.enable(chainId);
       const offlineSigner = await window.getOfflineSignerAuto(chainId);
@@ -459,8 +457,6 @@ export default {
         };
       }
 
-      console.log(finalMsg);
-
       try {
         const proposalResult = await client.signAndBroadcast(
           this.accounts[0].address,
@@ -469,7 +465,6 @@ export default {
           "Test proposal from ui"
         );
         assertIsDeliverTxSuccess(proposalResult);
-        console.log(proposalResult);
         this.isSend = true;
       } catch (e) {
         console.error(e);

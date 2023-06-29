@@ -202,7 +202,6 @@ export default {
     },
   },
   async mounted() {
-    // console.log(this.validators)
     await this.$store.dispatch("keplr/checkLogin");
     if (this.logged === "false") this.$router.push({ path: "login" });
 
@@ -226,7 +225,6 @@ export default {
     async selectValidator(validator) {
       this.dialog = true
       this.selectedValidator = validator;
-      console.log(validator);
       await this.$store.dispatch("data/getValidatorDetails", validator.op_address);
 
       if (this.logged) {

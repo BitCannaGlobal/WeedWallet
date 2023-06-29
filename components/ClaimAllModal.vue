@@ -93,34 +93,6 @@
               </tr>
             </tbody>
           </v-simple-table>
-          <!-- <v-stepper v-model="e1" v-if="dialogStepper">
-              <v-stepper-header>
-                <v-stepper-step
-                  :complete="e1 > 1"
-                  step="1"
-                  color="#00b786"
-                >
-                  Generate Tx
-                </v-stepper-step>
-
-                <v-divider></v-divider>
-
-                <v-stepper-step
-                  :rules="[() => eError]"
-                  :complete="e1 > 2"
-                  step="2"
-                >
-                  Keplr call
-                </v-stepper-step>
-
-
-                <v-divider></v-divider>      
-
-                <v-stepper-step :rules="[() => eError]" step="3" :complete="e1 === 3" color="green darken-2">
-                  Tx send!
-                </v-stepper-step>
-              </v-stepper-header> 
-            </v-stepper>  -->
         </v-form>
         <v-form
           v-if="step2"
@@ -180,38 +152,6 @@
           <v-row>
             <v-col cols="12" />
           </v-row>    
-          <!--           <v-row>
-            <v-col cols="12">
-              <v-simple-table class="accent">
-                <template #default>
-                  <tbody>
-                    <tr>
-                      <td>Amount</td>
-                      <td>
-                        {{ amount }}
-                        {{ cosmosConfig[chainId].coinLookup.viewDenom }}
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>To</td>
-                      <td />
-                    </tr>
-                    <tr>
-                      <td>Memo</td>
-                      <td>{{ memo }}</td>
-                    </tr>
-                    <tr>
-                      <td>Gas/fee</td>
-                      <td>
-                        {{ gasFee.gas }} / {{ gasFee.fee / 1000000 }}
-                        {{ cosmosConfig[chainId].coinLookup.viewDenom }}
-                      </td>
-                    </tr>
-                  </tbody>
-                </template>
-              </v-simple-table>
-            </v-col>
-          </v-row> -->
         </v-form>
 
         <v-row v-if="step3">
@@ -418,8 +358,7 @@ export default {
               validatorAddress: item.op_address,
             }),
           });
-        });
-        console.log(copieDelegator);
+        }); 
         try {
           const result = await client.signAndBroadcast(
             accounts[0].address,

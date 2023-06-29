@@ -249,8 +249,6 @@ export default {
     if (this.accounts[0].address) {
       const decode = bech32.decode(this.accounts[0].address);
       const starsAddr = await bech32.encode("stars", decode.words);
-
-      console.log(starsAddr);
       const getMyNft = await axios.get(
         "https://nft-api.stargaze-apis.com/api/v1beta/profile/" +
           starsAddr +
@@ -258,12 +256,10 @@ export default {
       );
       const myNft = this.myNft;
       getMyNft.data.forEach(function (item) {
-        // console.log(item)
         if (
           item.collection.contractAddress ===
           "stars1w4dff5myjyzymk8tkpjrzj6gnv352hcdpt2dszweqnff927a9xmqc7e0gv"
         ) {
-          console.log(item);
           myNft.push({
             url:
               "https://bafybeia45l2eflxa4xx7ii6mhekyhh5xnucudj5tzp2upzcoeqfl4uzdr4.ipfs.nftstorage.link/images/" +
@@ -293,7 +289,6 @@ export default {
       })
 
       .then(async function (response) {
-        console.log(response.data);
         finalData = response.data;
 
         //         response.data.data.tokens.tokens.forEach((item) => {

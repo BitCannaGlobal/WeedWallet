@@ -126,8 +126,7 @@ export default {
           tokenId: this.nftId,
         },
       })
-      .then(async function (response) {
-        console.log(response.data);
+      .then(async function (response) { 
         finalData = response.data;
       });
 

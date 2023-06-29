@@ -65,17 +65,6 @@
           >
             <v-row>
               <v-col cols="12">
-                <!-- <v-col class="text-right">
-                  <v-chip @click="getQuarter">
-                    1/4
-                  </v-chip>
-                  <v-chip @click="getHalf">
-                    1/2
-                  </v-chip>
-                  <v-chip @click="getMax">
-                    Max
-                  </v-chip>
-                </v-col> -->
                 <span class="text-left">Available: {{ amountAvailable }} BCNA</span>
                 <br><br>
                 <h3 class="mt-1 ml-1 mb-1">
@@ -514,10 +503,6 @@ export default {
           await window.keplr.enable(chainId);
           const offlineSigner = await window.getOfflineSignerAuto(chainId);
           const accounts = await offlineSigner.getAccounts();
-          console.log(
-            cosmosConfig[this.chainId].gasPrice +
-              cosmosConfig[this.chainId].coinLookup.chainDenom
-          );
 
           const client = await SigningStargateClient.connectWithSigner(
             cosmosConfig[this.chainId].rpcURL,

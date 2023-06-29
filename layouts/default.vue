@@ -94,20 +94,6 @@
           </v-list-item-icon>
         </v-list-item>        
       </v-list>
- 
-      <!-- <v-footer
-        class="accent mb-8 justify-center pl-3"
-        fixed
-      >
-        <v-btn
-          v-if="logged"
-          class="mb-6"
-          block
-          @click="logoutNow"
-        >
-          Logout
-        </v-btn>
-      </v-footer>  -->
       <v-footer
         min-height="48"
         class="justify-center pl-0"
@@ -169,25 +155,6 @@
       > 
         <v-icon>mdi-logout-variant</v-icon>
       </v-btn>
-      <!-- <v-switch
-        v-model="switch1"
-        class=" mt-6"
-        :label="`Simple/Pro: ${switch1.toString()}`"
-      ></v-switch> -->
-
-      <!-- <v-btn-toggle
-        v-model="switch1"
-        borderless
-        color="#00b786"
-      >
-        <v-btn value="true">
-          <span class="hidden-sm-and-down">Pro</span>
-        </v-btn>
-
-        <v-btn value="false">
-          <span class="hidden-sm-and-down">Simple</span>
-        </v-btn>
-      </v-btn-toggle> -->
     </v-app-bar>
     <v-main>
       <v-container

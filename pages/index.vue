@@ -494,7 +494,6 @@ export default {
           item.tx.body.messages[0]
         );
       });
-      //console.log(reversedTxs)
       // here we filter out all transactions related to validators
       return reversedTxs.reduce((collection, transaction) => {
         return collection.concat(transaction);

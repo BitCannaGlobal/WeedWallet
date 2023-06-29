@@ -175,8 +175,7 @@ export default {
           break;
         default:
           finalVote = "0";
-      }
-      console.log(finalVote);
+      } 
       if (this.$refs.form.validate() === true) {
         (async () => {
           // Send notification
@@ -201,8 +200,7 @@ export default {
             ],
             gas: "200000",
           };
-          const registryVote = defaultRegistryTypes[14][1];
-          console.log(registryVote);
+          const registryVote = defaultRegistryTypes[14][1]; 
           const voteSend = [
             {
               typeUrl: "/cosmos.gov.v1beta1.MsgVote",
@@ -212,8 +210,7 @@ export default {
                 option: finalVote,
               }),
             },
-          ];
-          console.log(voteSend);
+          ]; 
           try {
             const result = await client.signAndBroadcast(
               accounts[0].address,

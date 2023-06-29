@@ -705,8 +705,6 @@ const categories = [
   {
     section: "Today",
     matcher: (event) => {
-      //console.log(dayjs(event.timestamp).isSame(dayjs(), "day"));
-      // tests if the timestamp has the same day as today
       return dayjs(event.timestamp).isSame(dayjs(), "day");
     },
   },
@@ -755,75 +753,8 @@ export default {
   async beforeMount() {
     await this.$store.dispatch("keplr/checkLogin");
     await this.$store.dispatch("data/getAllValidators");
-    // TODO
-    // 1/ lcd -> get delegations
-    // 2/ lcd -> get undelegate
-    // 2/ rpc -> get historic
+
     if (this.logged && this.validatorsLoaded === true) {
-      /*
-      const rpcEndpoint = "https://rpc-devnet-6.bitcanna.io";
-      const client = await tendermintRpc.Tendermint34Client.connect(rpcEndpoint);
-
-      // Delegation historical
-      const querySender = buildQuery({
-        tags: [
-          { key: "message.sender", value: this.accounts[0].address }
-        ]
-      });
-      const queryRecipient = buildQuery({
-        tags: [
-          { key: "transfer.recipient", value: this.accounts[0].address }
-        ]
-      });
-      const resultSender = await client.txSearch({ query: querySender });
-      const resultRecipient = await client.txSearch({ query: queryRecipient });
-
-      let decodedTx = decodeTxRaw(resultSender.txs[0].tx)
-
-      const plain = Buffer.from(decodedTx.body.messages[0].value, 'base64').toString('utf8')
-
-      console.log(resultSender)
-
-      //console.log(resultSender.txs)
-
-      console.log(resultRecipient)
-
-      let finalResultSender = []
-
-      resultSender.txs.forEach(async (item, index) => {
-        if(item.result.code === 0) {
-          let txEvent = JSON.parse(item.result.log)
-          const txHash = toHex(item.hash)
-          item.hashDecoded = txHash
-
-          const foundMsg = txEvent[0].events.find(element => element.type === "message");
-          const foundType = foundMsg.attributes.find(element => element.key === "action");
-          item.msgType = foundType.value
-
-          const responseDate = await client.txSearch({ query: `tx.hash='${item.hashDecoded}'` });
-          let decodedTx = decodeTxRaw(responseDate.txs[0].tx)
-          console.log(decodedTx)
-
-
-          finalResultSender.push({
-            height: item.height,
-            hashDecoded: item.hashDecoded,
-            msgType: item.msgType,
-            // date: responseDate.header.time
-          })
-          // console.log(setMsg(item.msgType))
-        }
-      });
-
-
-      // Recipient
-      resultRecipient.txs.forEach(async (item) => {
-        let txEvent = JSON.parse(item.result.log)
-        const txHash = toHex(item.hash)
-        item.hashDecoded = txHash
-
-      }); */
-
       const resultSender = await axios(
         cosmosConfig[0].apiURL +
           "/cosmos/tx/v1beta1/txs?events=message.sender=%27" +
@@ -911,7 +842,6 @@ export default {
       });
     },    
     transactionsReducer(txs) {
-      // console.log(txs)
       const duplicateFreeTxs = uniqWith(txs, (a, b) => a.txhash === b.txhash);
       
       const sortedTxs = sortBy(duplicateFreeTxs, ["timestamp"]);
