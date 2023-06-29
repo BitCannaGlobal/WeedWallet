@@ -208,12 +208,6 @@ export function setMsg(msg, addrGet, timestamp, allVal, txHash) {
       finalHash = txHash;
       break;
     // ibc
-    case "/ibc.applications.transfer.v1.MsgTransfer":
-      typeReadable = "Ibc Transfer";
-      color = "#00b786";
-      icon = "Unknown.svg";
-      finalHash = txHash;
-      break;
     case "/ibc.core.channel.v1.MsgRecvPacket":
       typeReadable = "Ibc Recv Packet";
       color = "#00b786";
