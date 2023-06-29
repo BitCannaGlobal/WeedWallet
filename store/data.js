@@ -36,6 +36,7 @@ export const state = () => ({
   totalWalletPrice: "",
   validatorDelegations: "",
   validatorUnDelegations: "",
+  validatorRewards: "",
   paramsDeposit: "",
   paramsVoting: "",
   totalBonded: "",
@@ -187,7 +188,6 @@ export const actions = {
       myTotalDelegation: (sumDelegation / 1000000).toFixed(2),
       myTotalUnDelegation: (sumUnDelegate / 1000000).toFixed(2),
     };
-    console.log(myFinalData);
     commit("setMyDelegatorData", myFinalData);
   },
   async getWalletInfo({ commit, state }, address) {
@@ -278,10 +278,18 @@ export const actions = {
     );
     const getValidatorMainInfo = await axios(
       cosmosConfig[state.chainId].apiURL +
-        "/cosmos/staking/v1beta1/validators?pagination.limit=200"
+        "/cosmos/staking/v1beta1/validators?pagination.limit=250"
     );
 
     let totalDelegated = 0;
+    let totalBonded2 = 0;
+    const allValidators = await axios(
+      cosmosConfig[state.chainId].apiURL + "/cosmos/staking/v1beta1/validators?pagination.limit=250"
+    );
+    await allValidators.data.validators.forEach(async (item) => {
+      totalBonded2 += Number(item.tokens);
+    });
+    
     await getDelegations.data.rewards.forEach(function (item) {
       let foundDelegByValidator =
         getValidatorInfo.data.delegation_responses.find(
@@ -333,8 +341,7 @@ export const actions = {
         finalRewardAmount = 0;
       } else {
         finalRewardAmount = (item.reward[0].amount / 1000000).toFixed(6);
-      }
-
+      } 
       copieRewards.push({
         validatorName: foundValidatorMainInfo?.description.moniker,
         op_address: foundDelegByValidator.delegation.validator_address,
@@ -344,6 +351,8 @@ export const actions = {
         unDelegations: foundUnDelegations,
         reDelegations: foundRedelegations,
         status: foundValidatorMainInfo?.status,
+        commission: (foundValidatorMainInfo?.commission.commission_rates.rate * 100).toFixed(2),
+        votingPower: ((foundValidatorMainInfo?.tokens / totalBonded2) * 100).toFixed(2),
       });
       totalDelegated += Number(foundDelegByValidator.balance.amount);
     });
@@ -377,7 +386,7 @@ export const actions = {
       parseFloat(state.totalUnbound) +
       parseFloat(state.totalDelegated);
 
-    commit("setTotalWallet", (sum / 1000000).toFixed(6));
+    commit("setTotalWallet", (sum / 1000000).toFixed(2));
     commit(
       "setTotalWalletPrice",
       ((sum / 1000000) * state.priceNow).toFixed(4)
@@ -457,7 +466,7 @@ export const actions = {
 
   async getAllValidator({ commit, state }) {
     const allVal = await axios(
-      cosmosConfig[state.chainId].apiURL + "/cosmos/staking/v1beta1/validators"
+      cosmosConfig[state.chainId].apiURL + "/cosmos/staking/v1beta1/validators?pagination.limit=250"
     );
     
     var randomizeEntries = allVal.data.validators.sort(() => Math.random() - 0.5) 
@@ -564,7 +573,7 @@ export const actions = {
 
   async getProposalQuorum({ commit, state }) {
     const allDelegations = await axios(
-      cosmosConfig[state.chainId].apiURL + "/cosmos/staking/v1beta1/validators"
+      cosmosConfig[state.chainId].apiURL + "/cosmos/staking/v1beta1/validators?pagination.limit=250"
     );
 
     let totalBonded = 0;
@@ -578,7 +587,7 @@ export const actions = {
   async getAllValidators({ commit, state }) {
     var copieValidators = [];
     const allValidators = await axios(
-      cosmosConfig[state.chainId].apiURL + "/cosmos/staking/v1beta1/validators"
+      cosmosConfig[state.chainId].apiURL + "/cosmos/staking/v1beta1/validators?pagination.limit=250"
     );
 
     let totalBonded2 = 0;
@@ -591,6 +600,9 @@ export const actions = {
         if (item.status === 'BOND_STATUS_BONDED') {
           upTime = 100;
         }
+
+        const rewardFactor = 1 - item.commission.commission_rates.rate
+        const finalApr = state.aprNow * rewardFactor
         copieValidators.push({
           name: item.description.moniker,
           op_address: item.operator_address,
@@ -600,6 +612,7 @@ export const actions = {
           votingPower: ((item.tokens / totalBonded2) * 100).toFixed(2),
           status: item.status,
           uptime: upTime,
+          validatorApr: finalApr.toFixed(2),
         });
       })
     );
@@ -650,7 +663,6 @@ export const actions = {
       .then((res) => {
         let sumUndelegate = 0;
         for (let i = 0; i < res.data.unbond.entries.length; i++) {
-          console.log(res.data.unbond.entries[i].initial_balance)
           sumUndelegate += Number(res.data.unbond.entries[i].initial_balance);
         }
         commit(
@@ -663,6 +675,26 @@ export const actions = {
         console.log(error);
       });
   },  
+  async getValidatorRewards({ commit, state }, data) {
+    await axios(
+      // /cosmos/distribution/v1beta1/delegators/bcna13jawsn574rf3f0u5rhu7e8n6sayx5gkwgusz73/rewards/bcnavaloper1zvxldjgetj5u9wah0t8fnz229533xzsmm645gy
+      cosmosConfig[state.chainId].apiURL +
+        "/cosmos/distribution/v1beta1/delegators/" +
+        data.delegatorAddr +
+        "/rewards/" +
+        data.validatorAddr
+    )
+      .then((res) => {
+        commit(
+          "setValidatorRewards",
+          (res.data.rewards[0].amount / 1000000).toFixed(6)
+        );
+        return res.data;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  },
   changeChaniId({ commit }, chainId) {
     commit("setChainId", chainId);
   },

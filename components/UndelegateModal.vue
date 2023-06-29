@@ -171,7 +171,6 @@ export default {
         );
 
         const MsgUndelegate = defaultRegistryTypes[20][1]; // MsgWithdrawDelegatorReward
-        console.log(defaultRegistryTypes[20][1]);
 
         const myAccount = this.accounts[0].address;
         const copieUndelegate = [];
@@ -190,7 +189,6 @@ export default {
             }),
           });
         });
-        console.log(copieUndelegate);
 
         const fee = {
           amount: [

@@ -153,7 +153,7 @@
             </v-card-title>
             <v-card-text class="text-right text-h5">
               {{ validatorUnDelegations / 1000000 }}
-             <!--  {{ myDelegatorData.myTotalUnDelegation }} -->
+              <!--  {{ myDelegatorData.myTotalUnDelegation }} -->
               {{ cosmosConfig[chainId].coinLookup.viewDenom }}
             </v-card-text>
           </v-card>

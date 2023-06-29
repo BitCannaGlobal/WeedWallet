@@ -2,22 +2,24 @@
   <v-dialog
     v-model="dialog"
     max-width="600px"
+    max-height="1200px"
   >
     <template #activator="{ on, attrs }">
       <br>
       <v-btn
-        class="ma-2"
-        dark
         v-bind="attrs"
         color="#00b786"
+        block
+        class="mt-6"
+        x-large  
         v-on="on"
       >
         <v-icon class="mr-2">
           mdi-cube-send
-        </v-icon> Delegate {{ chainName }}
+        </v-icon> Delegate 
       </v-btn>
     </template>
-    <v-card class="accent">
+    <v-card color="#161819">
       <v-card-title>
         <span
           v-if="step1"
@@ -49,11 +51,10 @@
           ref="form"
           v-model="dislableSend"
           lazy-validation
-        >
-          <v-container>
-            <v-row>
-              <v-col cols="12">
-                <v-col class="text-right">
+        > 
+          <v-row>
+            <v-col cols="12">
+              <!-- <v-col class="text-right">
                   <v-chip @click="getQuarter">
                     1/4
                   </v-chip>
@@ -63,18 +64,36 @@
                   <v-chip @click="getMax">
                     Max
                   </v-chip>                  
-                </v-col>
-                <span class="text-left">Available: {{ balances / 1000000 }} BCNA</span>
-                <v-text-field
-                  v-model="amountFinal"
-                  label="Amount to delegate*"
-                  :rules="amountRules"
-                  required
-                  outlined
-                  dense
-                  class="mt-4"
-                />
-                <!-- <v-text-field
+                </v-col> -->
+              <span class="text-left">Available: {{ balances / 1000000 }} BCNA</span>
+              <v-text-field
+                v-model="amountFinal"
+                label="Amount to delegate*"
+                :rules="amountRules"
+                required
+                flat 
+                solo
+                background-color="#0F0F0F"
+                class="mt-4"
+              >
+                <template #append>
+                  <!-- <img
+                      width="24"
+                      height="24"
+                      :srcset="coinIcon"
+                      alt=""
+                      :class="`rounded-xl`"
+                    > -->
+                  <v-chip
+                    label
+                    small
+                    @click="getMax"
+                  >
+                    Max
+                  </v-chip>
+                </template>
+              </v-text-field>
+              <!-- <v-text-field
                   v-model="addressVal"
                   label="Validator address*"
                   :rules="addressRules"
@@ -82,16 +101,16 @@
                   outlined
                   dense
                 ></v-text-field> -->
-                <v-text-field
-                  v-model="memo"
-                  label="Memo"
-                  required
-                  outlined
-                  dense
-                />
-              </v-col>
-            </v-row>
-          </v-container>
+              <v-text-field
+                v-model="memo"
+                label="Memo"
+                required
+                flat 
+                solo
+                background-color="#0F0F0F"
+              />
+            </v-col>
+          </v-row> 
         </v-form>
         <v-form
           v-if="step2"
@@ -100,7 +119,59 @@
         >
           <v-row>
             <v-col cols="12">
-              <v-simple-table class="accent">
+              <v-sheet
+                outlined
+                color="gray"
+                rounded
+              >
+                <v-card
+                  color="#1C1D20"
+                  class="pa-2"
+                  outlined
+                  tile 
+                >
+                  <v-list-item two-line>
+                    <v-list-item-content>        
+                      <v-list-item-subtitle class="mb-2">
+                        <h3>Delegate to</h3>
+                      </v-list-item-subtitle>
+                      <v-list-item-title>
+                        <h3>{{ validatorName }}</h3> 
+                      </v-list-item-title>
+                    </v-list-item-content>
+                  </v-list-item>
+                  <v-list-item two-line>
+                    <v-list-item-content>        
+                      <v-list-item-subtitle class="mb-2">
+                        <h3>Amount</h3>
+                      </v-list-item-subtitle>
+                      <v-list-item-title>
+                        <h3>
+                          {{ amountFinal }}
+                          {{ cosmosConfig[chainId].coinLookup.viewDenom }}                        
+                        </h3> 
+                      </v-list-item-title>
+                    </v-list-item-content>
+                  </v-list-item>                
+                  <v-list-item two-line>
+                    <v-list-item-content>        
+                      <v-list-item-subtitle class="mb-2">
+                        <h3>Gas/fee</h3>
+                      </v-list-item-subtitle>
+                      <v-list-item-title>
+                        <h3>
+                          {{ gasFee.gas }} / {{ gasFee.fee / 1000000 }}
+                          {{ cosmosConfig[chainId].coinLookup.viewDenom }}
+                        </h3>
+                      </v-list-item-title>
+                    </v-list-item-content>
+                  </v-list-item>
+                </v-card>
+              </v-sheet> 
+
+
+
+              <!--  <v-simple-table class="accent">
                 <template #default>
                   <tbody>
                     <tr>
@@ -108,7 +179,7 @@
                       <td>
                         {{ amountFinal }}
                         {{ cosmosConfig[chainId].coinLookup.viewDenom }}
-                        <!-- <span>Fee are automaticly deducted</span> -->
+ 
 
                         <v-tooltip
                           v-if="feeDeducted"
@@ -135,7 +206,7 @@
                       <td>To</td>
                       <td>{{ validatorName }}</td>
                     </tr>
-                    <tr>
+                    <tr v-if="memo">
                       <td>Memo</td>
                       <td>{{ memo }}</td>
                     </tr>
@@ -148,7 +219,7 @@
                     </tr>
                   </tbody>
                 </template>
-              </v-simple-table>
+              </v-simple-table> -->
             </v-col>
           </v-row>
         </v-form>
@@ -159,12 +230,14 @@
             align="center"
             justify="center"
           >
-            <v-progress-circular
-              :size="100"
-              :width="10"
-              color="#00b786"
-              indeterminate
+            <v-img
+              max-height="102"
+              max-width="102"
+              src="icons/pending.svg"
             />
+            <br>
+            <h3>Transaction pending</h3> 
+            <h4>Your transaction is waiting to get approved on the blockchain.</h4>
           </v-col>
         </v-row>
         <v-row v-if="step4">
@@ -173,15 +246,21 @@
             align="center"
             justify="center"
           >
-            <img :src="cosmosConfig[0].website + '/accepted.png'">
+            <v-img
+              max-height="102"
+              max-width="102"
+              src="icons/approved.svg"
+            />
+            <br>
+            <h3>Transaction approved</h3> 
+            <h4>Your transaction has been approved on the blockchain.</h4>
           </v-col>
         </v-row>
-      </v-card-text>
-      <v-card-actions>
-        <v-spacer />
         <v-btn
-          v-if="step2"
-          color="#00b786"
+          v-if="step2" 
+          block
+          x-large
+          class="mt-4"
           @click="returnStep"
         >
           Return
@@ -191,6 +270,8 @@
           :disabled="!dislableSend"
           :loading="loading"
           color="#00b786"
+          block
+          x-large
           @click="validate"
         >
           Next step
@@ -200,10 +281,16 @@
           :disabled="!dislableSend"
           :loading="loading"
           color="#00b786"
+          block
+          x-large
+          class="mt-4"
           @click="validatestep2"
         >
-          Send tx
+          Delegate
         </v-btn>
+      </v-card-text>
+      <v-card-actions>
+        <v-spacer />
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -401,18 +488,13 @@ export default {
               this.memo
             );
             assertIsDeliverTxSuccess(result);
-            console.log(result);
             this.step3 = false;
             this.step4 = true;
             this.loading = false;
             await this.$store.dispatch(
               "data/getDelegations",
               accounts[0].address
-            );
-            await this.$store.dispatch("data/getDelegatorDataRpc", {
-              validator: this.addressVal,
-              delegator: accounts[0].address,
-            });
+            ); 
             await this.$store.dispatch("data/getValidatorDelegation", {
               validatorAddr: this.addressVal,
               delegatorAddr: accounts[0].address,

@@ -11,18 +11,30 @@
       floating
       class="accent"
     >
-      <v-sheet class="accent pa-4">
+      <img
+        alt="user"
+        class="ma-4"
+        height="64"
+        width="64"
+        src="BCNA-LOGO-C.svg"
+      >  
+      <v-sheet
+        color="#151618"
+        class="ma-4 pa-4"
+      >
         <div v-if="logged">
-          <v-avatar
-            class="mb-2"
-            size="64"
-          >
-            <img
-              alt="user"
-              src="https://res.cloudinary.com/stargaze/image/upload/w_700/yzsrwjxcsjzx17acr90i.jpg"
+          <h5> 
+            <v-avatar
+              class="mb-2"
+              size="32"
             >
-          </v-avatar>
-          <span class="ml-2"> {{ accounts[0].walletName }}</span>
+              <img
+                alt="user"
+                src="https://res.cloudinary.com/stargaze/image/upload/w_700/yzsrwjxcsjzx17acr90i.jpg"
+              >
+            </v-avatar>
+            <span class="ml-2">{{ accounts[0].walletName }}</span>
+          </h5>
         </div>
         <v-btn
           v-if="!logged"
@@ -59,7 +71,7 @@
             </v-list-item-title>
           </v-list-item-content>
           <v-list-item-icon>
-            <v-icon color="#00b786">
+            <v-icon>
               {{ icon }}
             </v-icon>
           </v-list-item-icon>
@@ -76,29 +88,16 @@
             </v-list-item-title>
           </v-list-item-content>
           <v-list-item-icon>
-            <v-icon color="#00b786">
+            <v-icon>
               mdi-chevron-right
             </v-icon>
           </v-list-item-icon>
         </v-list-item>        
       </v-list>
- 
-      <v-footer
-        class="accent mb-8 justify-center pl-3"
-        fixed
-      >
-        <v-btn
-          v-if="logged"
-          class="mb-6"
-          block
-          @click="logoutNow"
-        >
-          Logout
-        </v-btn>
-      </v-footer> 
       <v-footer
         min-height="48"
         class="justify-center pl-0"
+        color="#151618"
         fixed
       >
         <v-icon
@@ -148,25 +147,14 @@
         class="ml-2"
       >Address copied!</span>
       <v-spacer />
-      <!-- <v-switch
-        v-model="switch1"
-        class=" mt-6"
-        :label="`Simple/Pro: ${switch1.toString()}`"
-      ></v-switch> -->
-
-      <v-btn-toggle
-        v-model="switch1"
-        borderless
-        color="#00b786"
-      >
-        <v-btn value="true">
-          <span class="hidden-sm-and-down">Pro</span>
-        </v-btn>
-
-        <v-btn value="false">
-          <span class="hidden-sm-and-down">Simple</span>
-        </v-btn>
-      </v-btn-toggle>
+      <v-btn
+        v-if="logged" 
+        icon
+        class="mr-2"
+        @click="logoutNow"
+      > 
+        <v-icon>mdi-logout-variant</v-icon>
+      </v-btn>
     </v-app-bar>
     <v-main>
       <v-container
@@ -176,7 +164,7 @@
         <Nuxt :vue-mode="switch1.toString()" />
       </v-container>
     </v-main>
-    <v-footer padless>
+    <!--     <v-footer padless>
       <v-col
         class="text-center"
         cols="12"
@@ -243,7 +231,7 @@
           </v-card>
         </v-menu>
       </v-col>
-    </v-footer>
+    </v-footer> -->
   </v-app>
 </template>
 
@@ -265,16 +253,17 @@ export default {
     pageNow: "",
     isCopied: false,
     links: [
-      ["mdi-chevron-right", "Portfolio", "/"],
-      // ["mdi-chevron-right", "Earn", "/earn"],
-      ["mdi-chevron-right", "Validators", "/validators"],
+      ["mdi-chevron-right", "Overview", "/"],
+      ["mdi-chevron-right", "Transactions", "/transactions"],
+      
+      // ["mdi-chevron-right", "Validators", "/validators"],
       ["mdi-chevron-right", "Proposals", "/proposals"],
+      ["mdi-chevron-right", "Delegate", "/delegate"],
       // ['mdi-wallet-outline', 'Ibc manager', '/ibc'],
       // ['mdi-account-multiple', 'Groups manager', '/groups'],
-      ["mdi-chevron-right", "Transactions", "/transactions"],
-      ["mdi-chevron-right", "My NFT's", "/nfts"],
+      ["mdi-chevron-right", "NFTs", "/nfts"],
       //["mdi-chevron-right", "Create proposal", "/create-proposal"],
-      ["mdi-download", "Get bcna", "/get-bcna"],
+      ["mdi-chevron-right", "Get BCNA", "/get-bcna"],
     ],
     canCreateProposal: false,
   }),
@@ -296,8 +285,7 @@ export default {
       deep: true,
       immediate: true,
     },
-    async switch1(newQuestion) {
-      console.log(newQuestion);
+    async switch1(newQuestion) { 
       let finalView = "";
       if (newQuestion === "true") {
         finalView = true;
@@ -309,8 +297,9 @@ export default {
     await this.$store.dispatch("keplr/checkLogin");
   },
   async mounted() {
-    
-    console.log(this.logged)
+     
+   
+
     if (this.logged === true) {
       await this.$store.dispatch("data/getPriceNow");
       await this.$store.dispatch(
@@ -322,7 +311,8 @@ export default {
         this.accounts[0].address
       );
       await this.$store.dispatch("data/getAllTxs", this.accounts[0].address);
-      await this.$store.dispatch("data/getAllValidators");
+      
+      // await this.$store.dispatch("data/getAllValidator");
       await this.$store.dispatch("data/getApr");
       await this.$store.dispatch("data/getAllBalances");
 
@@ -437,4 +427,50 @@ export default {
 .custom-tooltip {
   opacity: 1 !important;
 }
+@font-face {
+    font-family: CarmenBold;
+    src: url("~assets/fonts/Carmen Sans Bold.otf") format("opentype");
+}
+@font-face {
+    font-family: CarmenExtraBold;
+    src: url("~assets/fonts/Carmen Sans ExtraBold.otf") format("opentype");
+}
+@font-face {
+    font-family: CarmenHeavy;
+    src: url("~assets/fonts/Carmen Sans Heavy.otf") format("opentype");
+}
+@font-face {
+    font-family: CarmenLight;
+    src: url("~assets/fonts/Carmen Sans Light.otf") format("opentype");
+}
+@font-face {
+    font-family: CarmenMedium;
+    src: url("~assets/fonts/Carmen Sans Medium.otf") format("opentype");
+}
+@font-face {
+    font-family: CarmenRegular;
+    src: url("~assets/fonts/Carmen Sans Regular.otf") format("opentype");
+}
+@font-face {
+    font-family: CarmenSemiBold;
+    src: url("~assets/fonts/Carmen Sans SemiBold.otf") format("opentype");
+}
+@font-face {
+    font-family: CarmenThin;
+    src: url("~assets/fonts/Carmen Sans Thin.otf") format("opentype");
+}
+@font-face {
+    font-family: CarmenUltraLight;
+    src: url("~assets/fonts/Carmen Sans UltraLight.otf") format("opentype");
+}
+.body,
+.v-application{
+    font-family: 'CarmenMedium';
+} 
+.carmenBold {
+    font-family: 'CarmenBold';
+
+} 
+
+
 </style>

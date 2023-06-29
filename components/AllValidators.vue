@@ -11,80 +11,157 @@
       <div class="row">
         <div class="col-sm">
           <v-data-table
-            class="accent"
+            class="accent allValidators" 
             :headers="headers"
             :items="finalValidators"
             :items-per-page="150"
             hide-default-footer
           >
             <template #top />
-            <template #item.status="{ item }">
-              <v-chip
-                v-if="item.status === 'BOND_STATUS_BONDED'"
-                class="ma-2"
-                color="#00b786"
-                outlined
-                label
-              >
-                Active
-              </v-chip>
-              <v-chip
-                v-else
-                class="ma-2"
-                color="red"
-                outlined
-                label
-              >
-                Inactive
-              </v-chip>
-            </template>
+ 
             <template #item.name="{ item }">
-              <router-link
-                :to="'/validators/' + item.op_address"
-                class="linkFormat"
-              >
-                <v-icon class="mr-2">
-                  mdi-shield-check
-                </v-icon> {{ item.name }}
-              </router-link>
+              <a 
+                class="linkFormat box"
+                @click="selectValidator(item)"
+              > 
+                <v-chip
+                  v-if="item.status === 'BOND_STATUS_BONDED'"
+                  class="ma-2"
+                  color="#00b786"
+                  label
+                >
+                  Active
+                </v-chip>
+                <v-chip
+                  v-else
+                  class="ma-2"
+                  color="red"
+                  label
+                >
+                  Inactive
+                </v-chip>  
+                <img
+                  src="BCNA-LOGO-C.svg"
+                  alt="BitCanna"
+                  height="40"
+                  width="40"
+                  class="ml-8"
+                > 
+                <span class="ml-8"><h3>{{ item.name }}</h3></span>                            
+              </a>              
             </template>
             <template #item.crate="{ item }">
-              <span>{{ item.crate }}%</span>
+              <h3>{{ item.crate }}%</h3>
             </template>  
             <template #item.votingPower="{ item }">
-              <span>{{ item.votingPower }}%</span>
+              <h3><span>{{ item.votingPower }}%</span></h3>
             </template>
                     
-            <template #item.uptime="{ item }">
-              <span>{{ item.uptime }}%</span>
+            <template #item.validatorApr="{ item }">
+              <h3><span>{{ item.validatorApr }}%</span></h3>
             </template>
           </v-data-table>
         </div>
       </div>
     </v-col>
+    <v-dialog
+      v-model="dialog"
+      max-width="600" 
+    >
+      <v-card color="#161819">
+        <v-card-title class="text-h5">
+          Delegate
+        </v-card-title>
+
+        <v-card-text class="mt-6">
+          <div 
+            class="fill-height d-flex"
+          >
+            <img
+              src="BCNA-LOGO-C.svg"
+              alt="BitCanna"
+              height="40"
+              width="40"
+            > 
+            <span class="text-h6 mt-2 ml-8">{{ selectedValidator.name }}</span>
+          </div> 
+
+
+          <v-sheet
+            outlined
+            color="gray"
+            rounded
+            class="mt-4"
+          >
+            <v-card
+              color="#1C1D20"
+              class="pa-2"
+              outlined
+              tile 
+            >
+              <v-row>
+                <v-col md="6">
+                  <v-list-item two-line>
+                    <v-list-item-content>        
+                      <v-list-item-subtitle class="mb-2 subtitle-1">
+                        Commission rate
+                      </v-list-item-subtitle>
+                      <v-list-item-title class="text-h6 subtitle-2">
+                        {{ selectedValidator.crate }}%
+                      </v-list-item-title>
+                    </v-list-item-content>
+                  </v-list-item>
+                </v-col>
+                <v-col md="6">
+                  <v-list-item two-line>
+                    <v-list-item-content>        
+                      <v-list-item-subtitle class="mb-2 subtitle-1">
+                        Voting Power
+                      </v-list-item-subtitle>
+                      <v-list-item-title class="text-h6">
+                        {{ selectedValidator.votingPower }}%
+                      </v-list-item-title>
+                    </v-list-item-content>
+                  </v-list-item>
+                </v-col>
+              </v-row>
+            </v-card>
+          </v-sheet>  
+
+          <DelegateModal
+            v-if="logged"
+            :chain-id-props="cosmosConfig[chainId].coinLookup.addressPrefix"
+            :address-to="selectedValidator.op_address"
+            :validator-name="validatorDetails.description?.moniker" 
+          />
+        </v-card-text>
+
+        <v-card-actions> 
+          <v-spacer />
+        </v-card-actions>
+      </v-card>
+    </v-dialog>     
   </v-row>
 </template>
 
 <script>
 import { mapState } from "vuex";
-import {
-  assertIsBroadcastTxSuccess,
-  SigningStargateClient,
-} from "@cosmjs/stargate";
 import cosmosConfig from "~/cosmos.config";
-import { notifWaiting, notifError, notifSuccess } from "~/libs/notifications";
 
 export default {
   name: "Validators",
   props: ["getStatus"],
   data() {
     return {
+      dialog: false,
+      selectedValidator: "",
+      myTotalUnDelegation: 0,
       headers: [
-        { text: "Status", value: "status" },
+       /*  { text: "Status", value: "status" }, */
         { text: "Name", value: "name" },
         { text: "Commission rate", value: "crate" },
         { text: "Voting power", value: "votingPower" },
-        { text: "Uptime", value: "uptime" },
+        { text: "validatorApr", value: "validatorApr" },
         { text: "", value: "actions" },
       ],
       finalValidators: [],
@@ -102,8 +179,15 @@ export default {
     };
   },
   computed: {
-    ...mapState("data", ["chainId", `balances`, "validators"]),
-    ...mapState("keplr", [`logged`]),
+    ...mapState("data", [
+      "chainId", 
+      `balances`, 
+      "validators", 
+      "validatorDetails",
+      "validatorDelegations",
+      "validatorUnDelegations",
+    ]),
+    ...mapState("keplr", [`logged`, `accounts`]),
   },  
   watch: {
     getStatus: function (val) {
@@ -118,7 +202,6 @@ export default {
     },
   },
   async mounted() {
-    // console.log(this.validators)
     await this.$store.dispatch("keplr/checkLogin");
     if (this.logged === "false") this.$router.push({ path: "login" });
 
@@ -139,62 +222,20 @@ export default {
         value.toString().toLowerCase().indexOf(search) !== -1
       );
     },
-    validate(addrValidator) {
-      if (this.$refs.form.validate() === true) {
-        (async () => {
-          // Send notification
-          const returnWaiting = notifWaiting(this.$toast);
-          this.loading = true;
+    async selectValidator(validator) {
+      this.dialog = true
+      this.selectedValidator = validator;
+      await this.$store.dispatch("data/getValidatorDetails", validator.op_address);
 
-          const chainId = cosmosConfig[this.chainId].chainId;
-          await window.keplr.enable(chainId);
-          const offlineSigner = await window.getOfflineSignerAuto(chainId);
-          const accounts = await offlineSigner.getAccounts();
-
-          const client = await SigningStargateClient.connectWithSigner(
-            cosmosConfig[this.chainId].rpcURL,
-            offlineSigner
-          );
-          const convertAmount = this.amountToDelegate * 1000000;
-          const amountFinal = {
-            denom: cosmosConfig[this.chainId].coinLookup.chainDenom,
-            amount: convertAmount.toString(),
-          };
-          const fee = {
-            amount: [
-              {
-                denom: cosmosConfig[this.chainId].coinLookup.chainDenom,
-                amount: "5000",
-              },
-            ],
-            gas: "200000",
-          };
-          //var returnWaiting = notifWaiting(this.$toast);
-
-          try {
-            const result = await client.delegateTokens(
-              accounts[0].address,
-              addrValidator,
-              amountFinal,
-              fee,
-              this.memo
-            );
-            assertIsBroadcastTxSuccess(result);
-            // const result = await client.signAndBroadcast(accounts[0].address, [reDelegateMsg], fee, this.memo)
-            // assertIsBroadcastTxSuccess(result)
-            this.loading = false;
-            this.$toast.dismiss(returnWaiting);
-            // Send notification
-            notifSuccess(this.$toast, result.transactionHash);
-            await this.$store.dispatch("data/refresh", accounts[0].address);
-          } catch (error) {
-            console.error(error);
-            //console.log(returnWaiting)
-            this.$toast.dismiss(returnWaiting);
-            notifError(this.$toast);
-            this.loading = false;
-          }
-        })();
+      if (this.logged) {
+        await this.$store.dispatch("data/getValidatorDelegation", {
+          validatorAddr: validator.op_address,
+          delegatorAddr: this.accounts[0].address,
+        });
+        await this.$store.dispatch("data/getValidatorUnDelegations", {
+          validatorAddr: validator.op_address,
+          delegatorAddr: this.accounts[0].address,
+        });  
       }
     },
   },
@@ -205,5 +246,8 @@ export default {
   color: #e5e9ec !important;
   caret-color: #f4f4f4 !important;
   text-decoration: none;
+}
+.allValidators tr {
+  height: 90px !important;
 }
 </style>

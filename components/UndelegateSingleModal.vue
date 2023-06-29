@@ -5,8 +5,10 @@
   >
     <template #activator="{ on, attrs }">
       <v-btn
-        class="ma-2"
-        color="#00b786"
+        color="#FF0F0F"
+        block
+        class="mt-2"
+        x-large  
         v-bind="attrs"
         :disabled="!enableModal"
         v-on="on"
@@ -17,7 +19,7 @@
       </v-btn>
     </template>
 
-    <v-card class="accent">
+    <v-card color="#161819">
       <v-card-title>
         <span
           v-if="step1"
@@ -49,59 +51,40 @@
           ref="form"
           v-model="dislableSend"
           lazy-validation
-        >
-          <v-container>
-            <v-row>
-              <v-col cols="12">
-                <v-col class="text-right">
-                  <v-chip @click="getQuarter">
-                    1/4
-                  </v-chip>
-                  <v-chip @click="getHalf">
-                    1/2
-                  </v-chip>
-                  <v-chip @click="getMax">
+        > 
+          <v-row>
+            <v-col cols="12">
+              <span class="text-left">Available: {{ amountUn }} BCNA</span>
+              <v-text-field
+                v-model="amount"
+                label="Amount*"
+                :rules="!loadingInput ? amountRules : ''"
+                type="text"
+                class="mt-4"
+                background-color="#0F0F0F"
+                flat 
+                solo
+              >
+                <template #append>
+                  <v-chip
+                    label
+                    small
+                    @click="getMax"
+                  >
                     Max
                   </v-chip>
-                </v-col>
-                <span class="text-left">Available: {{ amountUn }} BCNA</span>
-                <v-text-field
-                  v-model="amount"
-                  outlined
-                  label="Amount*"
-                  :rules="!loadingInput ? amountRules : ''"
-                  type="text"
-                  dense
-                  class="mt-4"
-                >
-                  <template #append>
-                    <img
-                      width="24"
-                      height="24"
-                      :srcset="coinIcon"
-                      alt=""
-                      :class="`rounded-xl`"
-                    >
-                  </template>
-                </v-text-field>
-                <!-- <v-text-field
-                  v-model="address"
-                  label="Address from*"
-                  :rules="addressRules"
-                  required
-                  outlined
-                  dense
-                ></v-text-field> -->
-                <v-text-field
-                  v-model="memo"
-                  label="Memo"
-                  required
-                  outlined
-                  dense
-                />
-              </v-col>
-            </v-row>
-          </v-container>
+                </template>
+              </v-text-field>
+              <v-text-field
+                v-model="memo"
+                label="Memo"
+                required
+                background-color="#0F0F0F"
+                flat 
+                solo
+              />
+            </v-col>
+          </v-row> 
         </v-form>
         <v-form
           v-if="step2"
@@ -110,15 +93,75 @@
         >
           <v-row>
             <v-col cols="12">
-              <v-simple-table class="accent">
+              <v-sheet
+                outlined
+                color="gray"
+                rounded
+              >
+                <v-card
+                  color="#1C1D20"
+                  class="pa-2"
+                  outlined
+                  tile 
+                >
+                  <v-list-item two-line>
+                    <v-list-item-content>        
+                      <v-list-item-subtitle class="mb-2">
+                        <h3>Amount</h3>
+                      </v-list-item-subtitle>
+                      <v-list-item-title>
+                        <h3>{{ amount }} {{ cosmosConfig[chainId].coinLookup.viewDenom }}</h3>
+                      </v-list-item-title>
+                    </v-list-item-content>
+                  </v-list-item>
+                  <v-list-item two-line>
+                    <v-list-item-content>        
+                      <v-list-item-subtitle class="mb-2">
+                        <h3>From</h3>
+                      </v-list-item-subtitle>
+                      <v-list-item-title>
+                        <h3>{{ validatorName }}</h3>
+                      </v-list-item-title>
+                    </v-list-item-content>
+                  </v-list-item>                              
+                  <v-list-item two-line>
+                    <v-list-item-content>        
+                      <v-list-item-subtitle class="mb-2">
+                        <h3>Gas/fee</h3>
+                      </v-list-item-subtitle>
+                      <v-list-item-title>
+                        <h3>
+                          {{ gasFee.gas }} / {{ gasFee.fee / 1000000 }}
+                          {{ cosmosConfig[chainId].coinLookup.viewDenom }}
+                        </h3>
+                      </v-list-item-title>
+                    </v-list-item-content>
+                  </v-list-item>
+                  <v-list-item
+                    v-if="memo !== ''"
+                    two-line
+                  >
+                    <v-list-item-content>        
+                      <v-list-item-subtitle class="mb-2">
+                        <h3>Memo</h3>
+                      </v-list-item-subtitle>
+                      <v-list-item-title>
+                        <h3>{{ memo }}</h3>
+                      </v-list-item-title> 
+                    </v-list-item-content>
+                  </v-list-item>  
+                </v-card>
+              </v-sheet>  
+
+
+              <!--               <v-simple-table class="accent">
                 <template #default>
                   <tbody>
                     <tr>
                       <td>Amount</td>
                       <td>
                         {{ amount }}
-                        {{ cosmosConfig[chainId].coinLookup.viewDenom }}
-                        <!-- <span>Fee are automaticly deducted</span> -->
+                        {{ cosmosConfig[chainId].coinLookup.viewDenom }} 
 
                         <v-tooltip
                           v-if="feeDeducted"
@@ -158,7 +201,7 @@
                     </tr>
                   </tbody>
                 </template>
-              </v-simple-table>
+              </v-simple-table> -->
             </v-col>
           </v-row>
         </v-form>
@@ -169,12 +212,14 @@
             align="center"
             justify="center"
           >
-            <v-progress-circular
-              :size="100"
-              :width="10"
-              color="#00b786"
-              indeterminate
+            <v-img
+              max-height="102"
+              max-width="102"
+              src="icons/pending.svg"
             />
+            <br>
+            <h3>Transaction pending</h3> 
+            <h4>Your transaction is waiting to get approved on the blockchain.</h4>
           </v-col>
         </v-row>
         <v-row v-if="step4">
@@ -183,15 +228,22 @@
             align="center"
             justify="center"
           >
-            <img src="https://weedwallet-6.bitcanna.io/accepted.png">
+            <v-img
+              max-height="102"
+              max-width="102"
+              src="icons/approved.svg"
+            />
+            <br>
+            <h3>Transaction approved</h3> 
+            <h4>Your transaction has been approved on the blockchain.</h4>
           </v-col>
         </v-row>
-      </v-card-text>
-      <v-card-actions>
-        <v-spacer />
         <v-btn
           v-if="step2"
-          color="#00b786"
+           
+          block
+          x-large
+          class="mt-4"
           @click="returnStep"
         >
           Return
@@ -201,6 +253,8 @@
           :disabled="!dislableSend"
           :loading="loading"
           color="#00b786"
+          block
+          x-large
           @click="validate"
         >
           Next step
@@ -210,10 +264,16 @@
           :disabled="!dislableSend"
           :loading="loading"
           color="#00b786"
+          block
+          x-large
+          class="mt-4"
           @click="validatestep2"
         >
           Undelegate
         </v-btn>
+      </v-card-text>
+      <v-card-actions>
+        <v-spacer />
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -283,7 +343,6 @@ export default {
     ...mapState("data", ["chainId", `balances`]),
     enableModal: function () {
       let isDeleg = false;
-      console.log(this.amountUn);
       if (this.amountTotalUn !== "0") isDeleg = true;
 
       return isDeleg;
@@ -360,16 +419,6 @@ export default {
               cosmosConfig[this.chainId].coinLookup.chainDenom
           )
         );
-        console.log(usedFee);
-        console.log(usedFee.amount[0].amount / 1000000 + Number(this.amount));
-        // Recalculate fee if amount is too high
-        /* if ((usedFee.amount[0].amount / 1000000) + Number(this.amount) > (this.balances /1000000)) {
-            this.amount = (Number(this.amount) - (usedFee.amount[0].amount / 1000000)).toFixed(6)
-            this.feeDeducted = true
-          } else {
-            this.feeDeducted = false
-          } */
-
         this.gasFee = { fee: usedFee.amount[0].amount, gas: usedFee.gas };
       }
     },
@@ -418,10 +467,7 @@ export default {
             this.step4 = true;
             this.loading = false;
             await this.$store.dispatch("data/refresh", accounts[0].address);
-            await this.$store.dispatch("data/getDelegatorDataRpc", {
-              validator: this.address,
-              delegator: accounts[0].address,
-            });
+ 
             await this.$store.dispatch("data/getValidatorDelegation", {
               validatorAddr: this.address,
               delegatorAddr: accounts[0].address,
