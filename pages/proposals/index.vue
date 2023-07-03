@@ -6,7 +6,8 @@
       </h1>
       <v-spacer /> 
       <v-divider class="mb-6" />
-    <h3 class="mb-8">Active proposals</h3>
+    <h3 class="mb-8">Active proposals</h3> 
+    <span v-if="proposalsActive.length === 0">No active proposals are on chain at this moment<br /><br /><br /></span>
       <v-row> 
         <v-col
           v-for="item in proposals"
@@ -904,6 +905,7 @@ export default {
       selection: 0,
       chip4: true,
       proposals: [],
+      proposalsActive: [],
       search: "",
       memo: "",
       headers: [
@@ -1011,6 +1013,12 @@ export default {
     allProposals.data.proposals.forEach((item) => {
       setFinalPropos.push(item);
     });
+    const setFinalPropsActive = [];
+    allProposals.data.proposals.forEach((item) => {
+      if (item.status === "PROPOSAL_STATUS_VOTING_PERIOD")
+        setFinalPropsActive.push(item);
+    });
+    this.proposalsActive = setFinalPropsActive.reverse();
     this.proposals = setFinalPropos.reverse();
 
     await this.$store.dispatch("data/getProposalParamsDeposit");
