@@ -51,12 +51,14 @@
                         class="linkFormat box"
                         @click="selectValidator(item)"
                       > 
-                        <img
-                          src="BCNA-LOGO-C.svg"
-                          alt="BitCanna"
-                          height="40"
-                          width="40"
-                        > 
+                      
+                        <!-- BCNA-LOGO-C.svg -->
+                        <v-avatar>
+                          <v-img
+                            :src="'https://raw.githubusercontent.com/cosmostation/chainlist/main/chain/bitcanna/moniker/'+item.op_address+'.png'" 
+                            :alt="item.validatorName" 
+                          /> 
+                        </v-avatar>
                         <span class="ml-8"><h3>{{ item.validatorName }}</h3></span>                            
                       </a>
                     </td>
@@ -272,12 +274,12 @@
               md="6"
               class="fill-height d-flex"
             >
-              <img
-                src="BCNA-LOGO-C.svg"
-                alt="BitCanna"
-                height="40"
-                width="40"
-              > 
+              <v-avatar>
+                <v-img
+                  :src="'https://raw.githubusercontent.com/cosmostation/chainlist/main/chain/bitcanna/moniker/'+selectedValidator.op_address+'.png'" 
+                  :alt="selectedValidator.validatorName" 
+                /> 
+              </v-avatar>
               <span class="text-h6 mt-2 ml-8">{{ selectedValidator.validatorName }}</span>
             </v-col>
             <v-col md="6">
@@ -614,4 +616,6 @@ export default {
    display: flex;
    align-items:center;
 }
+
+
 </style> 
