@@ -40,13 +40,12 @@
                 >
                   Inactive
                 </v-chip>  
-                <img
-                  src="BCNA-LOGO-C.svg"
-                  alt="BitCanna"
-                  height="40"
-                  width="40"
-                  class="ml-8"
-                > 
+                <v-avatar class="ml-8">
+                  <v-img
+                    :src="'https://raw.githubusercontent.com/cosmostation/chainlist/main/chain/bitcanna/moniker/'+item.op_address+'.png'" 
+                    :alt="item.name"
+                  /> 
+                </v-avatar>
                 <span class="ml-8"><h3>{{ item.name }}</h3></span>                            
               </a>              
             </template>
@@ -77,12 +76,12 @@
           <div 
             class="fill-height d-flex"
           >
-            <img
-              src="BCNA-LOGO-C.svg"
-              alt="BitCanna"
-              height="40"
-              width="40"
-            > 
+            <v-avatar>
+              <v-img
+                :src="'https://raw.githubusercontent.com/cosmostation/chainlist/main/chain/bitcanna/moniker/'+selectedValidator.op_address+'.png'" 
+                :alt="selectedValidator.validatorName" 
+              /> 
+            </v-avatar>
             <span class="text-h6 mt-2 ml-8">{{ selectedValidator.name }}</span>
           </div> 
 

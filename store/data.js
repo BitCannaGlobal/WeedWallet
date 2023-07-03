@@ -352,7 +352,7 @@ export const actions = {
         reDelegations: foundRedelegations,
         status: foundValidatorMainInfo?.status,
         commission: (foundValidatorMainInfo?.commission.commission_rates.rate * 100).toFixed(2),
-        votingPower: ((foundValidatorMainInfo?.tokens / totalBonded2) * 100).toFixed(2),
+        votingPower: ((foundValidatorMainInfo?.tokens / totalBonded2) * 100).toFixed(2), 
       });
       totalDelegated += Number(foundDelegByValidator.balance.amount);
     });
