@@ -1011,6 +1011,9 @@ export default {
 
     const setFinalPropos = [];
     allProposals.data.proposals.forEach((item) => {
+      // Fix markdown syntax
+      item.content.description = item.content.description.replace(/\\n/g, "\n")
+      item.content.description = item.content.description.replace(/\\u0026/g, "&")
       setFinalPropos.push(item);
     });
     const setFinalPropsActive = [];
