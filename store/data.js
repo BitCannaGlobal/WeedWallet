@@ -693,6 +693,10 @@ export const actions = {
       })
       .catch((error) => {
         console.log(error);
+        commit(
+          "setValidatorRewards",
+          0
+        );
       });
   },
   changeChaniId({ commit }, chainId) {
