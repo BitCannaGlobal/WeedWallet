@@ -5,8 +5,8 @@ export default {
   ssr: false,
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    titleTemplate: "%s - WeedWallet",
-    title: "WeedWallet",
+    titleTemplate: "%s Webwallet",
+    title: "BitCanna",
     htmlAttrs: {
       lang: "en",
     },
