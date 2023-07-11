@@ -198,6 +198,7 @@ export default {
   async mounted() {
     await this.$store.dispatch("keplr/checkLogin");
     await this.$store.dispatch("data/getValidatorRewards", { validatorAddr: this.validatorAddr, delegatorAddr: this.accounts[0].address });
+    await this.$store.dispatch("data/getValidatorDelegation", { validatorAddr: this.validatorAddr, delegatorAddr: this.accounts[0].address });
   },
   methods: {
     async getTxDate(height) {

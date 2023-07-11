@@ -650,6 +650,10 @@ export const actions = {
       })
       .catch((error) => {
         console.log(error);
+        commit(
+          "setValidatorDelegations",
+          0
+        );
       });
   },
   async getValidatorUnDelegations({ commit, state }, data) {
@@ -673,6 +677,10 @@ export const actions = {
       })
       .catch((error) => {
         console.log(error);
+        commit(
+          "setValidatorUnDelegations",
+          0
+        );
       });
   },  
   async getValidatorRewards({ commit, state }, data) {
