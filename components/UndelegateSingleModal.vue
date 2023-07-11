@@ -10,7 +10,7 @@
         class="mt-2"
         x-large  
         v-bind="attrs"
-        :disabled="!enableModal"
+        :disabled="!amountUn"
         v-on="on"
       >
         <v-icon class="mr-2">

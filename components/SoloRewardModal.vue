@@ -5,13 +5,26 @@
     max-height="1200px"
   >
     <template #activator="{ on, attrs }">
+      <v-btn 
+        v-if="type === 'fromValidatorDetail'"
+        :disabled="validatorRewards === '' || validatorRewards === '0.000000'"
+        color="#333333" 
+        class="mt-4"
+        x-large 
+
+        v-on="on"
+      >
+        Claim
+      </v-btn>
       <v-btn
+        v-else
+        :disabled="validatorRewards === '' || validatorRewards === '0.000000'"
         v-bind="attrs"
         block 
         v-on="on"
       >
         Claim
-      </v-btn>
+      </v-btn> 
     </template>
     <v-card color="#161819">
       <v-card-title>
@@ -93,7 +106,7 @@
             <v-img
               max-height="102"
               max-width="102"
-              src="icons/pending.svg"
+              src="https://wallet-testnet.bitcanna.io/icons/pending.svg"
             />
             <br>
             <h3>Transaction pending</h3> 
@@ -109,7 +122,7 @@
             <v-img
               max-height="102"
               max-width="102"
-              src="icons/approved.svg"
+              src="https://wallet-testnet.bitcanna.io/icons/approved.svg"
             />
             <br>
             <h3>Transaction approved</h3> 
@@ -159,6 +172,7 @@ export default {
     "validatorName",
     "opAddress",
     "totalReward",
+    "type",
   ],
   data: (instance) => ({
     dialog: false,

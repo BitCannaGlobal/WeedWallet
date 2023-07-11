@@ -133,6 +133,14 @@
             :address-to="selectedValidator.op_address"
             :validator-name="validatorDetails.description?.moniker" 
           />
+          <v-btn 
+            class="mt-4"
+            :to="`/validators/${selectedValidator.op_address}`"
+            block
+            x-large
+          >
+            View profile
+          </v-btn>
         </v-card-text>
 
         <v-card-actions> 

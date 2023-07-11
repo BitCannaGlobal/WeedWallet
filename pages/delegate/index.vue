@@ -364,7 +364,14 @@
               </v-row>
             </v-card>
           </v-sheet>  
-
+          <v-btn 
+            class="mt-2"
+            :to="`/validators/${selectedValidator.op_address}`"
+            block
+            x-large
+          >
+            View profile
+          </v-btn>
           <DelegateModal
             v-if="logged"
             :chain-id-props="cosmosConfig[chainId].coinLookup.addressPrefix"

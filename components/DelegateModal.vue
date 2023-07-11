@@ -4,13 +4,12 @@
     max-width="600px"
     max-height="1200px"
   >
-    <template #activator="{ on, attrs }">
-      <br>
+    <template #activator="{ on, attrs }"> 
       <v-btn
         v-bind="attrs"
         color="#00b786"
         block
-        class="mt-6"
+        class="mt-2"
         x-large  
         v-on="on"
       >
