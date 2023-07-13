@@ -47,12 +47,10 @@
                       </td> -->
 
                     <td style="">
-                      <a 
+                      <!-- <a 
                         class="linkFormat box"
                         @click="selectValidator(item)"
-                      > 
-                      
-                      <!-- BCNA-LOGO-C.svg -->
+                      >  
                       <v-avatar>
                         <v-img
                           :src="'https://raw.githubusercontent.com/cosmostation/chainlist/main/chain/bitcanna/moniker/'+item.op_address+'.png'" 
@@ -60,7 +58,19 @@
                         /> 
                       </v-avatar>
                         <span class="ml-8"><h3>{{ item.validatorName }}</h3></span>                            
-                      </a>
+                      </a> -->
+                      <router-link
+                        :to="'/validators/' + item.op_address"
+                        class="linkFormat box"
+                      >
+                        <v-avatar>
+                          <v-img
+                            :src="'https://raw.githubusercontent.com/cosmostation/chainlist/main/chain/bitcanna/moniker/'+item.op_address+'.png'" 
+                            :alt="item.validatorName" 
+                          /> 
+                        </v-avatar>
+                        <span class="ml-8"><h3>{{ item.validatorName }}</h3></span> 
+                      </router-link>
                     </td>
                     <td style="text-align: right;">
                       <span class="text-h6 mr-4">
@@ -274,13 +284,13 @@
               md="6"
               class="fill-height d-flex"
             >
-            <v-avatar>
-              <v-img
-                :src="'https://raw.githubusercontent.com/cosmostation/chainlist/main/chain/bitcanna/moniker/'+selectedValidator.op_address+'.png'" 
-                :alt="selectedValidator.validatorName" 
-              /> 
-            </v-avatar>
-            <span class="text-h6 mt-2 ml-8">{{ selectedValidator.validatorName }}</span>
+              <v-avatar>
+                <v-img
+                  :src="'https://raw.githubusercontent.com/cosmostation/chainlist/main/chain/bitcanna/moniker/'+selectedValidator.op_address+'.png'" 
+                  :alt="selectedValidator.validatorName" 
+                /> 
+              </v-avatar>
+              <span class="text-h6 mt-2 ml-8">{{ selectedValidator.validatorName }}</span>
             </v-col>
             <v-col md="6">
               <v-row>

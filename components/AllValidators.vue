@@ -20,10 +20,25 @@
             <template #top />
  
             <template #item.name="{ item }">
-              <a 
+              <!--  <a 
                 class="linkFormat box"
                 @click="selectValidator(item)"
               > 
+ 
+                <v-avatar class="ml-8">
+                  <v-img
+                    :src="'https://raw.githubusercontent.com/cosmostation/chainlist/main/chain/bitcanna/moniker/'+item.op_address+'.png'" 
+                    :alt="item.name"
+                  /> 
+                </v-avatar>
+                <span class="ml-8"><h3>{{ item.name }}</h3></span>                            
+              </a>   
+               -->
+              
+              <router-link
+                :to="'/validators/' + item.op_address"
+                class="linkFormat box"
+              >
                 <v-chip
                   v-if="item.status === 'BOND_STATUS_BONDED'"
                   class="ma-2"
@@ -39,15 +54,15 @@
                   label
                 >
                   Inactive
-                </v-chip>  
-                <v-avatar class="ml-8">
+                </v-chip> 
+                <v-avatar>
                   <v-img
                     :src="'https://raw.githubusercontent.com/cosmostation/chainlist/main/chain/bitcanna/moniker/'+item.op_address+'.png'" 
-                    :alt="item.name"
+                    :alt="item.validatorName" 
                   /> 
                 </v-avatar>
-                <span class="ml-8"><h3>{{ item.name }}</h3></span>                            
-              </a>              
+                <span class="ml-8"><h3>{{ item.name }}</h3></span> 
+              </router-link>
             </template>
             <template #item.crate="{ item }">
               <h3>{{ item.crate }}%</h3>

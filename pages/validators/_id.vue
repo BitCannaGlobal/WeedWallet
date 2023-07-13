@@ -5,12 +5,12 @@
     </h3>
     <v-divider class="mb-6" />
     <v-sheet
-        color="#0F1011"
-        min-height="520"
-        class="pa-4 pt-6 pl-10 ma-8 mx-auto"
-        elevation="2"
-        height="60"
-      >
+      color="#0F1011"
+      min-height="520"
+      class="pa-4 pt-6 pl-10 ma-8 mx-auto"
+      elevation="2"
+      height="60"
+    >
       <h3>
         <v-avatar>
           <v-img
@@ -30,7 +30,10 @@
       </h3>
       <div class="mt-6">
         <h4>Website</h4>
-        <a :href="validatorDetails.description?.website" target="_blank">
+        <a
+          :href="validatorDetails.description?.website"
+          target="_blank"
+        >
           {{ validatorDetails.description?.website }} 
         </a>
       </div>
@@ -47,12 +50,14 @@
             class="pa-4" 
           > 
             <h4>Current commission rate</h4>
-              {{
-                validatorDetails.commission?.commission_rates.rate * 100
-              }}
-              %
-            <h4 class="mt-2">Voting Power</h4>
-              10%
+            {{
+              validatorDetails.commission?.commission_rates.rate * 100
+            }}
+            %
+            <h4 class="mt-2">
+              Voting Power
+            </h4>
+            10%
           </v-col>
           <v-divider 
             vertical
@@ -63,8 +68,10 @@
             class="pa-4" 
           > 
             <h4>Total Stake</h4>
-              {{ validatorDelegations / 1000000 }} {{ cosmosConfig[chainId].coinLookup.viewDenom }}
-            <h4 class="mt-2">Rewards (APR)</h4>
+            {{ validatorDelegations / 1000000 }} {{ cosmosConfig[chainId].coinLookup.viewDenom }}
+            <h4 class="mt-2">
+              Rewards (APR)
+            </h4>
             {{ validatorApr.toFixed(2) }}%
           </v-col>
           <v-divider 
@@ -78,12 +85,12 @@
           > 
             <h4>Your Rewards</h4> 
             <span v-if="validatorRewards !== ''">{{ validatorRewards }} {{ cosmosConfig[chainId].coinLookup.viewDenom }}</span>
-            <br /> 
+            <br> 
             <SoloRewardModal 
-                :validator-name="validatorDetails.description?.moniker"
-                :op-address="validatorDetails.operator_address"
-                :total-reward="validatorRewards" 
-                type="fromValidatorDetail"
+              :validator-name="validatorDetails.description?.moniker"
+              :op-address="validatorDetails.operator_address"
+              :total-reward="validatorRewards" 
+              type="fromValidatorDetail"
             />
           </v-col>
         </v-row>
@@ -95,8 +102,7 @@
             cols="12"
             sm="4"
             class="pa-4" 
-          > 
- 
+          >
             <DelegateModal
               v-if="logged"
               :chain-id-props="cosmosConfig[chainId].coinLookup.addressPrefix"
@@ -109,7 +115,7 @@
             sm="4"
             class="pa-4" 
           > 
-          <RedelegateModal
+            <RedelegateModal
               v-if="logged"
               :chain-id-props="cosmosConfig[chainId].coinLookup.addressPrefix"
               :address-from="validatorAddr"
@@ -146,7 +152,6 @@ import {
   assertIsDeliverTxSuccess,
   SigningStargateClient,
   GasPrice,
-  calculateFee,
 } from "@cosmjs/stargate";
 import relativeTime from "dayjs/plugin/relativeTime";
 dayjs.extend(relativeTime);
