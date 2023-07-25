@@ -233,7 +233,13 @@ export function setMsg(msg, addrGet, timestamp, allVal, txHash) {
       icon = "Unknown.svg";
       finalHash = txHash;
       break;      
-           
+    case "/cosmos.authz.v1beta1.MsgExec":
+      typeReadable = "Authz Exec";
+      color = "#00b786";
+      icon = "Unknown.svg";
+      finalHash = txHash;
+      break;        
+       
 
     default:
       console.log("Sorry, dont know " + msg["@type"] + ".");
