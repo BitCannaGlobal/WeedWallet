@@ -95,15 +95,20 @@ export const actions = {
     const inflation = await axios(
       cosmosConfig[state.chainId].apiURL + "/cosmos/mint/v1beta1/inflation"
     );
+    const finalTotalBounded = await axios(
+      cosmosConfig[state.chainId].apiURL + "/cosmos/staking/v1beta1/pool"
+    );
 
     let foundSupply = totalSupply.data.supply.find(
       (element) =>
         element.denom === cosmosConfig[state.chainId].coinLookup.chainDenom
     );
     let finalApr = (
-      ((foundSupply.amount * inflation.data.inflation) / state.totalBonded) *
+      ((foundSupply.amount * inflation.data.inflation) / finalTotalBounded.data.pool.bonded_tokens) *
       100
     ).toFixed(1);
+
+    console.log('finalApr', finalApr)
     commit("setAprNow", finalApr);
   },
   async getSdkVersion({ commit, state }) {

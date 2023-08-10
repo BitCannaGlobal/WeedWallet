@@ -16,7 +16,7 @@
         class="ma-4"
         height="64"
         width="64"
-        src="BCNA-LOGO-C.svg"
+        src="https://wallet.bitcanna.io/BCNA-LOGO-C.svg"
       >  
       <v-sheet
         color="#151618"
