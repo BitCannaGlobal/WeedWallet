@@ -163,7 +163,7 @@
             <v-img
               max-height="102"
               max-width="102"
-              src="icons/pending.svg"
+              src="https://wallet.bitcanna.io/icons/pending.svg"
             />
             <br>
             <h3>Transaction pending</h3> 
@@ -179,7 +179,7 @@
             <v-img
               max-height="102"
               max-width="102"
-              src="icons/approved.svg"
+              src="https://wallet.bitcanna.io/icons/approved.svg"
             />
             <br>
             <h3>Transaction approved</h3> 
