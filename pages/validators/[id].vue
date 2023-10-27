@@ -1,7 +1,9 @@
 <template>
+  <div class="ma-6">
+
   <div>
     <h3>
-      {{ validatorDetails.description?.moniker }} 
+      {{ store.validatorDetails.description?.moniker }} 
     </h3>
     <v-divider class="mb-6" />
     <v-sheet
@@ -15,10 +17,10 @@
         <v-avatar>
           <v-img
             :src="'https://raw.githubusercontent.com/cosmostation/chainlist/main/chain/bitcanna/moniker/'+validatorAddr+'.png'" 
-            :alt="validatorDetails.description?.moniker" 
+            :alt="store.validatorDetails.description?.moniker" 
           /> 
         </v-avatar>          
-        <span class="ml-4">{{ validatorDetails.description?.moniker }}</span>
+        <span class="ml-4">{{ store.validatorDetails.description?.moniker }}</span>
         <v-chip
           class="ma-2 ml-4"
           label
@@ -31,15 +33,15 @@
       <div class="mt-6">
         <h4>Website</h4>
         <a
-          :href="validatorDetails.description?.website"
+          :href="store.validatorDetails.description?.website"
           target="_blank"
         >
-          {{ validatorDetails.description?.website }} 
+          {{ store.validatorDetails.description?.website }} 
         </a>
       </div>
       <div class="mt-6">
         <h4>Description</h4>
-        {{ validatorDetails.description?.details }} 
+        {{ store.validatorDetails.description?.details }} 
       </div>
       
       <div class="mt-6">
@@ -51,7 +53,7 @@
           > 
             <h4>Current commission rate</h4>
             {{
-              validatorDetails.commission?.commission_rates.rate * 100
+              store.validatorDetails.commission?.commissionRates.rate * 100
             }}
             %
             <h4 class="mt-2">
@@ -68,34 +70,34 @@
             class="pa-4" 
           > 
             <h4>Total Stake</h4>
-            {{ validatorDelegations / 1000000 }} {{ cosmosConfig[chainId].coinLookup.viewDenom }}
+             {{ store.validatorDelegations / 1000000 }} {{ cosmosConfig[store.chainSelected].coinLookup.viewDenom }} 
             <h4 class="mt-2">
               Rewards (APR)
             </h4>
-            {{ validatorApr.toFixed(2) }}%
+            <!-- {{ validatorApr.toFixed(2) }}% -->
           </v-col>
           <v-divider 
             vertical
           />
           <v-col
-            v-if="logged"
+            v-if="store.logged"
             cols="12"
             sm="4"
             class="pa-4" 
           > 
-            <h4>Your Rewards</h4> 
-            <span v-if="validatorRewards !== ''">{{ validatorRewards }} {{ cosmosConfig[chainId].coinLookup.viewDenom }}</span>
+            <h4>Your Rewards</h4>  
+           <span v-if="store.validatorRewards !== ''">{{ store.validatorRewards }} {{ cosmosConfig[store.chainSelected].coinLookup.viewDenom }}</span>
             <br> 
-            <SoloRewardModal 
-              :validator-name="validatorDetails.description?.moniker"
-              :op-address="validatorDetails.operator_address"
-              :total-reward="validatorRewards" 
+             <SoloRewardModal 
+              :validator-name="store.validatorDetails.description?.moniker"
+              :op-address="store.validatorDetails.operatorAddress"
+              :total-reward="store.validatorRewards" 
               type="fromValidatorDetail"
-            />
+            />  
           </v-col>
         </v-row>
       </div>
-      <!-- Button part -->
+  
       <div class="mt-6">
         <v-row no-gutters>
           <v-col
@@ -104,10 +106,11 @@
             class="pa-4" 
           >
             <DelegateModal
-              v-if="logged"
-              :chain-id-props="cosmosConfig[chainId].coinLookup.addressPrefix"
+              v-if="store.logged"
+              :balances="store.spendableBalances"
+              :chain-id-props="cosmosConfig[store.chainSelected].coinLookup.addressPrefix"
               :address-to="validatorAddr"
-              :validator-name="validatorDetails.description?.moniker" 
+              :validator-name="store.validatorDetails.description?.moniker" 
             />
           </v-col>
           <v-col
@@ -115,37 +118,38 @@
             sm="4"
             class="pa-4" 
           > 
-            <RedelegateModal
+            <!-- <RedelegateModal
               v-if="logged"
-              :chain-id-props="cosmosConfig[chainId].coinLookup.addressPrefix"
+              :chain-id-props="cosmosConfig[store.chainSelected].coinLookup.addressPrefix"
               :address-from="validatorAddr"
               :amount-re="validatorDelegations / 1000000"
-              :validator-name="validatorDetails.description?.moniker"
-              :coin-icon="cosmosConfig[chainId].coinLookup.icon"
-            />
+              :validator-name="store.validatorDetails.description?.moniker"
+              :coin-icon="cosmosConfig[store.chainSelected].coinLookup.icon"
+            /> -->
           </v-col>
           <v-col
             cols="12"
             sm="4"
             class="pa-4" 
           > 
-            <UndelegateSingleModal
+            <!-- <UndelegateSingleModal
               v-if="logged"
-              :chain-id-props="cosmosConfig[chainId].coinLookup.addressPrefix"
+              :chain-id-props="cosmosConfig[store.chainSelected].coinLookup.addressPrefix"
               :address-from="validatorAddr"
               :amount-un="validatorDelegations / 1000000"
               :amount-total-un="myTotalUnDelegation"
-              :validator-name="validatorDetails.description?.moniker"
-              :coin-icon="cosmosConfig[chainId].coinLookup.icon"
-            />
+              :validator-name="store.validatorDetails.description?.moniker"
+              :coin-icon="cosmosConfig[store.chainSelected].coinLookup.icon"
+            /> -->
           </v-col>
         </v-row>
       </div>
     </v-sheet>
-  </div>
+  </div> 
+</div>
 </template>
 <script>
-import { mapState } from "vuex";
+import { useAppStore } from '@/stores/data'
 import dayjs from "dayjs";
 import {
   defaultRegistryTypes,
@@ -169,7 +173,7 @@ export default {
     myTotalUnDelegation: "", 
   }),
   computed: {
-    ...mapState("keplr", [`accounts`, "logged"]),
+    /* ...mapState("keplr", [`accounts`, "logged"]),
     ...mapState("data", [
       "chainId",
       "myDelegatorData",
@@ -183,10 +187,10 @@ export default {
       "validatorDelegations",
       "validatorUnDelegations",
       "validatorRewards",
-    ]),
+    ]), */
     validatorApr() {
       const rewardFactor =
-        1 - this.validatorDetails.commission?.commission_rates.rate;
+        1 - this.validatorDetails.commission?.commissionRates.rate;
       const finalApr = this.aprNow * rewardFactor;
       return finalApr;
     },
@@ -195,15 +199,23 @@ export default {
       return fromNow;
     },
   },
+  setup() {
+    const store = useAppStore()
+
+    return {
+      store
+    }
+  },
   watch: {},
   async beforeMount() {
     this.validatorAddr = this.$route.params.id;
-    await this.$store.dispatch("data/getValidatorDetails", this.validatorAddr);
+    //await this.$store.dispatch("data/getValidatorDetails", this.validatorAddr);
+   
   },
   async mounted() {
-    await this.$store.dispatch("keplr/checkLogin");
-    await this.$store.dispatch("data/getValidatorRewards", { validatorAddr: this.validatorAddr, delegatorAddr: this.accounts[0].address });
-    await this.$store.dispatch("data/getValidatorDelegation", { validatorAddr: this.validatorAddr, delegatorAddr: this.accounts[0].address });
+    await this.store.getValidatorDetail(this.validatorAddr);
+    await this.store.getValidatorDelegator({ validatorAddr: this.validatorAddr, delegatorAddr: this.store.addrWallet });
+    //await this.$store.dispatch("data/getValidatorDelegation", { validatorAddr: this.validatorAddr, delegatorAddr: this.accounts[0].address });
   },
   methods: {
     async getTxDate(height) {

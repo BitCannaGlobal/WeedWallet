@@ -1,13 +1,22 @@
 <template>
-  <v-row>
+ 
     <v-col
       cols="12"
     >
-      <v-col class="ml-6 mb-6">
-        <h1>{{ accounts[0].walletName }}'s portfolio</h1>
-      </v-col>
+      <v-col class="ml-6 mt-6 mb-6"> 
 
-      <sequential-entrance>
+        <!-- <h1>        <img
+          src="/keplr.png"
+          alt="bcna"
+          height="40"
+          width="40"
+        >{{ store.nameWallet }}'s portfolio</h1> -->
+ 
+          <v-list-item
+            class="background"
+            :prepend-avatar="store.loggedType + '.svg'" 
+          ><h1>{{ store.nameWallet  }}</h1></v-list-item> 
+      </v-col>
         <v-row>
           <v-col
             class="fill-height d-flex flex-column justify-center align-center"
@@ -22,24 +31,29 @@
                   <v-col md="6">
                     Main account<br>
                     <h1 class="mt-2 carmenBold">
-                      {{ totalWallet }}
-                      {{ cosmosConfig[chainId].coinLookup.viewDenom }}  
+                      {{ store.totalTokens }}
+                      {{ cosmosConfig[store.chainSelected].coinLookup.viewDenom }}  
                     </h1>
                     <h3 class="mt-2">
-                      ${{ totalWalletPrice }}
+                      ${{ store.fiatWalletValue }}
                     </h3>
 
                     <v-row class="mt-2">
                       <v-col md="6">
-                        <SendModal
+                        <actionsModals 
+                          type="sendTokens" 
+                          :spendableBalances="store.spendableBalances" 
+                          :chain="cosmosConfig[store.chainSelected]" 
+                        /> 
+                        <!-- <SendModal
                           class="text-right"
                           :chain-id-props="
-                            cosmosConfig[chainId].coinLookup.addressPrefix
+                            cosmosConfig[0].coinLookup.addressPrefix
                           "
-                          :amount-available="balances / 1000000"
-                          :coin-icon="cosmosConfig[chainId].coinLookup.icon"
+                          :amount-available="0"
+                          :coin-icon="cosmosConfig[0].coinLookup.icon"
                           type="simpleSend"
-                        />
+                        /> -->
                       </v-col>
                       <v-col md="6">
                         <v-btn
@@ -55,15 +69,10 @@
                     </v-row>
                   </v-col>
                   <v-col md="6">
-                    <v-sheet
-                      outlined
-                      color="white"
-                      rounded
-                    >
+ 
                       <v-card
-                        class="pa-2 accent"
-                        outlined
-                        tile
+                        class="pa-2 accent" 
+                        variant="outlined"
                         height="160"
                       >
                         <img
@@ -73,12 +82,11 @@
                           width="40"
                         >
                         <br><br>
-                        <span class="mt-2"> {{ accounts[0].walletName }}'s portfolio</span> <br>
+                        <span class="mt-2"> {{ store.nameWallet }}'s portfolio</span> <br>
                         <span class="text-caption">
-                          {{ accounts[0]?.address }}
+                          {{ store.addrWallet }}
                         </span>
-                      </v-card>
-                    </v-sheet>
+                      </v-card> 
                   </v-col>
                 </v-row>
                 <v-row class="justify-end">
@@ -102,8 +110,8 @@
                     cols="12"
                     sm="6"
                   >                   
-                    <v-row no-gutters>
-                      <v-col> 
+                    <v-row no-gutters class="ma-2">
+                      <v-col > 
                         <v-icon
                           color="#0EB584"
                           small
@@ -114,11 +122,11 @@
                         Available 
                       </v-col>
                       <v-col> 
-                        {{ (balances / 1000000).toFixed(6) }}
-                        {{ cosmosConfig[chainId].coinLookup.viewDenom }}  
+                        {{ store.spendableBalances }}
+                        {{ cosmosConfig[store.chainSelected].coinLookup.viewDenom }}  
                       </v-col>
                     </v-row>
-                    <v-row no-gutters>
+                    <v-row no-gutters class="ma-2">
                       <v-col> 
                         <v-icon
                           color="#79FFD8"
@@ -130,11 +138,11 @@
                         Delegated 
                       </v-col>
                       <v-col> 
-                        {{ (totalDelegated / 1000000).toFixed(6) }}
-                        {{ cosmosConfig[chainId].coinLookup.viewDenom }}  
+                        {{ store.totalDelegations }}
+                        {{ cosmosConfig[store.chainSelected].coinLookup.viewDenom }}  
                       </v-col>
                     </v-row>
-                    <v-row no-gutters>
+                    <v-row no-gutters class="ma-2">
                       <v-col> 
                         <v-icon
                           color="#FFFFFF"
@@ -147,7 +155,7 @@
                       </v-col>
                       <v-col> 
                         0
-                        {{ cosmosConfig[chainId].coinLookup.viewDenom }}  
+                        {{ cosmosConfig[store.chainSelected].coinLookup.viewDenom }}  
                       </v-col>
                     </v-row>  
                   </v-col>
@@ -155,7 +163,7 @@
                     cols="12"
                     sm="6"
                   >
-                    <v-row no-gutters>
+                    <v-row no-gutters class="ma-2">
                       <v-col> 
                         <v-icon
                           color="#FF7E7E"
@@ -167,11 +175,11 @@
                         Unbonding 
                       </v-col>
                       <v-col> 
-                        {{ (totalUnbound / 1000000).toFixed(6) }} 
-                        {{ cosmosConfig[chainId].coinLookup.viewDenom }}  
+                        {{ store.totalUnbound }} 
+                        {{ cosmosConfig[store.chainSelected].coinLookup.viewDenom }}  
                       </v-col>
                     </v-row> 
-                    <v-row no-gutters>
+                    <v-row no-gutters class="ma-2">
                       <v-col> 
                         <v-icon
                           color="#006C4C"
@@ -183,8 +191,8 @@
                         Rewards 
                       </v-col>
                       <v-col> 
-                        {{ (rewards.amount / 1000000).toFixed(6) }}
-                        {{ cosmosConfig[chainId].coinLookup.viewDenom }}  
+                       {{ store.totalRewards }}
+                        {{ cosmosConfig[store.chainSelected].coinLookup.viewDenom }}  
                       </v-col>
                     </v-row>  
                   </v-col> 
@@ -192,12 +200,12 @@
               </v-card-text>
             </v-card>
 
-            <v-col class="mt-4 ml-9 mb-6"> 
-              <h1 style="text-align:left; float:left;">
+            <v-col class="mt-6 "> 
+              <h1 class="ml-9" style="text-align:left; float:left;">
                 Transactions
               </h1>
               <p
-                class="mt-4 mr-10"
+                class="mt-4 mr-9"
                 style="text-align:right;"
               >
                 <NuxtLink to="/transactions"> 
@@ -238,11 +246,11 @@
                       {{ formatDate(item.final.timestamp) }}
                     </v-col>
                     <v-col
-                      v-if="item.final.msgData.amount"
+                      v-if="item.final.msgData?.amount"
                       cols="2"
                       class="mt-2 text-right"
                     >
-                      {{ item.final.msgData.amount }} BCNA
+                      {{ item.final.msgData?.amount }} BCNA
                     </v-col>
                     <v-col
                       v-else
@@ -283,8 +291,8 @@
                     </span>
                     <br>
                     <h2>
-                      {{ (balances / 1000000).toFixed(6) }}
-                      {{ cosmosConfig[chainId].coinLookup.viewDenom }}
+                      {{ store.spendableBalances }}
+                      {{ cosmosConfig[store.chainSelected].coinLookup.viewDenom }}
                     </h2>
                   </v-col>
                   <v-col class="mt-2 text-right">
@@ -298,9 +306,9 @@
                         Stake
                       </v-btn> -->
                       <DelegateHomeModal
-                        v-if="logged"
-                        :chain-id-props="cosmosConfig[chainId].coinLookup.addressPrefix"
-                        :balances="balances"
+                        v-if="store.logged"
+                        :chain-id-props="cosmosConfig[store.chainSelected].coinLookup.addressPrefix"
+                        :balances="store.spendableBalances"
                       />                      
                     </span>
                   </v-col>
@@ -328,8 +336,8 @@
                     </span>
                     <br>
                     <h2>
-                      {{ (rewards.amount / 1000000).toFixed(6) }}
-                      {{ cosmosConfig[chainId].coinLookup.viewDenom }}
+                      {{ store.totalRewards }}
+                      {{ cosmosConfig[store.chainSelected].coinLookup.viewDenom }}
                     </h2>
                   </v-col>
                   <v-col class="mt-2 text-right">
@@ -341,9 +349,8 @@
                       >
                         Claim
                       </v-btn> -->
-                      <ClaimAllModal
-                        v-if="rewards.amount > 0"
-                        :amount-claim-all="(rewards.amount / 1000000).toFixed(6)"
+                      <ClaimAllModal 
+                        :amount-claim-all="0"
                         :get-all-delegation="delegations"
                         :home-page="true"
                       />                      
@@ -354,50 +361,12 @@
             </v-card>
           </v-col>
         </v-row>
-      </sequential-entrance>
     </v-col>
-    <v-dialog
-      id="qrcode"
-      v-model="dialog"
-      max-width="400"
-    >
-      <v-card>
-        <v-card-title class="text-h5">
-          Receive
-          <v-spacer />
-          <v-icon
-            class="mr-2"
-            @click="dialog = false"
-          >
-            mdi-close-circle
-          </v-icon>
-        </v-card-title>
-
-        <v-card-text align="center">
-          <span><qr-code
-            class="mb-2 mt-2"
-            :text="accounts[0]?.address"
-          /></span>
-          <v-chip
-            color="#00b786"
-            outlined
-            label 
-            @click="copyAddr(accounts[0].address)"
-          >
-            {{ accounts[0]?.address }}
-          </v-chip>
-          <span
-            v-if="isCopied"
-            class="ml-2"
-          >Address copied!</span>          
-        </v-card-text> 
-      </v-card>
-    </v-dialog>
-  </v-row>
+ 
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { useAppStore } from '@/stores/data'
 import axios from "axios";
 import dayjs from "dayjs";
 import { reverse, sortBy, orderBy, uniqWith, groupBy } from "lodash";
@@ -430,7 +399,7 @@ export default {
     walletDistribution: false
   }),
   computed: {
-    ...mapState("keplr", [
+    /* ...mapState("keplr", [
       `accounts`,
       `initialized`,
       `error`,
@@ -450,29 +419,33 @@ export default {
       "validatorsLoaded",
       "totalDelegated",
       "totalUnbound",
-    ]),
+    ]), */
   },
+  setup() {
+
+    const store = useAppStore()
+    return {
+      store
+    }
+  },
+  
   watch: {},
   async mounted() {
-    await this.$store.dispatch("keplr/checkLogin");
-    await this.$store.dispatch("data/getAllValidators");
-    if (!this.logged) {
-      this.$router.push({ path: "/login" });
-    }
+ 
     const resultSender = await axios(
-        cosmosConfig[0].apiURL +
+        cosmosConfig[this.store.chainSelected].apiURL +
           "/cosmos/tx/v1beta1/txs?events=message.sender=%27" +
-          this.accounts[0].address +
+          this.store.addrWallet +
           "%27&limit=" +
-          cosmosConfig[this.chainId].maxTxSenderHome +
+          cosmosConfig[this.store.chainSelected].maxTxSenderHome +
           "&order_by=2"
       );
       const resultRecipient = await axios(
-        cosmosConfig[0].apiURL +
+        cosmosConfig[this.store.chainSelected].apiURL +
           "/cosmos/tx/v1beta1/txs?events=transfer.recipient=%27" +
-          this.accounts[0].address +
+          this.store.addrWallet +
           "%27&limit=" +
-          cosmosConfig[this.chainId].maxTxRecipientHome +
+          cosmosConfig[this.store.chainSelected].maxTxRecipientHome +
           "&order_by=2"
       );
       const finalTxs = resultSender.data.tx_responses.concat(
@@ -500,16 +473,14 @@ export default {
         return collection.concat(transaction);
       }, []);
     },
-    groupedEvents() {
-      if (this.allTxsLoaded && this.validatorsLoaded) {
+    groupedEvents() { 
         const test = orderBy(
           groupBy(this.categorizedEvents(), "section"),
           (group) => group[0].final.timestamp,
           "desc"
         );
 
-        return test;
-      }
+        return test; 
     },
     categorizedEvents() {
       return this.rpcAllTxs.map((event) => {
@@ -556,7 +527,7 @@ export default {
       });
     },
     getMessageType(msg, timestamp) { 
-      const typeReadable = setMsg(msg, this.accounts[0].address, timestamp, this.validators);
+      const typeReadable = setMsg(msg, this.store.addrWallet, timestamp, this.store.allValidators);
       return typeReadable;
     },
     formatDate(dateStr) {
@@ -606,4 +577,6 @@ export default {
     grid-template-columns: repeat(3, 1fr);
   }
 }
+
+
 </style>

@@ -1,53 +1,65 @@
 <template>
-  <v-dialog
-    v-model="dialog"
-    max-width="600px"
-    max-height="1200px"
-  >
-    <template #activator="{ on, attrs }">
       <v-btn 
         v-if="type === 'fromValidatorDetail'"
-        :disabled="validatorRewards === '' || validatorRewards === '0.000000'"
+        :disabled="totalReward === '' || totalReward === '0.000000'"
         color="#333333" 
         class="mt-4"
         x-large 
-
-        v-on="on"
+        @click="openModal()"
       >
         Claim
       </v-btn>
       <v-btn
         v-else
-        :disabled="validatorRewards === '' || validatorRewards === '0.000000'"
-        v-bind="attrs"
-        block 
-        v-on="on"
+        :disabled="totalReward === '' || totalReward === '0.000000'" 
+        block  
+        @click="openModal()"
       >
         Claim
-      </v-btn> 
-    </template>
+      </v-btn>   
+  <v-dialog
+    v-model="dialog"
+    max-width="600px"
+    max-height="1200px"
+  >
+ 
     <v-card color="#161819">
-      <v-card-title>
-        <span
-          v-if="step2"
-          class="text-h5"
-        >Check transaction </span>
-        <span
-          v-if="step3"
-          class="text-h5"
-        >Wait from keplr</span>
-        <span
-          v-if="step4"
-          class="text-h5"
-        >Transaction send!</span>
-        <v-spacer />
-        <v-icon
-          class="mr-2"
-          @click="dialog = false"
-        >
-          mdi-close-circle
-        </v-icon>
-      </v-card-title>
+ 
+      <v-toolbar
+            color="rgba(0, 0, 0, 0)"
+            theme="dark"
+          >
+            <template v-slot:prepend>
+              <v-avatar>
+                  <v-img
+                    max-width="32"
+                    max-height="32"
+                    :src="cosmosConfig[store.chainSelected].coinLookup.icon"
+                    alt="Bitcanna"
+                  ></v-img>
+                </v-avatar>
+            </template>
+
+            <v-toolbar-title class="text-h6">
+            <span
+              v-if="step2"
+              class="text-h5"
+            >Check transaction </span>
+            <span
+              v-if="step3"
+              class="text-h5"
+            >Wait from keplr</span>
+            <span
+              v-if="step4"
+              class="text-h5"
+            >Transaction send!</span>
+            </v-toolbar-title>
+
+            <template v-slot:append>
+              <v-btn icon="mdi-close" @click="dialog = false"></v-btn>
+            </template>
+          </v-toolbar> 
+ 
       <v-card-text>
         <v-form
           v-if="step2"
@@ -85,8 +97,8 @@
                       </v-list-item-subtitle>
                       <v-list-item-title>
                         <h3>
-                          {{ validatorRewards }}
-                          {{ cosmosConfig[chainId].coinLookup.viewDenom }}                        
+                          {{ totalReward }}
+                          {{ cosmosConfig[store.chainSelected].coinLookup.viewDenom }}                        
                         </h3> 
                       </v-list-item-title>
                     </v-list-item-content>
@@ -151,7 +163,8 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { useAppStore } from '@/stores/data'
+import { selectSigner, calculFee } from "~/libs/signer";
 import cosmosConfig from "~/cosmos.config";
 import {
   assertIsDeliverTxSuccess,
@@ -210,9 +223,12 @@ export default {
     loading: false,
     cosmosConfig: cosmosConfig,
   }),
-  computed: {
-    ...mapState("keplr", [`accounts`]),
-    ...mapState("data", ["chainId", 'balances', 'validatorRewards']),
+  setup() {
+    const store = useAppStore()
+
+    return {
+      store
+    }
   },
   watch: {
     dialog(value) {
@@ -226,33 +242,37 @@ export default {
     },
   }, 
   methods: {
+    openModal() {
+      this.dialog = true;
+    },
  
-    validatestep2() {
-      if (this.$refs.form.validate() === true) {
+    validatestep2() { 
 
         this.loading = true;
         this.step3 = true;
         this.step2 = false;
         (async () => {
-        const chainId = cosmosConfig[this.chainId].chainId;
+        /* const chainId = cosmosConfig[this.store.chainSelected].chainId;
         await window.keplr.enable(chainId);
         const offlineSigner = await window.getOfflineSignerAuto(chainId);
 
         const accounts = await offlineSigner.getAccounts();
         const client = await SigningStargateClient.connectWithSigner(
-          cosmosConfig[this.chainId].rpcURL,
+          cosmosConfig[this.store.chainSelected].rpcURL,
           offlineSigner,
             {
               gasPrice: GasPrice.fromString(
-                cosmosConfig[this.chainId].gasPrice +
-                  cosmosConfig[this.chainId].coinLookup.chainDenom
+                cosmosConfig[this.store.chainSelected].gasPrice +
+                  cosmosConfig[this.store.chainSelected].coinLookup.chainDenom
               ),
             }          
-        );
+        ); */
+        let signer = await selectSigner(this.store.chainSelected, this.store.loggedType)
+
         const fee = {
           amount: [
             {
-              denom: cosmosConfig[this.chainId].chainDenom,
+              denom: cosmosConfig[this.store.chainSelected].chainDenom,
               amount: "5000",
             },
           ],
@@ -260,8 +280,8 @@ export default {
         };
  
         try {
-          const result = await client.withdrawRewards(
-            accounts[0].address,
+          const result = await signer.client.withdrawRewards(
+            signer.accounts[0].address,
             this.opAddress,
             fee,
             ""
@@ -270,11 +290,11 @@ export default {
           this.step3 = false;
           this.step4 = true;
           this.loading = false;
-          await this.$store.dispatch(
+          /* await this.$store.dispatch(
             "data/getDelegations",
             accounts[0].address
           );
-          this.$store.commit("data/setValidatorRewards", 0.000000);
+          this.$store.commit("data/setValidatorRewards", 0.000000); */
         } catch (error) {
             console.error(error);
             this.eError = false;
@@ -285,8 +305,7 @@ export default {
             await new Promise((resolve) => setTimeout(resolve, 4000));
             this.dialog = false;
           }
-      })(); 
-      }
+      })();  
     },
   },
 };

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="ma-6">
     <v-row class="ma-2">
       <h1>
         Transactions 
@@ -9,16 +9,16 @@
         Only showing last 100 transactions (50 incoming, 50 outgoing), for full history visit our 
         <a
           target="_blank"
-          :href="'https://explorer.bitcanna.io/accounts/' + accounts[0].address"
+          :href="'https://explorer.bitcanna.io/accounts/' + store.addrWallet"
         >explorer</a>
       </p>
       <SendModal
         class="text-right mr-4"
         :chain-id-props="
-          cosmosConfig[chainId].coinLookup.addressPrefix
+          cosmosConfig[store.chainSelected].coinLookup.addressPrefix
         "
         :amount-available="balances / 1000000"
-        :coin-icon="cosmosConfig[chainId].coinLookup.icon"
+        :coin-icon="cosmosConfig[store.chainSelected].coinLookup.icon"
         type="simpleSend"
       />
       <v-btn
@@ -30,7 +30,7 @@
         Receive
       </v-btn>
     </v-row>
-    <v-divider class="mb-6" />
+    <v-divider class="mb-6" /> 
     <template v-for="group in groupedEvents()">
       <div class="mb-6">
         <h3 class="mb-6">
@@ -42,7 +42,7 @@
             v-for="item in group"
             style="background:#1C1D20;color:white"
           > 
-            <v-expansion-panel-header>
+            <v-expansion-panel-title>
               <v-row no-gutters>
                 <!--                 <v-col cols="1">
                   <v-avatar class="mr-2">
@@ -149,14 +149,14 @@
                   </div>
                 </v-col>                       
               </v-row>
-            </v-expansion-panel-header>
-            <v-expansion-panel-content>
+            </v-expansion-panel-title>
+            <v-expansion-panel-text>
               <template
                 v-if="
                   item.final.type === '/cosmos.bank.v1beta1.MsgSend'
                 "
               >
-                <v-simple-table class="accent">
+                <v-table class="accent">
                   <template #default>
                     <thead>
                       <tr>
@@ -197,7 +197,7 @@
                       </tr>
                     </tbody>
                   </template>
-                </v-simple-table>
+                </v-table>
               </template>
 
               <template
@@ -206,7 +206,7 @@
                     '/cosmos.staking.v1beta1.MsgDelegate'
                 "
               >
-                <v-simple-table class="accent">
+                <v-table class="accent">
                   <template #default>
                     <thead>
                       <tr>
@@ -254,7 +254,7 @@
                       </tr>
                     </tbody>
                   </template>
-                </v-simple-table>
+                </v-table>
               </template>
               <template
                 v-if="
@@ -262,7 +262,7 @@
                     '/cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward'
                 "
               >
-                <v-simple-table class="accent">
+                <v-table class="accent">
                   <template #default>
                     <thead>
                       <tr>
@@ -303,14 +303,14 @@
                       </tr>
                     </tbody>
                   </template>
-                </v-simple-table>
+                </v-table>
               </template>
               <template
                 v-if="
                   item.final.type === '/cosmos.gov.v1beta1.MsgVote'
                 "
               >
-                <v-simple-table class="accent">
+                <v-table class="accent">
                   <template #default>
                     <thead>
                       <tr>
@@ -395,14 +395,14 @@
                       </tr>
                     </tbody>
                   </template>
-                </v-simple-table>
+                </v-table>
               </template>
               <template
                 v-if="
                   item.final.type === '/cosmos.group.v1.MsgVote'
                 "
               >
-                <v-simple-table class="accent">
+                <v-table class="accent">
                   <template #default>
                     <thead>
                       <tr>
@@ -442,7 +442,7 @@
                       </tr>
                     </tbody>
                   </template>
-                </v-simple-table>
+                </v-table>
               </template>
               <template
                 v-if="
@@ -450,7 +450,7 @@
                     '/cosmos.gov.v1beta1.MsgDeposit'
                 "
               >
-                <v-simple-table class="accent">
+                <v-table class="accent">
                   <template #default>
                     <thead>
                       <tr>
@@ -489,7 +489,7 @@
                       </tr>
                     </tbody>
                   </template>
-                </v-simple-table>
+                </v-table>
               </template>
               <template
                 v-if="
@@ -497,7 +497,7 @@
                     '/cosmos.staking.v1beta1.MsgUndelegate'
                 "
               >
-                <v-simple-table class="accent">
+                <v-table class="accent">
                   <template #default>
                     <thead>
                       <tr>
@@ -539,7 +539,7 @@
                       </tr>
                     </tbody>
                   </template>
-                </v-simple-table>
+                </v-table>
               </template>
               <template
                 v-if="
@@ -547,7 +547,7 @@
                     '/cosmos.gov.v1beta1.MsgSubmitProposal'
                 "
               >
-                <v-simple-table class="accent">
+                <v-table class="accent">
                   <template #default>
                     <thead>
                       <tr>
@@ -579,7 +579,7 @@
                       </tr>
                     </tbody>
                   </template>
-                </v-simple-table>
+                </v-table>
               </template>                    
               <template
                 v-if="
@@ -587,7 +587,7 @@
                     '/cosmos.staking.v1beta1.MsgBeginRedelegate'
                 "
               >
-                <v-simple-table class="accent">
+                <v-table class="accent">
                   <template #default>
                     <thead>
                       <tr>
@@ -638,9 +638,9 @@
                       </tr>
                     </tbody>
                   </template>
-                </v-simple-table>
+                </v-table>
               </template>
-            </v-expansion-panel-content>
+            </v-expansion-panel-text>
           </v-expansion-panel>
         </v-expansion-panels>
         <!-- {{ item }}  -->
@@ -675,7 +675,7 @@
             color="#00b786"
             outlined
             label 
-            @click="copyAddr(accounts[0].address)"
+            @click="copyAddr(store.addrWallet)"
           >
             {{ accounts[0]?.address }}
           </v-chip>
@@ -690,8 +690,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
-
+import { useAppStore } from '@/stores/data'
 import axios from "axios";
 import dayjs from "dayjs";
 import { reverse, sortBy, uniqWith, orderBy, groupBy } from "lodash";
@@ -730,7 +729,8 @@ export default {
     dialog: false,
     isCopied: false,
   }),
-  computed: {
+  
+  /* computed: {
     ...mapState("keplr", [`accounts`, "logged"]),
     ...mapState("data", [
       "chainId",
@@ -746,28 +746,32 @@ export default {
       "allTxs",
       "allTxsLoaded",
     ]),
+  }, */
+  setup() {
+    const store = useAppStore()
+    return {
+      store
+    }
   },
   watch: {},
 
   async beforeMount() {
-    await this.$store.dispatch("keplr/checkLogin");
-    await this.$store.dispatch("data/getAllValidators");
-
-    if (this.logged && this.validatorsLoaded === true) {
+    //await this.$store.dispatch("keplr/checkLogin");
+    //await this.$store.dispatch("data/getAllValidators"); 
       const resultSender = await axios(
-        cosmosConfig[0].apiURL +
+        cosmosConfig[this.store.chainSelected].apiURL +
           "/cosmos/tx/v1beta1/txs?events=message.sender=%27" +
-          this.accounts[0].address +
+          this.store.addrWallet +
           "%27&limit=" +
-          cosmosConfig[this.chainId].maxTxSender +
+          cosmosConfig[this.store.chainSelected].maxTxSender +
           "&order_by=2"
       );
       const resultRecipient = await axios(
-        cosmosConfig[0].apiURL +
+        cosmosConfig[this.store.chainSelected].apiURL +
           "/cosmos/tx/v1beta1/txs?events=transfer.recipient=%27" +
-          this.accounts[0].address +
+          this.store.addrWallet +
           "%27&limit=" +
-          cosmosConfig[this.chainId].maxTxRecipient +
+          cosmosConfig[this.store.chainSelected].maxTxRecipient +
           "&order_by=2"
       );
       const finalTxs = resultSender.data.tx_responses.concat(
@@ -776,20 +780,17 @@ export default {
 
       this.rpcAllTxs = this.transactionsReducer(finalTxs);
       this.loading = false;
-      this.firstLoad = false;
-    }
+      this.firstLoad = false; 
   },
   methods: {
-    groupedEvents() {
-      if (this.allTxsLoaded && this.validatorsLoaded) {
+    groupedEvents() { 
         const test = orderBy(
           groupBy(this.categorizedEvents(), "section"),
           (group) => group[0].final.timestamp,
           "desc"
         );
 
-        return test;
-      }
+        return test; 
     },    
     categorizedEvents() {
       return this.rpcAllTxs.map((event) => {
@@ -860,9 +861,9 @@ export default {
     getMessageType(msg, timestamp, txHash) { 
       const typeReadable = setMsg(
         msg,
-        this.accounts[0].address,
+        this.store.addrWallet,
         timestamp,
-        this.validators,
+        this.store.allValidators,
         txHash
       );
       return typeReadable;

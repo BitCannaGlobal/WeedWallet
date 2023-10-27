@@ -1,59 +1,61 @@
 <template>
-  <v-dialog
-    v-model="dialog"
-    max-width="600px"
-  >
-    <template #activator="{ on, attrs }"> 
       <v-btn
-        v-if="homePage"
-        large 
+        size="large" 
         class="mt-2 white--text"
         color="#0FB786"
-        v-bind="attrs"
-        v-on="on"
+        @click="dialog = true"
       >
         <v-icon class="mr-2">
           mdi-download
         </v-icon> Claim all
       </v-btn>
-      <v-btn
-        v-else
-        class="mr-4"
-        color="#00b786"
-        v-bind="attrs"
-        v-on="on"
-      >
-        <v-icon class="mr-2">
-          mdi-download
-        </v-icon> Claim all
-      </v-btn>      
-    </template>
+
+ 
+  <v-dialog
+    v-model="dialog"
+    max-width="600px"
+  >
+ 
     <v-card color="#161819">
-      <v-card-title>
-        <span
-          v-if="step1"
-          class="text-h5"
-        >Claim all</span>
-        <span
-          v-if="step2"
-          class="text-h5"
-        >Check transaction </span>
-        <span
-          v-if="step3"
-          class="text-h5"
-        >Wait from keplr</span>
-        <span
-          v-if="step4"
-          class="text-h5"
-        >Transaction send!</span>
-        <v-spacer />
-        <v-icon
-          class="mr-2"
-          @click="dialog = false"
-        >
-          mdi-close-circle
-        </v-icon>
-      </v-card-title>
+      <v-toolbar
+            color="rgba(0, 0, 0, 0)"
+            theme="dark"
+          >
+            <template v-slot:prepend>
+              <v-avatar>
+                  <v-img
+                    max-width="32"
+                    max-height="32"
+                    :src="cosmosConfig[store.chainSelected].coinLookup.icon"
+                    alt="Bitcanna"
+                  ></v-img>
+                </v-avatar>
+            </template>
+
+            <v-toolbar-title class="text-h6">
+              <span
+                v-if="step1"
+                class="text-h5"
+              >Claim all</span>
+              <span
+                v-if="step2"
+                class="text-h5"
+              >Check transaction </span>
+              <span
+                v-if="step3"
+                class="text-h5"
+              >Wait from keplr</span>
+              <span
+                v-if="step4"
+                class="text-h5"
+              >Transaction send!</span> 
+            </v-toolbar-title>
+
+            <template v-slot:append>
+              <v-btn icon="mdi-close" @click="dialog = false"></v-btn>
+            </template>
+          </v-toolbar> 
+ 
       <v-card-text>
         <v-form
           v-if="step1"
@@ -61,7 +63,7 @@
           v-model="dislableSend"
           lazy-validation
         >
-          <v-simple-table class="accent">
+          <v-table class="accent">
             <thead>
               <tr>
                 <th class="text-left">
@@ -77,22 +79,23 @@
             </thead>
             <tbody>
               <tr
-                v-for="item in delegations"
+                v-for="item in store.allMyDelegations"
                 :key="item.op_address"
               >
+              <!-- {{ item }} -->
                 <td>{{ item.validatorName }}</td>
                 <!--<td>{{ item.op_address }}</td>-->
                 <td>
                   {{ (item.delegated / 1000000).toFixed(6) }}
-                  {{ cosmosConfig[chainId].coinLookup.viewDenom }}
+                  {{ cosmosConfig[store.chainSelected].coinLookup.viewDenom }}
                 </td>
                 <td>
                   {{ item.reward }}
-                  {{ cosmosConfig[chainId].coinLookup.viewDenom }}
+                  {{ cosmosConfig[store.chainSelected].coinLookup.viewDenom }}
                 </td>
               </tr>
             </tbody>
-          </v-simple-table>
+          </v-table>
         </v-form>
         <v-form
           v-if="step2"
@@ -118,7 +121,7 @@
                   <v-list-item-title>
                     <h3>
                       {{ gasFee.gas }} / {{ gasFee.fee / 1000000 }}
-                      {{ cosmosConfig[chainId].coinLookup.viewDenom }}
+                      {{ cosmosConfig[store.chainSelected].coinLookup.viewDenom }}
                     </h3>
                   </v-list-item-title>
                 </v-list-item-content>
@@ -190,7 +193,7 @@
           v-if="step2"
           color="#1C1D20"
           block
-          x-large
+          size="large"
           class="mt-4"
           @click="returnStep"
         >
@@ -202,8 +205,8 @@
           :loading="loading"
           color="#00b786"
           block
-          x-large
-          class="mt-4"
+          size="large"
+          class="mt-4 "
           @click="validate"
         >
           Next step
@@ -214,8 +217,8 @@
           :loading="loading"
           color="#00b786"
           block
-          x-large
-          class="mt-4"
+          size="large"
+          class="mt-4 "
           @click="validatestep2"
         >
           Get reward
@@ -229,8 +232,10 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { useAppStore } from '@/stores/data'
+import { selectSigner, calculFee } from "~/libs/signer";
 import cosmosConfig from "~/cosmos.config";
+
 import {
   defaultRegistryTypes,
   assertIsDeliverTxSuccess,
@@ -267,24 +272,32 @@ export default {
     loading: false,
     cosmosConfig: cosmosConfig,
   }),
+  setup() {
+    const store = useAppStore()
+
+    return {
+      store
+    }
+  },
   computed: {
-    ...mapState("data", ["chainId", `balances`, "delegations"]),
+    //...mapState("data", ["chainId", `balances`, "delegations"]),
   },
   methods: {
     async validate() {
-      if (this.$refs.form.validate() === true) {
+ 
         this.step1 = false;
         this.step2 = true;
         // Fee claculation
-        const chainId = cosmosConfig[this.chainId].chainId;
+        let signer = await selectSigner(this.store.chainSelected, this.store.loggedType)
+        /* const chainId = cosmosConfig[this.store.chainSelected].chainId;
         await window.keplr.enable(chainId);
         const offlineSigner = await window.getOfflineSignerAuto(chainId);
         const client = await SigningStargateClient.connectWithSigner(
-          cosmosConfig[this.chainId].rpcURL,
+          cosmosConfig[this.store.chainSelected].rpcURL,
           offlineSigner
         );
 
-        const accounts = await offlineSigner.getAccounts();
+        const accounts = await offlineSigner.getAccounts(); */
 
         const foundMsgType = defaultRegistryTypes.find(
           (element) =>
@@ -292,29 +305,29 @@ export default {
             "/cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward"
         );
         const finalMsg = [];
-        this.getAllDelegation.forEach(function (item) {
+        this.store.allMyDelegations.forEach(function (item) {
           finalMsg.push({
             typeUrl: foundMsgType[0],
             value: foundMsgType[1].fromPartial({
-              delegatorAddress: accounts[0].address,
+              delegatorAddress: signer.accounts[0].address,
               validatorAddress: item.op_address,
             }),
           });
         });
-        const gasEstimation = await client.simulate(
-          accounts[0].address,
+        const gasEstimation = await signer.client.simulate(
+          signer.accounts[0].address,
           finalMsg,
           this.memo
         );
         const usedFee = calculateFee(
-          Math.round(gasEstimation * cosmosConfig[this.chainId].feeMultiplier),
+          Math.round(gasEstimation * cosmosConfig[this.store.chainSelected].feeMultiplier),
           GasPrice.fromString(
-            cosmosConfig[this.chainId].gasPrice +
-              cosmosConfig[this.chainId].coinLookup.chainDenom
+            cosmosConfig[this.store.chainSelected].gasPrice +
+              cosmosConfig[this.store.chainSelected].coinLookup.chainDenom
           )
         );
         this.gasFee = { fee: usedFee.amount[0].amount, gas: usedFee.gas };
-      }
+ 
     },
     returnStep() {
       this.step1 = true;
@@ -328,40 +341,41 @@ export default {
         this.step3 = true;
         this.step2 = false;
 
-        const chainId = cosmosConfig[this.chainId].chainId;
+        /* const chainId = cosmosConfig[this.store.chainSelected].chainId;
         await window.keplr.enable(chainId);
         const offlineSigner = await window.getOfflineSignerAuto(chainId);
         const accounts = await offlineSigner.getAccounts();
 
         const client = await SigningStargateClient.connectWithSigner(
-          cosmosConfig[this.chainId].rpcURL,
+          cosmosConfig[this.store.chainSelected].rpcURL,
           offlineSigner,
           {
             gasPrice: GasPrice.fromString(
-              cosmosConfig[this.chainId].gasPrice +
-                cosmosConfig[this.chainId].coinLookup.chainDenom
+              cosmosConfig[this.store.chainSelected].gasPrice +
+                cosmosConfig[this.store.chainSelected].coinLookup.chainDenom
             ),
           }
-        );
-
+        ); */
+        let signer = await selectSigner(this.store.chainSelected, this.store.loggedType)
+        
         const foundMsgType = defaultRegistryTypes.find(
           (element) =>
             element[0] ===
             "/cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward"
         );
         const copieDelegator = [];
-        this.getAllDelegation.forEach(function (item) {
+        this.store.allMyDelegations.forEach(function (item) {
           copieDelegator.push({
             typeUrl: foundMsgType[0],
             value: foundMsgType[1].fromPartial({
-              delegatorAddress: accounts[0].address,
+              delegatorAddress: signer.accounts[0].address,
               validatorAddress: item.op_address,
             }),
           });
         }); 
         try {
-          const result = await client.signAndBroadcast(
-            accounts[0].address,
+          const result = await signer.client.signAndBroadcast(
+            signer.accounts[0].address,
             copieDelegator,
             "auto",
             ""
@@ -371,13 +385,12 @@ export default {
           this.step3 = false;
           this.step4 = true;
           this.loading = false;
-          //notifSuccess(this.$toast, result.transactionHash)
-          await this.$store.dispatch("data/refresh", accounts[0].address);
+          // await this.$store.dispatch("data/refresh", accounts[0].address);          
+          await this.store.refresh()
+
         } catch (error) {
           console.error(error);
           this.eError = false;
-          //this.$toast.dismiss(returnWaiting);
-          //notifError(this.$toast)
           this.loading = false;
           this.step3 = false;
           this.step2 = true;

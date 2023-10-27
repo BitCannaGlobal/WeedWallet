@@ -5,60 +5,28 @@
         Delegate 
       </h1>
       <v-spacer /> 
-      <ClaimAllModal
+      <!-- <ClaimAllModal
         v-if="rewards.amount > 0"
         :amount-claim-all="(rewards.amount / 1000000).toFixed(6)"
         :get-all-delegation="delegations"
         :home-page="true"
-      />
+      /> -->
     </v-row>
     <v-col cols="12">
       <v-divider class="mb-6" />
-      <sequential-entrance from-bottom>
+ 
         <v-row justify="space-around">
           <v-col>
             <span class="text-h6">My validators</span>
-            <v-simple-table class="mt-2 accent">
-              <template #default>
-                <!-- <thead>
-                      <tr> 
-                        <th>Status</th>
-                        <th>Name</th>
-                        <th>Delegate</th>
-                        <th>Reward</th>
-                        <th>Undelegate</th>
-                        <th>Redelegate</th>
-                        <th />
-                      </tr>
-                    </thead> -->
-                    
+            <v-table class="ma-6 accent rounded">
+              <template #default>                   
                 <tbody>
                   <tr
-                    v-for="item in delegations"
+                    v-for="item in store.allMyDelegations"
                     :key="item.validatorName"
                     class="myValidator"
                   >
-                    <!-- <td>
-                        <v-checkbox
-                          v-model="selected"
-                          :value="item.op_address"
-                          color="#00b786"
-                        ></v-checkbox>
-                      </td> -->
-
                     <td style="">
-                      <!-- <a 
-                        class="linkFormat box"
-                        @click="selectValidator(item)"
-                      >  
-                      <v-avatar>
-                        <v-img
-                          :src="'https://raw.githubusercontent.com/cosmostation/chainlist/main/chain/bitcanna/moniker/'+item.op_address+'.png'" 
-                          :alt="item.validatorName" 
-                        /> 
-                      </v-avatar>
-                        <span class="ml-8"><h3>{{ item.validatorName }}</h3></span>                            
-                      </a> -->
                       <router-link
                         :to="'/validators/' + item.op_address"
                         class="linkFormat box"
@@ -99,64 +67,12 @@
                         Inactive
                       </v-chip> 
                     </td>
- 
-                    <!-- <td>
-                          {{ item.delegated / 1000000 }}
-                          {{ cosmosConfig[0].coinLookup.viewDenom }}
-                        </td>
-                        <td>
-                          {{ Number(item.reward).toFixed(6) }}
-                          {{ cosmosConfig[0].coinLookup.viewDenom }}
-                        </td>
-                        <td>
-                          {{ item.unDelegations.amount }}
-                          {{ cosmosConfig[0].coinLookup.viewDenom }}
-                        </td>
-                        <td>
-                          {{ item.reDelegations.amount }}
-                          {{ cosmosConfig[0].coinLookup.viewDenom }}
-                        </td>
-
-                        <td>
-                          <v-btn
-                            :disabled="item.reward > 0 ? false : true"
-                            class="ma-2"
-                            color="#00b786"
-                            @click="getReward(item.op_address)"
-                          >
-                            <v-icon class="mr-2">
-                              mdi-download
-                            </v-icon> Claim
-                          </v-btn>
-                          <RedelegateModal
-                            class="ma-2"
-                            :chain-id-props="
-                              cosmosConfig[chainId].coinLookup.addressPrefix
-                            "
-                            :address-from="item.op_address"
-                            :amount-re="item.delegated / 1000000"
-                            :validator-name="item.validatorName"
-                            :coin-icon="cosmosConfig[chainId].coinLookup.icon"
-                          />
-                          <UndelegateSingleModal
-                            class="ma-2"
-                            :chain-id-props="
-                              cosmosConfig[chainId].coinLookup.addressPrefix
-                            "
-                            :address-from="item.op_address"
-                            :amount-un="item.delegated / 1000000"
-                            :amount-total-un="item.delegated"
-                            :validator-name="item.validatorName"
-                            :coin-icon="cosmosConfig[chainId].coinLookup.icon"
-                          />
-                        </td> -->
                   </tr>
                 </tbody>
               </template>
-            </v-simple-table>
+            </v-table>
           </v-col>
-        </v-row>
-      </sequential-entrance>
+        </v-row> 
       <sequential-entrance
         v-if="dataLoaded"
         from-bottom
@@ -223,7 +139,7 @@
       </sequential-entrance>
       <sequential-entrance from-bottom>
         <v-row
-          class="mt-4"
+          class="ma-4"
           justify="space-around"
         >
           <v-col>
@@ -240,19 +156,6 @@
                   :label="`View ${getStatus.toString()}`"
                 />
 
-                <!-- <v-btn-toggle
-                  v-model="getStatus"
-                  borderless
-                  color="#00b786"
-                > 
-                  <v-btn value="all">
-                    <span class="hidden-sm-and-down">All</span>
-                  </v-btn>
-
-                  <v-btn value="active">
-                    <span class="hidden-sm-and-down">Active</span>
-                  </v-btn>
-                </v-btn-toggle> -->
               </v-card-title>
               <v-card-text>
                 <AllValidators :get-status="getStatus" />
@@ -427,10 +330,10 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
-
+//import { mapState } from "vuex";
+import { useAppStore } from '@/stores/data'
 import cosmosConfig from "~/cosmos.config";
-import { notifWaiting, notifError, notifSuccess } from "~/libs/notifications";
+//import { notifWaiting, notifError, notifSuccess } from "~/libs/notifications";
 import {
   assertIsDeliverTxSuccess,
   SigningStargateClient,
@@ -473,7 +376,7 @@ export default {
     ],
   }),
   computed: {
-    ...mapState("keplr", [
+    /* ...mapState("keplr", [
       `accounts`,
       `initialized`,
       `error`,
@@ -496,7 +399,14 @@ export default {
       "validatorDelegations",
       "validatorUnDelegations",
       "validatorRewards",
-    ]),
+    ]), */
+  },
+  setup() {
+    const store = useAppStore()
+
+    return {
+      store
+    }
   },
   watch: {
     orderVal: function (val) {  
@@ -509,13 +419,13 @@ export default {
   },  
   async mounted() {
 
-    await this.$store.dispatch("keplr/checkLogin");
+    /* await this.$store.dispatch("keplr/checkLogin");
     if (!this.logged) {
       this.$router.push({ path: "/login" });
       return;
     }
     await this.$store.dispatch("data/getDelegations", this.accounts[0].address);
-    this.dataLoaded = true;   
+    this.dataLoaded = true;    */
   },
   methods: {
     async selectValidator(validator) {
@@ -633,6 +543,19 @@ export default {
    display: flex;
    align-items:center;
 }
+/* rounded corners */
+.rounded {
+    --radius: 5px;
+ 
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    border-spacing: 0;
+}
+.rounded tr:first-child>:first-child { border-top-left-radius: var(--radius); }
+.rounded tr:first-child>:last-child { border-top-right-radius: var(--radius); }
+.rounded tr:last-child>:first-child { border-bottom-left-radius: var(--radius); }
+.rounded tr:last-child>:last-child { border-bottom-right-radius: var(--radius); }
 
+ 
 
 </style> 

@@ -6,11 +6,12 @@
       </h1>
       <v-spacer /> 
       <v-divider class="mb-6" />
-    <h3 class="mb-8">Active proposals</h3> 
+     <!--  {{ store.allProposals.proposals }} -->
+<!--     <h3 class="mb-8">Active proposals</h3> 
     <span v-if="proposalsActive.length === 0">No active proposals are on chain at this moment<br /><br /><br /></span>
       <v-row> 
         <v-col
-          v-for="item in proposals"
+          v-for="item in store.allProposals"
           :key="item.voting_end_time"
           cols="6"
           md="6"
@@ -59,7 +60,7 @@
             </v-chip>
           </td>
           <td v-if="item.status === 'PROPOSAL_STATUS_VOTING_PERIOD'">
-            <!--{{ item.status }}-->
+ 
             <v-chip
               class="ma-2"
               text-color="white"
@@ -73,7 +74,7 @@
             </v-chip>
           </td>
           <td v-if="item.status === 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
-            <!--{{ item.status }}-->
+ 
             <v-chip
               class="ma-2"
               text-color="white"
@@ -88,12 +89,7 @@
                 </v-col>
               </v-row> 
               <br>
-                <!-- <v-progress-linear
-                  background-color="success"
-                  color="error"
-                  value="45"
-                  height="10"
-                ></v-progress-linear> -->
+ 
                 <div v-if="
                           item.final_tally_result.yes > 0 ||
                           item.final_tally_result.no > 0 ||
@@ -129,7 +125,6 @@
 
 
       <h3 class="mt-4 mb-2">Past proposals</h3>
-    <sequential-entrance fromBottom>
       
       <v-row class="mb-4">        
         <v-col
@@ -191,7 +186,7 @@
             </v-chip>
           </td>
           <td v-if="item.status === 'PROPOSAL_STATUS_VOTING_PERIOD'">
-            <!--{{ item.status }}-->
+ 
             <v-chip
               class="ma-2"
               text-color="white"
@@ -205,7 +200,7 @@
             </v-chip>
           </td>
           <td v-if="item.status === 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
-            <!--{{ item.status }}-->
+ 
             <v-chip
               class="ma-2"
               text-color="white"
@@ -220,12 +215,7 @@
                 </v-col>
               </v-row> 
               <br>
-                <!-- <v-progress-linear
-                  background-color="success"
-                  color="error"
-                  value="45"
-                  height="10"
-                ></v-progress-linear> -->
+ 
  
  
 
@@ -237,180 +227,6 @@
         </v-col>  
       </v-row> 
 
-    </sequential-entrance>
-
-
-<!--     <v-card class="accent">
-      <v-card-title>
-        All proposals
-        <v-spacer />
-        <v-text-field
-          v-model="search"
-          append-icon="mdi-magnify"
-          label="Search"
-          single-line
-          hide-details
-        />
-      </v-card-title>
-      <v-data-table
-        class="accent"
-        :headers="headers"
-        :items="proposals"
-        :search="search"
-      >
-        <template #item.content.title="{ item }">
-          <span v-if="item.content.title">
-            <NuxtLink :to="'proposals/' + item.proposal_id">
-              {{ item.content.title }}
-            </NuxtLink>
-          </span>
-          <span v-else> Bad title </span>
-        </template>
-        <template #item.status="{ item }">
-          <td v-if="item.status === 'PROPOSAL_STATUS_PASSED'">
-            <v-chip
-              class="ma-2"
-              color="green"
-              text-color="white"
-              label
-            >
-              <v-icon class="mr-1">
-                mdi-checkbox-marked-circle
-              </v-icon>
-              Proposal Passed
-            </v-chip>
-          </td>
-          <td v-if="item.status === 'PROPOSAL_STATUS_REJECTED'">
-            <v-chip
-              class="ma-2"
-              color="red"
-              text-color="white"
-              label
-            >
-              <v-icon class="mr-1">
-                mdi-delete-forever
-              </v-icon>
-              Proposal Rejected
-            </v-chip>
-          </td>
-          <td v-if="item.status === 'PROPOSAL_STATUS_VOTING_PERIOD'"> 
-            <v-chip
-              class="ma-2"
-              text-color="white"
-              color="blue"
-              label
-            >
-              <v-icon class="mr-1">
-                mdi-alarm-check
-              </v-icon>
-              Voting Period
-            </v-chip>
-          </td>
-          <td v-if="item.status === 'PROPOSAL_STATUS_DEPOSIT_PERIOD'"> 
-            <v-chip
-              class="ma-2"
-              text-color="white"
-              label
-            >
-              <v-icon class="mr-1">
-                mdi-cash-fast
-              </v-icon>
-              Deposit Period
-            </v-chip>
-          </td>
-        </template>
-
-        <template #item.submit_time="{ item }">
-          <v-tooltip top>
-            <template #activator="{ on, attrs }">
-              <span
-                class="mt-n1"
-                v-bind="attrs"
-                v-on="on"
-              >{{
-                item.submit_time | timeFromNow
-              }}</span>
-            </template>
-            <span>
-              {{ formatDate(item.submit_time) }}
-            </span>
-          </v-tooltip>
-        </template>
-        <template #item.voting_start_time="{ item }">
-          <td>
-            <v-tooltip top>
-              <template #activator="{ on, attrs }">
-                <span
-                  class="mt-n1"
-                  v-bind="attrs"
-                  v-on="on"
-                >{{
-                  item.submit_time | timeFromNow
-                }}</span>
-              </template>
-              <span>
-                {{ formatDate(item.submit_time) }}
-              </span>
-            </v-tooltip>
-          </td>
-        </template>
-        <template #item.voting_end_time="{ item }">
-          <td v-if="item.status !== 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
-            <v-tooltip top>
-              <template #activator="{ on, attrs }">
-                <span
-                  class="mt-n1"
-                  v-bind="attrs"
-                  v-on="on"
-                >{{
-                  item.voting_end_time | timeFromNow
-                }}</span>
-              </template>
-              <span>
-                {{ formatDate(item.voting_end_time) }}
-              </span>
-            </v-tooltip>
-          </td>
-          <td v-else>
-            <v-tooltip top>
-              <template #activator="{ on, attrs }">
-                <span
-                  class="mt-n1"
-                  v-bind="attrs"
-                  v-on="on"
-                >{{
-                  {
-                    submit: item.submit_time,
-                    secondes: paramsDeposit.max_deposit_seconde,
-                  }
-                    | formatDateDeposite
-                    | timeFromNow
-                }}
-                </span>
-              </template>
-              <span>
-                {{
-                  {
-                    submit: item.submit_time,
-                    secondes: paramsDeposit.max_deposit_seconde,
-                  }
-                    | formatDateDeposite
-                    | formatDate
-                }}
-              </span>
-            </v-tooltip>
-          </td>
-        </template>
-        <template #item.myvote="{ item }">
-          <v-btn
-            class="ma-2"
-            disabled
-          >
-            View my vote (soon)
-          </v-btn>
-        </template>
-      </v-data-table>
-    </v-card> -->
 
 <v-dialog
       v-model="dialog"
@@ -878,12 +694,12 @@
           <v-spacer />
         </v-card-actions>
       </v-card>
-    </v-dialog>  
+    </v-dialog>   -->
   </div>
 </template>
 <script>
 /* eslint-disable */
-import { mapState } from "vuex";
+import { useAppStore } from '@/stores/data'
 import axios from "axios";
 import moment from "moment";
 
@@ -941,7 +757,7 @@ export default {
     };
   },
   computed: {
-    ...mapState("keplr", [`accounts`]),
+    /* ...mapState("keplr", [`accounts`]),
     ...mapState("data", [
       "chainId",
       `balances`,
@@ -950,8 +766,14 @@ export default {
       "paramsDeposit",
       "paramsVoting",
       "totalBonded",
-    ]),
+    ]), */
 
+  },
+  setup() {
+    const store = useAppStore()
+    return {
+      store
+    }
   },
   watch: {
     dialog(value) {
@@ -995,7 +817,7 @@ export default {
 
 
     // List of proposal from the blockchain
-    const allProposals = await axios(
+    /* const allProposals = await axios(
       cosmosConfig[0].apiURL + `/cosmos/gov/v1beta1/proposals`
     );
  
@@ -1007,11 +829,12 @@ export default {
       this.dialog = true
       this.selectedProposal = foundProp   
       this.dataLoaded = true;
-    }    
-
+    }     */
+    
     const setFinalPropos = [];
-    allProposals.data.proposals.forEach((item) => {
+    this.store.allProposals.proposals.forEach((item) => {
       // Fix markdown syntax
+      console.log(item)
       item.content.description = item.content.description.replace(/\\n/g, "\n")
       item.content.description = item.content.description.replace(/\\u0026/g, "&")
       setFinalPropos.push(item);
@@ -1024,8 +847,8 @@ export default {
     this.proposalsActive = setFinalPropsActive.reverse();
     this.proposals = setFinalPropos.reverse();
 
-    await this.$store.dispatch("data/getProposalParamsDeposit");
-    await this.$store.dispatch("data/getProposalParamsVoting");
+    //await this.$store.dispatch("data/getProposalParamsDeposit");
+    //await this.$store.dispatch("data/getProposalParamsVoting");
     
   },
   methods: {
