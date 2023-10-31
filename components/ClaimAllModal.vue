@@ -1,4 +1,5 @@
 <template>
+  <div>
       <v-btn
         size="large" 
         class="mt-2 white--text"
@@ -229,6 +230,7 @@
       </v-card-actions>
     </v-card>
   </v-dialog>
+</div>
 </template>
 
 <script>

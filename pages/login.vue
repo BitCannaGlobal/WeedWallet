@@ -1,4 +1,5 @@
 <template>
+  
   <v-container class="bcnaBackground">
     <v-row
       justify="center"

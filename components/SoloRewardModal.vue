@@ -1,4 +1,5 @@
 <template>
+  <div>
       <v-btn 
         v-if="type === 'fromValidatorDetail'"
         :disabled="totalReward === '' || totalReward === '0.000000'"
@@ -160,6 +161,7 @@
       </v-card-actions>
     </v-card>
   </v-dialog>
+</div>
 </template>
 
 <script>

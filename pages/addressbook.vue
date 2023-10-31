@@ -1,9 +1,10 @@
 <template>
-  <v-container>
-  <v-btn size="large" color="#0FB786" class="mb-4" @click="openDial()">
+  <div>
+ 
+  <v-btn size="large" color="#0FB786" class="ma-4" @click="openDial()">
     Add contact
   </v-btn> 
-<v-card v-for="(item, index) in store.myAddressBook" class="mb-4">
+  <v-card v-for="(item, index) in store.myAddressBook" class="ma-4">
 
 
     <v-list v-if="store.myAddressBook.length > 0" lines="two" >
@@ -117,8 +118,8 @@
     </v-dialog>
  
 
-
-  </v-container>
+ 
+</div>
 </template>
 <script>
 import { useAppStore } from '@/stores/data'

@@ -1,4 +1,5 @@
 <template>
+  <div>
         <v-btn
         size="large"
         min-width="200"
@@ -305,6 +306,7 @@
       </v-card-text> 
     </v-card>
   </v-dialog>
+</div>
 </template>
 
 <script>

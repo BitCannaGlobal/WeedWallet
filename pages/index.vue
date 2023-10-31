@@ -1,5 +1,5 @@
 <template>
- 
+ <div>
     <v-col
       cols="12"
     >
@@ -415,6 +415,7 @@
         </v-card-text>
       </v-card>
     </v-dialog>
+  </div>
 </template>
 
 <script>

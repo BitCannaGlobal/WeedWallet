@@ -1,4 +1,5 @@
 <template>
+  <div>
         <v-btn 
         color="#00b786"
         block
@@ -296,6 +297,7 @@
       </v-card-actions>
     </v-card>
   </v-dialog>
+</div>
 </template>
 
 <script>
