@@ -1,21 +1,20 @@
-<template>
+<template> 
         <v-btn
-        size="large"
-        min-width="200"
-        class="mt-2 white--text"
-        color="#0FB786"
+        color="#FF0F0F"
+        block
+        class="mt-2"
+        size="large"    
+        :disabled="!amountUn" 
         @click="dialog = true"
       >
         <v-icon class="mr-2">
-          mdi-cube-send
-        </v-icon> Delegate BitCanna
+          mdi-account-multiple-remove
+        </v-icon> Undelegate
       </v-btn>
   <v-dialog
     v-model="dialog"
     max-width="600px"
-    
   >
- 
     <v-card color="#161819">
       <v-toolbar
             color="rgba(0, 0, 0, 0)"
@@ -36,7 +35,7 @@
               <span
                 v-if="step1"
                 class="text-h5"
-              >Delegate token</span>
+              >Undelegate from {{ validatorName }}</span>
               <span
                 v-if="step2"
                 class="text-h5"
@@ -54,7 +53,7 @@
             <template v-slot:append>
               <v-btn icon="mdi-close" @click="dialog = false"></v-btn>
             </template>
-          </v-toolbar> 
+          </v-toolbar>  
  
       <v-card-text>
         <v-form
@@ -65,62 +64,32 @@
         > 
           <v-row>
             <v-col cols="12">
-              <span class="text-left">Available: {{ amount }} BCNA</span>
-              <br><br> 
-              <h3 class="mt-1 ml-1 ">
-                Amount to delegate*
-              </h3>
-              <v-text-field 
-                  v-model="amountFinal" 
-                  :rules="amountRules"
-                  required
-                  variant="solo"
-                  bg-color="#0F0F0F"
-                  
-                >
-                <template #append-inner>
-                  <v-chip
-                    label
-                    small
-                    @click="getMax"
-                  >
-                  Max
-                  </v-chip>
-                </template>            
-              </v-text-field>
- 
-              <h3 class="mt-1 ml-1 mb-1">
-                Delegate to*
-              </h3> 
-              <v-select
-                v-model="addressTo"
-                :rules="addressToRules"
-                item-title="name"
-                item-value="address"
-                :items="validatorListSearch" 
-                required
+              <span class="text-left">Available: {{ amountUn }} BCNA</span>
+              <v-text-field
+                v-model="amount"
+                label="Amount*"
+                :rules="!loadingInput ? amountRules : ''"
+                type="text"
+                class="mt-4"
                 variant="solo"
                 bg-color="#0F0F0F"
               >
-                <template #prepend-item>
-                  <v-list-item>
-                    <v-list-item-content>
-                      <v-text-field
-                        v-model="searchTerm"
-                        outlined
-                        placeholder="Search validator"
-                        @input="searchVal"
-                      />
-                    </v-list-item-content>
-                  </v-list-item>
-                  <v-divider class="mt-2" />
-                </template> 
-              </v-select>
-              <h3 class="mt-1 ml-1 mb-1">
+                  <template #append-inner>
+                    <v-chip
+                      label
+                      small
+                      @click="getMax"
+                    >
+                    Max
+                    </v-chip>
+                  </template>
+              </v-text-field>
+              <h3 class="mt-1 ml-1 mb-3">
                 Memo
               </h3>
               <v-text-field
                 v-model="memo"
+                label="Memo"
                 required
                 variant="solo"
                 bg-color="#0F0F0F"
@@ -133,64 +102,76 @@
           ref="form"
           lazy-validation
         >
-          <v-sheet
-            outlined
-            color="gray"
-            rounded
-          >
-            <v-card
-              color="#1C1D20"
-              class="pa-2"
-              outlined
-              tile 
-            >
-              <v-list-item two-line>
-                <v-list-item-content>        
-                  <v-list-item-subtitle class="mb-2">
-                    <h3>Delegate to</h3>
-                  </v-list-item-subtitle>
-                  <v-list-item-title>
-                    <h3>{{ valName }}</h3> 
-                  </v-list-item-title>
-                </v-list-item-content>
-              </v-list-item>
-              <v-list-item two-line>
-                <v-list-item-content>        
-                  <v-list-item-subtitle class="mb-2">
-                    <h3>Amount</h3>
-                  </v-list-item-subtitle>
-                  <v-list-item-title>
-                    <h3>
-                      {{ amountFinal }}
-                      {{ cosmosConfig[store.chainSelected].coinLookup.viewDenom }}                        
-                    </h3> 
-                  </v-list-item-title>
-                </v-list-item-content>
-              </v-list-item>                
-              <v-list-item two-line>
-                <v-list-item-content>        
-                  <v-list-item-subtitle class="mb-2">
-                    <h3>Gas/fee</h3>
-                  </v-list-item-subtitle>
-                  <v-list-item-title>
-                    <h3>
-                      {{ gasFee.gas }} / {{ gasFee.fee / 1000000 }}
-                      {{ cosmosConfig[store.chainSelected].coinLookup.viewDenom }}
-                    </h3>
-                  </v-list-item-title>
-                </v-list-item-content>
-              </v-list-item>
-            </v-card>
-          </v-sheet>  
-          <!--          <v-row>
+          <v-row>
             <v-col cols="12">
-              <v-simple-table class="accent">
+              <v-sheet
+                outlined
+                color="gray"
+                rounded
+              >
+                <v-card
+                  color="#1C1D20"
+                  class="pa-2"
+                  outlined
+                  tile 
+                >
+                  <v-list-item two-line>
+                    <v-list-item-content>        
+                      <v-list-item-subtitle class="mb-2">
+                        <h3>Amount</h3>
+                      </v-list-item-subtitle>
+                      <v-list-item-title>
+                        <h3>{{ amount }} {{ cosmosConfig[store.chainSelected].coinLookup.viewDenom }}</h3>
+                      </v-list-item-title>
+                    </v-list-item-content>
+                  </v-list-item>
+                  <v-list-item two-line>
+                    <v-list-item-content>        
+                      <v-list-item-subtitle class="mb-2">
+                        <h3>From</h3>
+                      </v-list-item-subtitle>
+                      <v-list-item-title>
+                        <h3>{{ validatorName }}</h3>
+                      </v-list-item-title>
+                    </v-list-item-content>
+                  </v-list-item>                              
+                  <v-list-item two-line>
+                    <v-list-item-content>        
+                      <v-list-item-subtitle class="mb-2">
+                        <h3>Gas/fee</h3>
+                      </v-list-item-subtitle>
+                      <v-list-item-title>
+                        <h3>
+                          {{ gasFee.gas }} / {{ gasFee.fee / 1000000 }}
+                          {{ cosmosConfig[store.chainSelected].coinLookup.viewDenom }}
+                        </h3>
+                      </v-list-item-title>
+                    </v-list-item-content>
+                  </v-list-item>
+                  <v-list-item
+                    v-if="memo !== ''"
+                    two-line
+                  >
+                    <v-list-item-content>        
+                      <v-list-item-subtitle class="mb-2">
+                        <h3>Memo</h3>
+                      </v-list-item-subtitle>
+                      <v-list-item-title>
+                        <h3>{{ memo }}</h3>
+                      </v-list-item-title> 
+                    </v-list-item-content>
+                  </v-list-item>  
+                </v-card>
+              </v-sheet>  
+
+
+              <!--               <v-simple-table class="accent">
                 <template #default>
                   <tbody>
                     <tr>
                       <td>Amount</td>
                       <td>
-                        {{ amountFinal }}
+                        {{ amount }}
                         {{ cosmosConfig[chainId].coinLookup.viewDenom }} 
 
                         <v-tooltip
@@ -216,7 +197,7 @@
                     </tr>
                     <tr>
                       <td>To</td>
-                      <td>{{ addressTo }} </td>
+                      <td>{{ validatorName }}</td>
                     </tr>
                     <tr>
                       <td>Memo</td>
@@ -231,9 +212,9 @@
                     </tr>
                   </tbody>
                 </template>
-              </v-simple-table>
+              </v-simple-table> -->
             </v-col>
-          </v-row> -->
+          </v-row>
         </v-form>
 
         <v-row v-if="step3">
@@ -245,7 +226,7 @@
             <v-img
               max-height="102"
               max-width="102"
-              src="icons/pending.svg"
+              src="https://wallet.bitcanna.io/icons/pending.svg"
             />
             <br>
             <h3>Transaction pending</h3> 
@@ -261,7 +242,7 @@
             <v-img
               max-height="102"
               max-width="102"
-              src="icons/approved.svg"
+              src="https://wallet.bitcanna.io/icons/approved.svg"
             />
             <br>
             <h3>Transaction approved</h3> 
@@ -270,9 +251,9 @@
         </v-row>
         <v-btn
           v-if="step2"
-          color="#1C1D20"
+           
           block
-          size="large"
+          x-large
           class="mt-4"
           @click="returnStep"
         >
@@ -284,8 +265,7 @@
           :loading="loading"
           color="#00b786"
           block
-          size="large"
-          class="mt-4 mb-4"
+          x-large
           @click="validate"
         >
           Next step
@@ -296,13 +276,16 @@
           :loading="loading"
           color="#00b786"
           block
-          size="large"
-          class="mt-4 mb-4"
+          x-large
+          class="mt-4"
           @click="validatestep2"
         >
-          Delegate
+          Undelegate
         </v-btn>
-      </v-card-text> 
+      </v-card-text>
+      <v-card-actions>
+        <v-spacer />
+      </v-card-actions>
     </v-card>
   </v-dialog>
 </template>
@@ -316,7 +299,7 @@ import {
   assertIsDeliverTxSuccess,
   SigningStargateClient,
   GasPrice,
-  calculateFee
+  calculateFee,
 } from "@cosmjs/stargate";
 
 function countPlaces(num) {
@@ -328,21 +311,23 @@ function countPlaces(num) {
 export default {
   props: [
     "chainIdProps",
-    "balances",
+    "addressFrom",
+    "amountUn",
+    "amountTotalUn",
+    "validatorName",
+    "coinIcon",
   ],
   data: (instance) => ({
     dialog: false,
     dislableSend: true,
+    address: instance.addressFrom,
+    amount: "",
     step1: true,
     step2: false,
     step3: false,
     step4: false,
     feeDeducted: false,
     gasFee: {},
-    address: '',
-    addressVal: '',
-    addressTo: '',
-    addressToRules: [(v) => !!v || "Address to is required"],
     addressRules: [
       (v) => !!v || "Address is required",
       (v) =>
@@ -350,39 +335,36 @@ export default {
         'Address must start with "' +
           instance.chainIdProps.toLowerCase() +
           'valoper"',
-      // v => bech32Validation(v) || 'Bad address (not bech32) ' + bech32Validation(v),
+      //v => bech32Validation(v) || 'Bad address (not bech32)',
     ],
-    amount: instance.balances,
-    amountFinal: "",
     amountRules: [
       (v) => !!v || "Amount is required",
       (v) => !isNaN(v) || "Amount must be number",
       (v) =>
-        v <= instance.balances ||
-        "Amount must be above delegated amount (" +
-          instance.balances +
-          ")",
+        v <= instance.amountUn ||
+        "Amount equal or above delegated amount (" + instance.amountUn + ")",
       (v) => countPlaces(v) < 7 || "Bad decimal",
     ],
-    amountToDelegate: "",
     memo: "",
     loading: false,
+    loadingInput: false,
     cosmosConfig: cosmosConfig,
-    validatorList: [],
-    validatorListSearch: [],
-    searchTerm: "",    
-    valName: ''
   }),
   setup() {
     const store = useAppStore()
-
     return {
       store
     }
   },
   computed: {
-    /* ...mapState("keplr", [`accounts`]),
-    ...mapState("data", ["chainId", "allValidators"]), */   
+    //...mapState("keplr", [`accounts`]),
+    //...mapState("data", ["chainId", `balances`]),
+    enableModal: function () {
+      let isDeleg = false;
+      if (this.amountTotalUn !== "0") isDeleg = true;
+
+      return isDeleg;
+    },
   },
   watch: {
     dialog(value) {
@@ -391,67 +373,32 @@ export default {
         this.step2 = false;
         this.step3 = false;
         this.step4 = false;
-        this.amountFinal = "";
-        this.addressTo = ''
+        this.amount = "";
       }
     },
   },
-  async mounted() {
-    
-    //await this.store.getStakingModule()
-    const selectValidatorList = [];
-    for (let i of this.store.allValidators) {
-      selectValidatorList.push({
-        'name': i.name,
-        'address': i.op_address,
-      });
-    }  
-    
-    this.validatorList = selectValidatorList;
-    this.validatorListSearch = this.validatorList;
-  },  
   methods: {
     getMax() {
-      this.amountFinal = this.amount;
+      this.amount = Number(this.amountUn);
     },
     getHalf() {
-      this.amountFinal = (this.amount / 2).toFixed(6);
+      this.amount = (this.amountUn / 2).toFixed(6);
     },
     getQuarter() {
-      this.amountFinal = (this.amount / 4).toFixed(6);
+      this.amount = (this.amountUn / 4).toFixed(6);
     },
-    searchVal() {
-      if (!this.searchTerm) {
-        this.validatorListSearch = this.validatorList;
-      }
-      this.validatorListSearch = this.validatorList.filter((val) => {        
-        return val.name.toLowerCase().indexOf(this.searchTerm.toLowerCase()) > -1;
-      });
-    },       
     async validate() {
       //if (this.$refs.form.validate() === true) {
         this.step1 = false;
         this.step2 = true;
-
-        this.valName = this.validatorList.find(
-          (element) => element.address === this.addressTo
-        ).name;
-
         // Fee claculation
-        /* const chainId = cosmosConfig[this.store.chainSelected].chainId;
-        await window.keplr.enable(chainId);
-        const offlineSigner = await window.getOfflineSignerAuto(chainId);
-        const client = await SigningStargateClient.connectWithSigner(
-          cosmosConfig[this.store.chainSelected].rpcURL,
-          offlineSigner
-        ); */
         let signer = await selectSigner(this.store.chainSelected, this.store.loggedType)
 
         const foundMsgType = defaultRegistryTypes.find(
-          (element) => element[0] === "/cosmos.staking.v1beta1.MsgDelegate"
+          (element) => element[0] === "/cosmos.staking.v1beta1.MsgUndelegate"
         );
 
-        const convertAmount = Math.round(this.amount * 1000000);
+        const convertAmount = (this.amount * 1000000).toFixed(0);
         const amount = {
           denom: cosmosConfig[this.store.chainSelected].coinLookup.chainDenom,
           amount: convertAmount.toString(),
@@ -460,15 +407,17 @@ export default {
           typeUrl: foundMsgType[0],
           value: foundMsgType[1].fromPartial({
             delegatorAddress: signer.accounts[0].address,
-            validatorAddress: this.addressTo,
+            validatorAddress: this.address,
             amount: amount,
           }),
         };
+
         const gasEstimation = await signer.client.simulate(
           signer.accounts[0].address,
           [finalMsg],
           this.memo
         );
+
         const usedFee = calculateFee(
           Math.round(gasEstimation * cosmosConfig[this.store.chainSelected].feeMultiplier),
           GasPrice.fromString(
@@ -476,22 +425,6 @@ export default {
               cosmosConfig[this.store.chainSelected].coinLookup.chainDenom
           )
         );
-
-        // console.log((usedFee.amount[0].amount / 1000000) + Number(this.amountFinal))
- 
-        if (
-          usedFee.amount[0].amount / 1000000 + Number(this.amountFinal) >
-          this.balances 
-        ) {
-          this.amountFinal = (
-            Number(this.amount) -
-            usedFee.amount[0].amount / 1000000
-          ).toFixed(6);
-          this.feeDeducted = true;
-        } else {
-          this.feeDeducted = false;
-        }
-
         this.gasFee = { fee: usedFee.amount[0].amount, gas: usedFee.gas };
       //}
     },
@@ -500,63 +433,37 @@ export default {
       this.step2 = false;
     },
     validatestep2() {
-      //if (this.$refs.form.validate() === true) {
+      // if (this.$refs.form.validate() === true) {
         (async () => {
           this.loading = true;
           this.step3 = true;
           this.step2 = false;
 
-          /* const chainId = cosmosConfig[this.store.chainSelected].chainId;
-          await window.keplr.enable(chainId);
-          const offlineSigner = await window.getOfflineSignerAuto(chainId);
-          const accounts = await offlineSigner.getAccounts();
-
-          const client = await SigningStargateClient.connectWithSigner(
-            cosmosConfig[this.store.chainSelected].rpcURL,
-            offlineSigner,
-            {
-              gasPrice: GasPrice.fromString(
-                cosmosConfig[this.store.chainSelected].gasPrice +
-                  cosmosConfig[this.store.chainSelected].coinLookup.chainDenom
-              ),
-            }
-          ); */
           let signer = await selectSigner(this.store.chainSelected, this.store.loggedType)
-
-
-          const convertAmount = Math.round(this.amountFinal * 1000000);
+          const convertAmount = Number(this.amount).toFixed(2) * 1000000;
           const amountFinal = {
             denom: cosmosConfig[this.store.chainSelected].coinLookup.chainDenom,
             amount: convertAmount.toString(),
           };
 
           try {
-            const result = await signer.client.delegateTokens(
+            const result = await signer.client.undelegateTokens(
               signer.accounts[0].address,
-              this.addressTo,
+              this.address,
               amountFinal,
-              'auto',
+              "auto",
               this.memo
             );
             assertIsDeliverTxSuccess(result);
-            await this.store.refresh()
             this.step3 = false;
             this.step4 = true;
             this.loading = false;
-            
-            /* await this.$store.dispatch(
-              "data/getDelegations",
-              accounts[0].address
-            );
-            await this.$store.dispatch("data/getDelegatorDataRpc", {
-              validator: this.addressTo,
-              delegator: accounts[0].address,
-            });
+            /* await this.$store.dispatch("data/refresh", accounts[0].address);
+ 
             await this.$store.dispatch("data/getValidatorDelegation", {
-              validatorAddr: this.addressTo,
+              validatorAddr: this.address,
               delegatorAddr: accounts[0].address,
             }); */
-            // await this.$store.dispatch('data/refresh', accounts[0].address)
           } catch (error) {
             console.error(error);
             this.eError = false;
@@ -568,7 +475,7 @@ export default {
             this.dialog = false;
           }
         })();
-      //}
+      // }
     },
   },
 };

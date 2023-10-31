@@ -40,28 +40,28 @@
 
                     <v-row class="mt-2">
                       <v-col md="6">
-                        <actionsModals 
+                        <!-- <actionsModals 
                           type="sendTokens" 
                           :spendableBalances="store.spendableBalances" 
                           :chain="cosmosConfig[store.chainSelected]" 
-                        /> 
-                        <!-- <SendModal
+                        />  -->
+                        <SendModal
                           class="text-right"
                           :chain-id-props="
-                            cosmosConfig[0].coinLookup.addressPrefix
+                            cosmosConfig[store.chainSelected].coinLookup.addressPrefix
                           "
-                          :amount-available="0"
-                          :coin-icon="cosmosConfig[0].coinLookup.icon"
+                          :amount-available="store.spendableBalances"
+                          :coin-icon="cosmosConfig[store.chainSelected].coinLookup.icon"
                           type="simpleSend"
-                        /> -->
+                        />
                       </v-col>
                       <v-col md="6">
                         <v-btn
-                          large
+                          size="large" 
                           block
                           class="mt-2 green--text"
                           color="white"
-                          @click.stop="dialog = true"
+                          @click.stop="dialogReceive = true"
                         >
                           Receive
                         </v-btn>
@@ -362,7 +362,59 @@
           </v-col>
         </v-row>
     </v-col>
- 
+    <v-dialog
+      v-model="dialogReceive"
+      max-width="600px"
+    >
+      <v-card>
+        <v-toolbar
+            color="rgba(0, 0, 0, 0)"
+            theme="dark"
+          >
+            <template v-slot:prepend>
+              <v-avatar>
+                  <v-img
+                    max-width="32"
+                    max-height="32"
+                    :src="cosmosConfig[store.chainSelected].coinLookup.icon"
+                    alt="Bitcanna"
+                  ></v-img>
+                </v-avatar>
+            </template>
+
+            <v-toolbar-title class="text-h6">
+              test
+            </v-toolbar-title>
+
+            <template v-slot:append>
+              <v-btn icon="mdi-close" @click="dialog = false"></v-btn>
+            </template>
+          </v-toolbar>  
+        <v-tabs
+          v-model="tab" 
+          class="ma-4"
+        >
+          <v-tab value="one">Address</v-tab>
+          <v-tab value="two">Mobile Tx</v-tab> 
+        </v-tabs>
+
+        <v-card-text>
+          <v-window v-model="tab">
+            <v-window-item value="one">
+              One
+            </v-window-item>
+
+            <v-window-item value="two">
+              Two
+            </v-window-item>
+
+            <v-window-item value="three">
+              Three
+            </v-window-item>
+          </v-window>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
 </template>
 
 <script>
@@ -396,7 +448,10 @@ export default {
     rpcAllTxs: [],
     dialog: false,
     isCopied: false,
-    walletDistribution: false
+    walletDistribution: false,
+    dialogReceive: false,
+    tab: null,
+
   }),
   computed: {
     /* ...mapState("keplr", [

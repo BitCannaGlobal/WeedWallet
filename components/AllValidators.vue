@@ -181,11 +181,11 @@ export default {
       myTotalUnDelegation: 0,
       headers: [
        /*  { text: "Status", value: "status" }, */
-        { text: "Name", value: "name" },
-        { text: "Commission rate", value: "crate" },
-        { text: "Voting power", value: "votingPower" },
-        { text: "validatorApr", value: "validatorApr" },
-        { text: "", value: "actions" },
+        { title: "Name", key: "name" },
+        { title: "Commission rate", key: "crate" },
+        { title: "Voting power", key: "votingPower" },
+        { title: "validatorApr", key: "validatorApr" },
+        { title: "", key: "actions" },
       ],
       finalValidators: [],
       valid: false,
@@ -236,7 +236,6 @@ export default {
     //if (this.logged === "false") this.$router.push({ path: "login" });
 
     //await this.$store.dispatch("data/getAllValidators");
-    console.log(this.store.allValidators)
     if (this.getStatus === "active") {
  
       this.finalValidators = this.store.allValidators;

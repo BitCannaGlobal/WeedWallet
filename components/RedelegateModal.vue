@@ -1,23 +1,23 @@
 <template>
-        <v-btn
-        size="large"
-        min-width="200"
-        class="mt-2 white--text"
-        color="#0FB786"
+      <v-btn
+        color="#FFFFFF"
+        block
+        class="mt-2 green--text" 
+        size="large"   
+        :disabled="!enableModal"
         @click="dialog = true"
       >
         <v-icon class="mr-2">
-          mdi-cube-send
-        </v-icon> Delegate BitCanna
-      </v-btn>
+          mdi-account-convert
+        </v-icon> Redelegate
+      </v-btn>  
   <v-dialog
     v-model="dialog"
     max-width="600px"
-    
   >
  
     <v-card color="#161819">
-      <v-toolbar
+            <v-toolbar
             color="rgba(0, 0, 0, 0)"
             theme="dark"
           >
@@ -36,7 +36,7 @@
               <span
                 v-if="step1"
                 class="text-h5"
-              >Delegate token</span>
+              >Redelegate from {{ validatorName }}</span>
               <span
                 v-if="step2"
                 class="text-h5"
@@ -54,7 +54,7 @@
             <template v-slot:append>
               <v-btn icon="mdi-close" @click="dialog = false"></v-btn>
             </template>
-          </v-toolbar> 
+          </v-toolbar>  
  
       <v-card-text>
         <v-form
@@ -62,43 +62,40 @@
           ref="form"
           v-model="dislableSend"
           lazy-validation
-        > 
+        >
           <v-row>
             <v-col cols="12">
-              <span class="text-left">Available: {{ amount }} BCNA</span>
-              <br><br> 
-              <h3 class="mt-1 ml-1 ">
-                Amount to delegate*
+              <span class="ml-1 text-left">Available: {{ amountRe }} BCNA</span>
+              <h3 class="mt-6 ml-1 mb-3">
+                Amount Redelegate
               </h3>
-              <v-text-field 
-                  v-model="amountFinal" 
-                  :rules="amountRules"
-                  required
-                  variant="solo"
-                  bg-color="#0F0F0F"
-                  
-                >
-                <template #append-inner>
-                  <v-chip
-                    label
-                    small
-                    @click="getMax"
-                  >
-                  Max
-                  </v-chip>
-                </template>            
+              <v-text-field
+                v-model="amount" 
+                :rules="!loadingInput ? amountRules : ''"
+                type="text"
+                class="mt-4"
+                variant="solo"
+                bg-color="#0F0F0F"
+              >
+                  <template #append-inner>
+                    <v-chip
+                      label
+                      small
+                      @click="getMax"
+                    >
+                    Max
+                    </v-chip>
+                  </template>
               </v-text-field>
- 
-              <h3 class="mt-1 ml-1 mb-1">
-                Delegate to*
-              </h3> 
+              <h3 class="mt-1 ml-1 mb-3">
+                Redelegate to
+              </h3>
               <v-select
                 v-model="addressTo"
                 :rules="addressToRules"
                 item-title="name"
                 item-value="address"
                 :items="validatorListSearch" 
-                required
                 variant="solo"
                 bg-color="#0F0F0F"
               >
@@ -107,20 +104,22 @@
                     <v-list-item-content>
                       <v-text-field
                         v-model="searchTerm"
-                        outlined
+                        variant="solo"
+                        bg-color="#0F0F0F"
                         placeholder="Search validator"
                         @input="searchVal"
                       />
                     </v-list-item-content>
                   </v-list-item>
                   <v-divider class="mt-2" />
-                </template> 
+                </template>                
               </v-select>
-              <h3 class="mt-1 ml-1 mb-1">
+              <h3 class="mt-1 ml-1 mb-3">
                 Memo
               </h3>
               <v-text-field
                 v-model="memo"
+                label="Memo"
                 required
                 variant="solo"
                 bg-color="#0F0F0F"
@@ -133,64 +132,86 @@
           ref="form"
           lazy-validation
         >
-          <v-sheet
-            outlined
-            color="gray"
-            rounded
-          >
-            <v-card
-              color="#1C1D20"
-              class="pa-2"
-              outlined
-              tile 
-            >
-              <v-list-item two-line>
-                <v-list-item-content>        
-                  <v-list-item-subtitle class="mb-2">
-                    <h3>Delegate to</h3>
-                  </v-list-item-subtitle>
-                  <v-list-item-title>
-                    <h3>{{ valName }}</h3> 
-                  </v-list-item-title>
-                </v-list-item-content>
-              </v-list-item>
-              <v-list-item two-line>
-                <v-list-item-content>        
-                  <v-list-item-subtitle class="mb-2">
-                    <h3>Amount</h3>
-                  </v-list-item-subtitle>
-                  <v-list-item-title>
-                    <h3>
-                      {{ amountFinal }}
-                      {{ cosmosConfig[store.chainSelected].coinLookup.viewDenom }}                        
-                    </h3> 
-                  </v-list-item-title>
-                </v-list-item-content>
-              </v-list-item>                
-              <v-list-item two-line>
-                <v-list-item-content>        
-                  <v-list-item-subtitle class="mb-2">
-                    <h3>Gas/fee</h3>
-                  </v-list-item-subtitle>
-                  <v-list-item-title>
-                    <h3>
-                      {{ gasFee.gas }} / {{ gasFee.fee / 1000000 }}
-                      {{ cosmosConfig[store.chainSelected].coinLookup.viewDenom }}
-                    </h3>
-                  </v-list-item-title>
-                </v-list-item-content>
-              </v-list-item>
-            </v-card>
-          </v-sheet>  
-          <!--          <v-row>
+          <v-row>
             <v-col cols="12">
-              <v-simple-table class="accent">
+              <v-sheet
+                outlined
+                color="gray"
+                rounded
+              >
+                <v-card
+                  color="#1C1D20"
+                  class="pa-2"
+                  outlined
+                  tile 
+                >
+                  <v-list-item two-line>
+                    <v-list-item-content>        
+                      <v-list-item-subtitle class="mb-2">
+                        <h3>Amount</h3>
+                      </v-list-item-subtitle>
+                      <v-list-item-title>
+                        <h3>{{ amount }} {{ cosmosConfig[store.chainSelected].coinLookup.viewDenom }}</h3>
+                      </v-list-item-title>
+                    </v-list-item-content>
+                  </v-list-item>
+                  <v-list-item two-line>
+                    <v-list-item-content>        
+                      <v-list-item-subtitle class="mb-2">
+                        <h3>From</h3>
+                      </v-list-item-subtitle>
+                      <v-list-item-title>
+                        <h3>{{ validatorName }}</h3>
+                      </v-list-item-title>
+                    </v-list-item-content>
+                  </v-list-item>  
+                  <v-list-item two-line>
+                    <v-list-item-content>        
+                      <v-list-item-subtitle class="mb-2">
+                        <h3>To</h3>
+                      </v-list-item-subtitle>
+                      <v-list-item-title>
+                        <h3>{{ addressTo }}</h3>
+                      </v-list-item-title>
+                    </v-list-item-content>
+                  </v-list-item>                               
+                  <v-list-item two-line>
+                    <v-list-item-content>        
+                      <v-list-item-subtitle class="mb-2">
+                        <h3>Gas/fee</h3>
+                      </v-list-item-subtitle>
+                      <v-list-item-title>
+                        <h3>
+                          {{ gasFee.gas }} / {{ gasFee.fee / 1000000 }}
+                          {{ cosmosConfig[store.chainSelected].coinLookup.viewDenom }}
+                        </h3>
+                      </v-list-item-title>
+                    </v-list-item-content>
+                  </v-list-item>
+                  <v-list-item
+                    v-if="memo !== ''"
+                    two-line
+                  >
+                    <v-list-item-content>        
+                      <v-list-item-subtitle class="mb-2">
+                        <h3>Memo</h3>
+                      </v-list-item-subtitle>
+                      <v-list-item-title>
+                        <h3>{{ memo }}</h3>
+                      </v-list-item-title> 
+                    </v-list-item-content>
+                  </v-list-item>  
+                </v-card>
+              </v-sheet>  
+
+
+              <!--              <v-simple-table class="accent">
                 <template #default>
                   <tbody>
                     <tr>
                       <td>Amount</td>
                       <td>
-                        {{ amountFinal }}
+                        {{ amount }}
                         {{ cosmosConfig[chainId].coinLookup.viewDenom }} 
 
                         <v-tooltip
@@ -215,8 +236,12 @@
                       </td>
                     </tr>
                     <tr>
+                      <td>From</td>
+                      <td>{{ validatorName }}</td>
+                    </tr>
+                    <tr>
                       <td>To</td>
-                      <td>{{ addressTo }} </td>
+                      <td>{{ addressTo }}</td>
                     </tr>
                     <tr>
                       <td>Memo</td>
@@ -231,9 +256,9 @@
                     </tr>
                   </tbody>
                 </template>
-              </v-simple-table>
+              </v-simple-table> -->
             </v-col>
-          </v-row> -->
+          </v-row>
         </v-form>
 
         <v-row v-if="step3">
@@ -245,7 +270,7 @@
             <v-img
               max-height="102"
               max-width="102"
-              src="icons/pending.svg"
+              src="https://wallet.bitcanna.io/icons/pending.svg"
             />
             <br>
             <h3>Transaction pending</h3> 
@@ -261,7 +286,7 @@
             <v-img
               max-height="102"
               max-width="102"
-              src="icons/approved.svg"
+              src="https://wallet.bitcanna.io/icons/approved.svg"
             />
             <br>
             <h3>Transaction approved</h3> 
@@ -270,7 +295,6 @@
         </v-row>
         <v-btn
           v-if="step2"
-          color="#1C1D20"
           block
           size="large"
           class="mt-4"
@@ -285,7 +309,7 @@
           color="#00b786"
           block
           size="large"
-          class="mt-4 mb-4"
+          class="mt-4"
           @click="validate"
         >
           Next step
@@ -297,12 +321,15 @@
           color="#00b786"
           block
           size="large"
-          class="mt-4 mb-4"
+          class="mt-4"
           @click="validatestep2"
         >
-          Delegate
+          Redelegate
         </v-btn>
-      </v-card-text> 
+      </v-card-text>
+      <v-card-actions>
+        <v-spacer />
+      </v-card-actions>
     </v-card>
   </v-dialog>
 </template>
@@ -316,7 +343,7 @@ import {
   assertIsDeliverTxSuccess,
   SigningStargateClient,
   GasPrice,
-  calculateFee
+  calculateFee,
 } from "@cosmjs/stargate";
 
 function countPlaces(num) {
@@ -324,24 +351,25 @@ function countPlaces(num) {
   const b = String(num).split(sep);
   return b[1] ? b[1].length : 0;
 }
-
 export default {
   props: [
     "chainIdProps",
-    "balances",
+    "addressFrom",
+    "amountRe",
+    "validatorName",
+    "coinIcon",
   ],
   data: (instance) => ({
     dialog: false,
     dislableSend: true,
+    address: instance.addressFrom,
+    addressTo: "",
     step1: true,
     step2: false,
     step3: false,
     step4: false,
     feeDeducted: false,
     gasFee: {},
-    address: '',
-    addressVal: '',
-    addressTo: '',
     addressToRules: [(v) => !!v || "Address to is required"],
     addressRules: [
       (v) => !!v || "Address is required",
@@ -350,39 +378,39 @@ export default {
         'Address must start with "' +
           instance.chainIdProps.toLowerCase() +
           'valoper"',
-      // v => bech32Validation(v) || 'Bad address (not bech32) ' + bech32Validation(v),
+      //v => bech32Validation(v) || 'Bad address (not bech32)',
     ],
-    amount: instance.balances,
-    amountFinal: "",
+    amount: instance.amountRe,
     amountRules: [
       (v) => !!v || "Amount is required",
       (v) => !isNaN(v) || "Amount must be number",
       (v) =>
-        v <= instance.balances ||
-        "Amount must be above delegated amount (" +
-          instance.balances +
-          ")",
+        v <= instance.amountRe ||
+        "Amount equal or above delegated amount (" + instance.amountRe + ")",
       (v) => countPlaces(v) < 7 || "Bad decimal",
     ],
-    amountToDelegate: "",
     memo: "",
     loading: false,
+    loadingInput: false,
     cosmosConfig: cosmosConfig,
     validatorList: [],
     validatorListSearch: [],
-    searchTerm: "",    
-    valName: ''
+    searchTerm: "",
   }),
   setup() {
     const store = useAppStore()
-
     return {
       store
     }
   },
   computed: {
     /* ...mapState("keplr", [`accounts`]),
-    ...mapState("data", ["chainId", "allValidators"]), */   
+    ...mapState("data", ["chainId", `balances`, "allValidators"]), */
+    enableModal: function () {
+      let isDeleg = false;
+      if (this.amountRe !== 0) isDeleg = true;
+      return isDeleg;
+    },  
   },
   watch: {
     dialog(value) {
@@ -391,64 +419,69 @@ export default {
         this.step2 = false;
         this.step3 = false;
         this.step4 = false;
-        this.amountFinal = "";
-        this.addressTo = ''
+        this.addressTo = "";
+        this.amount = "";
       }
     },
   },
   async mounted() {
-    
-    //await this.store.getStakingModule()
+    //await this.$store.dispatch("data/getAllValidator");
+    /* const selectValidatorList = [];
+    this.allValidators.forEach((item) => {
+      if (item.description.moniker !== this.validatorName) {
+        selectValidatorList.push({
+          name: item.description.moniker,
+          address: item.operator_address,
+        });
+      }
+    }); */
+
     const selectValidatorList = [];
     for (let i of this.store.allValidators) {
-      selectValidatorList.push({
-        'name': i.name,
-        'address': i.op_address,
-      });
+      console.log(i.name, this.validatorName)
+      if (i.name !== this.validatorName) {
+        selectValidatorList.push({
+          'name': i.name,
+          'address': i.op_address,
+        });
+      }
     }  
+
     
     this.validatorList = selectValidatorList;
     this.validatorListSearch = this.validatorList;
-  },  
+  },
   methods: {
     getMax() {
-      this.amountFinal = this.amount;
+      this.amount = (this.amountRe).toFixed(6);
     },
     getHalf() {
-      this.amountFinal = (this.amount / 2).toFixed(6);
+      this.amount = (this.amountRe / 2).toFixed(6);
     },
     getQuarter() {
-      this.amountFinal = (this.amount / 4).toFixed(6);
+      this.amount = (this.amountRe / 4).toFixed(6);
     },
     searchVal() {
       if (!this.searchTerm) {
         this.validatorListSearch = this.validatorList;
       }
-      this.validatorListSearch = this.validatorList.filter((val) => {        
-        return val.name.toLowerCase().indexOf(this.searchTerm.toLowerCase()) > -1;
+      this.validatorListSearch = this.validatorList.filter((fruit) => {
+        console.log(fruit.name);
+        console.log(this.searchTerm);
+        
+        return fruit.name.toLowerCase().indexOf(this.searchTerm.toLowerCase()) > -1;
       });
-    },       
+    }, 
     async validate() {
       //if (this.$refs.form.validate() === true) {
         this.step1 = false;
         this.step2 = true;
-
-        this.valName = this.validatorList.find(
-          (element) => element.address === this.addressTo
-        ).name;
-
         // Fee claculation
-        /* const chainId = cosmosConfig[this.store.chainSelected].chainId;
-        await window.keplr.enable(chainId);
-        const offlineSigner = await window.getOfflineSignerAuto(chainId);
-        const client = await SigningStargateClient.connectWithSigner(
-          cosmosConfig[this.store.chainSelected].rpcURL,
-          offlineSigner
-        ); */
         let signer = await selectSigner(this.store.chainSelected, this.store.loggedType)
 
         const foundMsgType = defaultRegistryTypes.find(
-          (element) => element[0] === "/cosmos.staking.v1beta1.MsgDelegate"
+          (element) =>
+            element[0] === "/cosmos.staking.v1beta1.MsgBeginRedelegate"
         );
 
         const convertAmount = Math.round(this.amount * 1000000);
@@ -460,15 +493,18 @@ export default {
           typeUrl: foundMsgType[0],
           value: foundMsgType[1].fromPartial({
             delegatorAddress: signer.accounts[0].address,
-            validatorAddress: this.addressTo,
+            validatorSrcAddress: this.address,
+            validatorDstAddress: this.addressTo,
             amount: amount,
           }),
         };
+
         const gasEstimation = await signer.client.simulate(
           signer.accounts[0].address,
           [finalMsg],
           this.memo
         );
+
         const usedFee = calculateFee(
           Math.round(gasEstimation * cosmosConfig[this.store.chainSelected].feeMultiplier),
           GasPrice.fromString(
@@ -476,22 +512,6 @@ export default {
               cosmosConfig[this.store.chainSelected].coinLookup.chainDenom
           )
         );
-
-        // console.log((usedFee.amount[0].amount / 1000000) + Number(this.amountFinal))
- 
-        if (
-          usedFee.amount[0].amount / 1000000 + Number(this.amountFinal) >
-          this.balances 
-        ) {
-          this.amountFinal = (
-            Number(this.amount) -
-            usedFee.amount[0].amount / 1000000
-          ).toFixed(6);
-          this.feeDeducted = true;
-        } else {
-          this.feeDeducted = false;
-        }
-
         this.gasFee = { fee: usedFee.amount[0].amount, gas: usedFee.gas };
       //}
     },
@@ -506,57 +526,44 @@ export default {
           this.step3 = true;
           this.step2 = false;
 
-          /* const chainId = cosmosConfig[this.store.chainSelected].chainId;
-          await window.keplr.enable(chainId);
-          const offlineSigner = await window.getOfflineSignerAuto(chainId);
-          const accounts = await offlineSigner.getAccounts();
-
-          const client = await SigningStargateClient.connectWithSigner(
-            cosmosConfig[this.store.chainSelected].rpcURL,
-            offlineSigner,
-            {
-              gasPrice: GasPrice.fromString(
-                cosmosConfig[this.store.chainSelected].gasPrice +
-                  cosmosConfig[this.store.chainSelected].coinLookup.chainDenom
-              ),
-            }
-          ); */
           let signer = await selectSigner(this.store.chainSelected, this.store.loggedType)
 
+          const convertAmount = Math.round(this.amount * 1000000);
 
-          const convertAmount = Math.round(this.amountFinal * 1000000);
           const amountFinal = {
             denom: cosmosConfig[this.store.chainSelected].coinLookup.chainDenom,
             amount: convertAmount.toString(),
           };
-
+          const foundMsgType = defaultRegistryTypes.find(
+            (element) =>
+              element[0] === "/cosmos.staking.v1beta1.MsgBeginRedelegate"
+          );
+          const reDelegateMsg = {
+            typeUrl: foundMsgType[0],
+            value: foundMsgType[1].fromPartial({
+              delegatorAddress: signer.accounts[0].address,
+              validatorSrcAddress: this.address,
+              validatorDstAddress: this.addressTo,
+              amount: amountFinal,
+            }),
+          };
           try {
-            const result = await signer.client.delegateTokens(
+            const result = await signer.client.signAndBroadcast(
               signer.accounts[0].address,
-              this.addressTo,
-              amountFinal,
-              'auto',
+              [reDelegateMsg],
+              "auto",
               this.memo
             );
             assertIsDeliverTxSuccess(result);
-            await this.store.refresh()
             this.step3 = false;
             this.step4 = true;
             this.loading = false;
-            
-            /* await this.$store.dispatch(
-              "data/getDelegations",
-              accounts[0].address
-            );
-            await this.$store.dispatch("data/getDelegatorDataRpc", {
-              validator: this.addressTo,
-              delegator: accounts[0].address,
-            });
+
+            /* await this.$store.dispatch("data/refresh", accounts[0].address);
             await this.$store.dispatch("data/getValidatorDelegation", {
-              validatorAddr: this.addressTo,
+              validatorAddr: this.address,
               delegatorAddr: accounts[0].address,
             }); */
-            // await this.$store.dispatch('data/refresh', accounts[0].address)
           } catch (error) {
             console.error(error);
             this.eError = false;

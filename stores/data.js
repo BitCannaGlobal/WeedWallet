@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia' 
+import { getData, setData } from 'nuxt-storage/local-storage';
 import axios from "axios";
 import { createProtobufRpcClient, QueryClient } from "@cosmjs/stargate";
 import { Tendermint34Client, Tendermint37Client } from "@cosmjs/tendermint-rpc";  
@@ -43,6 +44,8 @@ export const useAppStore = defineStore('app', {
     validatorDetails: '',
     validatorRewards: '',
     validatorDelegations: '',
+    validatorUnDelegations: '',
+    myAddressBook: [],
   }),
   actions: {
     async refresh() {
@@ -177,13 +180,16 @@ export const useAppStore = defineStore('app', {
         if (item.status === 'BOND_STATUS_BONDED') {
           upTime = 100;
         }
-        const rewardFactor = 1 - item.commission.commissionRates.rate
+
+        console.log(item.commission.commissionRates.rate / 10000000000000000)
+
+        const rewardFactor = 1 - (item.commission.commissionRates.rate / 10000000000000000)
         const finalApr = this.aprNow * rewardFactor
         copieValidators.push({
           name: item.description.moniker,
           op_address: item.operatorAddress,
           crate:
-            (Number(item.commission.commissionRates.rate) * 100).toFixed(2),
+            (Number(item.commission.commissionRates.rate / 10000000000000000)).toFixed(2),
           website: item.description.website,
           votingPower: ((item.tokens / getPoolStaking.pool.bondedTokens) * 100).toFixed(2),
           status: item.status,
@@ -193,7 +199,7 @@ export const useAppStore = defineStore('app', {
 
       });
 
-      console.log('poolStaking', getPoolStaking.pool.bondedTokens)
+      //console.log('poolStaking', getPoolStaking.pool.bondedTokens)
  
       this.totalDelegations = (total / 1000000).toFixed(2)
       this.totalUnbound = (totalUnbound / 1000000).toFixed(2)
@@ -248,9 +254,7 @@ export const useAppStore = defineStore('app', {
     }, 
     async getValidatorDetail(address) { 
       const queryValidator = new staking.QueryClientImpl(this.rpcClient);
-      
-      console.log(address)
-      console.log(await queryValidator.Validator({ validatorAddr: address }))
+       
       let finalValidator = await queryValidator.Validator({ validatorAddr: address })
       this.validatorDetails = finalValidator.validator
     }, 
@@ -285,6 +289,21 @@ export const useAppStore = defineStore('app', {
           .catch((error) => { 
             this.validatorDelegations = 0 
           });
+        // validatorUnDelegations
+        await axios(
+          cosmosConfig[this.chainSelected].apiURL +
+            "/cosmos/staking/v1beta1/validators/" +
+            data.validatorAddr +
+            "/delegations/" +
+            data.delegatorAddr +
+            "/unbonding_delegation"
+        )
+          .then((res) => {
+            this.validatorUnDelegations = res.data.delegation_response.balance.amount
+          })
+          .catch((error) => { 
+            this.validatorUnDelegations = 0 
+          });         
     },
     async getDelegations() {
       const getDelegations = await axios(
@@ -429,8 +448,25 @@ export const useAppStore = defineStore('app', {
       commit("setAllUnbonding", getUnDelegations.data.unbonding_responses);
       commit("setAllRedelegate", getRedelegations.data.redelegation_responses); */
     },
+    async getAddressBook() {
+      let myAddressBook = getData('bcnaAddressBook') 
+      this.myAddressBook = myAddressBook
+      console.log('myAddressBook', this.myAddressBook)
+    },
+    async addressBook(typeAction, data) {
+      if (typeAction === 'addContact') {
+        let getBookMark = getData('bcnaAddressBook') 
+        if (getBookMark === null) {
+          getBookMark = []
+        }
+        getBookMark.push(data)
+        console.log('getBookMark', getBookMark)
+        setData('bcnaAddressBook', getBookMark, 730, 'd')    
+      } 
 
-
+      /* setData('test', 'test1');
+      console.log(getData('test')) */
+    },
     async logout() {
       this.logged = false
       this.addrWallet = ''
@@ -516,8 +552,7 @@ export const useAppStore = defineStore('app', {
             window.cosmostation.providers.keplr.getOfflineSigner(chainId);
        
           const accounts = await offlineSigner.getAccounts();
-          const getKey = await  window.cosmostation.providers.keplr.getKey(chainId);
-          console.log('cosmoStation', getKey.name)
+          const getKey = await  window.cosmostation.providers.keplr.getKey(chainId); 
 
           this.addrWallet = accounts[0].address
           this.nameWallet = getKey.name
@@ -534,11 +569,9 @@ export const useAppStore = defineStore('app', {
      
         await window.leap.enable(chainId);
 
-        const offlineSigner = window.leap.getOfflineSigner(chainId);
-        console.log('leaptest', await offlineSigner)
+        const offlineSigner = window.leap.getOfflineSigner(chainId); 
         const accounts = await offlineSigner.getAccounts(); 
-        const getKey = await window.leap.getKey(chainId);
-        console.log('leap', getKey.name)
+        const getKey = await window.leap.getKey(chainId); 
 
         this.addrWallet = accounts[0].address
         this.nameWallet = getKey.name

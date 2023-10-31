@@ -77,33 +77,25 @@
                   </v-chip>                  
                 </v-col> -->
               <span class="text-left">Available: {{ balances }} BCNA</span>
-              <v-text-field
-                v-model="amountFinal"
-                label="Amount to delegate*"
-                :rules="amountRules"
-                required
-                flat 
-                solo
-                background-color="#0F0F0F"
-                class="mt-4"
-              >
-                <template #append>
-                  <!-- <img
-                      width="24"
-                      height="24"
-                      :srcset="coinIcon"
-                      alt=""
-                      :class="`rounded-xl`"
-                    > -->
-                  <v-chip
-                    label
-                    small
-                    @click="getMax"
+ 
+              <v-text-field 
+                    v-model="amountFinal" 
+                    :rules="amountRules"
+                    required
+                    variant="solo"
+                    bg-color="#0F0F0F"
+                    
                   >
+                  <template #append-inner>
+                    <v-chip
+                      label
+                      small
+                      @click="getMax"
+                    >
                     Max
-                  </v-chip>
-                </template>
-              </v-text-field>
+                    </v-chip>
+                  </template>            
+                </v-text-field>  
               <!-- <v-text-field
                   v-model="addressVal"
                   label="Validator address*"
@@ -115,10 +107,9 @@
               <v-text-field
                 v-model="memo"
                 label="Memo"
-                required
-                flat 
-                solo
-                background-color="#0F0F0F"
+                required 
+                variant="solo"
+                bg-color="#0F0F0F"
               />
             </v-col>
           </v-row> 
@@ -270,7 +261,7 @@
         <v-btn
           v-if="step2" 
           block
-          x-large
+          size="large"
           class="mt-4"
           @click="returnStep"
         >
@@ -282,7 +273,7 @@
           :loading="loading"
           color="#00b786"
           block
-          x-large
+          size="large"
           @click="validate"
         >
           Next step
@@ -293,7 +284,7 @@
           :loading="loading"
           color="#00b786"
           block
-          x-large
+          size="large"
           class="mt-4"
           @click="validatestep2"
         >

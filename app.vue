@@ -88,6 +88,16 @@
           :text="store.addrWallet"
         /></span>
       </v-tooltip>
+      <v-chip
+            class="ml-3"
+            color="#00b786"
+            variant="outlined"
+            label 
+            @click="copyAddr(store.addrWallet)"
+          >
+            {{ cosmosConfig[store.chainSelected].chainId }}
+          </v-chip>
+      
       <span
         v-if="isCopied"
         class="ml-2"
@@ -118,9 +128,11 @@ import cosmosConfig from "~/cosmos.config";
 
 export default {
   data: () => ({ 
+    cosmosConfig: cosmosConfig,
     drawer: null,
     links: [
       ["mdi-chevron-right", "Overview", "/"],
+      ["mdi-chevron-right", "Address book", "/addressbook"],
       ["mdi-chevron-right", "Transactions", "/transactions"],
       
       // ["mdi-chevron-right", "Validators", "/validators"],

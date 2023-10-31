@@ -21,7 +21,7 @@ export default [
     maxTxSender: 50,
     maxTxRecipient: 50,
     color: '#33ffc9',
-    colorChart: ["#b3ffeb", "#33ffc9", "#00b383", "#004d38"],
+    colorChart: ["#b3ffeb", "#33ffc9", "#00b383", "#004d38"], 
     modules: {
       feeGrant: true,
       authz: true,

@@ -53,7 +53,7 @@
           > 
             <h4>Current commission rate</h4>
             {{
-              store.validatorDetails.commission?.commissionRates.rate * 100
+              store.validatorDetails.commission?.commissionRates.rate / 10000000000000000
             }}
             %
             <h4 class="mt-2">
@@ -118,29 +118,29 @@
             sm="4"
             class="pa-4" 
           > 
-            <!-- <RedelegateModal
-              v-if="logged"
+            <RedelegateModal
+              v-if="store.logged"
               :chain-id-props="cosmosConfig[store.chainSelected].coinLookup.addressPrefix"
               :address-from="validatorAddr"
-              :amount-re="validatorDelegations / 1000000"
+              :amount-re="store.validatorDelegations / 1000000"
               :validator-name="store.validatorDetails.description?.moniker"
               :coin-icon="cosmosConfig[store.chainSelected].coinLookup.icon"
-            /> -->
+            />
           </v-col>
           <v-col
             cols="12"
             sm="4"
             class="pa-4" 
           > 
-            <!-- <UndelegateSingleModal
-              v-if="logged"
+            <UndelegateSingleModal
+              v-if="store.logged"
               :chain-id-props="cosmosConfig[store.chainSelected].coinLookup.addressPrefix"
               :address-from="validatorAddr"
-              :amount-un="validatorDelegations / 1000000"
-              :amount-total-un="myTotalUnDelegation"
+              :amount-un="store.validatorDelegations / 1000000"
+              :amount-total-un="store.validatorUnDelegations"
               :validator-name="store.validatorDetails.description?.moniker"
               :coin-icon="cosmosConfig[store.chainSelected].coinLookup.icon"
-            /> -->
+            /> 
           </v-col>
         </v-row>
       </div>

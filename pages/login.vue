@@ -206,6 +206,7 @@ export default {
       await this.store.getWalletAmount()
       await this.store.getGovModule()
       await this.store.getDelegations()
+      await this.store.getAddressBook()
 
 
     },

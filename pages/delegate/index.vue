@@ -1,5 +1,5 @@
 <template>
-  <v-row>
+  <div>
     <v-row class="ma-2">
       <h1>
         Delegate 
@@ -144,19 +144,26 @@
         >
           <v-col>
             <v-card class="accent">
-              <v-card-title class="headline">
-                <v-icon class="mr-2">
+
+              <v-toolbar
+            color="rgba(0, 0, 0, 0)"
+            theme="dark"
+          >
+            <v-toolbar-title class="text-h6">
+              <v-icon class="mr-2">
                   mdi-wallet-outline
                 </v-icon> All validators
+            </v-toolbar-title>
 
-                <v-spacer />
-                <v-switch
+            <template v-slot:append>
+              <v-switch
                   v-model="orderVal"
                   color="#00b786"
                   :label="`View ${getStatus.toString()}`"
                 />
-
-              </v-card-title>
+            </template>
+          </v-toolbar> 
+ 
               <v-card-text>
                 <AllValidators :get-status="getStatus" />
               </v-card-text>
@@ -165,7 +172,7 @@
         </v-row>
       </sequential-entrance>
     </v-col>
-    <v-dialog
+<!--     <v-dialog
       v-model="dialog"
       max-width="600" 
     >
@@ -325,8 +332,8 @@
           <v-spacer />
         </v-card-actions>
       </v-card>
-    </v-dialog>    
-  </v-row>
+    </v-dialog>   -->  
+  </div>
 </template>
 
 <script>
