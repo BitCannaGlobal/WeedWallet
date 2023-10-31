@@ -59,7 +59,7 @@
                         <v-btn
                           size="large" 
                           block
-                          class="mt-2 green--text"
+                          class="mt-2 text-green-lighten-1"
                           color="white"
                           @click.stop="dialogReceive = true"
                         >

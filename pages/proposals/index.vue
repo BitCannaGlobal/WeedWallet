@@ -8,7 +8,7 @@
       <v-divider class="mb-6" />
       {{ setFinalPropos }}
      <!--  {{ store.allProposals.proposals }} -->
-<!--     <h3 class="mb-8">Active proposals</h3> 
+     <h3 class="mb-8">Active proposals</h3> 
     <span v-if="proposalsActive.length === 0">No active proposals are on chain at this moment<br /><br /><br /></span>
       <v-row> 
         <v-col
@@ -695,7 +695,7 @@
           <v-spacer />
         </v-card-actions>
       </v-card>
-    </v-dialog>   -->
+    </v-dialog> 
   </div>
 </template>
 <script>

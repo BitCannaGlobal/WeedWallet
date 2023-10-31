@@ -46,6 +46,7 @@
                   class="ma-2"
                   color="#00b786"
                   label
+                  variant="flat"
                 >
                   Active
                 </v-chip>
@@ -54,6 +55,7 @@
                   class="ma-2"
                   color="red"
                   label
+                  variant="flat"
                 >
                   Inactive
                 </v-chip> 
