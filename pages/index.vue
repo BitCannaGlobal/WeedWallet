@@ -15,7 +15,7 @@
           <v-list-item
             class="background"
             :prepend-avatar="store.loggedType + '.svg'" 
-          ><h1>{{ store.nameWallet  }}</h1></v-list-item> 
+          ><h1>{{ store.nameWallet  }}'s portfolio</h1></v-list-item> 
       </v-col>
         <v-row>
           <v-col
@@ -233,7 +233,7 @@
                       <v-chip
                         class="mb-2"
                         :color="item.final.color"
-                        outlined
+                        variant="outlined"
                         label
                       >
                         {{ item.final.typeReadable }}

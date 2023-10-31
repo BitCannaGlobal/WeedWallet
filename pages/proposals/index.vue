@@ -6,6 +6,7 @@
       </h1>
       <v-spacer /> 
       <v-divider class="mb-6" />
+      {{ setFinalPropos }}
      <!--  {{ store.allProposals.proposals }} -->
 <!--     <h3 class="mb-8">Active proposals</h3> 
     <span v-if="proposalsActive.length === 0">No active proposals are on chain at this moment<br /><br /><br /></span>
@@ -835,13 +836,13 @@ export default {
     this.store.allProposals.proposals.forEach((item) => {
       // Fix markdown syntax
       console.log(item)
-      item.content.description = item.content.description.replace(/\\n/g, "\n")
-      item.content.description = item.content.description.replace(/\\u0026/g, "&")
+      item.summary = item.summary.replace(/\\n/g, "\n")
+      item.summary = item.summary.replace(/\\u0026/g, "&")
       setFinalPropos.push(item);
     });
     const setFinalPropsActive = [];
-    allProposals.data.proposals.forEach((item) => {
-      if (item.status === "PROPOSAL_STATUS_VOTING_PERIOD")
+    this.store.allProposals.proposals.forEach((item) => {
+      if (item.status === 4)
         setFinalPropsActive.push(item);
     });
     this.proposalsActive = setFinalPropsActive.reverse();

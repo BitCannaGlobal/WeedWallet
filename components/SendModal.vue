@@ -231,11 +231,10 @@
               Memo (Optional)
             </h3>
             <v-text-field
-              v-model="memo"              
-              background-color="#0F0F0F"
+              v-model="memo"
               required
-              flat 
-              solo
+              variant="solo"
+              bg-color="#0F0F0F"
             /> 
   
             <v-row>
@@ -282,7 +281,7 @@
             color="#00b786"
             block
             class="mt-1"
-            x-large
+            size="x-large"
             @click="validatestep2"            
           >
             Send tx
@@ -297,7 +296,7 @@
             color="#1C1D20"
             block
             class="mt-4"
-            x-large
+            size="x-large"
             @click="returnStep"
           >            
             <v-icon
@@ -313,7 +312,7 @@
             :loading="loading"
             color="#00b786"
             block
-            x-large
+            size="x-large"
             @click="validate"
           >
             Next step

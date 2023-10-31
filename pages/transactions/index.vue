@@ -71,7 +71,7 @@
                         <v-chip
                           class="mt-3"
                           :color="item.final.color"
-                          outlined
+                          variant="outlined"
                           label 
                         >
                           {{ item.final.typeReadable }}
