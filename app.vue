@@ -133,8 +133,8 @@
     </v-app-bar>
 
     <v-main>
-      <NuxtLayout>{{ currentRoute.fullPath }}
-        <NuxtPage v-if="store.logged" />
+      <NuxtLayout> 
+        <NuxtPage />
       </NuxtLayout>
     </v-main>
   </v-app>
@@ -188,13 +188,17 @@ export default {
     // await this.$store.dispatch("keplr/checkLogin");
     // await this.$store.dispatch("data/getAllValidators");
     await this.store.checkLogin()
+    console.log('this.store.logged',this.store.logged)
     if (this.store.logged) {
       await this.store.refresh()
+    } else {
+      this.$router.push({ path: "/login" });
     }
   },
   methods: {
     logoutNow() {
       this.store.logout()
+      this.store.removeLocalLogin() 
       this.$router.push({ path: "/login" });
       //this.$store.dispatch("keplr/logout");
       //this.address = "";

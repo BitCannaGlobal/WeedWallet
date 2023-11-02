@@ -1,5 +1,5 @@
 <template>
- <div>
+ <div v-if="store.logged" >
     <v-col
       cols="12"
     >

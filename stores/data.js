@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia' 
-import { getData, setData } from 'nuxt-storage/local-storage';
+import { getData, setData, removeItem } from 'nuxt-storage/local-storage';
 import axios from "axios";
 import { createProtobufRpcClient, QueryClient } from "@cosmjs/stargate";
 import { Tendermint34Client, Tendermint37Client } from "@cosmjs/tendermint-rpc";  
@@ -543,7 +543,7 @@ export const useAppStore = defineStore('app', {
         commit('setNameWallet', getKey.name)
         dispatch('getAccountData') */
 
-        this.setLocalLogin(chainId, this.nameWallet, this.addrWallet)
+        this.setLocalLogin(chainId, this.nameWallet, this.addrWallet, 'keplr')
       }
     },
     async cosmoStationConnect() { 
@@ -564,8 +564,9 @@ export const useAppStore = defineStore('app', {
           this.nameWallet = getKey.name
           this.logged = true
           this.loggedType = 'cosmostation'
+          this.setLocalLogin(chainId, this.nameWallet, this.addrWallet, 'cosmostation')
         } 
-      //console.log('cosmoStation', test)
+        
     },
     async leapConnect() { 
       if (!window.leap) {
@@ -583,27 +584,38 @@ export const useAppStore = defineStore('app', {
         this.nameWallet = getKey.name
         this.logged = true
         this.loggedType = 'leap'
+        this.setLocalLogin(chainId, this.nameWallet, this.addrWallet, 'leap')
       } 
-    //console.log('cosmoStation', test)
+      
     },
-    async setLocalLogin(chainId, name, address) {
+    async setLocalLogin(chainId, name, address, type) {
+      let id = 0
+      if (chainId === 'bitcanna-1') {
+        id = 1
+      }
       setData(
         "account",
         {
-          id: chainId,
+          id: id,
           walletName: name,
-          data: address
+          data: address,
+          type: type
         },
         1000,
         "d"
       );
     },
+    async removeLocalLogin() {
+      removeItem("account");
+    },
     async checkLogin() { 
       let getSession = getData('account') 
       if (getSession) { 
         console.log(getSession)
+        this.chainSelected = getSession.id
         this.addrWallet = getSession.data
         this.nameWallet = getSession.walletName
+        this.loggedType = getSession.type
         this.logged = true
         //commit("setAccounts", getSession);
         //commit("setLogged", "true");

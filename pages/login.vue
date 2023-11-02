@@ -30,8 +30,8 @@
             selected-class="text-deep-purple-accent-4"
             mandatory
           >
-            <v-chip @click="setChainId(1)">Mainet (0.46)</v-chip>
-            <v-chip @click="setChainId(0)">DevNet (0.47)</v-chip>
+            <v-chip @click="setChainId(0)">Mainet (0.46)</v-chip>
+            <v-chip @click="setChainId(1)">DevNet (0.47)</v-chip>
           </v-chip-group>
         </v-card>
         <v-card
