@@ -7,7 +7,6 @@ export default defineNuxtConfig({
   },
   modules: [
     '@pinia/nuxt',
-    //'@nuxtjs/markdownit'
   ],
   plugins: [
     //'~/plugins/sequentialEntrance.js', // only in client side
@@ -20,9 +19,15 @@ export default defineNuxtConfig({
     transpile: ['vuetify'],
   },
   vite: {
+    server: {
+      hmr: {
+        protocol: "wss",
+        clientPort: 443,
+        path: "hmr/",
+      },
+    },
     define: {
       'process.env.DEBUG': false,
     },
   },
-
 })
