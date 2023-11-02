@@ -4,21 +4,19 @@
           v-if="type === 'simpleSend'"
           size="large" 
           block
-          class="mt-2 white--text"
+          class="mt-5 white--text"
           color="#0FB786"
           @click="dialog = true"
         >
           Send
         </v-btn>
         <v-btn
-          v-else
-          dark
-          color="#00b786"
+          v-else 
+          block
+          class="mt-2 white--text"
+          color="#0FB786"
           @click="dialog = true"
-        >
-          <v-icon class="mr-2">
-            mdi-send-circle
-          </v-icon> Send
+        >  Send
         </v-btn>    
     <v-dialog
       v-model="dialog"
@@ -88,7 +86,7 @@
                   variant="solo"
                     bg-color="#0F0F0F"
                 >
-                <template #append-inner>
+                <!-- <template #append-inner>
                     <v-chip
                       label
                       small
@@ -96,7 +94,7 @@
                     >
                     Max
                     </v-chip>
-                  </template>  
+                  </template>   -->
                 </v-text-field>
                 <h3 class="ml-1 mb-1">
                   Amount*
@@ -285,11 +283,7 @@
             @click="validatestep2"            
           >
             Send tx
-            <v-icon
-              right
-            >
-              mdi-arrow-right-thick
-            </v-icon>            
+         
           </v-btn>
           <v-btn
             v-if="step2"
@@ -299,11 +293,7 @@
             size="x-large"
             @click="returnStep"
           >            
-            <v-icon
-              left
-            >
-              mdi-arrow-left-thick
-            </v-icon> 
+ 
             Return
           </v-btn>
           <v-btn
@@ -316,11 +306,7 @@
             @click="validate"
           >
             Next step
-            <v-icon
-              right
-            >
-              mdi-arrow-right-thick
-            </v-icon>             
+            
           </v-btn>
         </v-card-text>
         <v-card-actions>

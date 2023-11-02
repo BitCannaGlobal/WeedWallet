@@ -64,29 +64,48 @@
     >
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
       My address:
-
+ 
       <v-tooltip
         content-class="custom-tooltip"
         color="grey"
-        bottom
+        location="bottom"
       >
-        <template #activator="{ on, attrs }">
+         <template v-slot:activator="{ props }">
           <v-chip
             class="ml-3"
             color="#00b786"
             variant="outlined"
             label
-            v-bind="attrs"
-            v-on="on"
+            v-bind="props" 
             @click="copyAddr(store.addrWallet)"
           >
             {{ store.addrWallet }}
           </v-chip>
         </template>
-        <span><qr-code
-          class="mb-2 mt-2"
-          :text="store.addrWallet"
-        /></span>
+        <span class="mb-2 mt-2">
+          <QRCodeVue3
+          
+          :width="250"
+          :height="250"
+          :value="store.addrWallet"
+          :qrOptions="{ typeNumber: 0, mode: 'Byte', errorCorrectionLevel: 'H' }" 
+          :dotsOptions="{
+            type: 'dots',
+            color: '#3CC194',
+            gradient: {
+              type: 'linear',
+              rotation: 0,
+              colorStops: [
+                { offset: 0, color: '#3CC194' },
+                { offset: 1, color: '#3CC194' },
+              ],
+            },
+          }"
+          :backgroundOptions="{ color: '#ffffff' }"
+          :cornersSquareOptions="{ type: 'dot', color: '#000000' }"
+          :cornersDotOptions="{ type: undefined, color: '#000000' }"    
+        />
+      </span>
       </v-tooltip>
       <v-chip
             class="ml-3"
@@ -123,13 +142,19 @@
 
 <script>
 import { useTheme } from 'vuetify'
+import QRCodeVue3 from "qrcode-vue3";
+import useClipboard from '~/composables/useClipboard'
 import { useAppStore } from '@/stores/data'
 import cosmosConfig from "~/cosmos.config";
 
 export default {
+  components: {
+    QRCodeVue3
+  },
   data: () => ({ 
     cosmosConfig: cosmosConfig,
     drawer: null,
+    isCopied: false,
     links: [
       ["mdi-chevron-right", "Overview", "/"],
       ["mdi-chevron-right", "Address book", "/addressbook"],
@@ -173,7 +198,8 @@ export default {
       await this.$store.dispatch("data/refresh", this.accounts[0].address);
     },
     async copyAddr(text) {
-      await this.$copyText(text);
+      const { toClipboard } = useClipboard()
+      await toClipboard(text)
       this.isCopied = true;
       setTimeout(this.hideCopy, 4000);
     },
@@ -224,6 +250,7 @@ export default {
     src: url("fonts/Carmen Sans UltraLight.otf") format("opentype");
 }
 .body,
+.v-text-field,
 .v-application{
     font-family: 'CarmenMedium';
 } 
@@ -250,5 +277,8 @@ export default {
 a {
 color: #e5e9ec !important;
 caret-color: #f4f4f4 !important;
+}
+.custom-tooltip {
+  opacity: 1 !important;
 }
 </style>

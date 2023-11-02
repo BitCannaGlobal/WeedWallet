@@ -1,24 +1,24 @@
 <!-- eslint-disable -->
 <template>
-  <div>
+  <div class="ma-6">
       <h1>
         Proposals 
       </h1>
       <v-spacer /> 
       <v-divider class="mb-6" />
-      {{ setFinalPropos }}
-     <!--  {{ store.allProposals.proposals }} -->
-     <h3 class="mb-8">Active proposals</h3> 
+      <!-- {{ setFinalPropos }}
+      {{ store.allProposals.proposals }}  --> 
+   <h3 class="mb-8">Active proposals</h3> 
     <span v-if="proposalsActive.length === 0">No active proposals are on chain at this moment<br /><br /><br /></span>
-      <v-row> 
+      <v-row v-if="proposalsActive.length > 0"> 
         <v-col
-          v-for="item in store.allProposals"
+          v-for="item in proposals"
           :key="item.voting_end_time"
           cols="6"
           md="6"
-          v-if="item.status === 'PROPOSAL_STATUS_VOTING_PERIOD'"          
+                 
         >
-        <v-item>            
+        <div v-if="item.status === 'PROPOSAL_STATUS_VOTING_PERIOD'">            
             <v-card
               dark 
               class="accent"
@@ -119,34 +119,35 @@
 
             </v-card-text>
             </v-card>          
-          </v-item>        
+          </div>         
       </v-col> 
        
       </v-row> 
 
 
-      <h3 class="mt-4 mb-2">Past proposals</h3>
-      
+        <h3 class="mt-4 mb-2">Past proposals</h3>
+ 
+
+
       <v-row class="mb-4">        
         <v-col
           v-for="item in proposals"
           :key="item.voting_end_time"
           cols="6"
           md="6"
-          v-if="item.status !== 'PROPOSAL_STATUS_VOTING_PERIOD'"
+          
           
         >
  
-        
+        <div v-if="item.status !== 'PROPOSAL_STATUS_VOTING_PERIOD'">
 
-          <v-item>
             
             <v-card
               dark 
               class="accent"
               @click="setSelectProposal(item)"
             >
-            <v-card-title>{{ item.content.title }}</v-card-title>
+            <v-card-title>{{ item.title }}</v-card-title>
             <v-divider  />
             <v-card-text>
               <v-row>
@@ -155,64 +156,59 @@
                   {{ formatDate(item.voting_end_time) }}
                 </v-col> 
                 <v-col cols="6" align="right"> 
-
-
- 
-
-
-           <td v-if="item.status === 'PROPOSAL_STATUS_PASSED'">
-            <v-chip
-              class="ma-2"
-              color="green"
-              text-color="white"
-              label
-            >
-              <v-icon class="mr-1">
-                mdi-checkbox-marked-circle
-              </v-icon>
-              Proposal Passed
-            </v-chip>
-          </td>
-          <td v-if="item.status === 'PROPOSAL_STATUS_REJECTED'">
-            <v-chip
-              class="ma-2"
-              color="red"
-              text-color="white"
-              label
-            >
-              <v-icon class="mr-1">
-                mdi-delete-forever
-              </v-icon>
-              Proposal Rejected
-            </v-chip>
-          </td>
-          <td v-if="item.status === 'PROPOSAL_STATUS_VOTING_PERIOD'">
- 
-            <v-chip
-              class="ma-2"
-              text-color="white"
-              color="blue"
-              label
-            >
-              <v-icon class="mr-1">
-                mdi-alarm-check
-              </v-icon>
-              Voting Period
-            </v-chip>
-          </td>
-          <td v-if="item.status === 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
- 
-            <v-chip
-              class="ma-2"
-              text-color="white"
-              label
-            >
-              <v-icon class="mr-1">
-                mdi-cash-fast
-              </v-icon>
-              Deposit Period
-            </v-chip>
-          </td>                 
+                  <td v-if="item.status === 'PROPOSAL_STATUS_PASSED'">
+                    <v-chip
+                      class="ma-2"
+                      color="green"
+                      text-color="white"
+                      label
+                    >
+                      <v-icon class="mr-1">
+                        mdi-checkbox-marked-circle
+                      </v-icon>
+                      Proposal Passed
+                    </v-chip>
+                  </td>
+                  <td v-if="item.status === 'PROPOSAL_STATUS_REJECTED'">
+                    <v-chip
+                      class="ma-2"
+                      color="red"
+                      text-color="white"
+                      label
+                    >
+                      <v-icon class="mr-1">
+                        mdi-delete-forever
+                      </v-icon>
+                      Proposal Rejected
+                    </v-chip>
+                  </td>
+                  <td v-if="item.status === 'PROPOSAL_STATUS_VOTING_PERIOD'">
+        
+                    <v-chip
+                      class="ma-2"
+                      text-color="white"
+                      color="blue"
+                      label
+                    >
+                      <v-icon class="mr-1">
+                        mdi-alarm-check
+                      </v-icon>
+                      Voting Period
+                    </v-chip>
+                  </td>
+                  <td v-if="item.status === 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
+        
+                    <v-chip
+                      class="ma-2"
+                      text-color="white"
+                      label
+                    >
+                      <v-icon class="mr-1">
+                        mdi-cash-fast
+                      </v-icon>
+                      Deposit Period
+                    </v-chip>
+                  </td>                 
                 </v-col>
               </v-row> 
               <br>
@@ -223,13 +219,13 @@
 
             </v-card-text>
             </v-card>          
-          </v-item>  
 
+          </div>
         </v-col>  
       </v-row> 
 
 
-<v-dialog
+  <v-dialog
       v-model="dialog"
       max-width="600" 
     >
@@ -484,9 +480,8 @@
             >
             <div
             v-if="dataLoaded"
-                    v-html="
-                      $md.render(selectedProposal.content?.description)
-                    "
+            v-html="$mdRenderer.render(selectedProposal.summary)"
+ 
                   /> 
             </v-card>
           </v-sheet> 
@@ -817,32 +812,38 @@ export default {
   async mounted() {
 
 
+
     // List of proposal from the blockchain
-    /* const allProposals = await axios(
-      cosmosConfig[0].apiURL + `/cosmos/gov/v1beta1/proposals`
+    const allProposals = await axios(
+      cosmosConfig[this.store.chainSelected].apiURL + `/cosmos/gov/v1/proposals`
     );
- 
-    if ($nuxt.$route.hash) {
-      const proposalId = $nuxt.$route.hash.replace("#", "");
-      const foundProp = allProposals.data.proposals.find(
-        (element) => element.proposal_id === proposalId
-      );       
-      this.dialog = true
-      this.selectedProposal = foundProp   
-      this.dataLoaded = true;
-    }     */
-    
+
     const setFinalPropos = [];
-    this.store.allProposals.proposals.forEach((item) => {
+    console.log(allProposals.data.proposals)
+    allProposals.data.proposals.forEach((item) => {
       // Fix markdown syntax
       console.log(item)
-      item.summary = item.summary.replace(/\\n/g, "\n")
-      item.summary = item.summary.replace(/\\u0026/g, "&")
+      if(item.messages.length > 0) {
+        
+        item.title = item.messages[0].content.title
+        //item.summary = item.messages[0].content.description
+        // item.summary = item.messages[0].content.description.replace(/\\n/g, "\n")
+        item.summary = item.messages[0].content.description.replace(/\\n/g, "\n ")
+        item.summary = item.summary.replace('*', "-")
+        
+        item.summary = item.summary.replace(/\\u0026/g, "&")
+        console.log(item.summary)
+      } else {
+        item.summary = item.summary.replace(/\\n/g, "\n")
+        item.summary = item.summary.replace(/\\u0026/g, "&")
+      }
+      //item.content.description = item.content.description.replace(/\\n/g, "\n")
+      //item.content.description = item.content.description.replace(/\\u0026/g, "&")
       setFinalPropos.push(item);
     });
     const setFinalPropsActive = [];
-    this.store.allProposals.proposals.forEach((item) => {
-      if (item.status === 4)
+    allProposals.data.proposals.forEach((item) => {
+      if (item.status === "PROPOSAL_STATUS_VOTING_PERIOD")
         setFinalPropsActive.push(item);
     });
     this.proposalsActive = setFinalPropsActive.reverse();

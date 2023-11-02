@@ -2,7 +2,7 @@
   <div>
       <v-btn
         size="large" 
-        class="mt-2 white--text"
+        class="mt-8 white--text"
         color="#0FB786"
         @click="dialog = true"
       >

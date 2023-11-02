@@ -21,10 +21,12 @@
           /> 
         </v-avatar>          
         <span class="ml-4">{{ store.validatorDetails.description?.moniker }}</span>
+        {{ store.validatorDetails?.status }}
         <v-chip
           class="ma-2 ml-4"
           label
           small
+          variant="flat"
           color="#0FB786"
         >
           Online

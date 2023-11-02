@@ -3,7 +3,7 @@
     <v-col
       cols="12"
     >
-      <v-col class="ml-6 mt-6 mb-6"> 
+      <v-col class="ml-4 mt-6 mb-6"> 
 
         <!-- <h1>        <img
           src="/keplr.png"
@@ -28,7 +28,7 @@
             >
               <v-card-text>
                 <v-row>
-                  <v-col md="6">
+                  <v-col md="6" class="text-textbcna">
                     Main account<br>
                     <h1 class="mt-2 carmenBold">
                       {{ store.totalTokens }}
@@ -59,7 +59,7 @@
                         <v-btn
                           size="large" 
                           block
-                          class="mt-2 text-green-lighten-1"
+                          class="mt-5 text-green-accent-3"
                           color="white"
                           @click.stop="dialogReceive = true"
                         >
@@ -114,7 +114,7 @@
                       <v-col > 
                         <v-icon
                           color="#0EB584"
-                          small
+                          size="small"
                           class="mt-n1"
                         >
                           mdi-circle
@@ -130,7 +130,7 @@
                       <v-col> 
                         <v-icon
                           color="#79FFD8"
-                          small
+                          size="small"
                           class="mt-n1"
                         >
                           mdi-circle
@@ -146,7 +146,7 @@
                       <v-col> 
                         <v-icon
                           color="#FFFFFF"
-                          small
+                          size="small"
                           class="mt-n1"
                         >
                           mdi-circle
@@ -167,7 +167,7 @@
                       <v-col> 
                         <v-icon
                           color="#FF7E7E"
-                          small
+                          size="small"
                           class="mt-n1"
                         >
                           mdi-circle
@@ -183,7 +183,7 @@
                       <v-col> 
                         <v-icon
                           color="#006C4C"
-                          small
+                          size="small"
                           class="mt-n1"
                         >
                           mdi-circle
@@ -201,7 +201,7 @@
             </v-card>
 
             <v-col class="mt-6 "> 
-              <h1 class="ml-9" style="text-align:left; float:left;">
+              <h1 class="ml-7" style="text-align:left; float:left;">
                 Transactions
               </h1>
               <p
@@ -214,7 +214,7 @@
               </p>
             </v-col>
             <template v-for="group in groupedEvents()">
-              <div>
+              <div class="text-textbcna">
                 <h3 class="ml-2">
                   {{ group[0].section }}
                 </h3>
@@ -287,10 +287,10 @@
                 <v-row>
                   <v-col class="mt-2">
                     <span>
-                      <h1>Available to stake</h1>
+                      <h1 class="text-textbcna">Available to stake</h1>
                     </span>
                     <br>
-                    <h2>
+                    <h2 class="text-textbcna">
                       {{ store.spendableBalances }}
                       {{ cosmosConfig[store.chainSelected].coinLookup.viewDenom }}
                     </h2>
@@ -332,10 +332,10 @@
                 <v-row>
                   <v-col class="mt-2">
                     <span>
-                      <h1>Your rewards</h1>
+                      <h1 class="text-textbcna">Your rewards</h1>
                     </span>
                     <br>
-                    <h2>
+                    <h2 class="text-textbcna">
                       {{ store.totalRewards }}
                       {{ cosmosConfig[store.chainSelected].coinLookup.viewDenom }}
                     </h2>
@@ -364,12 +364,13 @@
     </v-col>
     <v-dialog
       v-model="dialogReceive"
-      max-width="600px"
+      max-width="450px"
     >
       <v-card>
         <v-toolbar
             color="rgba(0, 0, 0, 0)"
             theme="dark"
+            align="center"
           >
             <template v-slot:prepend>
               <v-avatar>
@@ -383,46 +384,106 @@
             </template>
 
             <v-toolbar-title class="text-h6">
-              test
+              <v-tabs
+                v-model="tab" 
+                class="ma-4"
+              >
+                <v-tab value="one">Address</v-tab>
+                <v-tab value="two">Mobile Tx</v-tab> 
+              </v-tabs>
             </v-toolbar-title>
 
             <template v-slot:append>
-              <v-btn icon="mdi-close" @click="dialog = false"></v-btn>
+              <v-btn icon="mdi-close" @click="dialogReceive = false"></v-btn>
             </template>
           </v-toolbar>  
-        <v-tabs
-          v-model="tab" 
-          class="ma-4"
-        >
-          <v-tab value="one">Address</v-tab>
-          <v-tab value="two">Mobile Tx</v-tab> 
-        </v-tabs>
 
-        <v-card-text>
+
+        <v-card-text align="center">
           <v-window v-model="tab">
-            <v-window-item value="one">
-              One
+            <v-window-item value="one"> 
+              <QRCodeVue3                
+                :width="256"
+                :height="256"
+                :value="store.addrWallet"
+                :qrOptions="{ typeNumber: 0, mode: 'Byte', errorCorrectionLevel: 'H' }" 
+                :dotsOptions="{
+                  type: 'dots',
+                  color: '#3CC194',
+                  gradient: {
+                    type: 'linear',
+                    rotation: 0,
+                    colorStops: [
+                      { offset: 0, color: '#3CC194' },
+                      { offset: 1, color: '#3CC194' },
+                    ],
+                  },
+                }"
+                :backgroundOptions="{ color: '#ffffff' }"
+                :cornersSquareOptions="{ type: 'dot', color: '#000000' }"
+                :cornersDotOptions="{ type: undefined, color: '#000000' }"    
+              />
+              <v-chip
+                class="mb-4 mt-4 ml-3"
+                color="#00b786"
+                variant="outlined"
+                label 
+                @click="copyAddr(store.addrWallet)"
+              >
+                {{ store.addrWallet }}
+              </v-chip>             
             </v-window-item>
 
             <v-window-item value="two">
-              Two
-            </v-window-item>
-
-            <v-window-item value="three">
-              Three
-            </v-window-item>
+              Soon!
+            </v-window-item> 
           </v-window>
         </v-card-text>
       </v-card>
     </v-dialog>
+
+
+
+<!--    <QRCodeVue3
+          :width="200"
+          :height="200"
+          value="https://scholtz.sk"
+          :qrOptions="{ typeNumber: 0, mode: 'Byte', errorCorrectionLevel: 'H' }" 
+          :dotsOptions="{
+            type: 'dots',
+            color: '#26249a',
+            gradient: {
+              type: 'linear',
+              rotation: 0,
+              colorStops: [
+                { offset: 0, color: '#26249a' },
+                { offset: 1, color: '#26249a' },
+              ],
+            },
+          }"
+          :backgroundOptions="{ color: '#ffffff' }"
+          :cornersSquareOptions="{ type: 'dot', color: '#000000' }"
+          :cornersDotOptions="{ type: undefined, color: '#000000' }"
+          fileExt="png"
+          :download="true"
+          myclass="my-qur"
+          imgclass="img-qr"
+          downloadButton="my-button"
+          :downloadOptions="{ name: 'vqr', extension: 'png' }"
+          
+        /> -->
   </div>
 </template>
 
 <script>
 import { useAppStore } from '@/stores/data'
-import axios from "axios";
-import dayjs from "dayjs";
-import { reverse, sortBy, orderBy, uniqWith, groupBy } from "lodash";
+import axios from "axios"
+import dayjs from "dayjs"
+import QRCodeVue3 from "qrcode-vue3"
+import useClipboard from '~/composables/useClipboard'
+import { reverse, sortBy, orderBy, uniqWith, groupBy } from "lodash"
+
+
 import { setMsg } from "~/libs/msgType";
 import cosmosConfig from "~/cosmos.config";
 
@@ -444,6 +505,9 @@ const categories = [
 
 export default {
   layout: "blog",
+  components: {
+    QRCodeVue3
+  },
   data: () => ({
     cosmosConfig: cosmosConfig,
     rpcAllTxs: [],
@@ -598,7 +662,8 @@ export default {
       }).format(new Date(dateStr))
     },  
     async copyAddr(text) {
-      await this.$copyText(text);
+      const { toClipboard } = useClipboard()
+      await toClipboard(text)
       this.isCopied = true;
       setTimeout(this.hideCopy, 4000);
     },  

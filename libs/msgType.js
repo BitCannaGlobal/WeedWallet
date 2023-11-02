@@ -70,7 +70,7 @@ export function setMsg(msg, addrGet, timestamp, allVal, txHash) {
       break;
     case "/cosmos.gov.v1beta1.MsgSubmitProposal":
       type = msg["@type"];
-      typeReadable = "Submit proposal";
+      typeReadable = "Submit proposal v1beta1";
       color = "#8555de";
       icon = "Unknown.svg";
       finalHash = txHash;
@@ -239,8 +239,13 @@ export function setMsg(msg, addrGet, timestamp, allVal, txHash) {
       icon = "Unknown.svg";
       finalHash = txHash;
       break;        
-       
-
+    case "/cosmos.gov.v1.MsgSubmitProposal":
+      typeReadable = "Submit Proposal v1";
+      color = "#00b786";
+      icon = "Unknown.svg";
+      finalHash = txHash;
+      break;        
+      
     default:
       console.log("Sorry, dont know " + msg["@type"] + ".");
   }

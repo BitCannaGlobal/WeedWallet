@@ -17,10 +17,10 @@
         :chain-id-props="
           cosmosConfig[store.chainSelected].coinLookup.addressPrefix
         "
-        :amount-available="balances / 1000000"
-        :coin-icon="cosmosConfig[store.chainSelected].coinLookup.icon"
-        type="simpleSend"
+        :amount-available="store.spendableBalances"
+        :coin-icon="cosmosConfig[store.chainSelected].coinLookup.icon" 
       />
+ 
       <v-btn
         large                          
         class="mt-2"
@@ -145,7 +145,7 @@
                     v-if="item.final.msgData.amount"
                     class="mr-4"
                   >
-                    {{ item.final.msgData.amount }} {{ cosmosConfig[0].coinLookup.viewDenom }}
+                    {{ item.final.msgData.amount }} {{ cosmosConfig[store.chainSelected].coinLookup.viewDenom }}
                   </div>
                 </v-col>                       
               </v-row>
@@ -180,14 +180,14 @@
                         <td>{{ item.final.msgData.to }}</td>
                         <td class="green--text">
                           {{ item.final.msgData.amount }}
-                          {{ cosmosConfig[0].coinLookup.viewDenom }}
+                          {{ cosmosConfig[store.chainSelected].coinLookup.viewDenom }}
                         </td>
                         <td>
                           <v-btn
                             class=" mr-2"
                             elevation="2"
                             color="#333333"
-                            :href="'https://explorer.bitcanna.io/transactions/' + item.final.finalHash"
+                            :href="cosmosConfig[store.chainSelected].explorerUrl + item.final.finalHash"
                             target="_blank"
                             small
                           >
@@ -237,14 +237,14 @@
                         </td>
                         <td class="green--text">
                           {{ item.final.msgData.amount }}
-                          {{ cosmosConfig[0].coinLookup.viewDenom }}
+                          {{ cosmosConfig[store.chainSelected].coinLookup.viewDenom }}
                         </td>
                         <td>
                           <v-btn
                             class=" mr-2"
                             elevation="2"
                             color="#333333"
-                            :href="'https://explorer.bitcanna.io/transactions/' + item.final.finalHash"
+                            :href="cosmosConfig[store.chainSelected].explorerUrl + item.final.finalHash"
                             target="_blank"
                             small
                           >
@@ -293,7 +293,7 @@
                             class=" mr-2"
                             elevation="2"
                             color="#333333"
-                            :href="'https://explorer.bitcanna.io/transactions/' + item.final.finalHash"
+                            :href="cosmosConfig[store.chainSelected].explorerUrl + item.final.finalHash"
                             target="_blank"
                             small
                           >
@@ -385,7 +385,7 @@
                             class=" mr-2"
                             elevation="2"
                             color="#333333"
-                            :href="'https://explorer.bitcanna.io/transactions/' + item.final.finalHash"
+                            :href="cosmosConfig[store.chainSelected].explorerUrl + item.final.finalHash"
                             target="_blank"
                             small
                           >
@@ -432,7 +432,7 @@
                             class=" mr-2"
                             elevation="2"
                             color="#333333"
-                            :href="'https://explorer.bitcanna.io/transactions/' + item.final.finalHash"
+                            :href="cosmosConfig[store.chainSelected].explorerUrl + item.final.finalHash"
                             target="_blank"
                             small
                           >
@@ -472,14 +472,14 @@
                         </td>
                         <td>
                           {{ item.final.msgData.amount }}
-                          {{ cosmosConfig[0].coinLookup.viewDenom }}
+                          {{ cosmosConfig[store.chainSelected].coinLookup.viewDenom }}
                         </td>
                         <td>
                           <v-btn
                             class=" mr-2"
                             elevation="2"
                             color="#333333"
-                            :href="'https://explorer.bitcanna.io/transactions/' + item.final.finalHash"
+                            :href="cosmosConfig[store.chainSelected].explorerUrl + item.final.finalHash"
                             target="_blank"
                             small
                           >
@@ -522,14 +522,14 @@
                         </td>
                         <td>
                           {{ item.final.msgData.amount }}
-                          {{ cosmosConfig[0].coinLookup.viewDenom }}
+                          {{ cosmosConfig[store.chainSelected].coinLookup.viewDenom }}
                         </td>
                         <td>
                           <v-btn
                             class=" mr-2"
                             elevation="2"
                             color="#333333"
-                            :href="'https://explorer.bitcanna.io/transactions/' + item.final.finalHash"
+                            :href="cosmosConfig[store.chainSelected].explorerUrl + item.final.finalHash"
                             target="_blank"
                             small
                           >
@@ -569,7 +569,7 @@
                             class=" mr-2"
                             elevation="2"
                             color="#333333"
-                            :href="'https://explorer.bitcanna.io/transactions/' + item.final.finalHash"
+                            :href="cosmosConfig[store.chainSelected].explorerUrl + item.final.finalHash"
                             target="_blank"
                             small
                           >
@@ -620,15 +620,15 @@
                           {{ item.final.msgData.to }}
                         </td>
                         <td>
-                          {{ item.messageInfo.msgData.amount }}
-                          {{ cosmosConfig[0].coinLookup.viewDenom }}
+                          {{ item.messageInfo?.msgData.amount }}
+                          {{ cosmosConfig[store.chainSelected].coinLookup.viewDenom }}
                         </td>
                         <td>
                           <v-btn
                             class=" mr-2"
                             elevation="2"
                             color="#333333"
-                            :href="'https://explorer.bitcanna.io/transactions/' + item.final.finalHash"
+                            :href="cosmosConfig[store.chainSelected].explorerUrl + item.final.finalHash"
                             target="_blank"
                             small
                           >

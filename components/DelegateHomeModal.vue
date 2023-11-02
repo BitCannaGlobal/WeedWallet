@@ -1,9 +1,9 @@
 <template>
   <div>
-        <v-btn
+      <v-btn
         size="large"
         min-width="200"
-        class="mt-2 white--text"
+        class="mt-8 white--text"
         color="#0FB786"
         @click="dialog = true"
       >

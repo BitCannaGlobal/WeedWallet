@@ -7,6 +7,7 @@ export default defineNuxtConfig({
   },
   modules: [
     '@pinia/nuxt',
+    //'@nuxtjs/markdownit'
   ],
   plugins: [
     //'~/plugins/sequentialEntrance.js', // only in client side
@@ -23,4 +24,5 @@ export default defineNuxtConfig({
       'process.env.DEBUG': false,
     },
   },
+
 })
