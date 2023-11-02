@@ -176,6 +176,9 @@ export default {
       store
     }
   },
+  async mounted() {    
+    
+  },
   methods: {
     setChainId(id) {
       this.store.setChainId(id)
@@ -196,7 +199,9 @@ export default {
           break;
       }
       this.$router.push({ path: "/" });
-      await this.store.initRpc()
+      
+      await this.store.refresh()
+      /* await this.store.initRpc()
       await this.store.getSdkVersion()
       await this.store.getPriceNow()
       await this.store.getApr()
@@ -207,7 +212,7 @@ export default {
       await this.store.getWalletAmount()
       await this.store.getGovModule()
       await this.store.getDelegations()
-      await this.store.getAddressBook()
+      await this.store.getAddressBook() */
 
 
     },

@@ -66,9 +66,9 @@
         > 
           <v-row>
             <v-col cols="12">
-              <span class="text-left">Available: {{ amount }} BCNA</span>
+              <span class="text-left carmenBold">Available: {{ amount }} BCNA</span>
               <br><br> 
-              <h3 class="mt-1 ml-1 ">
+              <h3 class="mt-1 ml-1 carmenBold">
                 Amount to delegate*
               </h3>
               <v-text-field 
@@ -90,7 +90,7 @@
                 </template>            
               </v-text-field>
  
-              <h3 class="mt-1 ml-1 mb-1">
+              <h3 class="mt-1 ml-1 mb-1 carmenBold">
                 Delegate to*
               </h3> 
               <v-select
@@ -117,7 +117,7 @@
                   <v-divider class="mt-2" />
                 </template> 
               </v-select>
-              <h3 class="mt-1 ml-1 mb-1">
+              <h3 class="mt-1 ml-1 mb-1 carmenBold">
                 Memo
               </h3>
               <v-text-field

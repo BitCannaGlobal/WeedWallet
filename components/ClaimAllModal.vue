@@ -64,7 +64,7 @@
           v-model="dislableSend"
           lazy-validation
         >
-          <v-table class="accent">
+          <v-table class="accent carmenBold">
             <thead>
               <tr>
                 <th class="text-left">

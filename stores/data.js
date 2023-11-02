@@ -49,7 +49,10 @@ export const useAppStore = defineStore('app', {
   }),
   actions: {
     async refresh() {
+      await this.initRpc()
+      await this.getSdkVersion()
       await this.getPriceNow()
+      await this.getApr()
       await this.getBankModule()
       await this.getStakingModule()
       await this.getDistribModule()
@@ -57,6 +60,7 @@ export const useAppStore = defineStore('app', {
       await this.getWalletAmount()
       await this.getGovModule()
       await this.getDelegations()
+      await this.getAddressBook()
     },
     setChainId(chainId) {
       this.chainSelected = chainId
@@ -538,6 +542,8 @@ export const useAppStore = defineStore('app', {
         /* commit('setAddrWallet', accounts[0].address)
         commit('setNameWallet', getKey.name)
         dispatch('getAccountData') */
+
+        this.setLocalLogin(chainId, this.nameWallet, this.addrWallet)
       }
     },
     async cosmoStationConnect() { 
@@ -579,7 +585,32 @@ export const useAppStore = defineStore('app', {
         this.loggedType = 'leap'
       } 
     //console.log('cosmoStation', test)
-  },
+    },
+    async setLocalLogin(chainId, name, address) {
+      setData(
+        "account",
+        {
+          id: chainId,
+          walletName: name,
+          data: address
+        },
+        1000,
+        "d"
+      );
+    },
+    async checkLogin() { 
+      let getSession = getData('account') 
+      if (getSession) { 
+        console.log(getSession)
+        this.addrWallet = getSession.data
+        this.nameWallet = getSession.walletName
+        this.logged = true
+        //commit("setAccounts", getSession);
+        //commit("setLogged", "true");
+      } else {
+        console.log("No session!");
+      }
+    },
   },
 
 })

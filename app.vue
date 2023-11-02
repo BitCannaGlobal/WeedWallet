@@ -32,11 +32,11 @@
           <v-list-item 
             v-for="[icon, text, url] in links" 
             :to="url"
-            :append-icon="icon" 
-            :title="text" 
+            :append-icon="icon"  
             :value="text" 
-            class="ma-2 tile white--text"
+            class="ma-2 tile" 
           >
+          <v-list-item-title><span class="carmenBold"><h3>{{ text }}</h3></span></v-list-item-title>
           </v-list-item>
         </v-list>
       <!-- <v-list>
@@ -133,8 +133,8 @@
     </v-app-bar>
 
     <v-main>
-      <NuxtLayout>
-        <NuxtPage />
+      <NuxtLayout>{{ currentRoute.fullPath }}
+        <NuxtPage v-if="store.logged" />
       </NuxtLayout>
     </v-main>
   </v-app>
@@ -173,17 +173,23 @@ export default {
   setup() {
     const store = useAppStore()
     const theme = useTheme()
+    const {currentRoute} = useRouter()
 
     return {
       store,
+      currentRoute,
       toggleTheme: () => theme.global.name.value = theme.global.current.value.dark ? 'light' : 'dark'
     }
   },
+
+  
   async beforeCreate() {
+     
     // await this.$store.dispatch("keplr/checkLogin");
     // await this.$store.dispatch("data/getAllValidators");
-    if (!this.store.logged) {
-      this.$router.push({ path: "/login" });
+    await this.store.checkLogin()
+    if (this.store.logged) {
+      await this.store.refresh()
     }
   },
   methods: {
@@ -215,41 +221,42 @@ export default {
 
 @font-face {
     font-family: CarmenBold;
-    src: url("fonts/Carmen Sans Bold.otf") format("opentype");
+    src: url("./fonts/Carmen Sans Bold.otf") format("opentype");
 }
 @font-face {
     font-family: CarmenExtraBold;
-    src: url("fonts/Carmen Sans ExtraBold.otf") format("opentype");
+    src: url("./fonts/Carmen Sans ExtraBold.otf") format("opentype");
 }
 @font-face {
     font-family: CarmenHeavy;
-    src: url("fonts/Carmen Sans Heavy.otf") format("opentype");
+    src: url("./fonts/Carmen Sans Heavy.otf") format("opentype");
 }
 @font-face {
     font-family: CarmenLight;
-    src: url("fonts/Carmen Sans Light.otf") format("opentype");
+    src: url("./fonts/Carmen Sans Light.otf") format("opentype");
 }
 @font-face {
     font-family: CarmenMedium;
-    src: url("fonts/Carmen Sans Medium.otf") format("opentype");
+    src: url("./fonts/Carmen Sans Medium.otf") format("opentype");
 }
 @font-face {
     font-family: CarmenRegular;
-    src: url("fonts/Carmen Sans Regular.otf") format("opentype");
+    src: url("./fonts/Carmen Sans Regular.otf") format("opentype");
 }
 @font-face {
     font-family: CarmenSemiBold;
-    src: url("fonts/Carmen Sans SemiBold.otf") format("opentype");
+    src: url("./fonts/Carmen Sans SemiBold.otf") format("opentype");
 }
 @font-face {
     font-family: CarmenThin;
-    src: url("fonts/Carmen Sans Thin.otf") format("opentype");
+    src: url("./fonts/Carmen Sans Thin.otf") format("opentype");
 }
 @font-face {
     font-family: CarmenUltraLight;
-    src: url("fonts/Carmen Sans UltraLight.otf") format("opentype");
+    src: url("./fonts/Carmen Sans UltraLight.otf") format("opentype");
 }
 .body,
+.v-navigation-drawer,
 .v-text-field,
 .v-application{
     font-family: 'CarmenMedium';

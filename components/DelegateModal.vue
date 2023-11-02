@@ -77,14 +77,18 @@
                     Max
                   </v-chip>                  
                 </v-col> -->
-              <span class="text-left">Available: {{ balances }} BCNA</span>
- 
+              <span class="ml-1 carmenBold text-left">Available: {{ balances }} BCNA</span>
+              <br><br> 
+              <h3 class="mt-1 ml-1 mb-1 carmenBold">
+                Amount to delegate 
+              </h3>
               <v-text-field 
                     v-model="amountFinal" 
                     :rules="amountRules"
                     required
                     variant="solo"
                     bg-color="#0F0F0F"
+                    class="mt-4"
                     
                   >
                   <template #append-inner>
@@ -105,12 +109,15 @@
                   outlined
                   dense
                 ></v-text-field> -->
+              <h3 class="mt-1 ml-1 mb-1 carmenBold">
+                Memo
+              </h3>
               <v-text-field
-                v-model="memo"
-                label="Memo"
+                v-model="memo" 
                 required 
                 variant="solo"
                 bg-color="#0F0F0F"
+                class="mt-4"
               />
             </v-col>
           </v-row> 

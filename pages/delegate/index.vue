@@ -45,7 +45,7 @@
                         {{ Number(item.delegated / 1000000).toFixed(2) }}
                         <span
                           color="#00BB82"
-                          class="green--text"
+                          class="text-greenbcna"
                         >
                           +{{ Number(item.reward).toFixed(2) }}                             
                         </span>

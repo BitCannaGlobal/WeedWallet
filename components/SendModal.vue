@@ -74,9 +74,9 @@
           >
             <v-row>
               <v-col cols="12">
-                <span class="text-left">Available: {{ amountAvailable }} BCNA</span>
+                <span class="carmenBold text-left">Available: {{ amountAvailable }} BCNA</span>
                 <br><br>
-                <h3 class="mt-1 ml-1 mb-1">
+                <h3 class="carmenBold mt-1 ml-1 mb-1"> 
                   Address*
                 </h3>
                 <v-text-field
@@ -96,7 +96,7 @@
                     </v-chip>
                   </template>   -->
                 </v-text-field>
-                <h3 class="ml-1 mb-1">
+                <h3 class="carmenBold ml-1 mb-1">
                   Amount*
                 </h3>
                   <v-text-field 

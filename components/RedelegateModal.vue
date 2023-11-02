@@ -66,8 +66,8 @@
         >
           <v-row>
             <v-col cols="12">
-              <span class="ml-1 text-left">Available: {{ amountRe }} BCNA</span>
-              <h3 class="mt-6 ml-1 mb-3">
+              <span class="ml-1 text-left carmenBold">Available: {{ amountRe }} BCNA</span>
+              <h3 class="mt-6 ml-1 mb-3 carmenBold">
                 Amount Redelegate
               </h3>
               <v-text-field
@@ -88,7 +88,7 @@
                     </v-chip>
                   </template>
               </v-text-field>
-              <h3 class="mt-1 ml-1 mb-3">
+              <h3 class="mt-1 ml-1 mb-3 carmenBold">
                 Redelegate to
               </h3>
               <v-select
@@ -115,12 +115,11 @@
                   <v-divider class="mt-2" />
                 </template>                
               </v-select>
-              <h3 class="mt-1 ml-1 mb-3">
+              <h3 class="mt-1 ml-1 mb-3 carmenBold">
                 Memo
               </h3>
               <v-text-field
-                v-model="memo"
-                label="Memo"
+                v-model="memo" 
                 required
                 variant="solo"
                 bg-color="#0F0F0F"

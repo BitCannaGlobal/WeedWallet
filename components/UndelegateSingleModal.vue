@@ -65,10 +65,13 @@
         > 
           <v-row>
             <v-col cols="12">
-              <span class="text-left">Available: {{ amountUn }} BCNA</span>
+              <span class="ml-1 text-left carmenBold">Available: {{ amountUn }} BCNA</span>
+              <br /><br />
+              <h3 class="mt-1 ml-1 carmenBold">
+                Amount to delegate*
+              </h3>
               <v-text-field
                 v-model="amount"
-                label="Amount*"
                 :rules="!loadingInput ? amountRules : ''"
                 type="text"
                 class="mt-4"
@@ -85,12 +88,11 @@
                     </v-chip>
                   </template>
               </v-text-field>
-              <h3 class="mt-1 ml-1 mb-3">
+              <h3 class="mt-1 ml-1 mb-3 carmenBold">
                 Memo
               </h3>
               <v-text-field
-                v-model="memo"
-                label="Memo"
+                v-model="memo" 
                 required
                 variant="solo"
                 bg-color="#0F0F0F"
