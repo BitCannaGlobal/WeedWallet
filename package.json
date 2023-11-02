@@ -34,6 +34,7 @@
     "markdown-it-ins": "^3.0.1",
     "markdown-it-sub": "^1.0.0",
     "markdown-it-sup": "^1.0.0",
+    "moment": "^2.29.4",
     "nuxt-storage": "^1.2.2",
     "pinia": "^2.1.6",
     "qrcode-vue3": "^1.6.8",
