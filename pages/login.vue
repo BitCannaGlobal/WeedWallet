@@ -30,8 +30,9 @@
             selected-class="text-deep-purple-accent-4"
             mandatory
           >
-            <v-chip @click="setChainId(0)">Mainet (0.46)</v-chip>
-            <v-chip @click="setChainId(1)">DevNet (0.47)</v-chip>
+            <v-chip @click="setChainId(1)">Mainet (0.46)</v-chip>
+            <v-chip @click="setChainId(0)">DevNet (0.47)</v-chip>
+            <v-chip @click="setChainId(2)">Testnet</v-chip>
           </v-chip-group>
         </v-card>
         <v-card
@@ -220,11 +221,6 @@ export default {
 };
 </script>
 <style>
-.cosmofolio-logo {
-  height: 380px;
-  width: 380px;
-}
-
 .bcnaBackground {
   background: transparent url("/bg_imgs.png") 0 0 no-repeat padding-box;
   background-size: 800px;

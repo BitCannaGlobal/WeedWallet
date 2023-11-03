@@ -9,7 +9,7 @@
       v-if="loaded"
       class="p-2 border border-gray-500 mt-4"
     >
-      <line-chart
+      <Line
         :width="width"
         :height="height"
         :data="pricedata"
@@ -20,8 +20,14 @@
 
 <script>
 import axios from "axios";
+import { Bar, Line } from 'vue-chartjs'
+import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from 'chart.js'
+
+//ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
+
 
 export default {
+  components: { Line },
   props: {
     chartId: {
       type: String,
@@ -99,7 +105,7 @@ export default {
       copyItems.push(item[1]);
       copyDates.push(finalDate);
     }) */
-    full.data.forEach((item) => {
+    full.data.getMarket.forEach((item) => {
       const dateFormat = new Date(item.time * 1000);
       const finalDate =
         dateFormat.getDate() +

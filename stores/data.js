@@ -18,6 +18,7 @@ export const useAppStore = defineStore('app', {
   state: () => ({ 
     ibcVersion: '',
     sdkVersion: '',
+    blockNow: '',
     logged: false,
     loggedType: '',
     chainSelected: 0,
@@ -51,6 +52,7 @@ export const useAppStore = defineStore('app', {
     async refresh() {
       await this.initRpc()
       await this.getSdkVersion()
+      await this.getBlockNow()
       await this.getPriceNow()
       await this.getApr()
       await this.getBankModule()
@@ -75,6 +77,15 @@ export const useAppStore = defineStore('app', {
       this.rpcClient = rpcClient
       this.rpcBase = client 
     },  
+    async getBlockNow() {
+      console.log('getBlockNow')
+      const getBlock = await axios(
+        cosmosConfig[this.chainSelected].apiURL +
+          "/cosmos/base/tendermint/v1beta1/blocks/latest"
+      );
+      this.blockNow = getBlock.data.block.header.height
+
+    },
     async getSdkVersion() {
       const getSdk = await axios(
         cosmosConfig[this.chainSelected].apiURL +

@@ -132,7 +132,7 @@
             >
               <v-card
                 color="#1C1D20"
-                class="pa-2"
+                class="pa-2 carmenBold"
                 outlined
                 tile 
               >

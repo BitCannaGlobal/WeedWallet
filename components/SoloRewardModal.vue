@@ -292,6 +292,9 @@ export default {
           this.step3 = false;
           this.step4 = true;
           this.loading = false;
+          await this.store.getValidatorDetail(this.opAddress);
+          await this.store.getValidatorDelegator({ validatorAddr: this.opAddress, delegatorAddr: this.store.addrWallet });
+
           /* await this.$store.dispatch(
             "data/getDelegations",
             accounts[0].address

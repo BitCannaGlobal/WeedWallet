@@ -15,7 +15,7 @@
             <v-spacer />
           </v-row>
           <v-divider class="mb-6" />
-          <ChartsBar />
+          <ChartsLine />
           <br><br>
           <v-row>
             <v-col 

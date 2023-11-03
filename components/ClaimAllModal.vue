@@ -110,7 +110,7 @@
           >
             <v-card
               color="#1C1D20"
-              class="pa-2"
+              class="pa-2 carmenBold"
               outlined
               tile 
             >
@@ -147,10 +147,9 @@
           </h3>
           <v-text-field
             v-model="memo"              
-            background-color="#0F0F0F"
             required
-            flat 
-            solo
+            variant="solo"
+            bg-color="#0F0F0F"
           /> 
   
           <v-row>

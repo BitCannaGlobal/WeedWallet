@@ -19,11 +19,13 @@
     "vuetify": "^3.3.22"
   },
   "dependencies": {
+    "@amcharts/amcharts5": "^5.5.4",
     "@cosmjs/stargate": "^0.31.1",
     "@cosmjs/tendermint-rpc": "^0.31.1",
     "@cosmostation/cosmos-client": "^0.0.5",
     "@mdi/font": "^7.3.67",
     "@pinia/nuxt": "^0.4.11",
+    "chart.js": "^4.4.0",
     "dayjs": "^1.11.10",
     "markdown-it": "^13.0.2",
     "markdown-it-attrs": "^4.1.6",
@@ -39,6 +41,7 @@
     "pinia": "^2.1.6",
     "qrcode-vue3": "^1.6.8",
     "sass": "^1.69.2",
+    "vue-chartjs": "^5.2.0",
     "vue-clipboard3": "^2.0.0"
   }
 }

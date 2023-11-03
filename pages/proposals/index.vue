@@ -12,19 +12,21 @@
     <span v-if="proposalsActive.length === 0">No active proposals are on chain at this moment<br /><br /><br /></span>
       <v-row v-if="proposalsActive.length > 0"> 
         <v-col
-          v-for="item in proposals"
+          v-for="item in proposalsActive"
           :key="item.voting_end_time"
           cols="6"
           md="6"
                  
         >
-        <div v-if="item.status === 'PROPOSAL_STATUS_VOTING_PERIOD'">            
+
+        <div v-if="item.status === 'PROPOSAL_STATUS_VOTING_PERIOD'">   
+     
             <v-card
               dark 
               class="accent"
               @click="setSelectProposal(item)"
             >
-            <v-card-title>{{ item.content.title }}</v-card-title>
+            <v-card-title>{{ item.title }}</v-card-title>
             <v-divider  />
             <v-card-text>
               <v-row>
@@ -595,7 +597,7 @@
                     <v-list-item-title>
                       <h3>
                         {{ gasFee.gas }} / {{ gasFee.fee / 1000000 }}
-                        {{ cosmosConfig[chainId].coinLookup.viewDenom }}
+                        {{ cosmosConfig[store.chainSelected].coinLookup.viewDenom }}
                       </h3>
                     </v-list-item-title>
                   </v-list-item-content>
@@ -698,6 +700,8 @@
 import { useAppStore } from '@/stores/data'
 import axios from "axios";
 import moment from "moment";
+
+import { selectSigner, calculFee } from "~/libs/signer";
 
 import {
   defaultRegistryTypes,
@@ -822,15 +826,9 @@ export default {
     console.log(allProposals.data.proposals)
     allProposals.data.proposals.forEach((item) => {
       // Fix markdown syntax
-      console.log(item)
-      if(item.messages.length > 0) {
-        
+      if(item.messages.length > 0) {        
         item.title = item.messages[0].content.title
-        //item.summary = item.messages[0].content.description
-        // item.summary = item.messages[0].content.description.replace(/\\n/g, "\n")
-        item.summary = item.messages[0].content.description.replace(/\\n/g, "\n ")
-        item.summary = item.summary.replace('*', "-")
-        
+        item.summary = item.messages[0].content.description.replace(/\\n/g, "\n ")        
         item.summary = item.summary.replace(/\\u0026/g, "&")
         console.log(item.summary)
       } else {
@@ -855,108 +853,72 @@ export default {
   },
   methods: {
     async validate(proposal) {
-      if (this.$refs.form.validate() === true) {
+      //if (this.$refs.form.validate() === true) {
         this.step1 = false;
         this.step2 = true;
         // Fee claculation
-        const chainId = cosmosConfig[this.chainId].chainId;
-        await window.keplr.enable(chainId);
-        const offlineSigner = await window.getOfflineSignerAuto(chainId);
-        const client = await SigningStargateClient.connectWithSigner(
-          cosmosConfig[this.chainId].rpcURL,
-          offlineSigner,
-            {
-              gasPrice: GasPrice.fromString(
-                cosmosConfig[this.chainId].gasPrice +
-                  cosmosConfig[this.chainId].coinLookup.chainDenom
-              ),
-            }          
-        );
-
+        let signer = await selectSigner(this.store.chainSelected, this.store.loggedType)
         const foundMsgType = defaultRegistryTypes.find(
-          (element) => element[0] === "/cosmos.gov.v1beta1.MsgVote"
+          (element) => element[0] === "/cosmos.gov.v1.MsgVote"
         );
 
         
-     
+        console.log(proposal)
 
         const finalMsg = {
           typeUrl: foundMsgType[0],
           value: foundMsgType[1].fromPartial({           
-            proposalId: proposal.proposal_id,
-            voter: this.accounts[0].address,
+            proposalId: proposal.id,
+            voter: signer.accounts[0].address,
             option: 1,
+            metadata: "",
           }),
         };
         
 
-        const gasEstimation = await client.simulate(
-          this.accounts[0].address,
+        const gasEstimation = await signer.client.simulate(
+          signer.accounts[0].address,
           [finalMsg],
           this.memo
         ); 
         const usedFee = calculateFee(
-          Math.round(gasEstimation * cosmosConfig[this.chainId].feeMultiplier),
+          Math.round(gasEstimation * cosmosConfig[this.store.chainSelected].feeMultiplier),
           GasPrice.fromString(
-            cosmosConfig[this.chainId].gasPrice +
-              cosmosConfig[this.chainId].coinLookup.chainDenom
+            cosmosConfig[this.store.chainSelected].gasPrice +
+              cosmosConfig[this.store.chainSelected].coinLookup.chainDenom
           )
         );
         this.gasFee = { fee: usedFee.amount[0].amount, gas: usedFee.gas };
-        /* 
-        // Recalculate fee if amount is too high
-        if (
-          usedFee.amount[0].amount / 1000000 + Number(this.amount) >
-          this.amountAvailable
-        ) {
-          this.amount = (
-            Number(this.amount) -
-            usedFee.amount[0].amount / 1000000
-          ).toFixed(6);
-          this.feeDeducted = true;
-        } else {
-          this.feeDeducted = false;
-        }
-
-        this.gasFee = { fee: usedFee.amount[0].amount, gas: usedFee.gas }; */
-      }
+ 
+      //}
     },
     async validatestep2(proposal) { 
 
-      const chainId = cosmosConfig[this.chainId].chainId;
-      await window.keplr.enable(chainId);
-      const offlineSigner = await window.getOfflineSignerAuto(chainId);
-      const client = await SigningStargateClient.connectWithSigner(
-        cosmosConfig[this.chainId].rpcURL,
-        offlineSigner,
-        {
-          gasPrice: GasPrice.fromString(
-            0.25 + cosmosConfig[this.chainId].coinLookup.chainDenom
-          ),
-        }
-      );
+      let signer = await selectSigner(this.store.chainSelected, this.store.loggedType)
 
       const foundMsgType = defaultRegistryTypes.find(
-        (element) => element[0] === "/cosmos.gov.v1beta1.MsgVote"
+        (element) => element[0] === "/cosmos.gov.v1.MsgVote"
       );
 
       const finalMsg = {
         typeUrl: foundMsgType[0],
         value: foundMsgType[1].fromPartial({
-          proposalId: proposal.proposal_id,
-          voter: this.accounts[0].address,
+          proposalId: proposal.id,
+          voter: signer.accounts[0].address,
           option: this.finalVoteId,
+          metadata: "",
         }),
       };
       try {
         this.step2 = false;
         this.step3 = true;
-        const result = await client.signAndBroadcast(
-          this.accounts[0].address,
+        const result = await signer.client.signAndBroadcast(
+          signer.accounts[0].address,
           [finalMsg],
           "auto",
           this.memo
         );
+        console.log(result);
         this.step3 = false;
         this.step4 = true;
       } catch (error) {

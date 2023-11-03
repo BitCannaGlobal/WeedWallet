@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="ma-6">
     <v-row class="ma-2">
       <h1>
         Delegate 
@@ -11,14 +11,19 @@
         :get-all-delegation="delegations"
         :home-page="true"
       /> -->
+      <ClaimAllModal 
+        :amount-claim-all="0"
+        :get-all-delegation="delegations"
+        :home-page="false"
+      /> 
     </v-row>
     <v-col cols="12">
       <v-divider class="mb-6" />
  
         <v-row justify="space-around">
           <v-col>
-            <span class="text-h6">My validators</span>
-            <v-table class="ma-6 accent rounded">
+            <span class="text-h5">My validators</span>
+            <v-table theme="dark" class="table rounded">
               <template #default>                   
                 <tbody>
                   <tr
@@ -31,7 +36,7 @@
                         :to="'/validators/' + item.op_address"
                         class="linkFormat box"
                       >
-                        <v-avatar>
+                        <v-avatar size="48">
                           <v-img
                             :src="'https://raw.githubusercontent.com/cosmostation/chainlist/main/chain/bitcanna/moniker/'+item.op_address+'.png'" 
                             :alt="item.validatorName" 
@@ -41,11 +46,11 @@
                       </router-link>
                     </td>
                     <td style="text-align: right;">
-                      <span class="text-h6 mr-4">
+                      <span class="mr-4 carmenBold">
                         {{ Number(item.delegated / 1000000).toFixed(2) }}
                         <span
                           color="#00BB82"
-                          class="text-greenbcna"
+                          class="text-greenbcna carmenBold"
                         >
                           +{{ Number(item.reward).toFixed(2) }}                             
                         </span>
@@ -75,11 +80,8 @@
             </v-table>
           </v-col>
         </v-row> 
-      <sequential-entrance
-        v-if="dataLoaded"
-        from-bottom
-      >
-        <v-row
+
+<!--         <v-row
           justify="space-around"
           class="mt-4 data-row"
         >
@@ -91,8 +93,7 @@
                 </v-icon> Wallet
                 Undelegates
               </v-card-title>
-              <!-- {{ allUnbonding }} -->
-
+ 
  
 
 
@@ -120,8 +121,7 @@
                   mdi-wallet-outline
                 </v-icon> Wallet
                 Redelegates
-              </v-card-title>
-              <!-- {{ allRedelegate }} -->
+              </v-card-title> 
               <v-data-table
                 :headers="headersRedelegate"
                 :items="allRedelegate"
@@ -138,203 +138,30 @@
             </v-card>
           </v-col>
         </v-row>
-      </sequential-entrance>
-      <sequential-entrance from-bottom>
-        <v-row
-          class="ma-4"
+ -->
+        <v-row 
           justify="space-around"
         >
           <v-col>
+            <span class="text-h5">All validators</span>
             <v-card class="accent">
 
-              <v-toolbar
-            color="rgba(0, 0, 0, 0)"
-            theme="dark"
-          >
-            <v-toolbar-title class="text-h6">
-              <v-icon class="mr-2">
-                  mdi-wallet-outline
-                </v-icon> All validators
-            </v-toolbar-title>
 
-            <template v-slot:append>
-              <v-switch
-                  v-model="orderVal"
-                  color="#00b786"
-                  :label="`View ${getStatus.toString()}`"
-                />
-            </template>
-          </v-toolbar> 
- 
+              <template v-slot:append>
+                  <v-switch
+                      v-model="orderVal"
+                      color="#00b786"
+                      :label="`View ${getStatus.toString()}`"
+                    />
+                </template>
               <v-card-text>
                 <AllValidators :get-status="getStatus" />
               </v-card-text>
             </v-card>
           </v-col>
         </v-row>
-      </sequential-entrance>
+
     </v-col>
-<!--     <v-dialog
-      v-model="dialog"
-      max-width="600" 
-    >
-      <v-card color="#161819">
-        <v-card-title class="text-h5">
-          Delegate
-          <v-spacer />
-          <v-icon
-            class="mr-2"
-            @click="dialog = false"
-          >
-            mdi-close
-          </v-icon>
-        </v-card-title>
-
-        <v-card-text class="mt-6">
-          <v-row>
-            <v-col
-              md="6"
-              class="fill-height d-flex"
-            >
-              <v-avatar>
-                <v-img
-                  :src="'https://raw.githubusercontent.com/cosmostation/chainlist/main/chain/bitcanna/moniker/'+selectedValidator.op_address+'.png'" 
-                  :alt="selectedValidator.validatorName" 
-                /> 
-              </v-avatar>
-              <span class="text-h6 mt-2 ml-8">{{ selectedValidator.validatorName }}</span>
-            </v-col>
-            <v-col md="6">
-              <v-row>
-                <v-col
-                  md="6"
-                  class="ml-2"
-                >
-                  Your reward {{ validatorRewards }}
-                </v-col>
-                <v-col md="3">
-                  <SoloRewardModal 
-                    :validator-name="selectedValidator.validatorName"
-                    :op-address="selectedValidator.op_address"
-                    :total-reward="selectedValidator?.reward" 
-                  />
-                </v-col>
-              </v-row>
-            </v-col>
-          </v-row>  
-
-
-          <v-sheet
-            outlined
-            color="gray"
-            rounded
-            class="mt-4"
-          >
-            <v-card
-              color="#1C1D20"
-              class="pa-2"
-              outlined
-              tile 
-            >
-              <v-row>
-                <v-col md="6">
-                  <v-list-item two-line>
-                    <v-list-item-content>        
-                      <v-list-item-subtitle class="mb-2 subtitle-1">
-                        Commission rate
-                      </v-list-item-subtitle>
-                      <v-list-item-title class="text-h6 subtitle-2">
-                        {{ selectedValidator.commission }}%
-                      </v-list-item-title>
-                    </v-list-item-content>
-                  </v-list-item>
-                  <v-list-item two-line>
-                    <v-list-item-content>        
-                      <v-list-item-subtitle class="mb-2 subtitle-1">
-                        Voting Power
-                      </v-list-item-subtitle>
-                      <v-list-item-title class="text-h6">
-                        {{ selectedValidator.votingPower }}%
-                      </v-list-item-title>
-                    </v-list-item-content>
-                  </v-list-item>
-                </v-col>
-                <v-col md="6">
-                  <v-list-item two-line>
-                    <v-list-item-content>        
-                      <v-list-item-subtitle class="mb-2 subtitle-1">
-                        Total stake
-                      </v-list-item-subtitle>
-                      <v-list-item-title class="text-h6 subtitle-2">
-                        {{ validatorDelegations / 1000000 }}
-                        {{ cosmosConfig[0].coinLookup.viewDenom }}
-                      </v-list-item-title>
-                    </v-list-item-content>
-                  </v-list-item>
-                  <v-list-item two-line>
-                    <v-list-item-content>        
-                      <v-list-item-subtitle class="mb-2 subtitle-1">
-                        Rewards
-                      </v-list-item-subtitle>
-                      <v-list-item-title class="text-h6">
-                        {{ validatorRewards }}
-                        {{ cosmosConfig[0].coinLookup.viewDenom }}
-                      </v-list-item-title>
-                    </v-list-item-content>
-                  </v-list-item>
-                </v-col>
-              </v-row>
-            </v-card>
-          </v-sheet>  
-          <v-btn 
-            class="mt-2"
-            :to="`/validators/${selectedValidator.op_address}`"
-            block
-            x-large
-          >
-            View profile
-          </v-btn>
-          <DelegateModal
-            v-if="logged"
-            :chain-id-props="cosmosConfig[chainId].coinLookup.addressPrefix"
-            :address-to="selectedValidator.op_address"
-            :validator-name="validatorDetails.description?.moniker" 
-          /> 
-
-
-          <v-row>
-            <v-col
-              md="6"
-              class="fill-height d-flex"
-            >
-              <RedelegateModal
-                v-if="logged"
-                :chain-id-props="cosmosConfig[chainId].coinLookup.addressPrefix"
-                :address-from="selectedValidator.op_address"
-                :amount-re="validatorDelegations / 1000000"
-                :validator-name="validatorDetails.description?.moniker"
-                :coin-icon="cosmosConfig[chainId].coinLookup.icon"
-              /> 
-            </v-col>
-            <v-col md="6">
-              <UndelegateSingleModal
-                v-if="logged"
-                :chain-id-props="cosmosConfig[chainId].coinLookup.addressPrefix"
-                :address-from="selectedValidator.op_address"
-                :amount-un="validatorDelegations / 1000000"
-                :amount-total-un="myTotalUnDelegation"
-                :validator-name="validatorDetails.description?.moniker"
-                :coin-icon="cosmosConfig[chainId].coinLookup.icon"
-              />            
-            </v-col>
-          </v-row>  
-        </v-card-text>
-
-        <v-card-actions>
-          <v-spacer />
-        </v-card-actions>
-      </v-card>
-    </v-dialog>   -->  
   </div>
 </template>
 
@@ -521,7 +348,7 @@ export default {
   bottom: 0;
   right: 0;
 } */
-
+ 
 .icon {
   display: inline-flex;
   align-self: center;
@@ -565,6 +392,8 @@ export default {
 .rounded tr:last-child>:first-child { border-bottom-left-radius: var(--radius); }
 .rounded tr:last-child>:last-child { border-bottom-right-radius: var(--radius); }
 
- 
+.table {
+  background-color: #1C1D20;
+}
 
 </style> 

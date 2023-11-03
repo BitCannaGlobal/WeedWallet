@@ -12,8 +12,10 @@
     >
       <div class="row">
         <div class="col-sm">
+          
           <v-data-table
-            class="accent allValidators" 
+            theme="dark"
+            class="accent table allValidators" 
             :headers="headers"
             :items="finalValidators"
             :items-per-page="150"

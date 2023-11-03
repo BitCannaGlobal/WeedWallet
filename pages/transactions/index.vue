@@ -1,5 +1,5 @@
 <template>
-  <div class="ma-6">
+  <div v-if="dataLoaded" class="ma-6">
     <v-row class="ma-2">
       <h1>
         Transactions 
@@ -728,6 +728,7 @@ export default {
     firstLoad: true,
     dialog: false,
     isCopied: false,
+    dataLoaded: false,
   }),
   
   /* computed: {
@@ -781,6 +782,7 @@ export default {
       this.rpcAllTxs = this.transactionsReducer(finalTxs);
       this.loading = false;
       this.firstLoad = false; 
+      this.dataLoaded = true;
   },
   methods: {
     groupedEvents() { 

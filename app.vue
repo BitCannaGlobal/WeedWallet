@@ -39,6 +39,22 @@
           <v-list-item-title><span class="carmenBold"><h3>{{ text }}</h3></span></v-list-item-title>
           </v-list-item>
         </v-list>
+        
+      <v-footer
+        min-height="48"
+        class="justify-center footerNav"
+        color="#151618"
+        fixed
+      >
+        <v-icon
+          class="heart"
+          color="green darken-2"
+          small
+        >
+          mdi-circle
+        </v-icon>
+        <span class="ml-1">Block: {{ store.blockNow }}</span>
+      </v-footer> 
       <!-- <v-list>
           <v-list-item
             prepend-avatar="https://cdn.vuetifyjs.com/images/john.png"
@@ -194,6 +210,12 @@ export default {
     } else {
       this.$router.push({ path: "/login" });
     }
+
+    setInterval(async () => {
+      this.store.getBlockNow()
+    }, 5000);
+
+
   },
   methods: {
     logoutNow() {
@@ -291,5 +313,21 @@ caret-color: #f4f4f4 !important;
 }
 .custom-tooltip {
   opacity: 1 !important;
+}
+
+.footerNav {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: red;
+  color: white;
+  text-align: center;
+}
+.heart {
+  fill: red;
+  position: relative;
+  width: 40px;
+  animation: pulse 1s ease infinite;
 }
 </style>
