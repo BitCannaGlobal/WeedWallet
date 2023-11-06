@@ -233,17 +233,31 @@
     >
     
       <v-card color="#161819">
-        <v-card-title class="text-h5">
-          Proposal #{{selectedProposal.proposal_id}}
-          <v-spacer />
-          <v-icon
-            class="mr-2"
-            @click="dialog = false"
+ 
+        <v-toolbar
+            color="rgba(0, 0, 0, 0)"
+            theme="dark"
           >
-            mdi-close
-          </v-icon>
-        </v-card-title>
+            <template v-slot:prepend>
+              <v-avatar>
+                  <v-img
+                    max-width="32"
+                    max-height="32"
+                    :src="cosmosConfig[store.chainSelected].coinLookup.icon"
+                    alt="Bitcanna"
+                  ></v-img>
+                </v-avatar>
+            </template>
+        <v-toolbar-title class="text-h6">
+            <span 
+              class="text-h5"
+            >Proposal #{{selectedProposal.id}}</span> 
+            </v-toolbar-title>
 
+            <template v-slot:append>
+              <v-btn icon="mdi-close" @click="dialog = false"></v-btn>
+            </template>
+          </v-toolbar> 
         <v-card-text class="mt-6">
 
           <v-form
@@ -290,22 +304,22 @@
                           width="10"
                         ></v-sheet>
                       </v-col>
-                        <v-col md="10">Yes<br /> 
+                        <v-col md="10">Yes<br />  
                           <span
                             v-if="
-                              selectedProposal.final_tally_result?.yes > 0 ||
-                              selectedProposal.final_tally_result?.no > 0 ||
-                              selectedProposal.final_tally_result?.abstain > 0 ||
-                              selectedProposal.final_tally_result?.no_with_veto > 0
+                              selectedProposal.final_tally_result?.yes_count > 0 ||
+                              selectedProposal.final_tally_result?.no_count > 0 ||
+                              selectedProposal.final_tally_result?.abstain_count > 0 ||
+                              selectedProposal.final_tally_result?.no_with_veto_count > 0
                             "
                           >
                             {{
                               (
-                                (Number(selectedProposal.final_tally_result?.yes) * 100) /
-                                (Number(selectedProposal.final_tally_result?.yes) +
-                                  Number(selectedProposal.final_tally_result?.no) +
-                                  Number(selectedProposal.final_tally_result?.abstain) +
-                                  Number(selectedProposal.final_tally_result?.no_with_veto))
+                                (Number(selectedProposal.final_tally_result?.yes_count) * 100) /
+                                (Number(selectedProposal.final_tally_result?.yes_count) +
+                                  Number(selectedProposal.final_tally_result?.no_count) +
+                                  Number(selectedProposal.final_tally_result?.abstain_count) +
+                                  Number(selectedProposal.final_tally_result?.no_with_veto_count))
                               ).toFixed(2)
                             }}
                             % 
@@ -338,19 +352,19 @@
                         <v-col md="10">No with veto<br />
                           <span
                             v-if="
-                              selectedProposal.final_tally_result?.yes > 0 ||
-                              selectedProposal.final_tally_result?.no > 0 ||
-                              selectedProposal.final_tally_result?.abstain > 0 ||
-                              selectedProposal.final_tally_result?.no_with_veto > 0
+                              selectedProposal.final_tally_result?.yes_count > 0 ||
+                              selectedProposal.final_tally_result?.no_count > 0 ||
+                              selectedProposal.final_tally_result?.abstain_count > 0 ||
+                              selectedProposal.final_tally_result?.no_with_veto_count > 0
                             "
                           >
                           {{
                               (
-                                (Number(selectedProposal.final_tally_result?.no_with_veto) * 100) /
-                                (Number(selectedProposal.final_tally_result?.yes) +
-                                  Number(selectedProposal.final_tally_result?.no) +
-                                  Number(selectedProposal.final_tally_result?.abstain) +
-                                  Number(selectedProposal.final_tally_result?.no_with_veto))
+                                (Number(selectedProposal.final_tally_result?.no_with_veto_count) * 100) /
+                                (Number(selectedProposal.final_tally_result?.yes_count) +
+                                  Number(selectedProposal.final_tally_result?.no_count) +
+                                  Number(selectedProposal.final_tally_result?.abstain_count) +
+                                  Number(selectedProposal.final_tally_result?.no_with_veto_count))
                               ).toFixed(2)
                             }}
                             %  
@@ -391,19 +405,19 @@
                         <v-col md="10">No<br />
                           <span
                             v-if="
-                              selectedProposal.final_tally_result?.yes > 0 ||
-                              selectedProposal.final_tally_result?.no > 0 ||
-                              selectedProposal.final_tally_result?.abstain > 0 ||
-                              selectedProposal.final_tally_result?.no_with_veto > 0
+                              selectedProposal.final_tally_result?.yes_count > 0 ||
+                              selectedProposal.final_tally_result?.no_count > 0 ||
+                              selectedProposal.final_tally_result?.abstain_count > 0 ||
+                              selectedProposal.final_tally_result?.no_with_veto_count > 0
                             "
                           >
                           {{
                               (
-                                (Number(selectedProposal.final_tally_result?.no) * 100) /
-                                (Number(selectedProposal.final_tally_result?.yes) +
-                                  Number(selectedProposal.final_tally_result?.no) +
-                                  Number(selectedProposal.final_tally_result?.abstain) +
-                                  Number(selectedProposal.final_tally_result?.no_with_veto))
+                                (Number(selectedProposal.final_tally_result?.no_count) * 100) /
+                                (Number(selectedProposal.final_tally_result?.yes_count) +
+                                  Number(selectedProposal.final_tally_result?.no_count) +
+                                  Number(selectedProposal.final_tally_result?.abstain_count) +
+                                  Number(selectedProposal.final_tally_result?.no_with_veto_count))
                               ).toFixed(2)
                             }}
                             %  
@@ -439,18 +453,18 @@
                         <v-col md="10">Abstain<br />
                           <span
                             v-if="
-                              selectedProposal.final_tally_result?.yes > 0 ||
-                              selectedProposal.final_tally_result?.no > 0 ||
-                              selectedProposal.final_tally_result?.abstain > 0 ||
-                              selectedProposal.final_tally_result?.no_with_veto > 0
+                              selectedProposal.final_tally_result?.yes_count > 0 ||
+                              selectedProposal.final_tally_result?.no_count > 0 ||
+                              selectedProposal.final_tally_result?.abstain_count > 0 ||
+                              selectedProposal.final_tally_result?.no_with_veto_count > 0
                             "
                           >{{
                               (
-                                (Number(selectedProposal.final_tally_result?.abstain) * 100) /
-                                (Number(selectedProposal.final_tally_result?.yes) +
-                                  Number(selectedProposal.final_tally_result?.no) +
-                                  Number(selectedProposal.final_tally_result?.abstain) +
-                                  Number(selectedProposal.final_tally_result?.no_with_veto))
+                                (Number(selectedProposal.final_tally_result?.abstain_count) * 100) /
+                                (Number(selectedProposal.final_tally_result?.yes_count) +
+                                  Number(selectedProposal.final_tally_result?.no_count) +
+                                  Number(selectedProposal.final_tally_result?.abstain_count) +
+                                  Number(selectedProposal.final_tally_result?.no_with_veto_count))
                               ).toFixed(2)
                             }}
                             %   
@@ -562,10 +576,9 @@
             </h3>
             <v-text-field
               v-model="memo"              
-              background-color="#0F0F0F"
               required
-              flat 
-              solo
+              variant="solo"
+              bg-color="#0F0F0F"
             /> 
 
             <v-sheet                       
@@ -575,7 +588,7 @@
           > 
           <v-card
               color="#1C1D20"
-              class="pa-2"
+              class="pa-2 carmenBold"
               outlined
               tile 
             >

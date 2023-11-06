@@ -78,6 +78,8 @@ export function setMsg(msg, addrGet, timestamp, allVal, txHash) {
         proposal_id: msg.proposal_id 
       }
       break;
+     
+    case "/cosmos.gov.v1.MsgVote":
     case "/cosmos.gov.v1beta1.MsgVote":
       type = msg["@type"];
       typeReadable = "Vote";

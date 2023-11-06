@@ -1,5 +1,5 @@
 <template>
-  <div class="ma-6">
+  <div v-if="store.logged" class="ma-6">
     <v-row class="ma-2">
       <h1>
         Delegate 

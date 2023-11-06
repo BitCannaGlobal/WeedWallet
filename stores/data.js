@@ -78,7 +78,6 @@ export const useAppStore = defineStore('app', {
       this.rpcBase = client 
     },  
     async getBlockNow() {
-      console.log('getBlockNow')
       const getBlock = await axios(
         cosmosConfig[this.chainSelected].apiURL +
           "/cosmos/base/tendermint/v1beta1/blocks/latest"
