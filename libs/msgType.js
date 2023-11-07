@@ -70,7 +70,7 @@ export function setMsg(msg, addrGet, timestamp, allVal, txHash) {
       break;
     case "/cosmos.gov.v1beta1.MsgSubmitProposal":
       type = msg["@type"];
-      typeReadable = "Submit proposal";
+      typeReadable = "Submit proposal v1beta1";
       color = "#8555de";
       icon = "Unknown.svg";
       finalHash = txHash;
@@ -78,6 +78,8 @@ export function setMsg(msg, addrGet, timestamp, allVal, txHash) {
         proposal_id: msg.proposal_id 
       }
       break;
+     
+    case "/cosmos.gov.v1.MsgVote":
     case "/cosmos.gov.v1beta1.MsgVote":
       type = msg["@type"];
       typeReadable = "Vote";
@@ -114,8 +116,8 @@ export function setMsg(msg, addrGet, timestamp, allVal, txHash) {
       icon = "Unknown.svg";
       finalHash = txHash;
       msgData = {
-        from: foundVal.name,
-        to: foundVal2.name,
+        from: foundVal?.name,
+        to: foundVal2?.name,
         amount: msg.amount.amount / 1000000,
       };
       break;
@@ -239,8 +241,13 @@ export function setMsg(msg, addrGet, timestamp, allVal, txHash) {
       icon = "Unknown.svg";
       finalHash = txHash;
       break;        
-       
-
+    case "/cosmos.gov.v1.MsgSubmitProposal":
+      typeReadable = "Submit Proposal v1";
+      color = "#00b786";
+      icon = "Unknown.svg";
+      finalHash = txHash;
+      break;        
+      
     default:
       console.log("Sorry, dont know " + msg["@type"] + ".");
   }

@@ -1,5 +1,5 @@
 <template>
-  <v-item-group active-class="primary">
+  <v-item-group v-if="store.logged" active-class="primary">
     <v-container>
       <v-row
         justify="center"
@@ -15,7 +15,7 @@
             <v-spacer />
           </v-row>
           <v-divider class="mb-6" />
-          <ChartsBar />
+          <ChartsLine />
           <br><br>
           <v-row>
             <v-col 
@@ -174,7 +174,24 @@
     </v-container>
   </v-item-group>
 </template> 
+<script>
+import { useTheme } from 'vuetify'
+import QRCodeVue3 from "qrcode-vue3";
+import useClipboard from '~/composables/useClipboard'
+import { useAppStore } from '@/stores/data'
+import cosmosConfig from "~/cosmos.config";
 
+export default {
+  setup() {
+    const store = useAppStore()
+
+    return {
+      store
+    }
+  },
+
+}
+</script>
 <style>
  
 

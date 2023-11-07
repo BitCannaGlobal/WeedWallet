@@ -1,5 +1,5 @@
 <template>
-  <div class="">
+  <div v-if="store.logged" class="ma-4">
     <v-row>
       <v-col cols="12">
         <sequential-entrance>
@@ -40,7 +40,7 @@
                       <div v-if="collectionDataLoaded">
                         <h2>
                           {{
-                            collectionData.data?.collection.floorPrice / 1000000
+                            collectionData.finalData.data?.collection.floorPrice / 1000000
                           }}      
                           STARS
                         </h2>           
@@ -49,7 +49,7 @@
                         v-else
                         indeterminate
                         color="#00b786"
-                      />   
+                      /> 
                     </v-col>
                   </v-row>           
                 </v-card-text>
@@ -73,11 +73,11 @@
                     > 
                       <h4>
                         Best Offer
-                      </h4>
+                      </h4> 
                       <div v-if="collectionDataLoaded">
                         <h2>
                           {{
-                            collectionData.data?.collection.stats.bestOffer / 1000000
+                            collectionData.finalData.data?.collection.stats.bestOffer / 1000000
                           }}      
                           STARS   
                         </h2>           
@@ -113,14 +113,14 @@
                       </h4>
                       <div v-if="collectionDataLoaded">
                         <h2>
-                          {{ collectionData.data?.collection.numTokensAlive }} Buddhead   
+                          {{ collectionData.finalData.data?.collection.stats.numOwners }} Buddhead   
                         </h2>           
                       </div> 
                       <v-progress-circular
                         v-else
                         indeterminate
                         color="#00b786"
-                      />   
+                      />
                     </v-col>
                   </v-row>  
                 </v-card-text>
@@ -145,7 +145,7 @@
                       <h4>
                         Tokens For Sale
                       </h4>
-                      <div v-if="collectionDataLoaded">
+                      <!-- <div v-if="collectionDataLoaded">
                         <h2>
                           {{
                             collectionData.data?.collection.numTokensForSale
@@ -157,7 +157,7 @@
                         v-else
                         indeterminate
                         color="#00b786"
-                      />   
+                      />   --> 
                     </v-col>
                   </v-row>  
                 </v-card-text>
@@ -222,7 +222,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { useAppStore } from '@/stores/data'
 import axios from "axios";
 import bech32 from "bech32";
 import cosmosConfig from "~/cosmos.config";
@@ -241,21 +241,29 @@ export default {
     loading: true,
   }),
   computed: {
-    ...mapState("keplr", [`accounts`, "logged"]),
+    //...mapState("keplr", [`accounts`, "logged"]),
+  },
+  setup() {
+    const store = useAppStore()
+
+    return {
+      store
+    }
   },
   async beforeMount() {
     this.watchWindowSize();
     window.onresize = this.watchWindowSize;
-    if (this.accounts[0].address) {
-      const decode = bech32.decode(this.accounts[0].address);
-      const starsAddr = await bech32.encode("stars", decode.words);
-      const getMyNft = await axios.get(
+    if (this.store.logged) {
+      const decode = bech32.decode(this.store.addrWallet);
+      const starsAddr = bech32.encode("stars", decode.words);
+/*       const getMyNft = await axios.get(
         "https://nft-api.stargaze-apis.com/api/v1beta/profile/" +
           starsAddr +
           "/nfts"
-      );
+      ); */
+      const full = await axios("api/nfts/" + starsAddr);
       const myNft = this.myNft;
-      getMyNft.data.forEach(function (item) {
+      full.data.getMyNft.forEach(function (item) {
         if (
           item.collection.contractAddress ===
           "stars1w4dff5myjyzymk8tkpjrzj6gnv352hcdpt2dszweqnff927a9xmqc7e0gv"
@@ -275,28 +283,11 @@ export default {
         }
       });
     }
-    this.loading = false;
-
-    let finalData = [];
-    await axios
-      .post("https://graphql.stargaze-apis.com/", {
-        query:
-          "query ExampleQuery($address: String!) { collection(address: $address) { contractAddress stats { bestOffer numOwners } numTokensForSale numTokensAlive name floorPrice } }",
-        variables: {
-          address:
-            "stars1w4dff5myjyzymk8tkpjrzj6gnv352hcdpt2dszweqnff927a9xmqc7e0gv",
-        },
-      })
-
-      .then(async function (response) {
-        finalData = response.data;
-
-        //         response.data.data.tokens.tokens.forEach((item) => {
-        //           // console.log({ token: item.id.replace(collectionAddr + '/', ''), owner: item.owner })
-        //           finalData.push({ token: item.id.replace(collectionAddr + '/', ''), owner: item.owner })
-        //         });
-      });
-    this.collectionData = finalData;
+    this.loading = false; 
+    
+    let finalData = await axios("api/collectiondata");
+    console.log('finalData',finalData.data)
+    this.collectionData = finalData.data;
     this.collectionDataLoaded = true;
     
   },

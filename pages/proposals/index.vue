@@ -1,28 +1,32 @@
 <!-- eslint-disable -->
 <template>
-  <div>
+  <div class="ma-6">
       <h1>
         Proposals 
       </h1>
       <v-spacer /> 
       <v-divider class="mb-6" />
-    <h3 class="mb-8">Active proposals</h3> 
+      <!-- {{ setFinalPropos }}
+      {{ store.allProposals.proposals }}  --> 
+   <h3 class="mb-8">Active proposals</h3> 
     <span v-if="proposalsActive.length === 0">No active proposals are on chain at this moment<br /><br /><br /></span>
-      <v-row> 
+      <v-row v-if="proposalsActive.length > 0"> 
         <v-col
-          v-for="item in proposals"
+          v-for="item in proposalsActive"
           :key="item.voting_end_time"
           cols="6"
           md="6"
-          v-if="item.status === 'PROPOSAL_STATUS_VOTING_PERIOD'"          
+                 
         >
-        <v-item>            
+
+        <div v-if="item.status === 'PROPOSAL_STATUS_VOTING_PERIOD'">   
+     
             <v-card
               dark 
               class="accent"
               @click="setSelectProposal(item)"
             >
-            <v-card-title>{{ item.content.title }}</v-card-title>
+            <v-card-title>{{ item.title }}</v-card-title>
             <v-divider  />
             <v-card-text>
               <v-row>
@@ -59,7 +63,7 @@
             </v-chip>
           </td>
           <td v-if="item.status === 'PROPOSAL_STATUS_VOTING_PERIOD'">
-            <!--{{ item.status }}-->
+ 
             <v-chip
               class="ma-2"
               text-color="white"
@@ -73,7 +77,7 @@
             </v-chip>
           </td>
           <td v-if="item.status === 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
-            <!--{{ item.status }}-->
+ 
             <v-chip
               class="ma-2"
               text-color="white"
@@ -88,12 +92,7 @@
                 </v-col>
               </v-row> 
               <br>
-                <!-- <v-progress-linear
-                  background-color="success"
-                  color="error"
-                  value="45"
-                  height="10"
-                ></v-progress-linear> -->
+ 
                 <div v-if="
                           item.final_tally_result.yes > 0 ||
                           item.final_tally_result.no > 0 ||
@@ -122,35 +121,35 @@
 
             </v-card-text>
             </v-card>          
-          </v-item>        
+          </div>         
       </v-col> 
        
       </v-row> 
 
 
-      <h3 class="mt-4 mb-2">Past proposals</h3>
-    <sequential-entrance fromBottom>
-      
+        <h3 class="mt-4 mb-2">Past proposals</h3>
+ 
+
+
       <v-row class="mb-4">        
         <v-col
           v-for="item in proposals"
           :key="item.voting_end_time"
           cols="6"
           md="6"
-          v-if="item.status !== 'PROPOSAL_STATUS_VOTING_PERIOD'"
+          
           
         >
  
-        
+        <div v-if="item.status !== 'PROPOSAL_STATUS_VOTING_PERIOD'">
 
-          <v-item>
             
             <v-card
               dark 
               class="accent"
               @click="setSelectProposal(item)"
             >
-            <v-card-title>{{ item.content.title }}</v-card-title>
+            <v-card-title>{{ item.title }}</v-card-title>
             <v-divider  />
             <v-card-text>
               <v-row>
@@ -159,276 +158,106 @@
                   {{ formatDate(item.voting_end_time) }}
                 </v-col> 
                 <v-col cols="6" align="right"> 
-
-
- 
-
-
-           <td v-if="item.status === 'PROPOSAL_STATUS_PASSED'">
-            <v-chip
-              class="ma-2"
-              color="green"
-              text-color="white"
-              label
-            >
-              <v-icon class="mr-1">
-                mdi-checkbox-marked-circle
-              </v-icon>
-              Proposal Passed
-            </v-chip>
-          </td>
-          <td v-if="item.status === 'PROPOSAL_STATUS_REJECTED'">
-            <v-chip
-              class="ma-2"
-              color="red"
-              text-color="white"
-              label
-            >
-              <v-icon class="mr-1">
-                mdi-delete-forever
-              </v-icon>
-              Proposal Rejected
-            </v-chip>
-          </td>
-          <td v-if="item.status === 'PROPOSAL_STATUS_VOTING_PERIOD'">
-            <!--{{ item.status }}-->
-            <v-chip
-              class="ma-2"
-              text-color="white"
-              color="blue"
-              label
-            >
-              <v-icon class="mr-1">
-                mdi-alarm-check
-              </v-icon>
-              Voting Period
-            </v-chip>
-          </td>
-          <td v-if="item.status === 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
-            <!--{{ item.status }}-->
-            <v-chip
-              class="ma-2"
-              text-color="white"
-              label
-            >
-              <v-icon class="mr-1">
-                mdi-cash-fast
-              </v-icon>
-              Deposit Period
-            </v-chip>
-          </td>                 
+                  <td v-if="item.status === 'PROPOSAL_STATUS_PASSED'">
+                    <v-chip
+                      class="ma-2"
+                      color="green"
+                      text-color="white"
+                      label
+                    >
+                      <v-icon class="mr-1">
+                        mdi-checkbox-marked-circle
+                      </v-icon>
+                      Proposal Passed
+                    </v-chip>
+                  </td>
+                  <td v-if="item.status === 'PROPOSAL_STATUS_REJECTED'">
+                    <v-chip
+                      class="ma-2"
+                      color="red"
+                      text-color="white"
+                      label
+                    >
+                      <v-icon class="mr-1">
+                        mdi-delete-forever
+                      </v-icon>
+                      Proposal Rejected
+                    </v-chip>
+                  </td>
+                  <td v-if="item.status === 'PROPOSAL_STATUS_VOTING_PERIOD'">
+        
+                    <v-chip
+                      class="ma-2"
+                      text-color="white"
+                      color="blue"
+                      label
+                    >
+                      <v-icon class="mr-1">
+                        mdi-alarm-check
+                      </v-icon>
+                      Voting Period
+                    </v-chip>
+                  </td>
+                  <td v-if="item.status === 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
+        
+                    <v-chip
+                      class="ma-2"
+                      text-color="white"
+                      label
+                    >
+                      <v-icon class="mr-1">
+                        mdi-cash-fast
+                      </v-icon>
+                      Deposit Period
+                    </v-chip>
+                  </td>                 
                 </v-col>
               </v-row> 
               <br>
-                <!-- <v-progress-linear
-                  background-color="success"
-                  color="error"
-                  value="45"
-                  height="10"
-                ></v-progress-linear> -->
+ 
  
  
 
 
             </v-card-text>
             </v-card>          
-          </v-item>  
 
+          </div>
         </v-col>  
       </v-row> 
 
-    </sequential-entrance>
 
-
-<!--     <v-card class="accent">
-      <v-card-title>
-        All proposals
-        <v-spacer />
-        <v-text-field
-          v-model="search"
-          append-icon="mdi-magnify"
-          label="Search"
-          single-line
-          hide-details
-        />
-      </v-card-title>
-      <v-data-table
-        class="accent"
-        :headers="headers"
-        :items="proposals"
-        :search="search"
-      >
-        <template #item.content.title="{ item }">
-          <span v-if="item.content.title">
-            <NuxtLink :to="'proposals/' + item.proposal_id">
-              {{ item.content.title }}
-            </NuxtLink>
-          </span>
-          <span v-else> Bad title </span>
-        </template>
-        <template #item.status="{ item }">
-          <td v-if="item.status === 'PROPOSAL_STATUS_PASSED'">
-            <v-chip
-              class="ma-2"
-              color="green"
-              text-color="white"
-              label
-            >
-              <v-icon class="mr-1">
-                mdi-checkbox-marked-circle
-              </v-icon>
-              Proposal Passed
-            </v-chip>
-          </td>
-          <td v-if="item.status === 'PROPOSAL_STATUS_REJECTED'">
-            <v-chip
-              class="ma-2"
-              color="red"
-              text-color="white"
-              label
-            >
-              <v-icon class="mr-1">
-                mdi-delete-forever
-              </v-icon>
-              Proposal Rejected
-            </v-chip>
-          </td>
-          <td v-if="item.status === 'PROPOSAL_STATUS_VOTING_PERIOD'"> 
-            <v-chip
-              class="ma-2"
-              text-color="white"
-              color="blue"
-              label
-            >
-              <v-icon class="mr-1">
-                mdi-alarm-check
-              </v-icon>
-              Voting Period
-            </v-chip>
-          </td>
-          <td v-if="item.status === 'PROPOSAL_STATUS_DEPOSIT_PERIOD'"> 
-            <v-chip
-              class="ma-2"
-              text-color="white"
-              label
-            >
-              <v-icon class="mr-1">
-                mdi-cash-fast
-              </v-icon>
-              Deposit Period
-            </v-chip>
-          </td>
-        </template>
-
-        <template #item.submit_time="{ item }">
-          <v-tooltip top>
-            <template #activator="{ on, attrs }">
-              <span
-                class="mt-n1"
-                v-bind="attrs"
-                v-on="on"
-              >{{
-                item.submit_time | timeFromNow
-              }}</span>
-            </template>
-            <span>
-              {{ formatDate(item.submit_time) }}
-            </span>
-          </v-tooltip>
-        </template>
-        <template #item.voting_start_time="{ item }">
-          <td>
-            <v-tooltip top>
-              <template #activator="{ on, attrs }">
-                <span
-                  class="mt-n1"
-                  v-bind="attrs"
-                  v-on="on"
-                >{{
-                  item.submit_time | timeFromNow
-                }}</span>
-              </template>
-              <span>
-                {{ formatDate(item.submit_time) }}
-              </span>
-            </v-tooltip>
-          </td>
-        </template>
-        <template #item.voting_end_time="{ item }">
-          <td v-if="item.status !== 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
-            <v-tooltip top>
-              <template #activator="{ on, attrs }">
-                <span
-                  class="mt-n1"
-                  v-bind="attrs"
-                  v-on="on"
-                >{{
-                  item.voting_end_time | timeFromNow
-                }}</span>
-              </template>
-              <span>
-                {{ formatDate(item.voting_end_time) }}
-              </span>
-            </v-tooltip>
-          </td>
-          <td v-else>
-            <v-tooltip top>
-              <template #activator="{ on, attrs }">
-                <span
-                  class="mt-n1"
-                  v-bind="attrs"
-                  v-on="on"
-                >{{
-                  {
-                    submit: item.submit_time,
-                    secondes: paramsDeposit.max_deposit_seconde,
-                  }
-                    | formatDateDeposite
-                    | timeFromNow
-                }}
-                </span>
-              </template>
-              <span>
-                {{
-                  {
-                    submit: item.submit_time,
-                    secondes: paramsDeposit.max_deposit_seconde,
-                  }
-                    | formatDateDeposite
-                    | formatDate
-                }}
-              </span>
-            </v-tooltip>
-          </td>
-        </template>
-        <template #item.myvote="{ item }">
-          <v-btn
-            class="ma-2"
-            disabled
-          >
-            View my vote (soon)
-          </v-btn>
-        </template>
-      </v-data-table>
-    </v-card> -->
-
-<v-dialog
+  <v-dialog
       v-model="dialog"
       max-width="600" 
     >
     
       <v-card color="#161819">
-        <v-card-title class="text-h5">
-          Proposal #{{selectedProposal.proposal_id}}
-          <v-spacer />
-          <v-icon
-            class="mr-2"
-            @click="dialog = false"
+ 
+        <v-toolbar
+            color="rgba(0, 0, 0, 0)"
+            theme="dark"
           >
-            mdi-close
-          </v-icon>
-        </v-card-title>
+            <template v-slot:prepend>
+              <v-avatar>
+                  <v-img
+                    max-width="32"
+                    max-height="32"
+                    :src="cosmosConfig[store.chainSelected].coinLookup.icon"
+                    alt="Bitcanna"
+                  ></v-img>
+                </v-avatar>
+            </template>
+        <v-toolbar-title class="text-h6">
+            <span 
+              class="text-h5"
+            >Proposal #{{selectedProposal.id}}</span> 
+            </v-toolbar-title>
 
+            <template v-slot:append>
+              <v-btn icon="mdi-close" @click="dialog = false"></v-btn>
+            </template>
+          </v-toolbar> 
         <v-card-text class="mt-6">
 
           <v-form
@@ -475,22 +304,22 @@
                           width="10"
                         ></v-sheet>
                       </v-col>
-                        <v-col md="10">Yes<br /> 
+                        <v-col md="10">Yes<br />  
                           <span
                             v-if="
-                              selectedProposal.final_tally_result?.yes > 0 ||
-                              selectedProposal.final_tally_result?.no > 0 ||
-                              selectedProposal.final_tally_result?.abstain > 0 ||
-                              selectedProposal.final_tally_result?.no_with_veto > 0
+                              selectedProposal.final_tally_result?.yes_count > 0 ||
+                              selectedProposal.final_tally_result?.no_count > 0 ||
+                              selectedProposal.final_tally_result?.abstain_count > 0 ||
+                              selectedProposal.final_tally_result?.no_with_veto_count > 0
                             "
                           >
                             {{
                               (
-                                (Number(selectedProposal.final_tally_result?.yes) * 100) /
-                                (Number(selectedProposal.final_tally_result?.yes) +
-                                  Number(selectedProposal.final_tally_result?.no) +
-                                  Number(selectedProposal.final_tally_result?.abstain) +
-                                  Number(selectedProposal.final_tally_result?.no_with_veto))
+                                (Number(selectedProposal.final_tally_result?.yes_count) * 100) /
+                                (Number(selectedProposal.final_tally_result?.yes_count) +
+                                  Number(selectedProposal.final_tally_result?.no_count) +
+                                  Number(selectedProposal.final_tally_result?.abstain_count) +
+                                  Number(selectedProposal.final_tally_result?.no_with_veto_count))
                               ).toFixed(2)
                             }}
                             % 
@@ -523,19 +352,19 @@
                         <v-col md="10">No with veto<br />
                           <span
                             v-if="
-                              selectedProposal.final_tally_result?.yes > 0 ||
-                              selectedProposal.final_tally_result?.no > 0 ||
-                              selectedProposal.final_tally_result?.abstain > 0 ||
-                              selectedProposal.final_tally_result?.no_with_veto > 0
+                              selectedProposal.final_tally_result?.yes_count > 0 ||
+                              selectedProposal.final_tally_result?.no_count > 0 ||
+                              selectedProposal.final_tally_result?.abstain_count > 0 ||
+                              selectedProposal.final_tally_result?.no_with_veto_count > 0
                             "
                           >
                           {{
                               (
-                                (Number(selectedProposal.final_tally_result?.no_with_veto) * 100) /
-                                (Number(selectedProposal.final_tally_result?.yes) +
-                                  Number(selectedProposal.final_tally_result?.no) +
-                                  Number(selectedProposal.final_tally_result?.abstain) +
-                                  Number(selectedProposal.final_tally_result?.no_with_veto))
+                                (Number(selectedProposal.final_tally_result?.no_with_veto_count) * 100) /
+                                (Number(selectedProposal.final_tally_result?.yes_count) +
+                                  Number(selectedProposal.final_tally_result?.no_count) +
+                                  Number(selectedProposal.final_tally_result?.abstain_count) +
+                                  Number(selectedProposal.final_tally_result?.no_with_veto_count))
                               ).toFixed(2)
                             }}
                             %  
@@ -576,19 +405,19 @@
                         <v-col md="10">No<br />
                           <span
                             v-if="
-                              selectedProposal.final_tally_result?.yes > 0 ||
-                              selectedProposal.final_tally_result?.no > 0 ||
-                              selectedProposal.final_tally_result?.abstain > 0 ||
-                              selectedProposal.final_tally_result?.no_with_veto > 0
+                              selectedProposal.final_tally_result?.yes_count > 0 ||
+                              selectedProposal.final_tally_result?.no_count > 0 ||
+                              selectedProposal.final_tally_result?.abstain_count > 0 ||
+                              selectedProposal.final_tally_result?.no_with_veto_count > 0
                             "
                           >
                           {{
                               (
-                                (Number(selectedProposal.final_tally_result?.no) * 100) /
-                                (Number(selectedProposal.final_tally_result?.yes) +
-                                  Number(selectedProposal.final_tally_result?.no) +
-                                  Number(selectedProposal.final_tally_result?.abstain) +
-                                  Number(selectedProposal.final_tally_result?.no_with_veto))
+                                (Number(selectedProposal.final_tally_result?.no_count) * 100) /
+                                (Number(selectedProposal.final_tally_result?.yes_count) +
+                                  Number(selectedProposal.final_tally_result?.no_count) +
+                                  Number(selectedProposal.final_tally_result?.abstain_count) +
+                                  Number(selectedProposal.final_tally_result?.no_with_veto_count))
                               ).toFixed(2)
                             }}
                             %  
@@ -624,18 +453,18 @@
                         <v-col md="10">Abstain<br />
                           <span
                             v-if="
-                              selectedProposal.final_tally_result?.yes > 0 ||
-                              selectedProposal.final_tally_result?.no > 0 ||
-                              selectedProposal.final_tally_result?.abstain > 0 ||
-                              selectedProposal.final_tally_result?.no_with_veto > 0
+                              selectedProposal.final_tally_result?.yes_count > 0 ||
+                              selectedProposal.final_tally_result?.no_count > 0 ||
+                              selectedProposal.final_tally_result?.abstain_count > 0 ||
+                              selectedProposal.final_tally_result?.no_with_veto_count > 0
                             "
                           >{{
                               (
-                                (Number(selectedProposal.final_tally_result?.abstain) * 100) /
-                                (Number(selectedProposal.final_tally_result?.yes) +
-                                  Number(selectedProposal.final_tally_result?.no) +
-                                  Number(selectedProposal.final_tally_result?.abstain) +
-                                  Number(selectedProposal.final_tally_result?.no_with_veto))
+                                (Number(selectedProposal.final_tally_result?.abstain_count) * 100) /
+                                (Number(selectedProposal.final_tally_result?.yes_count) +
+                                  Number(selectedProposal.final_tally_result?.no_count) +
+                                  Number(selectedProposal.final_tally_result?.abstain_count) +
+                                  Number(selectedProposal.final_tally_result?.no_with_veto_count))
                               ).toFixed(2)
                             }}
                             %   
@@ -667,9 +496,8 @@
             >
             <div
             v-if="dataLoaded"
-                    v-html="
-                      $md.render(selectedProposal.content?.description)
-                    "
+            v-html="$mdRenderer.render(selectedProposal.summary)"
+ 
                   /> 
             </v-card>
           </v-sheet> 
@@ -748,10 +576,9 @@
             </h3>
             <v-text-field
               v-model="memo"              
-              background-color="#0F0F0F"
               required
-              flat 
-              solo
+              variant="solo"
+              bg-color="#0F0F0F"
             /> 
 
             <v-sheet                       
@@ -761,7 +588,7 @@
           > 
           <v-card
               color="#1C1D20"
-              class="pa-2"
+              class="pa-2 carmenBold"
               outlined
               tile 
             >
@@ -783,7 +610,7 @@
                     <v-list-item-title>
                       <h3>
                         {{ gasFee.gas }} / {{ gasFee.fee / 1000000 }}
-                        {{ cosmosConfig[chainId].coinLookup.viewDenom }}
+                        {{ cosmosConfig[store.chainSelected].coinLookup.viewDenom }}
                       </h3>
                     </v-list-item-title>
                   </v-list-item-content>
@@ -878,14 +705,16 @@
           <v-spacer />
         </v-card-actions>
       </v-card>
-    </v-dialog>  
+    </v-dialog> 
   </div>
 </template>
 <script>
 /* eslint-disable */
-import { mapState } from "vuex";
+import { useAppStore } from '@/stores/data'
 import axios from "axios";
 import moment from "moment";
+
+import { selectSigner, calculFee } from "~/libs/signer";
 
 import {
   defaultRegistryTypes,
@@ -941,7 +770,7 @@ export default {
     };
   },
   computed: {
-    ...mapState("keplr", [`accounts`]),
+    /* ...mapState("keplr", [`accounts`]),
     ...mapState("data", [
       "chainId",
       `balances`,
@@ -950,8 +779,14 @@ export default {
       "paramsDeposit",
       "paramsVoting",
       "totalBonded",
-    ]),
+    ]), */
 
+  },
+  setup() {
+    const store = useAppStore()
+    return {
+      store
+    }
   },
   watch: {
     dialog(value) {
@@ -994,26 +829,27 @@ export default {
   async mounted() {
 
 
+
     // List of proposal from the blockchain
     const allProposals = await axios(
-      cosmosConfig[0].apiURL + `/cosmos/gov/v1beta1/proposals`
+      cosmosConfig[this.store.chainSelected].apiURL + `/cosmos/gov/v1/proposals`
     );
- 
-    if ($nuxt.$route.hash) {
-      const proposalId = $nuxt.$route.hash.replace("#", "");
-      const foundProp = allProposals.data.proposals.find(
-        (element) => element.proposal_id === proposalId
-      );       
-      this.dialog = true
-      this.selectedProposal = foundProp   
-      this.dataLoaded = true;
-    }    
 
     const setFinalPropos = [];
+    console.log(allProposals.data.proposals)
     allProposals.data.proposals.forEach((item) => {
       // Fix markdown syntax
-      item.content.description = item.content.description.replace(/\\n/g, "\n")
-      item.content.description = item.content.description.replace(/\\u0026/g, "&")
+      if(item.messages.length > 0) {        
+        item.title = item.messages[0].content.title
+        item.summary = item.messages[0].content.description.replace(/\\n/g, "\n ")        
+        item.summary = item.summary.replace(/\\u0026/g, "&")
+        console.log(item.summary)
+      } else {
+        item.summary = item.summary.replace(/\\n/g, "\n")
+        item.summary = item.summary.replace(/\\u0026/g, "&")
+      }
+      //item.content.description = item.content.description.replace(/\\n/g, "\n")
+      //item.content.description = item.content.description.replace(/\\u0026/g, "&")
       setFinalPropos.push(item);
     });
     const setFinalPropsActive = [];
@@ -1024,114 +860,78 @@ export default {
     this.proposalsActive = setFinalPropsActive.reverse();
     this.proposals = setFinalPropos.reverse();
 
-    await this.$store.dispatch("data/getProposalParamsDeposit");
-    await this.$store.dispatch("data/getProposalParamsVoting");
+    //await this.$store.dispatch("data/getProposalParamsDeposit");
+    //await this.$store.dispatch("data/getProposalParamsVoting");
     
   },
   methods: {
     async validate(proposal) {
-      if (this.$refs.form.validate() === true) {
+      //if (this.$refs.form.validate() === true) {
         this.step1 = false;
         this.step2 = true;
         // Fee claculation
-        const chainId = cosmosConfig[this.chainId].chainId;
-        await window.keplr.enable(chainId);
-        const offlineSigner = await window.getOfflineSignerAuto(chainId);
-        const client = await SigningStargateClient.connectWithSigner(
-          cosmosConfig[this.chainId].rpcURL,
-          offlineSigner,
-            {
-              gasPrice: GasPrice.fromString(
-                cosmosConfig[this.chainId].gasPrice +
-                  cosmosConfig[this.chainId].coinLookup.chainDenom
-              ),
-            }          
-        );
-
+        let signer = await selectSigner(this.store.chainSelected, this.store.loggedType)
         const foundMsgType = defaultRegistryTypes.find(
-          (element) => element[0] === "/cosmos.gov.v1beta1.MsgVote"
+          (element) => element[0] === "/cosmos.gov.v1.MsgVote"
         );
 
         
-     
+        console.log(proposal)
 
         const finalMsg = {
           typeUrl: foundMsgType[0],
           value: foundMsgType[1].fromPartial({           
-            proposalId: proposal.proposal_id,
-            voter: this.accounts[0].address,
+            proposalId: proposal.id,
+            voter: signer.accounts[0].address,
             option: 1,
+            metadata: "",
           }),
         };
         
 
-        const gasEstimation = await client.simulate(
-          this.accounts[0].address,
+        const gasEstimation = await signer.client.simulate(
+          signer.accounts[0].address,
           [finalMsg],
           this.memo
         ); 
         const usedFee = calculateFee(
-          Math.round(gasEstimation * cosmosConfig[this.chainId].feeMultiplier),
+          Math.round(gasEstimation * cosmosConfig[this.store.chainSelected].feeMultiplier),
           GasPrice.fromString(
-            cosmosConfig[this.chainId].gasPrice +
-              cosmosConfig[this.chainId].coinLookup.chainDenom
+            cosmosConfig[this.store.chainSelected].gasPrice +
+              cosmosConfig[this.store.chainSelected].coinLookup.chainDenom
           )
         );
         this.gasFee = { fee: usedFee.amount[0].amount, gas: usedFee.gas };
-        /* 
-        // Recalculate fee if amount is too high
-        if (
-          usedFee.amount[0].amount / 1000000 + Number(this.amount) >
-          this.amountAvailable
-        ) {
-          this.amount = (
-            Number(this.amount) -
-            usedFee.amount[0].amount / 1000000
-          ).toFixed(6);
-          this.feeDeducted = true;
-        } else {
-          this.feeDeducted = false;
-        }
-
-        this.gasFee = { fee: usedFee.amount[0].amount, gas: usedFee.gas }; */
-      }
+ 
+      //}
     },
     async validatestep2(proposal) { 
 
-      const chainId = cosmosConfig[this.chainId].chainId;
-      await window.keplr.enable(chainId);
-      const offlineSigner = await window.getOfflineSignerAuto(chainId);
-      const client = await SigningStargateClient.connectWithSigner(
-        cosmosConfig[this.chainId].rpcURL,
-        offlineSigner,
-        {
-          gasPrice: GasPrice.fromString(
-            0.25 + cosmosConfig[this.chainId].coinLookup.chainDenom
-          ),
-        }
-      );
+      let signer = await selectSigner(this.store.chainSelected, this.store.loggedType)
 
       const foundMsgType = defaultRegistryTypes.find(
-        (element) => element[0] === "/cosmos.gov.v1beta1.MsgVote"
+        (element) => element[0] === "/cosmos.gov.v1.MsgVote"
       );
 
       const finalMsg = {
         typeUrl: foundMsgType[0],
         value: foundMsgType[1].fromPartial({
-          proposalId: proposal.proposal_id,
-          voter: this.accounts[0].address,
+          proposalId: proposal.id,
+          voter: signer.accounts[0].address,
           option: this.finalVoteId,
+          metadata: "",
         }),
       };
       try {
         this.step2 = false;
         this.step3 = true;
-        const result = await client.signAndBroadcast(
-          this.accounts[0].address,
+        const result = await signer.client.signAndBroadcast(
+          signer.accounts[0].address,
           [finalMsg],
           "auto",
           this.memo
         );
+        console.log(result);
         this.step3 = false;
         this.step4 = true;
       } catch (error) {

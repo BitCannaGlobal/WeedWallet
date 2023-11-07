@@ -1,61 +1,70 @@
 <template>
   <div>
+        <v-btn
+          v-if="type === 'simpleSend'"
+          size="large" 
+          block
+          class="mt-5 white--text"
+          color="#0FB786"
+          @click="dialog = true"
+        >
+          Send
+        </v-btn>
+        <v-btn
+          v-else 
+          block
+          class="mt-2 white--text"
+          color="#0FB786"
+          @click="dialog = true"
+        >  Send
+        </v-btn>    
     <v-dialog
       v-model="dialog"
       max-width="600px"
       overlay-opacity="0.8"
       overlay-color="#000000"
     >
-      <template #activator="{ on, attrs }">
-        <v-btn
-          v-if="type === 'simpleSend'"
-          large
-          block
-          v-bind="attrs"
-          class="mt-2 white--text"
-          color="#0FB786"
-          v-on="on"
-        >
-          Send
-        </v-btn>
-        <v-btn
-          v-else
-          dark
-          v-bind="attrs"
-          color="#00b786"
-          v-on="on"
-        >
-          <v-icon class="mr-2">
-            mdi-send-circle
-          </v-icon> Send
-        </v-btn>
-      </template>
+ 
       <v-card color="#161819">
-        <v-card-title>
-          <span
-            v-if="step1"
-            class="text-h5"
-          >Send transaction</span>
-          <span
-            v-if="step2"
-            class="text-h5"
-          >Check transaction </span>
-          <span
-            v-if="step3"
-            class="text-h5"
-          >Wait from keplr</span>
-          <span
-            v-if="step4"
-            class="text-h5"
-          >Transaction send!</span>
-          <v-spacer />
-          <v-icon
-            class="mr-2"
-            @click="dialog = false"
+        <v-toolbar
+            color="rgba(0, 0, 0, 0)"
+            theme="dark"
           >
-            mdi-close
-          </v-icon>
-        </v-card-title>
+            <template v-slot:prepend>
+              <v-avatar>
+                  <v-img
+                    max-width="32"
+                    max-height="32"
+                    :src="cosmosConfig[store.chainSelected].coinLookup.icon"
+                    alt="Bitcanna"
+                  ></v-img>
+                </v-avatar>
+            </template>
+
+            <v-toolbar-title class="text-h6">
+            <span
+              v-if="step1"
+              class="text-h5"
+            >Send transaction</span>
+            <span
+              v-if="step2"
+              class="text-h5"
+            >Check transaction </span>
+            <span
+              v-if="step3"
+              class="text-h5"
+            >Wait from keplr</span>
+            <span
+              v-if="step4"
+              class="text-h5"
+            >Transaction send!</span>
+            </v-toolbar-title>
+
+            <template v-slot:append>
+              <v-btn icon="mdi-close" @click="dialog = false"></v-btn>
+            </template>
+          </v-toolbar> 
+ 
         <v-card-text>
           <v-form
             v-if="step1"
@@ -65,57 +74,49 @@
           >
             <v-row>
               <v-col cols="12">
-                <span class="text-left">Available: {{ amountAvailable }} BCNA</span>
+                <span class="carmenBold text-left">Available: {{ amountAvailable }} BCNA</span>
                 <br><br>
-                <h3 class="mt-1 ml-1 mb-1">
+                <h3 class="carmenBold mt-1 ml-1 mb-1"> 
                   Address*
                 </h3>
                 <v-text-field
                   v-model="address"
-                  :rules="addressRules"
-                  background-color="#0F0F0F"
+                  :rules="addressRules" 
                   required                    
-                  flat 
-                  solo
-                />
-                <h3 class="ml-1 mb-1">
-                  Amount*
-                </h3>
-                <v-text-field
-                  v-model="amount"
-                  flat 
-                  solo
-                  :rules="amountRules"
-                  type="text"
-                  background-color="#0F0F0F"
+                  variant="solo"
+                    bg-color="#0F0F0F"
                 >
-                  <template #append>
-                    <!-- <img
-                      width="24"
-                      height="24"
-                      :srcset="coinIcon"
-                      alt=""
-                      :class="`rounded-xl`"
-                    > -->
+                <!-- <template #append-inner>
                     <v-chip
                       label
                       small
                       @click="getMax"
                     >
-                      Max
+                    Max
                     </v-chip>
-                  </template>
+                  </template>   -->
                 </v-text-field>
-                <h3 class="ml-1 mb-1">
-                  Memo (Optional)
+                <h3 class="carmenBold ml-1 mb-1">
+                  Amount*
                 </h3>
-                <v-text-field
-                  v-model="memo"
-                  background-color="#0F0F0F"
-                  required
-                  flat 
-                  solo
-                />
+                  <v-text-field 
+                    v-model="amount" 
+                    :rules="amountRules"
+                    required
+                    variant="solo"
+                    bg-color="#0F0F0F"
+                    
+                  >
+                  <template #append-inner>
+                    <v-chip
+                      label
+                      small
+                      @click="getMax"
+                    >
+                    Max
+                    </v-chip>
+                  </template>            
+                </v-text-field>              
               </v-col>
             </v-row>
           </v-form>
@@ -131,7 +132,7 @@
             >
               <v-card
                 color="#1C1D20"
-                class="pa-2"
+                class="pa-2 carmenBold"
                 outlined
                 tile 
               >
@@ -141,10 +142,10 @@
                       <h3>Transaction</h3>
                     </v-list-item-subtitle>
                     <v-list-item-title>
-                      <h3>${{ (amount * priceNow).toFixed(2) }}</h3><!--  ({{ priceNow }}) -->
+                      <h3>${{ (amount * store.priceNow).toFixed(2) }}</h3><!--  ({{ priceNow }}) -->
                     </v-list-item-title>
                     <v-list-item-title>
-                      <h3>{{ amount }} {{ cosmosConfig[chainId].coinLookup.viewDenom }}</h3>
+                      <h3>{{ amount }} {{ cosmosConfig[store.chainSelected].coinLookup.viewDenom }}</h3>
                     </v-list-item-title>
                   </v-list-item-content>
                 </v-list-item>
@@ -156,7 +157,7 @@
                     <v-list-item-title>
                       <h3>
                         {{ gasFee.gas }} / {{ gasFee.fee / 1000000 }}
-                        {{ cosmosConfig[chainId].coinLookup.viewDenom }}
+                        {{ cosmosConfig[store.chainSelected].coinLookup.viewDenom }}
                       </h3>
                     </v-list-item-title>
                   </v-list-item-content>
@@ -228,11 +229,10 @@
               Memo (Optional)
             </h3>
             <v-text-field
-              v-model="memo"              
-              background-color="#0F0F0F"
+              v-model="memo"
               required
-              flat 
-              solo
+              variant="solo"
+              bg-color="#0F0F0F"
             /> 
   
             <v-row>
@@ -279,29 +279,21 @@
             color="#00b786"
             block
             class="mt-1"
-            x-large
+            size="x-large"
             @click="validatestep2"            
           >
             Send tx
-            <v-icon
-              right
-            >
-              mdi-arrow-right-thick
-            </v-icon>            
+         
           </v-btn>
           <v-btn
             v-if="step2"
             color="#1C1D20"
             block
             class="mt-4"
-            x-large
+            size="x-large"
             @click="returnStep"
           >            
-            <v-icon
-              left
-            >
-              mdi-arrow-left-thick
-            </v-icon> 
+ 
             Return
           </v-btn>
           <v-btn
@@ -310,15 +302,11 @@
             :loading="loading"
             color="#00b786"
             block
-            x-large
+            size="x-large"
             @click="validate"
           >
             Next step
-            <v-icon
-              right
-            >
-              mdi-arrow-right-thick
-            </v-icon>             
+            
           </v-btn>
         </v-card-text>
         <v-card-actions>
@@ -330,9 +318,10 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { useAppStore } from '@/stores/data'
 import bech32 from "bech32";
 import cosmosConfig from "~/cosmos.config";
+import { selectSigner, calculFee } from "~/libs/signer";
 import {
   defaultRegistryTypes,
   assertIsDeliverTxSuccess,
@@ -393,9 +382,15 @@ export default {
     loadingInput: false,
     cosmosConfig: cosmosConfig,
   }),
+  setup() {
+    const store = useAppStore()
+    return {
+      store
+    }
+  },  
   computed: {
-    ...mapState("keplr", [`accounts`]),
-    ...mapState("data", ["chainId", `balances`, 'priceNow']),
+    //...mapState("keplr", [`accounts`]),
+    //...mapState("data", ["chainId", `balances`, 'priceNow']),
   },
   watch: {
     dialog(value) {
@@ -428,17 +423,11 @@ export default {
     },
 
     async validate() {
-      if (this.$refs.form.validate() === true) {
+      //if (this.$refs.form.validate() === true) {
         this.step1 = false;
         this.step2 = true;
         // Fee claculation
-        const chainId = cosmosConfig[this.chainId].chainId;
-        await window.keplr.enable(chainId);
-        const offlineSigner = await window.getOfflineSignerAuto(chainId);
-        const client = await SigningStargateClient.connectWithSigner(
-          cosmosConfig[this.chainId].rpcURL,
-          offlineSigner
-        );
+        let signer = await selectSigner(this.store.chainSelected, this.store.loggedType)
 
         const foundMsgType = defaultRegistryTypes.find(
           (element) => element[0] === "/cosmos.bank.v1beta1.MsgSend"
@@ -446,29 +435,29 @@ export default {
 
         const convertAmount = Math.round(this.amount * 1000000);
         const amount = {
-          denom: cosmosConfig[this.chainId].coinLookup.chainDenom,
+          denom: cosmosConfig[this.store.chainSelected].coinLookup.chainDenom,
           amount: convertAmount.toString(),
         };
 
         const finalMsg = {
           typeUrl: foundMsgType[0],
           value: foundMsgType[1].fromPartial({
-            fromAddress: this.accounts[0].address,
+            fromAddress: signer.accounts[0].address,
             toAddress: this.address,
             amount: [amount],
           }),
         };
 
-        const gasEstimation = await client.simulate(
-          this.accounts[0].address,
+        const gasEstimation = await signer.client.simulate(
+          signer.accounts[0].address,
           [finalMsg],
           this.memo
         );
         const usedFee = calculateFee(
-          Math.round(gasEstimation * cosmosConfig[this.chainId].feeMultiplier),
+          Math.round(gasEstimation * cosmosConfig[this.store.chainSelected].feeMultiplier),
           GasPrice.fromString(
-            cosmosConfig[this.chainId].gasPrice +
-              cosmosConfig[this.chainId].coinLookup.chainDenom
+            cosmosConfig[this.store.chainSelected].gasPrice +
+              cosmosConfig[this.store.chainSelected].coinLookup.chainDenom
           )
         );
         // Recalculate fee if amount is too high
@@ -486,43 +475,29 @@ export default {
         }
 
         this.gasFee = { fee: usedFee.amount[0].amount, gas: usedFee.gas };
-      }
+      //}
     },
     returnStep() {
       this.step1 = true;
       this.step2 = false;
     },
     validatestep2() {
-      if (this.$refs.form.validate() === true) {
+      //if (this.$refs.form.validate() === true) {
         (async () => {
           this.loading = true;
           this.step3 = true;
           this.step2 = false;
 
-          const chainId = cosmosConfig[this.chainId].chainId;
-          await window.keplr.enable(chainId);
-          const offlineSigner = await window.getOfflineSignerAuto(chainId);
-          const accounts = await offlineSigner.getAccounts();
-
-          const client = await SigningStargateClient.connectWithSigner(
-            cosmosConfig[this.chainId].rpcURL,
-            offlineSigner,
-            {
-              gasPrice: GasPrice.fromString(
-                cosmosConfig[this.chainId].gasPrice +
-                  cosmosConfig[this.chainId].coinLookup.chainDenom
-              ),
-            }
-          );
+          let signer = await selectSigner(this.store.chainSelected, this.store.loggedType)
           const convertAmount = Math.round(this.amount * 1000000);
           const amount = {
-            denom: cosmosConfig[this.chainId].coinLookup.chainDenom,
+            denom: cosmosConfig[this.store.chainSelected].coinLookup.chainDenom,
             amount: convertAmount.toString(),
           };
 
           try {
-            const result = await client.sendTokens(
-              accounts[0].address,
+            const result = await signer.client.sendTokens(
+              signer.accounts[0].address,
               this.address,
               [amount],
               "auto",
@@ -533,7 +508,7 @@ export default {
             this.step3 = false;
             this.step4 = true;
             this.loading = false;
-            await this.$store.dispatch("data/refresh", accounts[0].address);
+            // await this.$store.dispatch("data/refresh", accounts[0].address);
             this.e1 = 3;
           } catch (error) {
             console.error(error);
@@ -546,7 +521,7 @@ export default {
             this.dialog = false;
           }
         })();
-      }
+      //}
     },
   },
 };

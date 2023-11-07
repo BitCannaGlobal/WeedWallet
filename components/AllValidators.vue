@@ -1,8 +1,10 @@
 <template>
+  <div>
   <v-row
     justify="center"
     align="center"
   >
+ 
     <v-col
       cols="12"
       sm="12"
@@ -10,8 +12,10 @@
     >
       <div class="row">
         <div class="col-sm">
+          
           <v-data-table
-            class="accent allValidators" 
+            theme="dark"
+            class="accent table allValidators" 
             :headers="headers"
             :items="finalValidators"
             :items-per-page="150"
@@ -40,10 +44,11 @@
                 class="linkFormat box"
               >
                 <v-chip
-                  v-if="item.status === 'BOND_STATUS_BONDED'"
+                  v-if="item.status === 3"
                   class="ma-2"
                   color="#00b786"
                   label
+                  variant="flat"
                 >
                   Active
                 </v-chip>
@@ -52,13 +57,14 @@
                   class="ma-2"
                   color="red"
                   label
+                  variant="flat"
                 >
                   Inactive
                 </v-chip> 
                 <v-avatar>
                   <v-img
                     :src="'https://raw.githubusercontent.com/cosmostation/chainlist/main/chain/bitcanna/moniker/'+item.op_address+'.png'" 
-                    :alt="item.validatorName" 
+                    :alt="item.name" 
                   /> 
                 </v-avatar>
                 <span class="ml-8"><h3>{{ item.name }}</h3></span> 
@@ -164,10 +170,11 @@
       </v-card>
     </v-dialog>     
   </v-row>
+</div>
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { useAppStore } from '@/stores/data'
 import cosmosConfig from "~/cosmos.config";
 
 export default {
@@ -180,11 +187,11 @@ export default {
       myTotalUnDelegation: 0,
       headers: [
        /*  { text: "Status", value: "status" }, */
-        { text: "Name", value: "name" },
-        { text: "Commission rate", value: "crate" },
-        { text: "Voting power", value: "votingPower" },
-        { text: "validatorApr", value: "validatorApr" },
-        { text: "", value: "actions" },
+        { title: "Name", key: "name" },
+        { title: "Commission rate", key: "crate" },
+        { title: "Voting power", key: "votingPower" },
+        { title: "validatorApr", key: "validatorApr" },
+        { title: "", key: "actions" },
       ],
       finalValidators: [],
       valid: false,
@@ -200,8 +207,15 @@ export default {
       cosmosConfig: cosmosConfig,
     };
   },
+  setup() {
+    const store = useAppStore()
+
+    return {
+      store
+    }
+  },
   computed: {
-    ...mapState("data", [
+    /* ...mapState("data", [
       "chainId", 
       `balances`, 
       "validators", 
@@ -209,30 +223,28 @@ export default {
       "validatorDelegations",
       "validatorUnDelegations",
     ]),
-    ...mapState("keplr", [`logged`, `accounts`]),
+    ...mapState("keplr", [`logged`, `accounts`]), */
   },  
   watch: {
     getStatus: function (val) {
       if (val === "active") {
-        const result = this.validators.filter(
-          (val) => val.status === "BOND_STATUS_BONDED"
+        const result = this.store.allValidators.filter(
+          (val) => val.status === 3
         );
-        this.finalValidators = result;
+        this.finalValidators = this.store.allValidators;
       } else {
-        this.finalValidators = this.validators;
+        this.finalValidators = this.store.allValidatorsOffline;
       }
     },
   },
   async mounted() {
-    await this.$store.dispatch("keplr/checkLogin");
-    if (this.logged === "false") this.$router.push({ path: "login" });
+    //await this.$store.dispatch("keplr/checkLogin");
+    //if (this.logged === "false") this.$router.push({ path: "login" });
 
-    await this.$store.dispatch("data/getAllValidators");
+    //await this.$store.dispatch("data/getAllValidators");
     if (this.getStatus === "active") {
-      const result = this.validators.filter(
-        (val) => val.status === "BOND_STATUS_BONDED"
-      );
-      this.finalValidators = result;
+ 
+      this.finalValidators = this.store.allValidators;
     }
   },
   methods: {
