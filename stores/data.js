@@ -122,8 +122,6 @@ export const useAppStore = defineStore('app', {
         ((foundSupply.amount * inflation.data.inflation) / finalTotalBounded.data.pool.bonded_tokens) *
         100
       ).toFixed(1);
-  
-      console.log('finalApr', finalApr)
       this.aprNow = finalApr 
     },
     async getWalletAmount() {
@@ -194,8 +192,6 @@ export const useAppStore = defineStore('app', {
         if (item.status === 'BOND_STATUS_BONDED') {
           upTime = 100;
         }
-
-        console.log(item.commission.commissionRates.rate / 10000000000000000)
 
         const rewardFactor = 1 - (item.commission.commissionRates.rate / 10000000000000000)
         const finalApr = this.aprNow * rewardFactor
@@ -465,7 +461,6 @@ export const useAppStore = defineStore('app', {
     async getAddressBook() {
       let myAddressBook = getData('bcnaAddressBook') 
       this.myAddressBook = myAddressBook
-      console.log('myAddressBook', this.myAddressBook)
     },
     async addressBook(typeAction, data) {
       if (typeAction === 'addContact') {
@@ -474,7 +469,6 @@ export const useAppStore = defineStore('app', {
           getBookMark = []
         }
         getBookMark.push(data)
-        console.log('getBookMark', getBookMark)
         setData('bcnaAddressBook', getBookMark, 730, 'd')    
       } 
 
@@ -621,7 +615,6 @@ export const useAppStore = defineStore('app', {
     async checkLogin() { 
       let getSession = getData('account') 
       if (getSession) { 
-        console.log(getSession)
         this.chainSelected = getSession.id
         this.addrWallet = getSession.data
         this.nameWallet = getSession.walletName

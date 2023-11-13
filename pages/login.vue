@@ -145,7 +145,7 @@ export default {
     address: "",
     microAddress: "",
     config: cosmosConfig,
-    selection: 0,
+    selection: 1,
   }),
   setup() {
     useSeoMeta({
