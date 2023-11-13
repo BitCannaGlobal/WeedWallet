@@ -21,7 +21,7 @@
           /> 
         </v-avatar>          
         <span class="ml-4">{{ store.validatorDetails.description?.moniker }}</span>
-        {{ store.validatorDetails?.status }}
+        {{ store.validatorDetails.status? }}
         <v-chip
           class="ma-2 ml-4"
           label
