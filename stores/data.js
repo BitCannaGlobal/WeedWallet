@@ -615,7 +615,8 @@ export const useAppStore = defineStore('app', {
     async checkLogin() { 
       let getSession = getData('account') 
       if (getSession) { 
-        this.chainSelected = getSession.id
+        // this.chainSelected = getSession.id
+        this.chainSelected = 2
         this.addrWallet = getSession.data
         this.nameWallet = getSession.walletName
         this.loggedType = getSession.type
