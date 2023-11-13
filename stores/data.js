@@ -21,7 +21,7 @@ export const useAppStore = defineStore('app', {
     blockNow: '',
     logged: false,
     loggedType: '',
-    chainSelected: 0,
+    chainSelected: 2,
     addrWallet: '',
     nameWallet: '',
     rpcClient: null,

@@ -20,7 +20,7 @@
         </div>
         <br>
 
-        <v-card
+<!--         <v-card
           class="mt-10"
           color="#161819"
           max-width="700px"
@@ -34,7 +34,7 @@
             <v-chip @click="setChainId(0)">DevNet (0.47)</v-chip>
             <v-chip @click="setChainId(2)">Testnet</v-chip>
           </v-chip-group>
-        </v-card>
+        </v-card> -->
         <v-card
           class="mt-10"
           color="#161819"
