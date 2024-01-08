@@ -1,4 +1,5 @@
 // @/plugins/markdownit.ts
+import { defineNuxtPlugin } from '#app'
 import md from "markdown-it";
 import div from 'markdown-it-div';
 import attrs from 'markdown-it-attrs';

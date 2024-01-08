@@ -1,7 +1,7 @@
 
 import axios from "axios";
 
-export default defineEventHandler(async (event) => {
+export default defineEventHandler(async () => {
   const getMarket = await axios(
     "https://api-osmosis.imperator.co/tokens/v2/historical/bcna/chart?tf=30"
   );

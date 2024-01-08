@@ -1,6 +1,6 @@
-  import axios from "axios";
+import axios from "axios";
 
-export default defineEventHandler(async (event) => { 
+export default defineEventHandler(async () => { 
   const finalData =  await axios
     .post("https://graphql.mainnet.stargaze-apis.com/graphql", {
       query:

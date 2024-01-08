@@ -311,12 +311,11 @@
 
 <script>
 import { useAppStore } from '@/stores/data'
-import { selectSigner, calculFee } from "~/libs/signer";
+import { selectSigner } from "~/libs/signer";
 import cosmosConfig from "~/cosmos.config";
 import {
   defaultRegistryTypes,
   assertIsDeliverTxSuccess,
-  SigningStargateClient,
   GasPrice,
   calculateFee
 } from "@cosmjs/stargate";

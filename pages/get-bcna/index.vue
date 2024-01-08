@@ -178,11 +178,8 @@
   </v-item-group>
 </template> 
 <script>
-import { useTheme } from 'vuetify'
-import QRCodeVue3 from "qrcode-vue3";
-import useClipboard from '~/composables/useClipboard'
 import { useAppStore } from '@/stores/data'
-import cosmosConfig from "~/cosmos.config";
+
 
 export default {
   setup() {

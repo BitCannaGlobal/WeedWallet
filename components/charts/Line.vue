@@ -11,14 +11,14 @@
 
 <script>
 import axios from "axios";
-import { Bar, Line } from 'vue-chartjs'
+import { Line } from 'vue-chartjs'
 import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, PointElement, LineElement, CategoryScale, LinearScale } from 'chart.js'
 
 ChartJS.register(Title, Tooltip, Legend, BarElement, PointElement, LineElement, CategoryScale, LinearScale)
 
 export default {
-  name: 'BarChart',
-  components: { Bar, Line },
+  name: 'LineChart',
+  components: { Line },
   data() {
     return {
       loaded: false,
@@ -62,9 +62,7 @@ export default {
         copyItems.push(item.close);
         copyDates.push(finalDate);
       });
-
-      console.log('copyItems', copyItems)
-      console.log('copyDates', copyDates)
+ 
       const dataChart = {
         labels: copyDates,
         datasets: [

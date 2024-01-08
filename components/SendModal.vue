@@ -320,11 +320,10 @@
 import { useAppStore } from '@/stores/data'
 import bech32 from "bech32";
 import cosmosConfig from "~/cosmos.config";
-import { selectSigner, calculFee } from "~/libs/signer";
+import { selectSigner } from "~/libs/signer";
 import {
   defaultRegistryTypes,
   assertIsDeliverTxSuccess,
-  SigningStargateClient,
   GasPrice,
   calculateFee,
 } from "@cosmjs/stargate";

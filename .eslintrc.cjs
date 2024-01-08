@@ -6,6 +6,10 @@ module.exports = {
     "vue/valid-v-for": "off",
     "vue/multi-word-component-names": "off",
     "vue/require-prop-types": "off",
-    "vue/valid-v-slot": "off"
+    "vue/valid-v-slot": "off",
+    "vue/no-reserved-component-names": "off",
+    "vue/no-dupe-keys": "off",
+    "no-undef": "off"
+    
   }
 };

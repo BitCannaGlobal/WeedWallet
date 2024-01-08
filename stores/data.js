@@ -1,8 +1,9 @@
+/*eslint no-unused-vars: 0 */
 import { defineStore } from 'pinia' 
 import { getData, setData, removeItem } from 'nuxt-storage/local-storage';
 import axios from "axios";
 import { createProtobufRpcClient, QueryClient } from "@cosmjs/stargate";
-import { Tendermint34Client, Tendermint37Client } from "@cosmjs/tendermint-rpc";  
+import { Tendermint37Client } from "@cosmjs/tendermint-rpc";  
 import Long from "long";
 import cosmosConfig from '~/cosmos.config'
 
@@ -137,7 +138,6 @@ export const useAppStore = defineStore('app', {
     async getBankModule() {
       const queryBank = new bank.QueryClientImpl(this.rpcClient); 
       let spendableBalances = await queryBank.SpendableBalances({ address: this.addrWallet });
-      let allBalances = await queryBank.AllBalances({ address: this.addrWallet });
 
       const found = spendableBalances.balances.find(element => element.denom === cosmosConfig[this.chainSelected].coinLookup.chainDenom);
       // TODO: fix this
@@ -231,8 +231,6 @@ export const useAppStore = defineStore('app', {
         returnValue = 0
       }
  
-      
-      let oldValue = this.totalRewards
       this.totalMyValidators = queryDistribResult.rewards.length
       this.totalDelegationsRewards = queryDistribResult.rewards
       this.totalRewards = returnValue
@@ -282,7 +280,7 @@ export const useAppStore = defineStore('app', {
         .then((res) => {
           this.validatorRewards = (res.data.rewards[0].amount / 1000000).toFixed(6) 
         })
-        .catch((error) => { 
+        .catch(() => { 
           this.validatorRewards = 0
         });
 
@@ -297,7 +295,7 @@ export const useAppStore = defineStore('app', {
           .then((res) => {
             this.validatorDelegations = res.data.delegation_response.balance.amount
           })
-          .catch((error) => { 
+          .catch(() => { 
             this.validatorDelegations = 0 
           });
         // validatorUnDelegations
@@ -312,7 +310,7 @@ export const useAppStore = defineStore('app', {
           .then((res) => {
             this.validatorUnDelegations = res.data.delegation_response.balance.amount
           })
-          .catch((error) => { 
+          .catch(() => { 
             this.validatorUnDelegations = 0 
           });         
     },

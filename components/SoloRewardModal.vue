@@ -167,12 +167,10 @@
 
 <script>
 import { useAppStore } from '@/stores/data'
-import { selectSigner, calculFee } from "~/libs/signer";
+import { selectSigner } from "~/libs/signer";
 import cosmosConfig from "~/cosmos.config";
 import {
-  assertIsDeliverTxSuccess,
-  SigningStargateClient,
-  GasPrice
+  assertIsDeliverTxSuccess
 } from "@cosmjs/stargate";
 
 function countPlaces(num) {

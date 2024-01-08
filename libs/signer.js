@@ -1,9 +1,6 @@
 import {
-  defaultRegistryTypes,
-  assertIsDeliverTxSuccess,
   SigningStargateClient,
-  GasPrice,
-  calculateFee,
+  GasPrice
 } from "@cosmjs/stargate";
 import cosmosConfig from '../cosmos.config'
 
