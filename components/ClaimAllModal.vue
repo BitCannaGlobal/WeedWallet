@@ -380,7 +380,7 @@ export default {
             signer.accounts[0].address,
             copieDelegator,
             "auto",
-            ""
+            this.memo
           );
           assertIsDeliverTxSuccess(result);
           // this.dialog = false
