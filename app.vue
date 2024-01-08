@@ -197,20 +197,16 @@ export default {
       toggleTheme: () => theme.global.name.value = theme.global.current.value.dark ? 'light' : 'dark'
     }
   },
-
   
   async beforeCreate() {
-     
-    // await this.$store.dispatch("keplr/checkLogin");
-    // await this.$store.dispatch("data/getAllValidators");
     await this.store.checkLogin()
-    console.log('this.store.logged',this.store.logged)
     if (this.store.logged) {
       await this.store.refresh()
     } else {
       this.$router.push({ path: "/login" });
     }
-
+  },
+  mounted() {
     setInterval(async () => {
       await this.store.getPriceNow()
       await this.store.getApr()
@@ -223,8 +219,6 @@ export default {
       await this.store.getDelegations()
       await this.store.getBlockNow()
     }, 5000);
-
-
   },
   methods: {
     logoutNow() {

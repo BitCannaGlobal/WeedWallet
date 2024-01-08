@@ -147,6 +147,7 @@ export const useAppStore = defineStore('app', {
       } else {
         returnValue = 0
       }
+      console.log('SpendableBalances', returnValue)
 
       let totalSupply = await queryBank.SupplyOf({ denom: cosmosConfig[this.chainSelected].coinLookup.chainDenom }) 
       this.spendableBalances = returnValue 
