@@ -1,208 +1,210 @@
 <template>
   <div>
-      <v-btn
-        color="#FFFFFF"
-        block
-        class="mt-2 green--text" 
-        size="large"   
-        :disabled="!enableModal"
-        @click="dialog = true"
-      >
-        <v-icon class="mr-2">
-          mdi-account-convert
-        </v-icon> Redelegate
-      </v-btn>  
-  <v-dialog
-    v-model="dialog"
-    max-width="600px"
-  >
- 
-    <v-card color="#161819">
-            <v-toolbar
-            color="rgba(0, 0, 0, 0)"
-            theme="dark"
-          >
-            <template v-slot:prepend>
-              <v-avatar>
-                  <v-img
-                    max-width="32"
-                    max-height="32"
-                    :src="cosmosConfig[store.chainSelected].coinLookup.icon"
-                    alt="Bitcanna"
-                  ></v-img>
-                </v-avatar>
-            </template>
-
-            <v-toolbar-title class="text-h6">
-              <span
-                v-if="step1"
-                class="text-h5"
-              >Redelegate from {{ validatorName }}</span>
-              <span
-                v-if="step2"
-                class="text-h5"
-              >Check transaction </span>
-              <span
-                v-if="step3"
-                class="text-h5"
-              >Wait from keplr</span>
-              <span
-                v-if="step4"
-                class="text-h5"
-              >Transaction send!</span>
-            </v-toolbar-title>
-
-            <template v-slot:append>
-              <v-btn icon="mdi-close" @click="dialog = false"></v-btn>
-            </template>
-          </v-toolbar>  
- 
-      <v-card-text>
-        <v-form
-          v-if="step1"
-          ref="form"
-          v-model="dislableSend"
-          lazy-validation
+    <v-btn
+      color="#FFFFFF"
+      block
+      class="mt-2 green--text" 
+      size="large"   
+      :disabled="!enableModal"
+      @click="dialog = true"
+    >
+      <v-icon class="mr-2">
+        mdi-account-convert
+      </v-icon> Redelegate
+    </v-btn>  
+    <v-dialog
+      v-model="dialog"
+      max-width="600px"
+    >
+      <v-card color="#161819">
+        <v-toolbar
+          color="rgba(0, 0, 0, 0)"
+          theme="dark"
         >
-          <v-row>
-            <v-col cols="12">
-              <span class="ml-1 text-left carmenBold">Available: {{ amountRe }} BCNA</span>
-              <h3 class="mt-6 ml-1 mb-3 carmenBold">
-                Amount Redelegate
-              </h3>
-              <v-text-field
-                v-model="amount" 
-                :rules="!loadingInput ? amountRules : ''"
-                type="text"
-                class="mt-4"
-                variant="solo"
-                bg-color="#0F0F0F"
-              >
+          <template #prepend>
+            <v-avatar>
+              <v-img
+                max-width="32"
+                max-height="32"
+                :src="cosmosConfig[store.chainSelected].coinLookup.icon"
+                alt="Bitcanna"
+              />
+            </v-avatar>
+          </template>
+
+          <v-toolbar-title class="text-h6">
+            <span
+              v-if="step1"
+              class="text-h5"
+            >Redelegate from {{ validatorName }}</span>
+            <span
+              v-if="step2"
+              class="text-h5"
+            >Check transaction </span>
+            <span
+              v-if="step3"
+              class="text-h5"
+            >Wait from keplr</span>
+            <span
+              v-if="step4"
+              class="text-h5"
+            >Transaction send!</span>
+          </v-toolbar-title>
+
+          <template #append>
+            <v-btn
+              icon="mdi-close"
+              @click="dialog = false"
+            />
+          </template>
+        </v-toolbar>  
+ 
+        <v-card-text>
+          <v-form
+            v-if="step1"
+            ref="form"
+            v-model="dislableSend"
+            lazy-validation
+          >
+            <v-row>
+              <v-col cols="12">
+                <span class="ml-1 text-left carmenBold">Available: {{ amountRe }} BCNA</span>
+                <h3 class="mt-6 ml-1 mb-3 carmenBold">
+                  Amount Redelegate
+                </h3>
+                <v-text-field
+                  v-model="amount" 
+                  :rules="!loadingInput ? amountRules : ''"
+                  type="text"
+                  class="mt-4"
+                  variant="solo"
+                  bg-color="#0F0F0F"
+                >
                   <template #append-inner>
                     <v-chip
                       label
                       small
                       @click="getMax"
                     >
-                    Max
+                      Max
                     </v-chip>
                   </template>
-              </v-text-field>
-              <h3 class="mt-1 ml-1 mb-3 carmenBold">
-                Redelegate to
-              </h3>
-              <v-select
-                v-model="addressTo"
-                :rules="addressToRules"
-                item-title="name"
-                item-value="address"
-                :items="validatorListSearch" 
-                variant="solo"
-                bg-color="#0F0F0F"
-              >
-                <template #prepend-item>
-                  <v-list-item>
-                    <v-list-item-content>
-                      <v-text-field
-                        v-model="searchTerm"
-                        variant="solo"
-                        bg-color="#0F0F0F"
-                        placeholder="Search validator"
-                        @input="searchVal"
-                      />
-                    </v-list-item-content>
-                  </v-list-item>
-                  <v-divider class="mt-2" />
-                </template>                
-              </v-select>
-              <h3 class="mt-1 ml-1 mb-3 carmenBold">
-                Memo
-              </h3>
-              <v-text-field
-                v-model="memo" 
-                required
-                variant="solo"
-                bg-color="#0F0F0F"
-              />
-            </v-col>
-          </v-row> 
-        </v-form>
-        <v-form
-          v-if="step2"
-          ref="form"
-          lazy-validation
-        >
-          <v-row>
-            <v-col cols="12">
-              <v-sheet
-                outlined
-                color="gray"
-                rounded
-              >
-                <v-card
-                  color="#1C1D20"
-                  class="pa-2"
-                  outlined
-                  tile 
+                </v-text-field>
+                <h3 class="mt-1 ml-1 mb-3 carmenBold">
+                  Redelegate to
+                </h3>
+                <v-select
+                  v-model="addressTo"
+                  :rules="addressToRules"
+                  item-title="name"
+                  item-value="address"
+                  :items="validatorListSearch" 
+                  variant="solo"
+                  bg-color="#0F0F0F"
                 >
-                  <v-list-item two-line>
-                    <v-list-item-content>        
-                      <v-list-item-subtitle class="mb-2">
-                        <h3>Amount</h3>
-                      </v-list-item-subtitle>
-                      <v-list-item-title>
-                        <h3>{{ amount }} {{ cosmosConfig[store.chainSelected].coinLookup.viewDenom }}</h3>
-                      </v-list-item-title>
-                    </v-list-item-content>
-                  </v-list-item>
-                  <v-list-item two-line>
-                    <v-list-item-content>        
-                      <v-list-item-subtitle class="mb-2">
-                        <h3>From</h3>
-                      </v-list-item-subtitle>
-                      <v-list-item-title>
-                        <h3>{{ validatorName }}</h3>
-                      </v-list-item-title>
-                    </v-list-item-content>
-                  </v-list-item>  
-                  <v-list-item two-line>
-                    <v-list-item-content>        
-                      <v-list-item-subtitle class="mb-2">
-                        <h3>To</h3>
-                      </v-list-item-subtitle>
-                      <v-list-item-title>
-                        <h3>{{ addressTo }}</h3>
-                      </v-list-item-title>
-                    </v-list-item-content>
-                  </v-list-item>                               
-                  <v-list-item two-line>
-                    <v-list-item-content>        
-                      <v-list-item-subtitle class="mb-2">
-                        <h3>Gas/fee</h3>
-                      </v-list-item-subtitle>
-                      <v-list-item-title>
-                        <h3>
-                          {{ gasFee.gas }} / {{ gasFee.fee / 1000000 }}
-                          {{ cosmosConfig[store.chainSelected].coinLookup.viewDenom }}
-                        </h3>
-                      </v-list-item-title>
-                    </v-list-item-content>
-                  </v-list-item>
-                  <v-list-item
-                    v-if="memo !== ''"
-                    two-line
+                  <template #prepend-item>
+                    <v-list-item>
+                      <v-list-item-content>
+                        <v-text-field
+                          v-model="searchTerm"
+                          variant="solo"
+                          bg-color="#0F0F0F"
+                          placeholder="Search validator"
+                          @input="searchVal"
+                        />
+                      </v-list-item-content>
+                    </v-list-item>
+                    <v-divider class="mt-2" />
+                  </template>                
+                </v-select>
+                <h3 class="mt-1 ml-1 mb-3 carmenBold">
+                  Memo
+                </h3>
+                <v-text-field
+                  v-model="memo" 
+                  required
+                  variant="solo"
+                  bg-color="#0F0F0F"
+                />
+              </v-col>
+            </v-row> 
+          </v-form>
+          <v-form
+            v-if="step2"
+            ref="form"
+            lazy-validation
+          >
+            <v-row>
+              <v-col cols="12">
+                <v-sheet
+                  outlined
+                  color="gray"
+                  rounded
+                >
+                  <v-card
+                    color="#1C1D20"
+                    class="pa-2"
+                    outlined
+                    tile 
                   >
-                    <v-list-item-content>        
-                      <v-list-item-subtitle class="mb-2">
-                        <h3>Memo</h3>
-                      </v-list-item-subtitle>
-                      <v-list-item-title>
-                        <h3>{{ memo }}</h3>
-                      </v-list-item-title> 
-                    </v-list-item-content>
-                  </v-list-item>  
-                </v-card>
-              </v-sheet>  
+                    <v-list-item two-line>
+                      <v-list-item-content>        
+                        <v-list-item-subtitle class="mb-2">
+                          <h3>Amount</h3>
+                        </v-list-item-subtitle>
+                        <v-list-item-title>
+                          <h3>{{ amount }} {{ cosmosConfig[store.chainSelected].coinLookup.viewDenom }}</h3>
+                        </v-list-item-title>
+                      </v-list-item-content>
+                    </v-list-item>
+                    <v-list-item two-line>
+                      <v-list-item-content>        
+                        <v-list-item-subtitle class="mb-2">
+                          <h3>From</h3>
+                        </v-list-item-subtitle>
+                        <v-list-item-title>
+                          <h3>{{ validatorName }}</h3>
+                        </v-list-item-title>
+                      </v-list-item-content>
+                    </v-list-item>  
+                    <v-list-item two-line>
+                      <v-list-item-content>        
+                        <v-list-item-subtitle class="mb-2">
+                          <h3>To</h3>
+                        </v-list-item-subtitle>
+                        <v-list-item-title>
+                          <h3>{{ addressTo }}</h3>
+                        </v-list-item-title>
+                      </v-list-item-content>
+                    </v-list-item>                               
+                    <v-list-item two-line>
+                      <v-list-item-content>        
+                        <v-list-item-subtitle class="mb-2">
+                          <h3>Gas/fee</h3>
+                        </v-list-item-subtitle>
+                        <v-list-item-title>
+                          <h3>
+                            {{ gasFee.gas }} / {{ gasFee.fee / 1000000 }}
+                            {{ cosmosConfig[store.chainSelected].coinLookup.viewDenom }}
+                          </h3>
+                        </v-list-item-title>
+                      </v-list-item-content>
+                    </v-list-item>
+                    <v-list-item
+                      v-if="memo !== ''"
+                      two-line
+                    >
+                      <v-list-item-content>        
+                        <v-list-item-subtitle class="mb-2">
+                          <h3>Memo</h3>
+                        </v-list-item-subtitle>
+                        <v-list-item-title>
+                          <h3>{{ memo }}</h3>
+                        </v-list-item-title> 
+                      </v-list-item-content>
+                    </v-list-item>  
+                  </v-card>
+                </v-sheet>  
 
 
               <!--              <v-simple-table class="accent">
@@ -257,82 +259,82 @@
                   </tbody>
                 </template>
               </v-simple-table> -->
+              </v-col>
+            </v-row>
+          </v-form>
+
+          <v-row v-if="step3">
+            <v-col
+              cols="12"
+              align="center"
+              justify="center"
+            >
+              <v-img
+                max-height="102"
+                max-width="102"
+                src="https://wallet.bitcanna.io/icons/pending.svg"
+              />
+              <br>
+              <h3>Transaction pending</h3> 
+              <h4>Your transaction is waiting to get approved on the blockchain.</h4>
             </v-col>
           </v-row>
-        </v-form>
-
-        <v-row v-if="step3">
-          <v-col
-            cols="12"
-            align="center"
-            justify="center"
+          <v-row v-if="step4">
+            <v-col
+              cols="12"
+              align="center"
+              justify="center"
+            >
+              <v-img
+                max-height="102"
+                max-width="102"
+                src="https://wallet.bitcanna.io/icons/approved.svg"
+              />
+              <br>
+              <h3>Transaction approved</h3> 
+              <h4>Your transaction has been approved on the blockchain.</h4>
+            </v-col>
+          </v-row>
+          <v-btn
+            v-if="step2"
+            block
+            size="large"
+            class="mt-4"
+            @click="returnStep"
           >
-            <v-img
-              max-height="102"
-              max-width="102"
-              src="https://wallet.bitcanna.io/icons/pending.svg"
-            />
-            <br>
-            <h3>Transaction pending</h3> 
-            <h4>Your transaction is waiting to get approved on the blockchain.</h4>
-          </v-col>
-        </v-row>
-        <v-row v-if="step4">
-          <v-col
-            cols="12"
-            align="center"
-            justify="center"
+            Return
+          </v-btn>
+          <v-btn
+            v-if="step1"
+            :disabled="!dislableSend"
+            :loading="loading"
+            color="#00b786"
+            block
+            size="large"
+            class="mt-4"
+            @click="validate"
           >
-            <v-img
-              max-height="102"
-              max-width="102"
-              src="https://wallet.bitcanna.io/icons/approved.svg"
-            />
-            <br>
-            <h3>Transaction approved</h3> 
-            <h4>Your transaction has been approved on the blockchain.</h4>
-          </v-col>
-        </v-row>
-        <v-btn
-          v-if="step2"
-          block
-          size="large"
-          class="mt-4"
-          @click="returnStep"
-        >
-          Return
-        </v-btn>
-        <v-btn
-          v-if="step1"
-          :disabled="!dislableSend"
-          :loading="loading"
-          color="#00b786"
-          block
-          size="large"
-          class="mt-4"
-          @click="validate"
-        >
-          Next step
-        </v-btn>
-        <v-btn
-          v-if="step2"
-          :disabled="!dislableSend"
-          :loading="loading"
-          color="#00b786"
-          block
-          size="large"
-          class="mt-4"
-          @click="validatestep2"
-        >
-          Redelegate
-        </v-btn>
-      </v-card-text>
-      <v-card-actions>
-        <v-spacer />
-      </v-card-actions>
-    </v-card>
-  </v-dialog>
-</div>
+            Next step
+          </v-btn>
+          <v-btn
+            v-if="step2"
+            :disabled="!dislableSend"
+            :loading="loading"
+            color="#00b786"
+            block
+            size="large"
+            class="mt-4"
+            @click="validatestep2"
+          >
+            Redelegate
+          </v-btn>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer />
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+  </div>
 </template>
 
 <script>
@@ -360,6 +362,12 @@ export default {
     "validatorName",
     "coinIcon",
   ],
+  setup() {
+    const store = useAppStore()
+    return {
+      store
+    }
+  },
   data: (instance) => ({
     dialog: false,
     dislableSend: true,
@@ -398,12 +406,6 @@ export default {
     validatorListSearch: [],
     searchTerm: "",
   }),
-  setup() {
-    const store = useAppStore()
-    return {
-      store
-    }
-  },
   computed: {
     /* ...mapState("keplr", [`accounts`]),
     ...mapState("data", ["chainId", `balances`, "allValidators"]), */
@@ -438,7 +440,7 @@ export default {
     }); */
 
     const selectValidatorList = [];
-    for (let i of this.store.allValidators) {
+    for (const i of this.store.allValidators) {
       console.log(i.name, this.validatorName)
       if (i.name !== this.validatorName) {
         selectValidatorList.push({
@@ -478,7 +480,7 @@ export default {
         this.step1 = false;
         this.step2 = true;
         // Fee claculation
-        let signer = await selectSigner(this.store.chainSelected, this.store.loggedType)
+        const signer = await selectSigner(this.store.chainSelected, this.store.loggedType)
 
         const foundMsgType = defaultRegistryTypes.find(
           (element) =>
@@ -527,7 +529,7 @@ export default {
           this.step3 = true;
           this.step2 = false;
 
-          let signer = await selectSigner(this.store.chainSelected, this.store.loggedType)
+          const signer = await selectSigner(this.store.chainSelected, this.store.loggedType)
 
           const convertAmount = Math.round(this.amount * 1000000);
 

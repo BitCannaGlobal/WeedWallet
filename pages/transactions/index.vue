@@ -1,5 +1,8 @@
 <template>
-  <div v-if="dataLoaded" class="ma-6">
+  <div
+    v-if="dataLoaded"
+    class="ma-6"
+  >
     <v-row class="ma-2">
       <h1>
         Transactions 
@@ -716,20 +719,6 @@ const categories = [
 
 
 export default {
-  data: () => ({
-    cosmosConfig: cosmosConfig,
-    validatorAddr: "",
-    totalProps: "",
-    totalVoted: "",
-    rpcSender: [],
-    rpcRecipient: [],
-    rpcAllTxs: [],
-    loading: true,
-    firstLoad: true,
-    dialog: false,
-    isCopied: false,
-    dataLoaded: false,
-  }),
   
   /* computed: {
     ...mapState("keplr", [`accounts`, "logged"]),
@@ -754,6 +743,20 @@ export default {
       store
     }
   },
+  data: () => ({
+    cosmosConfig: cosmosConfig,
+    validatorAddr: "",
+    totalProps: "",
+    totalVoted: "",
+    rpcSender: [],
+    rpcRecipient: [],
+    rpcAllTxs: [],
+    loading: true,
+    firstLoad: true,
+    dialog: false,
+    isCopied: false,
+    dataLoaded: false,
+  }),
   watch: {},
 
   async beforeMount() {

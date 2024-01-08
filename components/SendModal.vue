@@ -1,47 +1,47 @@
 <template>
   <div>
-        <v-btn
-          v-if="type === 'simpleSend'"
-          size="large" 
-          block
-          class="mt-5 white--text"
-          color="#0FB786"
-          @click="dialog = true"
-        >
-          Send
-        </v-btn>
-        <v-btn
-          v-else 
-          block
-          class="mt-2 white--text"
-          color="#0FB786"
-          @click="dialog = true"
-        >  Send
-        </v-btn>    
+    <v-btn
+      v-if="type === 'simpleSend'"
+      size="large" 
+      block
+      class="mt-5 white--text"
+      color="#0FB786"
+      @click="dialog = true"
+    >
+      Send
+    </v-btn>
+    <v-btn
+      v-else 
+      block
+      class="mt-2 white--text"
+      color="#0FB786"
+      @click="dialog = true"
+    >
+      Send
+    </v-btn>    
     <v-dialog
       v-model="dialog"
       max-width="600px"
       overlay-opacity="0.8"
       overlay-color="#000000"
     >
- 
       <v-card color="#161819">
         <v-toolbar
-            color="rgba(0, 0, 0, 0)"
-            theme="dark"
-          >
-            <template v-slot:prepend>
-              <v-avatar>
-                  <v-img
-                    max-width="32"
-                    max-height="32"
-                    :src="cosmosConfig[store.chainSelected].coinLookup.icon"
-                    alt="Bitcanna"
-                  ></v-img>
-                </v-avatar>
-            </template>
+          color="rgba(0, 0, 0, 0)"
+          theme="dark"
+        >
+          <template #prepend>
+            <v-avatar>
+              <v-img
+                max-width="32"
+                max-height="32"
+                :src="cosmosConfig[store.chainSelected].coinLookup.icon"
+                alt="Bitcanna"
+              />
+            </v-avatar>
+          </template>
 
-            <v-toolbar-title class="text-h6">
+          <v-toolbar-title class="text-h6">
             <span
               v-if="step1"
               class="text-h5"
@@ -58,12 +58,15 @@
               v-if="step4"
               class="text-h5"
             >Transaction send!</span>
-            </v-toolbar-title>
+          </v-toolbar-title>
 
-            <template v-slot:append>
-              <v-btn icon="mdi-close" @click="dialog = false"></v-btn>
-            </template>
-          </v-toolbar> 
+          <template #append>
+            <v-btn
+              icon="mdi-close"
+              @click="dialog = false"
+            />
+          </template>
+        </v-toolbar> 
  
         <v-card-text>
           <v-form
@@ -84,7 +87,7 @@
                   :rules="addressRules" 
                   required                    
                   variant="solo"
-                    bg-color="#0F0F0F"
+                  bg-color="#0F0F0F"
                 >
                 <!-- <template #append-inner>
                     <v-chip
@@ -99,21 +102,20 @@
                 <h3 class="carmenBold ml-1 mb-1">
                   Amount*
                 </h3>
-                  <v-text-field 
-                    v-model="amount" 
-                    :rules="amountRules"
-                    required
-                    variant="solo"
-                    bg-color="#0F0F0F"
-                    
-                  >
+                <v-text-field 
+                  v-model="amount" 
+                  :rules="amountRules"
+                  required
+                  variant="solo"
+                  bg-color="#0F0F0F"
+                >
                   <template #append-inner>
                     <v-chip
                       label
                       small
                       @click="getMax"
                     >
-                    Max
+                      Max
                     </v-chip>
                   </template>            
                 </v-text-field>              
@@ -283,7 +285,6 @@
             @click="validatestep2"            
           >
             Send tx
-         
           </v-btn>
           <v-btn
             v-if="step2"
@@ -292,8 +293,7 @@
             class="mt-4"
             size="x-large"
             @click="returnStep"
-          >            
- 
+          >
             Return
           </v-btn>
           <v-btn
@@ -306,7 +306,6 @@
             @click="validate"
           >
             Next step
-            
           </v-btn>
         </v-card-text>
         <v-card-actions>
@@ -345,6 +344,12 @@ function countPlaces(num) {
 }
 export default {
   props: ["chainIdProps", "amountAvailable", "coinIcon", "type"],
+  setup() {
+    const store = useAppStore()
+    return {
+      store
+    }
+  },
   data: (instance) => ({
     e1: 1,
     eError: true,
@@ -381,13 +386,7 @@ export default {
     loading: false,
     loadingInput: false,
     cosmosConfig: cosmosConfig,
-  }),
-  setup() {
-    const store = useAppStore()
-    return {
-      store
-    }
-  },  
+  }),  
   computed: {
     //...mapState("keplr", [`accounts`]),
     //...mapState("data", ["chainId", `balances`, 'priceNow']),
@@ -427,7 +426,7 @@ export default {
         this.step1 = false;
         this.step2 = true;
         // Fee claculation
-        let signer = await selectSigner(this.store.chainSelected, this.store.loggedType)
+        const signer = await selectSigner(this.store.chainSelected, this.store.loggedType)
 
         const foundMsgType = defaultRegistryTypes.find(
           (element) => element[0] === "/cosmos.bank.v1beta1.MsgSend"
@@ -488,7 +487,7 @@ export default {
           this.step3 = true;
           this.step2 = false;
 
-          let signer = await selectSigner(this.store.chainSelected, this.store.loggedType)
+          const signer = await selectSigner(this.store.chainSelected, this.store.loggedType)
           const convertAmount = Math.round(this.amount * 1000000);
           const amount = {
             denom: cosmosConfig[this.store.chainSelected].coinLookup.chainDenom,

@@ -1,6 +1,9 @@
 <template>
   <v-app id="inspire">
-    <v-navigation-drawer v-if="store.logged" v-model="drawer">
+    <v-navigation-drawer
+      v-if="store.logged"
+      v-model="drawer"
+    >
       <img
         alt="user"
         class="ma-4"
@@ -14,31 +17,27 @@
       >
         <div>
           <v-list>
-          <v-list-item
-            prepend-avatar="https://res.cloudinary.com/stargaze/image/upload/w_700/yzsrwjxcsjzx17acr90i.jpg"
-            :title="store.nameWallet" 
-          >
-          </v-list-item>
-        </v-list>
-
-
+            <v-list-item
+              prepend-avatar="https://res.cloudinary.com/stargaze/image/upload/w_700/yzsrwjxcsjzx17acr90i.jpg"
+              :title="store.nameWallet" 
+            />
+          </v-list>
         </div>
       </v-sheet>
  
-        <v-divider></v-divider>
+      <v-divider />
 
-        <v-list nav>
-          
-          <v-list-item 
-            v-for="[icon, text, url] in links" 
-            :to="url"
-            :append-icon="icon"  
-            :value="text" 
-            class="ma-2 tile" 
-          >
+      <v-list nav>
+        <v-list-item 
+          v-for="[icon, text, url] in links" 
+          :to="url"
+          :append-icon="icon"  
+          :value="text" 
+          class="ma-2 tile" 
+        >
           <v-list-item-title><span class="carmenBold"><h3>{{ text }}</h3></span></v-list-item-title>
-          </v-list-item>
-        </v-list>
+        </v-list-item>
+      </v-list>
         
       <v-footer
         min-height="48"
@@ -86,7 +85,7 @@
         color="grey"
         location="bottom"
       >
-         <template v-slot:activator="{ props }">
+        <template #activator="{ props }">
           <v-chip
             class="ml-3"
             color="#00b786"
@@ -101,37 +100,37 @@
         <span class="mb-2 mt-2">
           <QRCodeVue3
           
-          :width="250"
-          :height="250"
-          :value="store.addrWallet"
-          :qrOptions="{ typeNumber: 0, mode: 'Byte', errorCorrectionLevel: 'H' }" 
-          :dotsOptions="{
-            type: 'dots',
-            color: '#3CC194',
-            gradient: {
-              type: 'linear',
-              rotation: 0,
-              colorStops: [
-                { offset: 0, color: '#3CC194' },
-                { offset: 1, color: '#3CC194' },
-              ],
-            },
-          }"
-          :backgroundOptions="{ color: '#ffffff' }"
-          :cornersSquareOptions="{ type: 'dot', color: '#000000' }"
-          :cornersDotOptions="{ type: undefined, color: '#000000' }"    
-        />
-      </span>
+            :width="250"
+            :height="250"
+            :value="store.addrWallet"
+            :qr-options="{ typeNumber: 0, mode: 'Byte', errorCorrectionLevel: 'H' }" 
+            :dots-options="{
+              type: 'dots',
+              color: '#3CC194',
+              gradient: {
+                type: 'linear',
+                rotation: 0,
+                colorStops: [
+                  { offset: 0, color: '#3CC194' },
+                  { offset: 1, color: '#3CC194' },
+                ],
+              },
+            }"
+            :background-options="{ color: '#ffffff' }"
+            :corners-square-options="{ type: 'dot', color: '#000000' }"
+            :corners-dot-options="{ type: undefined, color: '#000000' }"    
+          />
+        </span>
       </v-tooltip>
       <v-chip
-            class="ml-3"
-            color="#00b786"
-            variant="outlined"
-            label 
-            @click="copyAddr(store.addrWallet)"
-          >
-            {{ cosmosConfig[store.chainSelected].chainId }}
-          </v-chip>
+        class="ml-3"
+        color="#00b786"
+        variant="outlined"
+        label 
+        @click="copyAddr(store.addrWallet)"
+      >
+        {{ cosmosConfig[store.chainSelected].chainId }}
+      </v-chip>
       
       <span
         v-if="isCopied"
@@ -167,6 +166,17 @@ export default {
   components: {
     QRCodeVue3
   },
+  setup() {
+    const store = useAppStore()
+    const theme = useTheme()
+    const {currentRoute} = useRouter()
+
+    return {
+      store,
+      currentRoute,
+      toggleTheme: () => theme.global.name.value = theme.global.current.value.dark ? 'light' : 'dark'
+    }
+  },
   data: () => ({ 
     cosmosConfig: cosmosConfig,
     drawer: null,
@@ -186,17 +196,6 @@ export default {
       ["mdi-chevron-right", "Get BCNA", "/get-bcna"],
     ],
   }),
-  setup() {
-    const store = useAppStore()
-    const theme = useTheme()
-    const {currentRoute} = useRouter()
-
-    return {
-      store,
-      currentRoute,
-      toggleTheme: () => theme.global.name.value = theme.global.current.value.dark ? 'light' : 'dark'
-    }
-  },
   
   async beforeCreate() {
     await this.store.checkLogin()

@@ -1,5 +1,8 @@
 <template>
-  <div v-if="store.logged" class="ma-6">
+  <div
+    v-if="store.logged"
+    class="ma-6"
+  >
     <v-row class="ma-2">
       <h1>
         Delegate 
@@ -20,68 +23,71 @@
     <v-col cols="12">
       <v-divider class="mb-6" />
  
-        <v-row justify="space-around">
-          <v-col>
-            <span class="text-h5">My validators</span>
-            <v-table theme="dark" class="table rounded">
-              <template #default>                   
-                <tbody>
-                  <tr
-                    v-for="item in store.allMyDelegations"
-                    :key="item.validatorName"
-                    class="myValidator"
-                  >
-                    <td style="">
-                      <router-link
-                        :to="'/validators/' + item.op_address"
-                        class="linkFormat box"
+      <v-row justify="space-around">
+        <v-col>
+          <span class="text-h5">My validators</span>
+          <v-table
+            theme="dark"
+            class="table rounded"
+          >
+            <template #default>                   
+              <tbody>
+                <tr
+                  v-for="item in store.allMyDelegations"
+                  :key="item.validatorName"
+                  class="myValidator"
+                >
+                  <td style="">
+                    <router-link
+                      :to="'/validators/' + item.op_address"
+                      class="linkFormat box"
+                    >
+                      <v-avatar size="48">
+                        <v-img
+                          :src="'https://raw.githubusercontent.com/cosmostation/chainlist/main/chain/bitcanna/moniker/'+item.op_address+'.png'" 
+                          :alt="item.validatorName" 
+                        /> 
+                      </v-avatar>
+                      <span class="ml-8"><h3>{{ item.validatorName }}</h3></span> 
+                    </router-link>
+                  </td>
+                  <td style="text-align: right;">
+                    <span class="mr-4 carmenBold">
+                      {{ Number(item.delegated / 1000000).toFixed(2) }}
+                      <span
+                        color="#00BB82"
+                        class="text-greenbcna carmenBold"
                       >
-                        <v-avatar size="48">
-                          <v-img
-                            :src="'https://raw.githubusercontent.com/cosmostation/chainlist/main/chain/bitcanna/moniker/'+item.op_address+'.png'" 
-                            :alt="item.validatorName" 
-                          /> 
-                        </v-avatar>
-                        <span class="ml-8"><h3>{{ item.validatorName }}</h3></span> 
-                      </router-link>
-                    </td>
-                    <td style="text-align: right;">
-                      <span class="mr-4 carmenBold">
-                        {{ Number(item.delegated / 1000000).toFixed(2) }}
-                        <span
-                          color="#00BB82"
-                          class="text-greenbcna carmenBold"
-                        >
-                          +{{ Number(item.reward).toFixed(2) }}                             
-                        </span>
+                        +{{ Number(item.reward).toFixed(2) }}                             
                       </span>
-                      <v-chip
-                        v-if="item.status === 'BOND_STATUS_BONDED'"
-                        class="ma-2"
-                        color="#00b786"
-                        label
-                        variant="flat"
-                      >
-                        Active
-                      </v-chip>
-                      <v-chip
-                        v-else
-                        class="ma-2"
-                        color="red"
-                        label
-                        variant="flat"
-                      >
-                        Inactive
-                      </v-chip> 
-                    </td>
-                  </tr>
-                </tbody>
-              </template>
-            </v-table>
-          </v-col>
-        </v-row> 
+                    </span>
+                    <v-chip
+                      v-if="item.status === 'BOND_STATUS_BONDED'"
+                      class="ma-2"
+                      color="#00b786"
+                      label
+                      variant="flat"
+                    >
+                      Active
+                    </v-chip>
+                    <v-chip
+                      v-else
+                      class="ma-2"
+                      color="red"
+                      label
+                      variant="flat"
+                    >
+                      Inactive
+                    </v-chip> 
+                  </td>
+                </tr>
+              </tbody>
+            </template>
+          </v-table>
+        </v-col>
+      </v-row> 
 
-<!--         <v-row
+      <!--         <v-row
           justify="space-around"
           class="mt-4 data-row"
         >
@@ -139,28 +145,25 @@
           </v-col>
         </v-row>
  -->
-        <v-row 
-          justify="space-around"
-        >
-          <v-col>
-            <span class="text-h5">All validators</span>
-            <v-card class="accent">
-
-
-              <template v-slot:append>
-                  <v-switch
-                      v-model="orderVal"
-                      color="#00b786"
-                      :label="`View ${getStatus.toString()}`"
-                    />
-                </template>
-              <v-card-text>
-                <AllValidators :get-status="getStatus" />
-              </v-card-text>
-            </v-card>
-          </v-col>
-        </v-row>
-
+      <v-row 
+        justify="space-around"
+      >
+        <v-col>
+          <span class="text-h5">All validators</span>
+          <v-card class="accent">
+            <template #append>
+              <v-switch
+                v-model="orderVal"
+                color="#00b786"
+                :label="`View ${getStatus.toString()}`"
+              />
+            </template>
+            <v-card-text>
+              <AllValidators :get-status="getStatus" />
+            </v-card-text>
+          </v-card>
+        </v-col>
+      </v-row>
     </v-col>
   </div>
 </template>
@@ -176,6 +179,13 @@ import {
 } from "@cosmjs/stargate";
 
 export default {
+  setup() {
+    const store = useAppStore()
+
+    return {
+      store
+    }
+  },
   data: () => ({
     cosmosConfig: cosmosConfig,
     dialog: false,
@@ -236,13 +246,6 @@ export default {
       "validatorUnDelegations",
       "validatorRewards",
     ]), */
-  },
-  setup() {
-    const store = useAppStore()
-
-    return {
-      store
-    }
   },
   watch: {
     orderVal: function (val) {  

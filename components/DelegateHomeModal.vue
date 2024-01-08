@@ -1,188 +1,188 @@
 <template>
   <div>
-      <v-btn
-        size="large"
-        min-width="200"
-        class="mt-8 white--text"
-        color="#0FB786"
-        @click="dialog = true"
-      >
-        <v-icon class="mr-2">
-          mdi-cube-send
-        </v-icon> Delegate BitCanna
-      </v-btn>
-  <v-dialog
-    v-model="dialog"
-    max-width="600px"
-    
-  >
- 
-    <v-card color="#161819">
-      <v-toolbar
-            color="rgba(0, 0, 0, 0)"
-            theme="dark"
-          >
-            <template v-slot:prepend>
-              <v-avatar>
-                  <v-img
-                    max-width="32"
-                    max-height="32"
-                    :src="cosmosConfig[store.chainSelected].coinLookup.icon"
-                    alt="Bitcanna"
-                  ></v-img>
-                </v-avatar>
-            </template>
+    <v-btn
+      size="large"
+      min-width="200"
+      class="mt-8 white--text"
+      color="#0FB786"
+      @click="dialog = true"
+    >
+      <v-icon class="mr-2">
+        mdi-cube-send
+      </v-icon> Delegate BitCanna
+    </v-btn>
+    <v-dialog
+      v-model="dialog"
+      max-width="600px"
+    >
+      <v-card color="#161819">
+        <v-toolbar
+          color="rgba(0, 0, 0, 0)"
+          theme="dark"
+        >
+          <template #prepend>
+            <v-avatar>
+              <v-img
+                max-width="32"
+                max-height="32"
+                :src="cosmosConfig[store.chainSelected].coinLookup.icon"
+                alt="Bitcanna"
+              />
+            </v-avatar>
+          </template>
 
-            <v-toolbar-title class="text-h6">
-              <span
-                v-if="step1"
-                class="text-h5"
-              >Delegate token</span>
-              <span
-                v-if="step2"
-                class="text-h5"
-              >Check transaction </span>
-              <span
-                v-if="step3"
-                class="text-h5"
-              >Wait from keplr</span>
-              <span
-                v-if="step4"
-                class="text-h5"
-              >Transaction send!</span>
-            </v-toolbar-title>
+          <v-toolbar-title class="text-h6">
+            <span
+              v-if="step1"
+              class="text-h5"
+            >Delegate token</span>
+            <span
+              v-if="step2"
+              class="text-h5"
+            >Check transaction </span>
+            <span
+              v-if="step3"
+              class="text-h5"
+            >Wait from keplr</span>
+            <span
+              v-if="step4"
+              class="text-h5"
+            >Transaction send!</span>
+          </v-toolbar-title>
 
-            <template v-slot:append>
-              <v-btn icon="mdi-close" @click="dialog = false"></v-btn>
-            </template>
-          </v-toolbar> 
+          <template #append>
+            <v-btn
+              icon="mdi-close"
+              @click="dialog = false"
+            />
+          </template>
+        </v-toolbar> 
  
-      <v-card-text>
-        <v-form
-          v-if="step1"
-          ref="form"
-          v-model="dislableSend"
-          lazy-validation
-        > 
-          <v-row>
-            <v-col cols="12">
-              <span class="text-left carmenBold">Available: {{ amount }} BCNA</span>
-              <br><br> 
-              <h3 class="mt-1 ml-1 carmenBold">
-                Amount to delegate*
-              </h3>
-              <v-text-field 
+        <v-card-text>
+          <v-form
+            v-if="step1"
+            ref="form"
+            v-model="dislableSend"
+            lazy-validation
+          > 
+            <v-row>
+              <v-col cols="12">
+                <span class="text-left carmenBold">Available: {{ amount }} BCNA</span>
+                <br><br> 
+                <h3 class="mt-1 ml-1 carmenBold">
+                  Amount to delegate*
+                </h3>
+                <v-text-field 
                   v-model="amountFinal" 
                   :rules="amountRules"
                   required
                   variant="solo"
                   bg-color="#0F0F0F"
-                  
                 >
-                <template #append-inner>
-                  <v-chip
-                    label
-                    small
-                    @click="getMax"
-                  >
-                  Max
-                  </v-chip>
-                </template>            
-              </v-text-field>
+                  <template #append-inner>
+                    <v-chip
+                      label
+                      small
+                      @click="getMax"
+                    >
+                      Max
+                    </v-chip>
+                  </template>            
+                </v-text-field>
  
-              <h3 class="mt-1 ml-1 mb-1 carmenBold">
-                Delegate to*
-              </h3> 
-              <v-select
-                v-model="addressTo"
-                :rules="addressToRules"
-                item-title="name"
-                item-value="address"
-                :items="validatorListSearch" 
-                required
-                variant="solo"
-                bg-color="#0F0F0F"
-              >
-                <template #prepend-item>
-                  <v-list-item>
-                    <v-list-item-content>
-                      <v-text-field
-                        v-model="searchTerm"
-                        outlined
-                        placeholder="Search validator"
-                        @input="searchVal"
-                      />
-                    </v-list-item-content>
-                  </v-list-item>
-                  <v-divider class="mt-2" />
-                </template> 
-              </v-select>
-              <h3 class="mt-1 ml-1 mb-1 carmenBold">
-                Memo
-              </h3>
-              <v-text-field
-                v-model="memo"
-                required
-                variant="solo"
-                bg-color="#0F0F0F"
-              />
-            </v-col>
-          </v-row> 
-        </v-form>
-        <v-form
-          v-if="step2"
-          ref="form"
-          lazy-validation
-        >
-          <v-sheet
-            outlined
-            color="gray"
-            rounded
+                <h3 class="mt-1 ml-1 mb-1 carmenBold">
+                  Delegate to*
+                </h3> 
+                <v-select
+                  v-model="addressTo"
+                  :rules="addressToRules"
+                  item-title="name"
+                  item-value="address"
+                  :items="validatorListSearch" 
+                  required
+                  variant="solo"
+                  bg-color="#0F0F0F"
+                >
+                  <template #prepend-item>
+                    <v-list-item>
+                      <v-list-item-content>
+                        <v-text-field
+                          v-model="searchTerm"
+                          outlined
+                          placeholder="Search validator"
+                          @input="searchVal"
+                        />
+                      </v-list-item-content>
+                    </v-list-item>
+                    <v-divider class="mt-2" />
+                  </template> 
+                </v-select>
+                <h3 class="mt-1 ml-1 mb-1 carmenBold">
+                  Memo
+                </h3>
+                <v-text-field
+                  v-model="memo"
+                  required
+                  variant="solo"
+                  bg-color="#0F0F0F"
+                />
+              </v-col>
+            </v-row> 
+          </v-form>
+          <v-form
+            v-if="step2"
+            ref="form"
+            lazy-validation
           >
-            <v-card
-              color="#1C1D20"
-              class="pa-2 carmenBold"
+            <v-sheet
               outlined
-              tile 
+              color="gray"
+              rounded
             >
-              <v-list-item two-line>
-                <v-list-item-content>        
-                  <v-list-item-subtitle class="mb-2">
-                    <h3>Delegate to</h3>
-                  </v-list-item-subtitle>
-                  <v-list-item-title>
-                    <h3>{{ valName }}</h3> 
-                  </v-list-item-title>
-                </v-list-item-content>
-              </v-list-item>
-              <v-list-item two-line>
-                <v-list-item-content>        
-                  <v-list-item-subtitle class="mb-2">
-                    <h3>Amount</h3>
-                  </v-list-item-subtitle>
-                  <v-list-item-title>
-                    <h3>
-                      {{ amountFinal }}
-                      {{ cosmosConfig[store.chainSelected].coinLookup.viewDenom }}                        
-                    </h3> 
-                  </v-list-item-title>
-                </v-list-item-content>
-              </v-list-item>                
-              <v-list-item two-line>
-                <v-list-item-content>        
-                  <v-list-item-subtitle class="mb-2">
-                    <h3>Gas/fee</h3>
-                  </v-list-item-subtitle>
-                  <v-list-item-title>
-                    <h3>
-                      {{ gasFee.gas }} / {{ gasFee.fee / 1000000 }}
-                      {{ cosmosConfig[store.chainSelected].coinLookup.viewDenom }}
-                    </h3>
-                  </v-list-item-title>
-                </v-list-item-content>
-              </v-list-item>
-            </v-card>
-          </v-sheet>  
+              <v-card
+                color="#1C1D20"
+                class="pa-2 carmenBold"
+                outlined
+                tile 
+              >
+                <v-list-item two-line>
+                  <v-list-item-content>        
+                    <v-list-item-subtitle class="mb-2">
+                      <h3>Delegate to</h3>
+                    </v-list-item-subtitle>
+                    <v-list-item-title>
+                      <h3>{{ valName }}</h3> 
+                    </v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>
+                <v-list-item two-line>
+                  <v-list-item-content>        
+                    <v-list-item-subtitle class="mb-2">
+                      <h3>Amount</h3>
+                    </v-list-item-subtitle>
+                    <v-list-item-title>
+                      <h3>
+                        {{ amountFinal }}
+                        {{ cosmosConfig[store.chainSelected].coinLookup.viewDenom }}                        
+                      </h3> 
+                    </v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>                
+                <v-list-item two-line>
+                  <v-list-item-content>        
+                    <v-list-item-subtitle class="mb-2">
+                      <h3>Gas/fee</h3>
+                    </v-list-item-subtitle>
+                    <v-list-item-title>
+                      <h3>
+                        {{ gasFee.gas }} / {{ gasFee.fee / 1000000 }}
+                        {{ cosmosConfig[store.chainSelected].coinLookup.viewDenom }}
+                      </h3>
+                    </v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>
+              </v-card>
+            </v-sheet>  
           <!--          <v-row>
             <v-col cols="12">
               <v-simple-table class="accent">
@@ -235,78 +235,78 @@
               </v-simple-table>
             </v-col>
           </v-row> -->
-        </v-form>
+          </v-form>
 
-        <v-row v-if="step3">
-          <v-col
-            cols="12"
-            align="center"
-            justify="center"
+          <v-row v-if="step3">
+            <v-col
+              cols="12"
+              align="center"
+              justify="center"
+            >
+              <v-img
+                max-height="102"
+                max-width="102"
+                src="icons/pending.svg"
+              />
+              <br>
+              <h3>Transaction pending</h3> 
+              <h4>Your transaction is waiting to get approved on the blockchain.</h4>
+            </v-col>
+          </v-row>
+          <v-row v-if="step4">
+            <v-col
+              cols="12"
+              align="center"
+              justify="center"
+            >
+              <v-img
+                max-height="102"
+                max-width="102"
+                src="icons/approved.svg"
+              />
+              <br>
+              <h3>Transaction approved</h3> 
+              <h4>Your transaction has been approved on the blockchain.</h4>
+            </v-col>
+          </v-row>
+          <v-btn
+            v-if="step2"
+            color="#1C1D20"
+            block
+            size="large"
+            class="mt-4"
+            @click="returnStep"
           >
-            <v-img
-              max-height="102"
-              max-width="102"
-              src="icons/pending.svg"
-            />
-            <br>
-            <h3>Transaction pending</h3> 
-            <h4>Your transaction is waiting to get approved on the blockchain.</h4>
-          </v-col>
-        </v-row>
-        <v-row v-if="step4">
-          <v-col
-            cols="12"
-            align="center"
-            justify="center"
+            Return
+          </v-btn>
+          <v-btn
+            v-if="step1"
+            :disabled="!dislableSend"
+            :loading="loading"
+            color="#00b786"
+            block
+            size="large"
+            class="mt-4 mb-4"
+            @click="validate"
           >
-            <v-img
-              max-height="102"
-              max-width="102"
-              src="icons/approved.svg"
-            />
-            <br>
-            <h3>Transaction approved</h3> 
-            <h4>Your transaction has been approved on the blockchain.</h4>
-          </v-col>
-        </v-row>
-        <v-btn
-          v-if="step2"
-          color="#1C1D20"
-          block
-          size="large"
-          class="mt-4"
-          @click="returnStep"
-        >
-          Return
-        </v-btn>
-        <v-btn
-          v-if="step1"
-          :disabled="!dislableSend"
-          :loading="loading"
-          color="#00b786"
-          block
-          size="large"
-          class="mt-4 mb-4"
-          @click="validate"
-        >
-          Next step
-        </v-btn>
-        <v-btn
-          v-if="step2"
-          :disabled="!dislableSend"
-          :loading="loading"
-          color="#00b786"
-          block
-          size="large"
-          class="mt-4 mb-4"
-          @click="validatestep2"
-        >
-          Delegate
-        </v-btn>
-      </v-card-text> 
-    </v-card>
-  </v-dialog>
-</div>
+            Next step
+          </v-btn>
+          <v-btn
+            v-if="step2"
+            :disabled="!dislableSend"
+            :loading="loading"
+            color="#00b786"
+            block
+            size="large"
+            class="mt-4 mb-4"
+            @click="validatestep2"
+          >
+            Delegate
+          </v-btn>
+        </v-card-text> 
+      </v-card>
+    </v-dialog>
+  </div>
 </template>
 
 <script>
@@ -332,6 +332,13 @@ export default {
     "chainIdProps",
     "balances",
   ],
+  setup() {
+    const store = useAppStore()
+
+    return {
+      store
+    }
+  },
   data: (instance) => ({
     dialog: false,
     dislableSend: true,
@@ -375,13 +382,6 @@ export default {
     searchTerm: "",    
     valName: ''
   }),
-  setup() {
-    const store = useAppStore()
-
-    return {
-      store
-    }
-  },
   computed: {
     /* ...mapState("keplr", [`accounts`]),
     ...mapState("data", ["chainId", "allValidators"]), */   
@@ -402,7 +402,7 @@ export default {
     
     //await this.store.getStakingModule()
     const selectValidatorList = [];
-    for (let i of this.store.allValidators) {
+    for (const i of this.store.allValidators) {
       selectValidatorList.push({
         'name': i.name,
         'address': i.op_address,
@@ -447,7 +447,7 @@ export default {
           cosmosConfig[this.store.chainSelected].rpcURL,
           offlineSigner
         ); */
-        let signer = await selectSigner(this.store.chainSelected, this.store.loggedType)
+        const signer = await selectSigner(this.store.chainSelected, this.store.loggedType)
 
         const foundMsgType = defaultRegistryTypes.find(
           (element) => element[0] === "/cosmos.staking.v1beta1.MsgDelegate"
@@ -523,7 +523,7 @@ export default {
               ),
             }
           ); */
-          let signer = await selectSigner(this.store.chainSelected, this.store.loggedType)
+          const signer = await selectSigner(this.store.chainSelected, this.store.loggedType)
 
 
           const convertAmount = Math.round(this.amountFinal * 1000000);

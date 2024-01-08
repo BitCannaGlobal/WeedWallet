@@ -4,7 +4,7 @@
     {{ nftData }}-->
 
     <v-container>
-      <v-row >
+      <v-row>
         <v-col class="mb-4 text-h6 text-md-h5 text-lg-h4">
           Buddhead #{{ nftId }}
         </v-col>
@@ -29,7 +29,7 @@
             tile
             min-height="523"
           >
-           <v-img :src="nftData.data?.token.media.url" />
+            <v-img :src="nftData.data?.token.media.url" />
           </v-card>
         </v-col>
         <v-col
@@ -104,13 +104,6 @@ import cosmosConfig from "~/cosmos.config";
 
 export default {
   filters: {},
-  data: () => ({
-    cosmosConfig: cosmosConfig,
-    nftId: "",
-    nftData: "",
-  }),
-  computed: {},
-  watch: {},
   setup() {
     const store = useAppStore()
 
@@ -118,6 +111,13 @@ export default {
       store
     }
   },
+  data: () => ({
+    cosmosConfig: cosmosConfig,
+    nftId: "",
+    nftData: "",
+  }),
+  computed: {},
+  watch: {},
   async beforeMount() {
     this.nftId = this.$route.params.id;
 

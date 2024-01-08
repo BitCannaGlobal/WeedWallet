@@ -1,5 +1,8 @@
 <template>
-  <div v-if="store.logged" class="ma-4">
+  <div
+    v-if="store.logged"
+    class="ma-4"
+  >
     <v-row>
       <v-col cols="12">
         <sequential-entrance>
@@ -229,6 +232,13 @@ import cosmosConfig from "~/cosmos.config";
 
 export default {
   name: `AppHeader`,
+  setup() {
+    const store = useAppStore()
+
+    return {
+      store
+    }
+  },
   data: () => ({
     isOpen: false,
     desktop: false,
@@ -242,13 +252,6 @@ export default {
   }),
   computed: {
     //...mapState("keplr", [`accounts`, "logged"]),
-  },
-  setup() {
-    const store = useAppStore()
-
-    return {
-      store
-    }
   },
   async beforeMount() {
     this.watchWindowSize();
@@ -285,7 +288,7 @@ export default {
     }
     this.loading = false; 
     
-    let finalData = await axios("api/collectiondata");
+    const finalData = await axios("api/collectiondata");
     console.log('finalData',finalData.data)
     this.collectionData = finalData.data;
     this.collectionDataLoaded = true;

@@ -1,10 +1,9 @@
 <template>
- <div v-if="store.logged" >
+  <div v-if="store.logged">
     <v-col
       cols="12"
     >
-      <v-col class="ml-4 mt-6 mb-6"> 
-
+      <v-col class="ml-4 mt-6 mb-6">
         <!-- <h1>        <img
           src="/keplr.png"
           alt="bcna"
@@ -12,292 +11,314 @@
           width="40"
         >{{ store.nameWallet }}'s portfolio</h1> -->
  
-          <v-list-item
-            class="background"
-            :prepend-avatar="store.loggedType + '.svg'" 
-          ><h1>{{ store.nameWallet  }}'s portfolio</h1></v-list-item> 
+        <v-list-item
+          class="background"
+          :prepend-avatar="store.loggedType + '.svg'" 
+        >
+          <h1>{{ store.nameWallet }}'s portfolio</h1>
+        </v-list-item> 
       </v-col>
-        <v-row>
-          <v-col
-            class="fill-height d-flex flex-column justify-center align-center"
+      <v-row>
+        <v-col
+          class="fill-height d-flex flex-column justify-center align-center"
+        >
+          <v-card
+            class="pa-4 accent"
+            width="700"
+            min-height="220"
           >
-            <v-card
-              class="pa-4 accent"
-              width="700"
-              min-height="220"
-            >
-              <v-card-text>
-                <v-row>
-                  <v-col md="6" class="text-textbcna">
-                    Main account<br>
-                    <h1 class="mt-2 carmenBold">
-                      {{ store.totalTokens }}
-                      {{ cosmosConfig[store.chainSelected].coinLookup.viewDenom }}  
-                    </h1>
-                    <h3 class="mt-2">
-                      ${{ store.fiatWalletValue }}
-                    </h3>
+            <v-card-text>
+              <v-row>
+                <v-col
+                  md="6"
+                  class="text-textbcna"
+                >
+                  Main account<br>
+                  <h1 class="mt-2 carmenBold">
+                    {{ store.totalTokens }}
+                    {{ cosmosConfig[store.chainSelected].coinLookup.viewDenom }}  
+                  </h1>
+                  <h3 class="mt-2">
+                    ${{ store.fiatWalletValue }}
+                  </h3>
 
-                    <v-row class="mt-2">
-                      <v-col md="6">
-                        <!-- <actionsModals 
+                  <v-row class="mt-2">
+                    <v-col md="6">
+                      <!-- <actionsModals 
                           type="sendTokens" 
                           :spendableBalances="store.spendableBalances" 
                           :chain="cosmosConfig[store.chainSelected]" 
                         />  -->
-                        <SendModal
-                          class="text-right"
-                          :chain-id-props="
-                            cosmosConfig[store.chainSelected].coinLookup.addressPrefix
-                          "
-                          :amount-available="store.spendableBalances"
-                          :coin-icon="cosmosConfig[store.chainSelected].coinLookup.icon"
-                          type="simpleSend"
-                        />
-                      </v-col>
-                      <v-col md="6">
-                        <v-btn
-                          size="large" 
-                          block
-                          class="mt-5 text-green-accent-3"
-                          color="white"
-                          @click.stop="dialogReceive = true"
-                        >
-                          Receive
-                        </v-btn>
-                      </v-col>
-                    </v-row>
-                  </v-col>
-                  <v-col md="6">
- 
-                      <v-card
-                        class="pa-2 accent" 
-                        variant="outlined"
-                        height="160"
+                      <SendModal
+                        class="text-right"
+                        :chain-id-props="
+                          cosmosConfig[store.chainSelected].coinLookup.addressPrefix
+                        "
+                        :amount-available="store.spendableBalances"
+                        :coin-icon="cosmosConfig[store.chainSelected].coinLookup.icon"
+                        type="simpleSend"
+                      />
+                    </v-col>
+                    <v-col md="6">
+                      <v-btn
+                        size="large" 
+                        block
+                        class="mt-5 text-green-accent-3"
+                        color="white"
+                        @click.stop="dialogReceive = true"
                       >
-                        <img
-                          src="BCNA-LOGO-C.svg"
-                          alt="bcna"
-                          height="40"
-                          width="40"
-                        >
-                        <br><br>
-                        <span class="mt-2"> {{ store.nameWallet }}'s portfolio</span> <br>
-                        <span class="text-caption">
-                          {{ store.addrWallet }}
-                        </span>
-                      </v-card> 
-                  </v-col>
-                </v-row>
-                <v-row class="justify-end">
-                  <v-icon 
-                    class="mt-n1 mr-2"
-                    @click="walletDistribution = !walletDistribution"
-                  >
-                    mdi-chevron-down
-                  </v-icon>   
-                </v-row>              
-                <v-divider
-                  v-if="walletDistribution"
-                  class="mt-6 mb-6"
-                />
- 
-                <v-row
-                  v-if="walletDistribution"
-                  no-gutters
-                >
-                  <v-col 
-                    cols="12"
-                    sm="6"
-                  >                   
-                    <v-row no-gutters class="ma-2">
-                      <v-col > 
-                        <v-icon
-                          color="#0EB584"
-                          size="small"
-                          class="mt-n1"
-                        >
-                          mdi-circle
-                        </v-icon>
-                        Available 
-                      </v-col>
-                      <v-col> 
-                        {{ store.spendableBalances }}
-                        {{ cosmosConfig[store.chainSelected].coinLookup.viewDenom }}  
-                      </v-col>
-                    </v-row>
-                    <v-row no-gutters class="ma-2">
-                      <v-col> 
-                        <v-icon
-                          color="#79FFD8"
-                          size="small"
-                          class="mt-n1"
-                        >
-                          mdi-circle
-                        </v-icon>
-                        Delegated 
-                      </v-col>
-                      <v-col> 
-                        {{ store.totalDelegations }}
-                        {{ cosmosConfig[store.chainSelected].coinLookup.viewDenom }}  
-                      </v-col>
-                    </v-row>
-                    <v-row no-gutters class="ma-2">
-                      <v-col> 
-                        <v-icon
-                          color="#FFFFFF"
-                          size="small"
-                          class="mt-n1"
-                        >
-                          mdi-circle
-                        </v-icon>
-                        Vested 
-                      </v-col>
-                      <v-col> 
-                        0
-                        {{ cosmosConfig[store.chainSelected].coinLookup.viewDenom }}  
-                      </v-col>
-                    </v-row>  
-                  </v-col>
-                  <v-col 
-                    cols="12"
-                    sm="6"
-                  >
-                    <v-row no-gutters class="ma-2">
-                      <v-col> 
-                        <v-icon
-                          color="#FF7E7E"
-                          size="small"
-                          class="mt-n1"
-                        >
-                          mdi-circle
-                        </v-icon>
-                        Unbonding 
-                      </v-col>
-                      <v-col> 
-                        {{ store.totalUnbound }} 
-                        {{ cosmosConfig[store.chainSelected].coinLookup.viewDenom }}  
-                      </v-col>
-                    </v-row> 
-                    <v-row no-gutters class="ma-2">
-                      <v-col> 
-                        <v-icon
-                          color="#006C4C"
-                          size="small"
-                          class="mt-n1"
-                        >
-                          mdi-circle
-                        </v-icon>
-                        Rewards 
-                      </v-col>
-                      <v-col> 
-                       {{ store.totalRewards }}
-                        {{ cosmosConfig[store.chainSelected].coinLookup.viewDenom }}  
-                      </v-col>
-                    </v-row>  
-                  </v-col> 
-                </v-row> 
-              </v-card-text>
-            </v-card>
-
-            <v-col class="mt-6 "> 
-              <h1 class="ml-7" style="text-align:left; float:left;">
-                Transactions
-              </h1>
-              <p
-                class="mt-4 mr-9"
-                style="text-align:right;"
-              >
-                <NuxtLink to="/transactions"> 
-                  See all transactions 
-                </NuxtLink>
-              </p>
-            </v-col>
-            <template v-for="group in groupedEvents()">
-              <div class="text-textbcna">
-                <h3 class="ml-2">
-                  {{ group[0].section }}
-                </h3>
-                
-                <v-card
-                  v-for="item in group"  
-                  class="ma-2 pa-4 accent"
-                  width="700"
-                  min-height="50"
-                >
-                  <!-- {{ item }}  -->
-                  <v-row 
-                    class="data-row"
-                  >
-                    <v-col cols="3">
-                      <v-chip
-                        class="mb-2"
-                        :color="item.final.color"
-                        variant="outlined"
-                        label
-                      >
-                        {{ item.final.typeReadable }}
-                      </v-chip> 
+                        Receive
+                      </v-btn>
                     </v-col>
-                    <v-col
-                      cols="4"
-                      class="mt-2"
-                    >
-                      {{ formatDate(item.final.timestamp) }}
-                    </v-col>
-                    <v-col
-                      v-if="item.final.msgData?.amount"
-                      cols="2"
-                      class="mt-2 text-right"
-                    >
-                      {{ item.final.msgData?.amount }} BCNA
-                    </v-col>
-                    <v-col
-                      v-else
-                      cols="2"
-                      class="mt-2 text-right"
-                    />
                   </v-row>
-                </v-card>
-                <!-- {{ group }} -->
-              </div>
-            </template>
-          </v-col>
-          <v-divider
-            class="mx-4"
-            vertical
-          />
-
-          <v-col
-            class="fill-height d-flex flex-column justify-center align-center"
-          >
-            <v-card
-              class="accent"
-              width="700"
-              min-height="220"
-            >
-              <v-card-title class="headline">
-                <v-col class="mt-2">
-                  <h4 class="icon">
-                    <img src="icon-stake.png">
-                  </h4>
                 </v-col>
-              </v-card-title>
-              <v-card-text>
-                <v-row>
-                  <v-col class="mt-2">
-                    <span>
-                      <h1 class="text-textbcna">Available to stake</h1>
+                <v-col md="6">
+                  <v-card
+                    class="pa-2 accent" 
+                    variant="outlined"
+                    height="160"
+                  >
+                    <img
+                      src="BCNA-LOGO-C.svg"
+                      alt="bcna"
+                      height="40"
+                      width="40"
+                    >
+                    <br><br>
+                    <span class="mt-2"> {{ store.nameWallet }}'s portfolio</span> <br>
+                    <span class="text-caption">
+                      {{ store.addrWallet }}
                     </span>
-                    <br>
-                    <h2 class="text-textbcna">
+                  </v-card> 
+                </v-col>
+              </v-row>
+              <v-row class="justify-end">
+                <v-icon 
+                  class="mt-n1 mr-2"
+                  @click="walletDistribution = !walletDistribution"
+                >
+                  mdi-chevron-down
+                </v-icon>   
+              </v-row>              
+              <v-divider
+                v-if="walletDistribution"
+                class="mt-6 mb-6"
+              />
+ 
+              <v-row
+                v-if="walletDistribution"
+                no-gutters
+              >
+                <v-col 
+                  cols="12"
+                  sm="6"
+                >                   
+                  <v-row
+                    no-gutters
+                    class="ma-2"
+                  >
+                    <v-col> 
+                      <v-icon
+                        color="#0EB584"
+                        size="small"
+                        class="mt-n1"
+                      >
+                        mdi-circle
+                      </v-icon>
+                      Available 
+                    </v-col>
+                    <v-col> 
                       {{ store.spendableBalances }}
-                      {{ cosmosConfig[store.chainSelected].coinLookup.viewDenom }}
-                    </h2>
+                      {{ cosmosConfig[store.chainSelected].coinLookup.viewDenom }}  
+                    </v-col>
+                  </v-row>
+                  <v-row
+                    no-gutters
+                    class="ma-2"
+                  >
+                    <v-col> 
+                      <v-icon
+                        color="#79FFD8"
+                        size="small"
+                        class="mt-n1"
+                      >
+                        mdi-circle
+                      </v-icon>
+                      Delegated 
+                    </v-col>
+                    <v-col> 
+                      {{ store.totalDelegations }}
+                      {{ cosmosConfig[store.chainSelected].coinLookup.viewDenom }}  
+                    </v-col>
+                  </v-row>
+                  <v-row
+                    no-gutters
+                    class="ma-2"
+                  >
+                    <v-col> 
+                      <v-icon
+                        color="#FFFFFF"
+                        size="small"
+                        class="mt-n1"
+                      >
+                        mdi-circle
+                      </v-icon>
+                      Vested 
+                    </v-col>
+                    <v-col> 
+                      0
+                      {{ cosmosConfig[store.chainSelected].coinLookup.viewDenom }}  
+                    </v-col>
+                  </v-row>  
+                </v-col>
+                <v-col 
+                  cols="12"
+                  sm="6"
+                >
+                  <v-row
+                    no-gutters
+                    class="ma-2"
+                  >
+                    <v-col> 
+                      <v-icon
+                        color="#FF7E7E"
+                        size="small"
+                        class="mt-n1"
+                      >
+                        mdi-circle
+                      </v-icon>
+                      Unbonding 
+                    </v-col>
+                    <v-col> 
+                      {{ store.totalUnbound }} 
+                      {{ cosmosConfig[store.chainSelected].coinLookup.viewDenom }}  
+                    </v-col>
+                  </v-row> 
+                  <v-row
+                    no-gutters
+                    class="ma-2"
+                  >
+                    <v-col> 
+                      <v-icon
+                        color="#006C4C"
+                        size="small"
+                        class="mt-n1"
+                      >
+                        mdi-circle
+                      </v-icon>
+                      Rewards 
+                    </v-col>
+                    <v-col> 
+                      {{ store.totalRewards }}
+                      {{ cosmosConfig[store.chainSelected].coinLookup.viewDenom }}  
+                    </v-col>
+                  </v-row>  
+                </v-col> 
+              </v-row> 
+            </v-card-text>
+          </v-card>
+
+          <v-col class="mt-6 "> 
+            <h1
+              class="ml-7"
+              style="text-align:left; float:left;"
+            >
+              Transactions
+            </h1>
+            <p
+              class="mt-4 mr-9"
+              style="text-align:right;"
+            >
+              <NuxtLink to="/transactions"> 
+                See all transactions 
+              </NuxtLink>
+            </p>
+          </v-col>
+          <template v-for="group in groupedEvents()">
+            <div class="text-textbcna">
+              <h3 class="ml-2">
+                {{ group[0].section }}
+              </h3>
+                
+              <v-card
+                v-for="item in group"  
+                class="ma-2 pa-4 accent"
+                width="700"
+                min-height="50"
+              >
+                <!-- {{ item }}  -->
+                <v-row 
+                  class="data-row"
+                >
+                  <v-col cols="3">
+                    <v-chip
+                      class="mb-2"
+                      :color="item.final.color"
+                      variant="outlined"
+                      label
+                    >
+                      {{ item.final.typeReadable }}
+                    </v-chip> 
                   </v-col>
-                  <v-col class="mt-2 text-right">
-                    <span class="text-h6 text-md-h5 text-lg-h4">
-                      <!-- <v-btn
+                  <v-col
+                    cols="4"
+                    class="mt-2"
+                  >
+                    {{ formatDate(item.final.timestamp) }}
+                  </v-col>
+                  <v-col
+                    v-if="item.final.msgData?.amount"
+                    cols="2"
+                    class="mt-2 text-right"
+                  >
+                    {{ item.final.msgData?.amount }} BCNA
+                  </v-col>
+                  <v-col
+                    v-else
+                    cols="2"
+                    class="mt-2 text-right"
+                  />
+                </v-row>
+              </v-card>
+              <!-- {{ group }} -->
+            </div>
+          </template>
+        </v-col>
+        <v-divider
+          class="mx-4"
+          vertical
+        />
+
+        <v-col
+          class="fill-height d-flex flex-column justify-center align-center"
+        >
+          <v-card
+            class="accent"
+            width="700"
+            min-height="220"
+          >
+            <v-card-title class="headline">
+              <v-col class="mt-2">
+                <h4 class="icon">
+                  <img src="icon-stake.png">
+                </h4>
+              </v-col>
+            </v-card-title>
+            <v-card-text>
+              <v-row>
+                <v-col class="mt-2">
+                  <span>
+                    <h1 class="text-textbcna">Available to stake</h1>
+                  </span>
+                  <br>
+                  <h2 class="text-textbcna">
+                    {{ store.spendableBalances }}
+                    {{ cosmosConfig[store.chainSelected].coinLookup.viewDenom }}
+                  </h2>
+                </v-col>
+                <v-col class="mt-2 text-right">
+                  <span class="text-h6 text-md-h5 text-lg-h4">
+                    <!-- <v-btn
                         large
                         min-width="200"
                         class="mt-2 white--text"
@@ -305,62 +326,62 @@
                       >
                         Stake
                       </v-btn> -->
-                      <DelegateHomeModal
-                        v-if="store.logged"
-                        :chain-id-props="cosmosConfig[store.chainSelected].coinLookup.addressPrefix"
-                        :balances="store.spendableBalances"
-                      />                      
-                    </span>
-                  </v-col>
-                </v-row>
-              </v-card-text>
-            </v-card>
-
-            <v-card
-              class="mt-6 accent"
-              width="700"
-              min-height="220"
-            >
-              <v-card-title class="headline">
-                <v-col class="mt-2">
-                  <h4 class="icon">
-                    <img src="icon-reward.png">
-                  </h4>
+                    <DelegateHomeModal
+                      v-if="store.logged"
+                      :chain-id-props="cosmosConfig[store.chainSelected].coinLookup.addressPrefix"
+                      :balances="store.spendableBalances"
+                    />                      
+                  </span>
                 </v-col>
-              </v-card-title>
-              <v-card-text>
-                <v-row>
-                  <v-col class="mt-2">
-                    <span>
-                      <h1 class="text-textbcna">Your rewards</h1>
-                    </span>
-                    <br>
-                    <h2 class="text-textbcna">
-                      {{ store.totalRewards }}
-                      {{ cosmosConfig[store.chainSelected].coinLookup.viewDenom }}
-                    </h2>
-                  </v-col>
-                  <v-col class="mt-2 text-right">
-                    <span class="text-h6 text-md-h5 text-lg-h4">
-                      <!--                       <v-btn
+              </v-row>
+            </v-card-text>
+          </v-card>
+
+          <v-card
+            class="mt-6 accent"
+            width="700"
+            min-height="220"
+          >
+            <v-card-title class="headline">
+              <v-col class="mt-2">
+                <h4 class="icon">
+                  <img src="icon-reward.png">
+                </h4>
+              </v-col>
+            </v-card-title>
+            <v-card-text>
+              <v-row>
+                <v-col class="mt-2">
+                  <span>
+                    <h1 class="text-textbcna">Your rewards</h1>
+                  </span>
+                  <br>
+                  <h2 class="text-textbcna">
+                    {{ store.totalRewards }}
+                    {{ cosmosConfig[store.chainSelected].coinLookup.viewDenom }}
+                  </h2>
+                </v-col>
+                <v-col class="mt-2 text-right">
+                  <span class="text-h6 text-md-h5 text-lg-h4">
+                    <!--                       <v-btn
                         large
                         min-width="200"
                         class="mt-2 white--text"
                       >
                         Claim
                       </v-btn> -->
-                      <ClaimAllModal 
-                        :amount-claim-all="0"
-                        :get-all-delegation="delegations"
-                        :home-page="true"
-                      />                      
-                    </span>
-                  </v-col>
-                </v-row>
-              </v-card-text>
-            </v-card>
-          </v-col>
-        </v-row>
+                    <ClaimAllModal 
+                      :amount-claim-all="0"
+                      :get-all-delegation="delegations"
+                      :home-page="true"
+                    />                      
+                  </span>
+                </v-col>
+              </v-row>
+            </v-card-text>
+          </v-card>
+        </v-col>
+      </v-row>
     </v-col>
     <v-dialog
       v-model="dialogReceive"
@@ -368,35 +389,42 @@
     >
       <v-card>
         <v-toolbar
-            color="rgba(0, 0, 0, 0)"
-            theme="dark"
-            align="center"
-          >
-            <template v-slot:prepend>
-              <v-avatar>
-                  <v-img
-                    max-width="32"
-                    max-height="32"
-                    :src="cosmosConfig[store.chainSelected].coinLookup.icon"
-                    alt="Bitcanna"
-                  ></v-img>
-                </v-avatar>
-            </template>
+          color="rgba(0, 0, 0, 0)"
+          theme="dark"
+          align="center"
+        >
+          <template #prepend>
+            <v-avatar>
+              <v-img
+                max-width="32"
+                max-height="32"
+                :src="cosmosConfig[store.chainSelected].coinLookup.icon"
+                alt="Bitcanna"
+              />
+            </v-avatar>
+          </template>
 
-            <v-toolbar-title class="text-h6">
-              <v-tabs
-                v-model="tab" 
-                class="ma-4"
-              >
-                <v-tab value="one">Address</v-tab>
-                <v-tab value="two">Mobile Tx</v-tab> 
-              </v-tabs>
-            </v-toolbar-title>
+          <v-toolbar-title class="text-h6">
+            <v-tabs
+              v-model="tab" 
+              class="ma-4"
+            >
+              <v-tab value="one">
+                Address
+              </v-tab>
+              <v-tab value="two">
+                Mobile Tx
+              </v-tab> 
+            </v-tabs>
+          </v-toolbar-title>
 
-            <template v-slot:append>
-              <v-btn icon="mdi-close" @click="dialogReceive = false"></v-btn>
-            </template>
-          </v-toolbar>  
+          <template #append>
+            <v-btn
+              icon="mdi-close"
+              @click="dialogReceive = false"
+            />
+          </template>
+        </v-toolbar>  
 
 
         <v-card-text align="center">
@@ -406,8 +434,8 @@
                 :width="256"
                 :height="256"
                 :value="store.addrWallet"
-                :qrOptions="{ typeNumber: 0, mode: 'Byte', errorCorrectionLevel: 'H' }" 
-                :dotsOptions="{
+                :qr-options="{ typeNumber: 0, mode: 'Byte', errorCorrectionLevel: 'H' }" 
+                :dots-options="{
                   type: 'dots',
                   color: '#3CC194',
                   gradient: {
@@ -419,9 +447,9 @@
                     ],
                   },
                 }"
-                :backgroundOptions="{ color: '#ffffff' }"
-                :cornersSquareOptions="{ type: 'dot', color: '#000000' }"
-                :cornersDotOptions="{ type: undefined, color: '#000000' }"    
+                :background-options="{ color: '#ffffff' }"
+                :corners-square-options="{ type: 'dot', color: '#000000' }"
+                :corners-dot-options="{ type: undefined, color: '#000000' }"    
               />
               <v-chip
                 class="mb-4 mt-4 ml-3"
@@ -444,7 +472,7 @@
 
 
 
-<!--    <QRCodeVue3
+    <!--    <QRCodeVue3
           :width="200"
           :height="200"
           value="https://scholtz.sk"
@@ -504,9 +532,16 @@ const categories = [
 ];
 
 export default {
-  layout: "blog",
   components: {
     QRCodeVue3
+  },
+  layout: "blog",
+  setup() {
+
+    const store = useAppStore()
+    return {
+      store
+    }
   },
   data: () => ({
     cosmosConfig: cosmosConfig,
@@ -540,13 +575,6 @@ export default {
       "totalDelegated",
       "totalUnbound",
     ]), */
-  },
-  setup() {
-
-    const store = useAppStore()
-    return {
-      store
-    }
   },
   
   watch: {},

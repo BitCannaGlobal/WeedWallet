@@ -7,11 +7,14 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "lint": "eslint ."
   },
   "devDependencies": {
     "@nuxt/devtools": "latest",
+    "@nuxt/eslint-config": "^0.2.0",
     "@types/markdown-it": "^13.0.5",
+    "eslint": "^8.56.0",
     "nuxt": "^3.7.4",
     "vite-plugin-vuetify": "^1.0.2",
     "vue": "^3.3.4",

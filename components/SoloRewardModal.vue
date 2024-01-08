@@ -1,47 +1,45 @@
 <template>
   <div>
-      <v-btn 
-        v-if="type === 'fromValidatorDetail'"
-        :disabled="totalReward === '' || totalReward === '0.000000'"
-        color="#333333" 
-        class="mt-4"
-        x-large 
-        @click="openModal()"
-      >
-        Claim
-      </v-btn>
-      <v-btn
-        v-else
-        :disabled="totalReward === '' || totalReward === '0.000000'" 
-        block  
-        @click="openModal()"
-      >
-        Claim
-      </v-btn>   
-  <v-dialog
-    v-model="dialog"
-    max-width="600px"
-    max-height="1200px"
-  >
- 
-    <v-card color="#161819">
- 
-      <v-toolbar
-            color="rgba(0, 0, 0, 0)"
-            theme="dark"
-          >
-            <template v-slot:prepend>
-              <v-avatar>
-                  <v-img
-                    max-width="32"
-                    max-height="32"
-                    :src="cosmosConfig[store.chainSelected].coinLookup.icon"
-                    alt="Bitcanna"
-                  ></v-img>
-                </v-avatar>
-            </template>
+    <v-btn 
+      v-if="type === 'fromValidatorDetail'"
+      :disabled="totalReward === '' || totalReward === '0.000000'"
+      color="#333333" 
+      class="mt-4"
+      x-large 
+      @click="openModal()"
+    >
+      Claim
+    </v-btn>
+    <v-btn
+      v-else
+      :disabled="totalReward === '' || totalReward === '0.000000'" 
+      block  
+      @click="openModal()"
+    >
+      Claim
+    </v-btn>   
+    <v-dialog
+      v-model="dialog"
+      max-width="600px"
+      max-height="1200px"
+    >
+      <v-card color="#161819">
+        <v-toolbar
+          color="rgba(0, 0, 0, 0)"
+          theme="dark"
+        >
+          <template #prepend>
+            <v-avatar>
+              <v-img
+                max-width="32"
+                max-height="32"
+                :src="cosmosConfig[store.chainSelected].coinLookup.icon"
+                alt="Bitcanna"
+              />
+            </v-avatar>
+          </template>
 
-            <v-toolbar-title class="text-h6">
+          <v-toolbar-title class="text-h6">
             <span
               v-if="step2"
               class="text-h5"
@@ -54,114 +52,117 @@
               v-if="step4"
               class="text-h5"
             >Transaction send!</span>
-            </v-toolbar-title>
+          </v-toolbar-title>
 
-            <template v-slot:append>
-              <v-btn icon="mdi-close" @click="dialog = false"></v-btn>
-            </template>
-          </v-toolbar> 
+          <template #append>
+            <v-btn
+              icon="mdi-close"
+              @click="dialog = false"
+            />
+          </template>
+        </v-toolbar> 
  
-      <v-card-text>
-        <v-form
-          v-if="step2"
-          ref="form"
-          lazy-validation
-        >
-          <v-row>
-            <v-col cols="12">
-              <v-sheet
-                outlined
-                color="gray"
-                rounded
-              >
-                <v-card
-                  color="#1C1D20"
-                  class="pa-2"
+        <v-card-text>
+          <v-form
+            v-if="step2"
+            ref="form"
+            lazy-validation
+          >
+            <v-row>
+              <v-col cols="12">
+                <v-sheet
                   outlined
-                  tile 
+                  color="gray"
+                  rounded
                 >
-                  <v-list-item two-line>
-                    <v-list-item-content>        
-                      <v-list-item-subtitle class="mb-2">
-                        <h3>Claim from</h3>
-                      </v-list-item-subtitle>
-                      <v-list-item-title>
-                        <h3>{{ validatorName }}</h3> 
-                        <h5>{{ opAddress }}</h5>  
-                      </v-list-item-title>
-                    </v-list-item-content>
-                  </v-list-item>
-                  <v-list-item two-line>
-                    <v-list-item-content>        
-                      <v-list-item-subtitle class="mb-2">
-                        <h3>Amount</h3>
-                      </v-list-item-subtitle>
-                      <v-list-item-title>
-                        <h3>
-                          {{ totalReward }}
-                          {{ cosmosConfig[store.chainSelected].coinLookup.viewDenom }}                        
-                        </h3> 
-                      </v-list-item-title>
-                    </v-list-item-content>
-                  </v-list-item>
-                </v-card>
-              </v-sheet> 
+                  <v-card
+                    color="#1C1D20"
+                    class="pa-2"
+                    outlined
+                    tile 
+                  >
+                    <v-list-item two-line>
+                      <v-list-item-content>        
+                        <v-list-item-subtitle class="mb-2">
+                          <h3>Claim from</h3>
+                        </v-list-item-subtitle>
+                        <v-list-item-title>
+                          <h3>{{ validatorName }}</h3> 
+                          <h5>{{ opAddress }}</h5>  
+                        </v-list-item-title>
+                      </v-list-item-content>
+                    </v-list-item>
+                    <v-list-item two-line>
+                      <v-list-item-content>        
+                        <v-list-item-subtitle class="mb-2">
+                          <h3>Amount</h3>
+                        </v-list-item-subtitle>
+                        <v-list-item-title>
+                          <h3>
+                            {{ totalReward }}
+                            {{ cosmosConfig[store.chainSelected].coinLookup.viewDenom }}                        
+                          </h3> 
+                        </v-list-item-title>
+                      </v-list-item-content>
+                    </v-list-item>
+                  </v-card>
+                </v-sheet> 
+              </v-col>
+            </v-row>
+          </v-form>
+
+          <v-row v-if="step3">
+            <v-col
+              cols="12"
+              align="center"
+              justify="center"
+            >
+              <v-img
+                max-height="102"
+                max-width="102"
+                src="https://wallet.bitcanna.io/icons/pending.svg"
+              />
+              <br>
+              <h3>Transaction pending</h3> 
+              <h4>Your transaction is waiting to get approved on the blockchain.</h4>
             </v-col>
           </v-row>
-        </v-form>
-
-        <v-row v-if="step3">
-          <v-col
-            cols="12"
-            align="center"
-            justify="center"
-          >
-            <v-img
-              max-height="102"
-              max-width="102"
-              src="https://wallet.bitcanna.io/icons/pending.svg"
-            />
-            <br>
-            <h3>Transaction pending</h3> 
-            <h4>Your transaction is waiting to get approved on the blockchain.</h4>
-          </v-col>
-        </v-row>
-        <v-row v-if="step4">
-          <v-col
-            cols="12"
-            align="center"
-            justify="center"
-          >
-            <v-img
-              max-height="102"
-              max-width="102"
-              src="https://wallet.bitcanna.io/icons/approved.svg"
-            />
-            <br>
-            <h3>Transaction approved</h3> 
-            <h4>Your transaction has been approved on the blockchain.</h4>
-          </v-col>
-        </v-row>
+          <v-row v-if="step4">
+            <v-col
+              cols="12"
+              align="center"
+              justify="center"
+            >
+              <v-img
+                max-height="102"
+                max-width="102"
+                src="https://wallet.bitcanna.io/icons/approved.svg"
+              />
+              <br>
+              <h3>Transaction approved</h3> 
+              <h4>Your transaction has been approved on the blockchain.</h4>
+            </v-col>
+          </v-row>
  
-        <v-btn
-          v-if="step2"
-          :disabled="!dislableSend"
-          :loading="loading"
-          color="#00b786"
-          block
-          x-large
-          class="mt-4"
-          @click="validatestep2"
-        >
-          Claim
-        </v-btn>
-      </v-card-text>
-      <v-card-actions>
-        <v-spacer />
-      </v-card-actions>
-    </v-card>
-  </v-dialog>
-</div>
+          <v-btn
+            v-if="step2"
+            :disabled="!dislableSend"
+            :loading="loading"
+            color="#00b786"
+            block
+            x-large
+            class="mt-4"
+            @click="validatestep2"
+          >
+            Claim
+          </v-btn>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer />
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+  </div>
 </template>
 
 <script>
@@ -189,6 +190,13 @@ export default {
     "totalReward",
     "type",
   ],
+  setup() {
+    const store = useAppStore()
+
+    return {
+      store
+    }
+  },
   data: (instance) => ({
     dialog: false,
     dislableSend: true,
@@ -225,13 +233,6 @@ export default {
     loading: false,
     cosmosConfig: cosmosConfig,
   }),
-  setup() {
-    const store = useAppStore()
-
-    return {
-      store
-    }
-  },
   watch: {
     dialog(value) {
       if (value) {
@@ -269,7 +270,7 @@ export default {
               ),
             }          
         ); */
-        let signer = await selectSigner(this.store.chainSelected, this.store.loggedType)
+        const signer = await selectSigner(this.store.chainSelected, this.store.loggedType)
 
         const fee = {
           amount: [

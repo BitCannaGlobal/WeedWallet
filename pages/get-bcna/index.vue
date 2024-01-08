@@ -1,5 +1,8 @@
 <template>
-  <v-item-group v-if="store.logged" active-class="primary">
+  <v-item-group
+    v-if="store.logged"
+    active-class="primary"
+  >
     <v-container>
       <v-row
         justify="center"

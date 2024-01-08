@@ -1,12 +1,17 @@
 <template>
-  <div >
+  <div>
     <v-btn
       v-if="type === 'getRewards'"
       :color="cosmosConfig[store.chainSelected].color"
       variant="text"
       @click="openRewards"
     >
-      <v-icon class="mr-2" :color="cosmosConfig[store.chainSelected].color">mdi-download</v-icon>
+      <v-icon
+        class="mr-2"
+        :color="cosmosConfig[store.chainSelected].color"
+      >
+        mdi-download
+      </v-icon>
       Get rewards
     </v-btn>
  
@@ -31,7 +36,9 @@
         size="large" 
         class="mr-2"
         :color="cosmosConfig[store.chainSelected].color"
-      >mdi-upload</v-icon>
+      >
+        mdi-upload
+      </v-icon>
       Delegate  
     </v-btn> 
     <v-btn
@@ -40,7 +47,9 @@
       variant="text"
       @click="openValidatorRewards"
     >
-      <v-icon :color="cosmosConfig[store.chainSelected].color">mdi-send-circle-outline</v-icon>
+      <v-icon :color="cosmosConfig[store.chainSelected].color">
+        mdi-send-circle-outline
+      </v-icon>
       Get validator Rewards
     </v-btn>    
 
@@ -50,7 +59,9 @@
       variant="text"
       @click="openFeeGrant"
     >
-      <v-icon :color="cosmosConfig[store.chainSelected].color">mdi-send-circle-outline</v-icon>
+      <v-icon :color="cosmosConfig[store.chainSelected].color">
+        mdi-send-circle-outline
+      </v-icon>
       Grant Allowance
     </v-btn>   
 
@@ -59,11 +70,12 @@
       variant="text"
       @click="openRemoveFeeGrant"
     >
- 
       <v-icon
         size="large"
         color="red darken-1" 
-      >mdi-account-multiple-remove-outline</v-icon>      
+      >
+        mdi-account-multiple-remove-outline
+      </v-icon>      
     </v-btn> 
 
     <v-btn
@@ -71,10 +83,11 @@
       variant="text"
       @click="openVote"
     >
-
       <v-icon
         size="large" 
-      >mdi-vote-outline</v-icon>
+      >
+        mdi-vote-outline
+      </v-icon>
       Vote now!  
     </v-btn> 
 
@@ -83,10 +96,11 @@
       variant="text"
       @click="openAddAuthz"
     >
-
       <v-icon
         size="large" 
-      >mdi-vote-outline</v-icon>
+      >
+        mdi-vote-outline
+      </v-icon>
       Add authZ 
     </v-btn>     
 
@@ -95,11 +109,12 @@
       variant="text"
       @click="openRemoveAuthz"
     >
- 
       <v-icon
         size="large"
         color="red darken-1" 
-      >mdi-account-multiple-remove-outline</v-icon>      
+      >
+        mdi-account-multiple-remove-outline
+      </v-icon>      
     </v-btn> 
 
     <v-btn
@@ -107,11 +122,12 @@
       variant="text"
       @click="openDelegatorWithdrawAddress"
     >
- 
       <v-icon
         size="large"
         :color="cosmosConfig[store.chainSelected].color"
-      >mdi-pencil</v-icon>      
+      >
+        mdi-pencil
+      </v-icon>      
     </v-btn>    
 
     <v-btn
@@ -119,78 +135,82 @@
       variant="text"
       @click="verifyArbitrary"
     >
- 
       <v-icon
         size="large"
         :color="cosmosConfig[store.chainSelected].color"
-      >mdi-pencil</v-icon>      
+      >
+        mdi-pencil
+      </v-icon>      
     </v-btn>    
 
     <v-dialog
-        v-model="dialogSendTokens"  
-        transition="dialog-top-transition"
-        absolute 
-        max-width="600px" 
-      > 
-        <v-card> 
-          <v-toolbar
-            color="rgba(0, 0, 0, 0)"
-            theme="dark"
-          >
-            <template v-slot:prepend>
-              <v-avatar>
-                  <v-img
-                    max-width="32"
-                    max-height="32"
-                    :src="cosmosConfig[store.chainSelected].coinLookup.icon"
-                    alt="John"
-                  ></v-img>
-                </v-avatar>
-            </template>
+      v-model="dialogSendTokens"  
+      transition="dialog-top-transition"
+      absolute 
+      max-width="600px" 
+    > 
+      <v-card> 
+        <v-toolbar
+          color="rgba(0, 0, 0, 0)"
+          theme="dark"
+        >
+          <template #prepend>
+            <v-avatar>
+              <v-img
+                max-width="32"
+                max-height="32"
+                :src="cosmosConfig[store.chainSelected].coinLookup.icon"
+                alt="John"
+              />
+            </v-avatar>
+          </template>
 
-            <v-toolbar-title class="text-h6">
-              Send tokens
-            </v-toolbar-title>
+          <v-toolbar-title class="text-h6">
+            Send tokens
+          </v-toolbar-title>
 
-            <template v-slot:append>
-              <v-btn icon="mdi-close" @click="dialogSendTokens = false"></v-btn>
-            </template>
-          </v-toolbar> 
-          <v-card-text>            
-            <v-form
-              v-if="step1"
-              v-model="formSend" 
-              ref="formSend"
-            > 
-                <h3 class="ml-1 mb-1">
-                  Address*
-                </h3>
-                <v-text-field
-                  v-model="sendTo" 
-                  :rules="[rules.required, rules.bech32, rules.bech32Prefix]" 
-                  variant="solo"
-                  bg-color="#0F0F0F"
+          <template #append>
+            <v-btn
+              icon="mdi-close"
+              @click="dialogSendTokens = false"
+            />
+          </template>
+        </v-toolbar> 
+        <v-card-text>            
+          <v-form
+            v-if="step1"
+            ref="formSend" 
+            v-model="formSend"
+          > 
+            <h3 class="ml-1 mb-1">
+              Address*
+            </h3>
+            <v-text-field
+              v-model="sendTo" 
+              :rules="[rules.required, rules.bech32, rules.bech32Prefix]" 
+              variant="solo"
+              bg-color="#0F0F0F"
+            >
+              <template #append-inner>
+                <v-chip
+                  label
+                  small
+                  @click="setAddress"
                 >
-                <template #append-inner>
-                  <v-chip
-                    label
-                    small
-                    @click="setAddress"
-                  >
-                    Me
-                  </v-chip>
-                </template>            
-              </v-text-field>
-              <h3 class="ml-1 mb-1">
-                Amount*
-              </h3>
-              <v-text-field
-                v-model="sendAmount" 
-                :rules="[rules.required, rules.checkAmount, rules.checkDecimal]"
-                class="mb-2"  
-                variant="solo"
-                bg-color="#0F0F0F"
-              >
+                  Me
+                </v-chip>
+              </template>            
+            </v-text-field>
+            <h3 class="ml-1 mb-1">
+              Amount*
+            </h3>
+            <v-text-field
+              v-model="sendAmount" 
+              :rules="[rules.required, rules.checkAmount, rules.checkDecimal]"
+              class="mb-2"  
+              variant="solo"
+              bg-color="#0F0F0F"
+            >
               <template #append-inner>
                 <v-chip
                   label
@@ -202,13 +222,13 @@
               </template>
             </v-text-field>
             <h3 class="ml-1 mb-1">
-                  Memo (Optional)
-                </h3>
-                <v-text-field
-                  v-model="memo" 
-                  variant="solo"
-                bg-color="#0F0F0F"
-                />
+              Memo (Optional)
+            </h3>
+            <v-text-field
+              v-model="memo" 
+              variant="solo"
+              bg-color="#0F0F0F"
+            />
             <!-- <h4 v-if="store.myFeeAllowances.length > 0"> Fee </h4>  
             <v-select
               v-model="feeAllowancesFrom" 
@@ -217,8 +237,8 @@
               :items="['', store.myFeeAllowances[0].granter]"
               variant="outlined"
             ></v-select> -->
-            </v-form>   
-            <div v-if="step2">
+          </v-form>   
+          <div v-if="step2">
             <v-row>
               <v-col>
                 <v-card
@@ -252,11 +272,10 @@
                     </v-col>
                     <v-col>
                       <v-sheet class="pa-2 ma-2">
-                         {{ gasFee.gas }}
+                        {{ gasFee.gas }}
                       </v-sheet>
                     </v-col>
-                  </v-row>  
-                  
+                  </v-row>
                 </v-card>
               </v-col>
             </v-row>   
@@ -274,258 +293,280 @@
               </v-radio-group> 
             </v-card>  -->
           </div> 
-            <div v-if="step3" class="ma-8 text-center">
-              <v-progress-circular                
-                :size="100"
-                :width="5"
-                :color="cosmosConfig[store.chainSelected].color"
-                indeterminate 
-                justify="center"
-              ></v-progress-circular>   
-            </div>
-            <div v-if="step4" class="ma-8 text-center">
-              <v-icon
-                size="150"
-                color="green darken-2"
-              >
-                mdi-check-circle-outline
-              </v-icon>  
-              <br /><br />
-               {{ txResult.transactionHash }} 
-            </div>
-          </v-card-text>
-          <v-btn 
-            v-if="step1"
-            class="text-none ml-6 mr-6 mb-4"
-            :disabled="!formSend"
-            :color="cosmosConfig[store.chainSelected].color" 
-            @click="calculateSendFee()"
-            size="large"
+          <div
+            v-if="step3"
+            class="ma-8 text-center"
           >
-            Check fee
-          </v-btn> 
-          <v-btn 
-            v-if="step2"
-            class="text-none ml-6 mr-6 mb-4"
-            :disabled="!formSend"
-            :color="cosmosConfig[store.chainSelected].color" 
-            @click="sendNow()"
-            size="large"
+            <v-progress-circular                
+              :size="100"
+              :width="5"
+              :color="cosmosConfig[store.chainSelected].color"
+              indeterminate 
+              justify="center"
+            />   
+          </div>
+          <div
+            v-if="step4"
+            class="ma-8 text-center"
           >
-            Send now
-          </v-btn> 
- 
+            <v-icon
+              size="150"
+              color="green darken-2"
+            >
+              mdi-check-circle-outline
+            </v-icon>  
+            <br><br>
+            {{ txResult.transactionHash }} 
+          </div>
+        </v-card-text>
+        <v-btn 
+          v-if="step1"
+          class="text-none ml-6 mr-6 mb-4"
+          :disabled="!formSend"
+          :color="cosmosConfig[store.chainSelected].color" 
+          size="large"
+          @click="calculateSendFee()"
+        >
+          Check fee
+        </v-btn> 
+        <v-btn 
+          v-if="step2"
+          class="text-none ml-6 mr-6 mb-4"
+          :disabled="!formSend"
+          :color="cosmosConfig[store.chainSelected].color" 
+          size="large"
+          @click="sendNow()"
+        >
+          Send now
+        </v-btn>
       </v-card>  
     </v-dialog>
     
 
     <v-dialog
-        v-model="dialog" 
-        width="500" 
-        transition="dialog-top-transition"
-        absolute
-      >
-        <v-card> 
-          <v-toolbar
-            color="rgba(0, 0, 0, 0)"
-            theme="dark"
-          >
-            <template v-slot:prepend>
-              <v-avatar>
-                  <v-img
-                    max-width="32"
-                    max-height="32"
-                    :src="cosmosConfig[store.chainSelected].coinLookup.icon"
-                    alt="John"
-                  ></v-img>
-                </v-avatar>
-            </template>
+      v-model="dialog" 
+      width="500" 
+      transition="dialog-top-transition"
+      absolute
+    >
+      <v-card> 
+        <v-toolbar
+          color="rgba(0, 0, 0, 0)"
+          theme="dark"
+        >
+          <template #prepend>
+            <v-avatar>
+              <v-img
+                max-width="32"
+                max-height="32"
+                :src="cosmosConfig[store.chainSelected].coinLookup.icon"
+                alt="John"
+              />
+            </v-avatar>
+          </template>
 
-            <v-toolbar-title class="text-h6">
-              Get rewards
-            </v-toolbar-title>
+          <v-toolbar-title class="text-h6">
+            Get rewards
+          </v-toolbar-title>
 
-            <template v-slot:append>
-              <v-btn icon="mdi-close" @click="dialog = false"></v-btn>
-            </template>
-          </v-toolbar> 
-          <v-card-text>            
-            <v-table v-if="step1">
-              <tbody>
-                <tr>
-                  <td>Total rewards</td>
-                  <td> 
-                    {{ store.totalRewards }}
-                    <strong :style="'color:' + cosmosConfig[store.chainSelected].color">
-                      {{ cosmosConfig[store.chainSelected].coinLookup.viewDenom }}
-                    </strong>                   
-                  </td>
-                </tr>
-                <tr>
-                  <td>Fee</td>
-                  <td>
-                    {{ gasFee.fee }}
-                    <strong :style="'color:' + cosmosConfig[store.chainSelected].color">
-                      {{ cosmosConfig[store.chainSelected].coinLookup.viewDenom }}
-                    </strong>  
-                  </td>
-                </tr>
-              </tbody>
-            </v-table>    
-            <div v-if="step2" class="ma-8 text-center">
-              <v-progress-circular                
-                :size="100"
-                :width="5"
-                :color="cosmosConfig[store.chainSelected].color"
-                indeterminate 
-                justify="center"
-              ></v-progress-circular>   
-            </div>
-            <div v-if="step3" class="ma-8 text-center">
-              <v-icon
-                size="150"
-                color="green darken-2"
-              >
-                mdi-check-circle-outline
-              </v-icon>  
-              <br /><br />
-               {{ txResult.transactionHash }} 
-            </div>       
-          </v-card-text>
- 
-          <v-btn 
-            v-if="step1"
-            class="text-none ma-4"
-            :color="cosmosConfig[store.chainSelected].color"
-            prepend-icon="mdi-export-variant" 
-            @click="getRewards()"
-            size="large"
+          <template #append>
+            <v-btn
+              icon="mdi-close"
+              @click="dialog = false"
+            />
+          </template>
+        </v-toolbar> 
+        <v-card-text>            
+          <v-table v-if="step1">
+            <tbody>
+              <tr>
+                <td>Total rewards</td>
+                <td> 
+                  {{ store.totalRewards }}
+                  <strong :style="'color:' + cosmosConfig[store.chainSelected].color">
+                    {{ cosmosConfig[store.chainSelected].coinLookup.viewDenom }}
+                  </strong>                   
+                </td>
+              </tr>
+              <tr>
+                <td>Fee</td>
+                <td>
+                  {{ gasFee.fee }}
+                  <strong :style="'color:' + cosmosConfig[store.chainSelected].color">
+                    {{ cosmosConfig[store.chainSelected].coinLookup.viewDenom }}
+                  </strong>  
+                </td>
+              </tr>
+            </tbody>
+          </v-table>    
+          <div
+            v-if="step2"
+            class="ma-8 text-center"
           >
-            Claim
-          </v-btn> 
+            <v-progress-circular                
+              :size="100"
+              :width="5"
+              :color="cosmosConfig[store.chainSelected].color"
+              indeterminate 
+              justify="center"
+            />   
+          </div>
+          <div
+            v-if="step3"
+            class="ma-8 text-center"
+          >
+            <v-icon
+              size="150"
+              color="green darken-2"
+            >
+              mdi-check-circle-outline
+            </v-icon>  
+            <br><br>
+            {{ txResult.transactionHash }} 
+          </div>       
+        </v-card-text>
  
-        </v-card>
-      </v-dialog>
+        <v-btn 
+          v-if="step1"
+          class="text-none ma-4"
+          :color="cosmosConfig[store.chainSelected].color"
+          prepend-icon="mdi-export-variant" 
+          size="large"
+          @click="getRewards()"
+        >
+          Claim
+        </v-btn>
+      </v-card>
+    </v-dialog>
       
-      <v-dialog
-        v-model="dialogFeeGrant" 
-        width="500" 
-        transition="dialog-top-transition"
-        absolute
-      >
-        <v-card> 
-          <v-toolbar
-            color="rgba(0, 0, 0, 0)"
-            theme="dark"
-          >
-            <template v-slot:prepend>
-              <v-avatar>
-                  <v-img
-                    max-width="32"
-                    max-height="32"
-                    :src="cosmosConfig[store.chainSelected].coinLookup.icon"
-                    alt="John"
-                  ></v-img>
-                </v-avatar>
-            </template>
+    <v-dialog
+      v-model="dialogFeeGrant" 
+      width="500" 
+      transition="dialog-top-transition"
+      absolute
+    >
+      <v-card> 
+        <v-toolbar
+          color="rgba(0, 0, 0, 0)"
+          theme="dark"
+        >
+          <template #prepend>
+            <v-avatar>
+              <v-img
+                max-width="32"
+                max-height="32"
+                :src="cosmosConfig[store.chainSelected].coinLookup.icon"
+                alt="John"
+              />
+            </v-avatar>
+          </template>
 
-            <v-toolbar-title class="text-h6">
-              Grant Fee Allowance
-            </v-toolbar-title>
+          <v-toolbar-title class="text-h6">
+            Grant Fee Allowance
+          </v-toolbar-title>
 
-            <template v-slot:append>
-              <v-btn icon="mdi-close" @click="dialogFeeGrant = false"></v-btn>
-            </template>
-          </v-toolbar> 
-          <v-card-text>     
-            <div v-if="step1">
-              <v-text-field
-                v-model="grantee" 
-                :rules="[rules.required, rules.bech32]" 
-                label="Gantee address"
-                placeholder="Enter address"
-                variant="outlined"
-              ></v-text-field>
-              <v-text-field
-                v-model="amountFeeGrant" 
-                :rules="[rules.required]"
-                class="mb-2" 
-                label="Amount to grant by tx"
-                placeholder="Enter amount"
-                variant="outlined" 
-              ></v-text-field>
-            </div>
+          <template #append>
+            <v-btn
+              icon="mdi-close"
+              @click="dialogFeeGrant = false"
+            />
+          </template>
+        </v-toolbar> 
+        <v-card-text>     
+          <div v-if="step1">
+            <v-text-field
+              v-model="grantee" 
+              :rules="[rules.required, rules.bech32]" 
+              label="Gantee address"
+              placeholder="Enter address"
+              variant="outlined"
+            />
+            <v-text-field
+              v-model="amountFeeGrant" 
+              :rules="[rules.required]"
+              class="mb-2" 
+              label="Amount to grant by tx"
+              placeholder="Enter amount"
+              variant="outlined" 
+            />
+          </div>
  
-            <div v-if="step2" class="ma-8 text-center">
-              <v-progress-circular                
-                :size="100"
-                :width="5"
-                :color="cosmosConfig[store.chainSelected].color"
-                indeterminate 
-                justify="center"
-              ></v-progress-circular>   
-            </div>
-            <div v-if="step3" class="ma-8 text-center">
-              <v-icon
-                size="150"
-                color="green darken-2"
-              >
-                mdi-check-circle-outline
-              </v-icon>  
-              <br /><br />
-               {{ txResult.transactionHash }} 
-            </div>       
-          </v-card-text>
- 
-          <v-btn 
-            v-if="step1"
-            class="text-none ma-6"
-            :color="cosmosConfig[store.chainSelected].color"
-            prepend-icon="mdi-export-variant" 
-            @click="sendFeeGrant()"
-            size="large"
+          <div
+            v-if="step2"
+            class="ma-8 text-center"
           >
-            Send Fee Grant
-          </v-btn> 
+            <v-progress-circular                
+              :size="100"
+              :width="5"
+              :color="cosmosConfig[store.chainSelected].color"
+              indeterminate 
+              justify="center"
+            />   
+          </div>
+          <div
+            v-if="step3"
+            class="ma-8 text-center"
+          >
+            <v-icon
+              size="150"
+              color="green darken-2"
+            >
+              mdi-check-circle-outline
+            </v-icon>  
+            <br><br>
+            {{ txResult.transactionHash }} 
+          </div>       
+        </v-card-text>
  
-        </v-card>
-      </v-dialog>  
+        <v-btn 
+          v-if="step1"
+          class="text-none ma-6"
+          :color="cosmosConfig[store.chainSelected].color"
+          prepend-icon="mdi-export-variant" 
+          size="large"
+          @click="sendFeeGrant()"
+        >
+          Send Fee Grant
+        </v-btn>
+      </v-card>
+    </v-dialog>  
           
-      <v-dialog
-        v-model="dialogRemoveAuthz" 
-        width="500" 
-        transition="dialog-top-transition"
-        absolute
-      >
-        <v-card> 
-          <v-toolbar
-            color="rgba(0, 0, 0, 0)"
-            theme="dark"
-          >
-            <template v-slot:prepend>
-              <v-avatar>
-                  <v-img
-                    max-width="32"
-                    max-height="32"
-                    :src="cosmosConfig[store.chainSelected].coinLookup.icon"
-                    alt="John"
-                  ></v-img>
-                </v-avatar>
-            </template>
+    <v-dialog
+      v-model="dialogRemoveAuthz" 
+      width="500" 
+      transition="dialog-top-transition"
+      absolute
+    >
+      <v-card> 
+        <v-toolbar
+          color="rgba(0, 0, 0, 0)"
+          theme="dark"
+        >
+          <template #prepend>
+            <v-avatar>
+              <v-img
+                max-width="32"
+                max-height="32"
+                :src="cosmosConfig[store.chainSelected].coinLookup.icon"
+                alt="John"
+              />
+            </v-avatar>
+          </template>
 
-            <v-toolbar-title class="text-h6">
-              Remove Authz
-            </v-toolbar-title>
+          <v-toolbar-title class="text-h6">
+            Remove Authz
+          </v-toolbar-title>
 
-            <template v-slot:append>
-              <v-btn icon="mdi-close" @click="dialogRemoveAuthz = false"></v-btn>
-            </template>
-          </v-toolbar> 
-          <v-card-text>     
-            <div v-if="step1">
-
-             <v-table theme="dark">
- 
+          <template #append>
+            <v-btn
+              icon="mdi-close"
+              @click="dialogRemoveAuthz = false"
+            />
+          </template>
+        </v-toolbar> 
+        <v-card-text>     
+          <div v-if="step1">
+            <v-table theme="dark">
               <tbody>
                 <tr>
                   <td>AuthZ type</td>
@@ -537,102 +578,115 @@
                 </tr>
               </tbody>
             </v-table>
-
-            </div>
+          </div>
  
-            <div v-if="step2" class="ma-8 text-center">
-              <v-progress-circular                
-                :size="100"
-                :width="5"
-                :color="cosmosConfig[store.chainSelected].color"
-                indeterminate 
-                justify="center"
-              ></v-progress-circular>   
-            </div>
-            <div v-if="step3" class="ma-8 text-center">
-              <v-icon
-                size="150"
-                color="green darken-2"
-              >
-                mdi-check-circle-outline
-              </v-icon>  
-              <br /><br />
-               {{ txResult.transactionHash }} 
-            </div>       
-          </v-card-text>
- 
-          <v-btn 
-            v-if="step1" 
-            class="text-none ma-4"
-            :color="cosmosConfig[store.chainSelected].color"
-            prepend-icon="mdi-export-variant" 
-            @click="sendRemoveAuthz()"
-            size="large"
+          <div
+            v-if="step2"
+            class="ma-8 text-center"
           >
-            Remove this authZ
-          </v-btn>
+            <v-progress-circular                
+              :size="100"
+              :width="5"
+              :color="cosmosConfig[store.chainSelected].color"
+              indeterminate 
+              justify="center"
+            />   
+          </div>
+          <div
+            v-if="step3"
+            class="ma-8 text-center"
+          >
+            <v-icon
+              size="150"
+              color="green darken-2"
+            >
+              mdi-check-circle-outline
+            </v-icon>  
+            <br><br>
+            {{ txResult.transactionHash }} 
+          </div>       
+        </v-card-text>
  
-        </v-card>
-      </v-dialog> 
+        <v-btn 
+          v-if="step1" 
+          class="text-none ma-4"
+          :color="cosmosConfig[store.chainSelected].color"
+          prepend-icon="mdi-export-variant" 
+          size="large"
+          @click="sendRemoveAuthz()"
+        >
+          Remove this authZ
+        </v-btn>
+      </v-card>
+    </v-dialog> 
       
       
-      <v-dialog
-        v-model="dialogRemoveFeeGrant" 
-        width="500" 
-        transition="dialog-top-transition"
-        absolute
-      >
-        <v-card> 
-          <v-toolbar
-            color="rgba(0, 0, 0, 0)"
-            theme="dark"
+    <v-dialog
+      v-model="dialogRemoveFeeGrant" 
+      width="500" 
+      transition="dialog-top-transition"
+      absolute
+    >
+      <v-card> 
+        <v-toolbar
+          color="rgba(0, 0, 0, 0)"
+          theme="dark"
+        >
+          <template #prepend>
+            <v-avatar>
+              <v-img
+                max-width="32"
+                max-height="32"
+                :src="cosmosConfig[store.chainSelected].coinLookup.icon"
+                alt="John"
+              />
+            </v-avatar>
+          </template>
+
+          <v-toolbar-title class="text-h6">
+            Remove Fee Allowance
+          </v-toolbar-title>
+
+          <template #append>
+            <v-btn
+              icon="mdi-close"
+              @click="dialogRemoveFeeGrant = false"
+            />
+          </template>
+        </v-toolbar> 
+        <v-card-text>     
+          <div v-if="step1">
+            Soon
+          </div>
+ 
+          <div
+            v-if="step2"
+            class="ma-8 text-center"
           >
-            <template v-slot:prepend>
-              <v-avatar>
-                  <v-img
-                    max-width="32"
-                    max-height="32"
-                    :src="cosmosConfig[store.chainSelected].coinLookup.icon"
-                    alt="John"
-                  ></v-img>
-                </v-avatar>
-            </template>
-
-            <v-toolbar-title class="text-h6">
-              Remove Fee Allowance
-            </v-toolbar-title>
-
-            <template v-slot:append>
-              <v-btn icon="mdi-close" @click="dialogRemoveFeeGrant = false"></v-btn>
-            </template>
-          </v-toolbar> 
-          <v-card-text>     
-            <div v-if="step1">
-             Soon
-            </div>
+            <v-progress-circular                
+              :size="100"
+              :width="5"
+              :color="cosmosConfig[store.chainSelected].color"
+              indeterminate 
+              justify="center"
+            />   
+          </div>
+          <div
+            v-if="step3"
+            class="ma-8 text-center"
+          >
+            <v-icon
+              size="150"
+              color="green darken-2"
+            >
+              mdi-check-circle-outline
+            </v-icon>  
+            <br><br>
+            {{ txResult.transactionHash }} 
+          </div>       
+        </v-card-text>
  
-            <div v-if="step2" class="ma-8 text-center">
-              <v-progress-circular                
-                :size="100"
-                :width="5"
-                :color="cosmosConfig[store.chainSelected].color"
-                indeterminate 
-                justify="center"
-              ></v-progress-circular>   
-            </div>
-            <div v-if="step3" class="ma-8 text-center">
-              <v-icon
-                size="150"
-                color="green darken-2"
-              >
-                mdi-check-circle-outline
-              </v-icon>  
-              <br /><br />
-               {{ txResult.transactionHash }} 
-            </div>       
-          </v-card-text>
- 
-          <!-- <v-btn 
+        <!-- <v-btn 
             v-if="step1"
             disabled="true"
             class="text-none ma-4"
@@ -643,78 +697,89 @@
           >
             Remove FeeGrant
           </v-btn>  -->
- 
-        </v-card>
-      </v-dialog>   
-      <v-dialog
-        v-model="dialogVote" 
-        width="500" 
-        transition="dialog-top-transition" 
-      >
-        <v-card> 
-          <v-toolbar
-            color="rgba(0, 0, 0, 0)"
-            theme="dark"
-          >
-            <template v-slot:prepend>
-              <v-avatar>
-                  <v-img
-                    max-width="32"
-                    max-height="32"
-                    :src="cosmosConfig[store.chainSelected].coinLookup.icon"
-                    alt="John"
-                  ></v-img>
-                </v-avatar>
-            </template>
+      </v-card>
+    </v-dialog>   
+    <v-dialog
+      v-model="dialogVote" 
+      width="500" 
+      transition="dialog-top-transition" 
+    >
+      <v-card> 
+        <v-toolbar
+          color="rgba(0, 0, 0, 0)"
+          theme="dark"
+        >
+          <template #prepend>
+            <v-avatar>
+              <v-img
+                max-width="32"
+                max-height="32"
+                :src="cosmosConfig[store.chainSelected].coinLookup.icon"
+                alt="John"
+              />
+            </v-avatar>
+          </template>
 
-            <v-toolbar-title class="text-h6">
-              Vote
-            </v-toolbar-title>
+          <v-toolbar-title class="text-h6">
+            Vote
+          </v-toolbar-title>
 
-            <template v-slot:append>
-              <v-btn icon="mdi-close" @click="dialogVote = false"></v-btn>
-            </template>
-          </v-toolbar> 
-          <v-card-text>     
-            <div v-if="step1">
-              <v-row dense>
-                  <v-col
-                    class="mx-auto"
-                    v-for="vote in voteList"
-                    :key="vote.title"
-                    :cols="vote.flex"
-                    @click="voteNow(vote.title)"
-                  >
-                    <v-sheet border class="ma-2 pa-2" rounded="lg">
-                      <v-card-title v-text="vote.title"></v-card-title>
- 
-                    </v-sheet>
-                  </v-col>
-                </v-row>
-            </div>
- 
-            <div v-if="step2" class="ma-8 text-center">
-              <v-progress-circular                
-                :size="100"
-                :width="5"
-                :color="cosmosConfig[store.chainSelected].color"
-                indeterminate 
-                justify="center"
-              ></v-progress-circular>   
-            </div>
-            <div v-if="step3" class="ma-8 text-center">
-              <v-icon
-                size="150"
-                color="green darken-2"
+          <template #append>
+            <v-btn
+              icon="mdi-close"
+              @click="dialogVote = false"
+            />
+          </template>
+        </v-toolbar> 
+        <v-card-text>     
+          <div v-if="step1">
+            <v-row dense>
+              <v-col
+                v-for="vote in voteList"
+                :key="vote.title"
+                class="mx-auto"
+                :cols="vote.flex"
+                @click="voteNow(vote.title)"
               >
-                mdi-check-circle-outline
-              </v-icon>  
-              <br /><br />
-               {{ txResult.transactionHash }} 
-            </div>       
-          </v-card-text>
+                <v-sheet
+                  border
+                  class="ma-2 pa-2"
+                  rounded="lg"
+                >
+                  <v-card-title v-text="vote.title" />
+                </v-sheet>
+              </v-col>
+            </v-row>
+          </div>
  
-          <!-- <v-btn 
+          <div
+            v-if="step2"
+            class="ma-8 text-center"
+          >
+            <v-progress-circular                
+              :size="100"
+              :width="5"
+              :color="cosmosConfig[store.chainSelected].color"
+              indeterminate 
+              justify="center"
+            />   
+          </div>
+          <div
+            v-if="step3"
+            class="ma-8 text-center"
+          >
+            <v-icon
+              size="150"
+              color="green darken-2"
+            >
+              mdi-check-circle-outline
+            </v-icon>  
+            <br><br>
+            {{ txResult.transactionHash }} 
+          </div>       
+        </v-card-text>
+ 
+        <!-- <v-btn 
             v-if="step1"
             disabled="true"
             class="text-none ma-4"
@@ -725,67 +790,71 @@
           >
             Remove FeeGrant
           </v-btn>  -->
- 
-        </v-card>
-      </v-dialog>   
-      <v-dialog
-        v-model="dialogDelegate" 
-        width="500" 
-        transition="dialog-top-transition" 
-      >
-        <v-card> 
-          <v-toolbar
-            color="rgba(0, 0, 0, 0)"
-            theme="dark"
-          >
-            <template v-slot:prepend>
-              <v-avatar>
-                  <v-img
-                    max-width="32"
-                    max-height="32"
-                    :src="cosmosConfig[store.chainSelected].coinLookup.icon"
-                    alt="John"
-                  ></v-img>
-                </v-avatar>
-            </template>
+      </v-card>
+    </v-dialog>   
+    <v-dialog
+      v-model="dialogDelegate" 
+      width="500" 
+      transition="dialog-top-transition" 
+    >
+      <v-card> 
+        <v-toolbar
+          color="rgba(0, 0, 0, 0)"
+          theme="dark"
+        >
+          <template #prepend>
+            <v-avatar>
+              <v-img
+                max-width="32"
+                max-height="32"
+                :src="cosmosConfig[store.chainSelected].coinLookup.icon"
+                alt="John"
+              />
+            </v-avatar>
+          </template>
 
-            <v-toolbar-title class="text-h6">
-              Delegate
-            </v-toolbar-title>
+          <v-toolbar-title class="text-h6">
+            Delegate
+          </v-toolbar-title>
 
-            <template v-slot:append>
-              <v-btn icon="mdi-close" @click="dialogDelegate = false"></v-btn>
-            </template>
-          </v-toolbar> 
-          <v-card-text>     
-            <div v-if="step1">
-              <span class="mr-2">Select an validator</span>
-              <v-sheet 
-                v-for="item in store.allValidators" 
-                border="md" 
-                class="ma-2 pa-2" 
-                @click="selectDelValidator(item)"
-              >
-                <v-list lines="one">
+          <template #append>
+            <v-btn
+              icon="mdi-close"
+              @click="dialogDelegate = false"
+            />
+          </template>
+        </v-toolbar> 
+        <v-card-text>     
+          <div v-if="step1">
+            <span class="mr-2">Select an validator</span>
+            <v-sheet 
+              v-for="item in store.allValidators" 
+              border="md" 
+              class="ma-2 pa-2" 
+              @click="selectDelValidator(item)"
+            >
+              <v-list lines="one">
                 <v-list-item 
                   :key="item.title"
                   :title="item.description.moniker"
                   :subtitle="'Commission: ' + item.commission.commission_rates.rate * 100 + '%'"
                 >
                 <!-- {{ item.commission.commission_rates.rate }} -->
-              </v-list-item>
+                </v-list-item>
               </v-list>   
-              </v-sheet>
-       
-            </div>
+            </v-sheet>
+          </div>
             
-            <div v-if="step2" class="ma-2 ">
-              <!-- {{ selectedValDel }} -->
+          <div
+            v-if="step2"
+            class="ma-2 "
+          >
+            <!-- {{ selectedValDel }} -->
 
 
-              <v-form 
-              v-model="formDelegate" 
-              ref="formDelegate"
+            <v-form 
+              ref="formDelegate" 
+              v-model="formDelegate"
             > 
               <v-text-field
                 v-model="delegateAmount" 
@@ -795,16 +864,16 @@
                 placeholder="Enter amount"
                 variant="outlined" 
               >
-              <template #append-inner>
-                <v-chip
-                  label
-                  small
-                  @click="getMax"
-                >
-                  Max
-                </v-chip>
-              </template>
-            </v-text-field>
+                <template #append-inner>
+                  <v-chip
+                    label
+                    small
+                    @click="getMax"
+                  >
+                    Max
+                  </v-chip>
+                </template>
+              </v-text-field>
 
               <v-text-field
                 v-model="delegateTo"  
@@ -812,8 +881,7 @@
                 placeholder="Enter address"
                 variant="outlined"
                 class="mt-4"
-              >
-            </v-text-field>
+              />
             <!-- <h4 v-if="store.myFeeAllowances.length > 0"> Fee </h4>  
             <v-select
               v-model="feeAllowancesFrom" 
@@ -822,39 +890,44 @@
               :items="['', store.myFeeAllowances[0].granter]"
               variant="outlined"
             ></v-select> -->
-
             </v-form>   
-          <v-btn   
-            :disabled="!formDelegate"  
-            :color="cosmosConfig[store.chainSelected].color"
-            @click="delegateNow()"
-            block
+            <v-btn   
+              :disabled="!formDelegate"  
+              :color="cosmosConfig[store.chainSelected].color"
+              block
+              @click="delegateNow()"
+            >
+              Delegate
+            </v-btn> 
+          </div>
+          <div
+            v-if="step3"
+            class="ma-8 text-center"
           >
-            Delegate
-          </v-btn> 
-            </div>
-            <div v-if="step3" class="ma-8 text-center">
-              <v-progress-circular                
-                :size="100"
-                :width="5"
-                :color="cosmosConfig[store.chainSelected].color"
-                indeterminate 
-                justify="center"
-              ></v-progress-circular>   
-            </div>
-            <div v-if="step4" class="ma-8 text-center">
-              <v-icon
-                size="150"
-                color="green darken-2"
-              >
-                mdi-check-circle-outline
-              </v-icon>  
-              <br /><br />
-               {{ txResult.transactionHash }} 
-            </div>       
-          </v-card-text>
+            <v-progress-circular                
+              :size="100"
+              :width="5"
+              :color="cosmosConfig[store.chainSelected].color"
+              indeterminate 
+              justify="center"
+            />   
+          </div>
+          <div
+            v-if="step4"
+            class="ma-8 text-center"
+          >
+            <v-icon
+              size="150"
+              color="green darken-2"
+            >
+              mdi-check-circle-outline
+            </v-icon>  
+            <br><br>
+            {{ txResult.transactionHash }} 
+          </div>       
+        </v-card-text>
  
-          <!-- <v-btn 
+        <!-- <v-btn 
             v-if="step1"
             disabled="true"
             class="text-none ma-4"
@@ -865,163 +938,177 @@
           >
             Remove FeeGrant
           </v-btn>  -->
- 
-        </v-card>
-      </v-dialog>   
-      <v-dialog
-        v-model="dialogAddAuthz" 
-        width="500" 
-        transition="dialog-top-transition" 
-      >
-        <v-card> 
-          <v-toolbar
-            color="rgba(0, 0, 0, 0)"
-            theme="dark"
-          >
-            <template v-slot:prepend>
-              <v-avatar>
-                  <v-img
-                    max-width="32"
-                    max-height="32"
-                    :src="cosmosConfig[store.chainSelected].coinLookup.icon"
-                    alt="John"
-                  ></v-img>
-                </v-avatar>
-            </template>
-
-            <v-toolbar-title class="text-h6">
-              Add authz
-            </v-toolbar-title>
-
-            <template v-slot:append>
-              <v-btn icon="mdi-close" @click="dialogAddAuthz = false"></v-btn>
-            </template>
-          </v-toolbar> 
-          <v-card-text>     
-            <div v-if="step1">
-              <v-select
-                v-model="selectedAuhz"
-                label="Select authz"
-                :items="['Send', 'Delegate', 'Unbond', 'Redelegate', 'Vote', 'MultiSend']"
-                variant="outlined"  
-              ></v-select>  
-              <v-text-field
-                v-model="authzSendGrantee" 
-                :rules="[rules.required, rules.bech32]" 
-                label="Gantee address"
-                placeholder="Enter address"
-                variant="outlined"  
+      </v-card>
+    </v-dialog>   
+    <v-dialog
+      v-model="dialogAddAuthz" 
+      width="500" 
+      transition="dialog-top-transition" 
+    >
+      <v-card> 
+        <v-toolbar
+          color="rgba(0, 0, 0, 0)"
+          theme="dark"
+        >
+          <template #prepend>
+            <v-avatar>
+              <v-img
+                max-width="32"
+                max-height="32"
+                :src="cosmosConfig[store.chainSelected].coinLookup.icon"
+                alt="John"
               />
-            </div>
-            <v-btn 
-              v-if="step1"
-              class="text-none ma-4"
-              :color="cosmosConfig[store.chainSelected].color"
-              prepend-icon="mdi-export-variant" 
-              @click="sendAddAuthz()"
-              size="large"  
+            </v-avatar>
+          </template>
+
+          <v-toolbar-title class="text-h6">
+            Add authz
+          </v-toolbar-title>
+
+          <template #append>
+            <v-btn
+              icon="mdi-close"
+              @click="dialogAddAuthz = false"
             />
+          </template>
+        </v-toolbar> 
+        <v-card-text>     
+          <div v-if="step1">
+            <v-select
+              v-model="selectedAuhz"
+              label="Select authz"
+              :items="['Send', 'Delegate', 'Unbond', 'Redelegate', 'Vote', 'MultiSend']"
+              variant="outlined"  
+            />  
+            <v-text-field
+              v-model="authzSendGrantee" 
+              :rules="[rules.required, rules.bech32]" 
+              label="Gantee address"
+              placeholder="Enter address"
+              variant="outlined"  
+            />
+          </div>
+          <v-btn 
+            v-if="step1"
+            class="text-none ma-4"
+            :color="cosmosConfig[store.chainSelected].color"
+            prepend-icon="mdi-export-variant" 
+            size="large"
+            @click="sendAddAuthz()"  
+          />
             
  
-            <div v-if="step2" class="ma-8 text-center">
-              <v-progress-circular                
-                :size="100"
-                :width="5"
-                :color="cosmosConfig[store.chainSelected].color"
-                indeterminate 
-                justify="center"
-              ></v-progress-circular>   
-            </div>
-            <div v-if="step3" class="ma-8 text-center">
-              <v-icon
-                size="150"
-                color="green darken-2"
-              >
-                mdi-check-circle-outline
-              </v-icon>  
-              <br /><br />
-               {{ txResult.transactionHash }} 
-            </div>       
-          </v-card-text>
-
-        </v-card>
-      </v-dialog> 
-      <v-dialog
-        v-model="dialogWithdrawAddress" 
-        width="500" 
-        transition="dialog-top-transition" 
-      >
-        <v-card> 
-          <v-toolbar
-            color="rgba(0, 0, 0, 0)"
-            theme="dark"
+          <div
+            v-if="step2"
+            class="ma-8 text-center"
           >
-            <template v-slot:prepend>
-              <v-avatar>
-                  <v-img
-                    max-width="32"
-                    max-height="32"
-                    :src="cosmosConfig[store.chainSelected].coinLookup.icon"
-                    alt="John"
-                  ></v-img>
-                </v-avatar>
-            </template>
-
-            <v-toolbar-title class="text-h6">
-              Change your withdraw address
-            </v-toolbar-title>
-
-            <template v-slot:append>
-              <v-btn icon="mdi-close" @click="dialogWithdrawAddress = false"></v-btn>
-            </template>
-          </v-toolbar> 
-          <v-card-text>     
-            <div v-if="step1">
-              <v-text-field
-                v-model="withdrawAddressToSet" 
-                :rules="[rules.required, rules.bech32]" 
-                label="Your new withdraw address"
-                placeholder="Enter address"
-                variant="outlined"  
-              />
-            </div>
-            <v-btn 
-              v-if="step1"
-              class="text-none mt-4 mb-4"
+            <v-progress-circular                
+              :size="100"
+              :width="5"
               :color="cosmosConfig[store.chainSelected].color"
-              prepend-icon="mdi-export-variant" 
-              @click="setWithdrawAddressNow()"
-              size="large"  
-              block
+              indeterminate 
+              justify="center"
+            />   
+          </div>
+          <div
+            v-if="step3"
+            class="ma-8 text-center"
+          >
+            <v-icon
+              size="150"
+              color="green darken-2"
             >
-              Change address
-            </v-btn>
+              mdi-check-circle-outline
+            </v-icon>  
+            <br><br>
+            {{ txResult.transactionHash }} 
+          </div>       
+        </v-card-text>
+      </v-card>
+    </v-dialog> 
+    <v-dialog
+      v-model="dialogWithdrawAddress" 
+      width="500" 
+      transition="dialog-top-transition" 
+    >
+      <v-card> 
+        <v-toolbar
+          color="rgba(0, 0, 0, 0)"
+          theme="dark"
+        >
+          <template #prepend>
+            <v-avatar>
+              <v-img
+                max-width="32"
+                max-height="32"
+                :src="cosmosConfig[store.chainSelected].coinLookup.icon"
+                alt="John"
+              />
+            </v-avatar>
+          </template>
+
+          <v-toolbar-title class="text-h6">
+            Change your withdraw address
+          </v-toolbar-title>
+
+          <template #append>
+            <v-btn
+              icon="mdi-close"
+              @click="dialogWithdrawAddress = false"
+            />
+          </template>
+        </v-toolbar> 
+        <v-card-text>     
+          <div v-if="step1">
+            <v-text-field
+              v-model="withdrawAddressToSet" 
+              :rules="[rules.required, rules.bech32]" 
+              label="Your new withdraw address"
+              placeholder="Enter address"
+              variant="outlined"  
+            />
+          </div>
+          <v-btn 
+            v-if="step1"
+            class="text-none mt-4 mb-4"
+            :color="cosmosConfig[store.chainSelected].color"
+            prepend-icon="mdi-export-variant" 
+            size="large"
+            block  
+            @click="setWithdrawAddressNow()"
+          >
+            Change address
+          </v-btn>
             
  
-            <div v-if="step2" class="ma-8 text-center">
-              <v-progress-circular                
-                :size="100"
-                :width="5"
-                :color="cosmosConfig[store.chainSelected].color"
-                indeterminate 
-                justify="center"
-              ></v-progress-circular>   
-            </div>
-            <div v-if="step3" class="ma-8 text-center">
-              <v-icon
-                size="150"
-                color="green darken-2"
-              >
-                mdi-check-circle-outline
-              </v-icon>  
-              <br /><br />
-               {{ txResult.transactionHash }} 
-            </div>       
-          </v-card-text>
-
-        </v-card>
-      </v-dialog> 
-      
+          <div
+            v-if="step2"
+            class="ma-8 text-center"
+          >
+            <v-progress-circular                
+              :size="100"
+              :width="5"
+              :color="cosmosConfig[store.chainSelected].color"
+              indeterminate 
+              justify="center"
+            />   
+          </div>
+          <div
+            v-if="step3"
+            class="ma-8 text-center"
+          >
+            <v-icon
+              size="150"
+              color="green darken-2"
+            >
+              mdi-check-circle-outline
+            </v-icon>  
+            <br><br>
+            {{ txResult.transactionHash }} 
+          </div>       
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </div>  
 </template>
 
@@ -1088,6 +1175,13 @@ function countPlaces(num) {
 export default {
   name: 'App', 
   props: ['type', 'chain', 'spendableBalances', 'propData', 'authZdata'],
+  setup() {
+    const store = useAppStore()
+    console.log(store.spendableBalances)
+    return {
+      store
+    }
+  },
   data: (store) => ({
     cosmosConfig: cosmosConfig,
     dialog: false,
@@ -1137,19 +1231,12 @@ export default {
       ],  
     voteValue: null,
   }),
-  setup() {
-    const store = useAppStore()
-    console.log(store.spendableBalances)
-    return {
-      store
-    }
+  computed: {
+
   },
   watch: { 
   },
   mounted() {
-
-  },
-  computed: {
 
   },
   methods: { 
@@ -1195,7 +1282,7 @@ export default {
       this.step1 = false;
       this.step2 = true;
 
-      let signer = await selectSigner(this.store.chainSelected)  
+      const signer = await selectSigner(this.store.chainSelected)  
       
 
       const foundMsgType = defaultRegistryTypes.find(
@@ -1237,7 +1324,7 @@ export default {
       this.step1 = false;
       this.step2 = true;
 
-      let signer = await selectSigner(this.store.chainSelected)     
+      const signer = await selectSigner(this.store.chainSelected)     
 
       const foundMsgType = defaultRegistryTypes.find(
         (element) =>
@@ -1276,7 +1363,7 @@ export default {
     async sendAddAuthz () {
       this.step1 = false;
       this.step2 = true;
-        let signer = await selectSigner(this.store.chainSelected)     
+        const signer = await selectSigner(this.store.chainSelected)     
 
         const foundMsgType = defaultRegistryTypes.find(
           (element) =>
@@ -1358,7 +1445,7 @@ export default {
         console.log(this.delegateAmount)
         console.log(this.delegateTo)
         
-        let signer = await selectSigner(this.store.chainSelected)
+        const signer = await selectSigner(this.store.chainSelected)
         const foundMsgType = defaultRegistryTypes.find(
             (element) =>
               element[0] ===
@@ -1398,7 +1485,7 @@ export default {
           this.gasFee = { fee: (usedFee.amount[0].amount / 1000000), gas: usedFee.gas };
           
           const feeAmount = coins(usedFee.amount[0].amount, cosmosConfig[this.store.chainSelected].coinLookup.chainDenom);
-          let finalFee = {
+          const finalFee = {
             amount: feeAmount,
             gas: usedFee.gas,
             granter: this.feeAllowancesFrom,
@@ -1441,7 +1528,7 @@ export default {
       }
       console.log(this.propData)
 
-      let signer = await selectSigner(this.store.chainSelected) 
+      const signer = await selectSigner(this.store.chainSelected) 
  
       
 
@@ -1494,7 +1581,7 @@ export default {
     async calculateSendFee () {
       this.step1 = false;
       this.step2 = true;
-      let signer = await selectSigner(this.store.chainSelected, this.store.loggedType)
+      const signer = await selectSigner(this.store.chainSelected, this.store.loggedType)
 
       const foundMsgType = defaultRegistryTypes.find(
         (element) =>
@@ -1539,7 +1626,7 @@ export default {
       if (this.formSend) { 
         console.log(this.sendAmount)
         console.log(this.sendTo) 
-        let signer = await selectSigner(this.store.chainSelected, this.store.loggedType)
+        const signer = await selectSigner(this.store.chainSelected, this.store.loggedType)
         const foundMsgType = defaultRegistryTypes.find(
             (element) =>
               element[0] ===
@@ -1573,7 +1660,7 @@ export default {
           this.gasFee = { fee: (usedFee.amount[0].amount / 1000000), gas: usedFee.gas };
           
           const feeAmount = coins(usedFee.amount[0].amount, cosmosConfig[this.store.chainSelected].coinLookup.chainDenom);
-          let finalFee = {
+          const finalFee = {
             amount: feeAmount,
             gas: usedFee.gas,
             granter: this.finalFeeGranter,
@@ -1595,13 +1682,13 @@ export default {
 
     },
     async openValidatorRewards() {   
-      let signer = await selectSigner(this.store.chainSelected)
+      const signer = await selectSigner(this.store.chainSelected)
       const foundMsgType = defaultRegistryTypes.find(
           (element) =>
             element[0] ===
             "/cosmos.distribution.v1beta1.MsgWithdrawValidatorCommission"
         );
-        let valAddress = converteToValidator(signer.accounts[0].address) 
+        const valAddress = converteToValidator(signer.accounts[0].address) 
           
         const withdrawValidatorCommissionMsg = {
         typeUrl: foundMsgType[0],
@@ -1635,7 +1722,7 @@ export default {
     },
     async openRewards() {
       this.dialog = true
-      let signer = await selectSigner(this.store.chainSelected)
+      const signer = await selectSigner(this.store.chainSelected)
       const foundMsgType = defaultRegistryTypes.find(
           (element) =>
             element[0] ===
@@ -1674,7 +1761,7 @@ export default {
     async getRewards() {
         this.step1 = false;
         this.step2 = true;
-        let signer = await selectSigner(this.store.chainSelected) 
+        const signer = await selectSigner(this.store.chainSelected) 
         console.log( signer.accounts)
         const foundMsgType = defaultRegistryTypes.find(
           (element) =>
@@ -1738,7 +1825,7 @@ export default {
       console.log(this.grantee)
       console.log(this.amountFeeGrant)
 
-      let signer = await selectSigner(this.store.chainSelected)
+      const signer = await selectSigner(this.store.chainSelected)
         // Create feegrant allowance
         const allowance = {
           typeUrl: "/cosmos.feegrant.v1beta1.BasicAllowance",

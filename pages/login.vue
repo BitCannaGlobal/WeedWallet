@@ -1,5 +1,4 @@
 <template>
-  
   <v-container class="bcnaBackground">
     <v-row
       justify="center"
@@ -20,7 +19,7 @@
         </div>
         <br>
 
-<!--         <v-card
+        <!--         <v-card
           class="mt-10"
           color="#161819"
           max-width="700px"
@@ -86,12 +85,16 @@
               >
                 Cosmostation Connect
               </v-col>
-              <v-col v-if="selection === 1" cols="3" class="d-flex justify-right align-right">
-                  <v-icon
-                    size="large"
-                    color="red"
-                    icon="mdi-close-outline"
-                  ></v-icon>
+              <v-col
+                v-if="selection === 1"
+                cols="3"
+                class="d-flex justify-right align-right"
+              >
+                <v-icon
+                  size="large"
+                  color="red"
+                  icon="mdi-close-outline"
+                />
               </v-col>
             </v-row>
           </v-card>
@@ -116,19 +119,21 @@
               >
                 Leap wallet
               </v-col>
-              <v-col v-if="selection === 1" cols="3" class="d-flex justify-right align-right">
-                  <v-icon
-                    size="large"
-                    color="red"
-                    icon="mdi-close-outline"
-                  ></v-icon>
+              <v-col
+                v-if="selection === 1"
+                cols="3"
+                class="d-flex justify-right align-right"
+              >
+                <v-icon
+                  size="large"
+                  color="red"
+                  icon="mdi-close-outline"
+                />
               </v-col>
             </v-row>
           </v-card>
           <v-card-actions />
         </v-card>
-
-
       </v-col>
     </v-row>
   </v-container>
@@ -141,12 +146,6 @@ import cosmosConfig from "~/cosmos.config";
 export default {
   name: `SessionKeplrExtension`,
   layout: "session",
-  data: () => ({
-    address: "",
-    microAddress: "",
-    config: cosmosConfig,
-    selection: 1,
-  }),
   setup() {
     useSeoMeta({
       title: 'BitCanna - Webwallet',
@@ -177,6 +176,12 @@ export default {
       store
     }
   },
+  data: () => ({
+    address: "",
+    microAddress: "",
+    config: cosmosConfig,
+    selection: 1,
+  }),
   async mounted() {    
     
   },

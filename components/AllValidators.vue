@@ -1,30 +1,28 @@
 <template>
   <div>
-  <v-row
-    justify="center"
-    align="center"
-  >
- 
-    <v-col
-      cols="12"
-      sm="12"
-      md="12"
+    <v-row
+      justify="center"
+      align="center"
     >
-      <div class="row">
-        <div class="col-sm">
-          
-          <v-data-table
-            theme="dark"
-            class="accent table allValidators" 
-            :headers="headers"
-            :items="finalValidators"
-            :items-per-page="150"
-            hide-default-footer
-          >
-            <template #top />
+      <v-col
+        cols="12"
+        sm="12"
+        md="12"
+      >
+        <div class="row">
+          <div class="col-sm">
+            <v-data-table
+              theme="dark"
+              class="accent table allValidators" 
+              :headers="headers"
+              :items="finalValidators"
+              :items-per-page="150"
+              hide-default-footer
+            >
+              <template #top />
  
-            <template #item.name="{ item }">
-              <!--  <a 
+              <template #item.name="{ item }">
+                <!--  <a 
                 class="linkFormat box"
                 @click="selectValidator(item)"
               > 
@@ -39,138 +37,138 @@
               </a>   
                -->
               
-              <router-link
-                :to="'/validators/' + item.op_address"
-                class="linkFormat box"
-              >
-                <v-chip
-                  v-if="item.status === 3"
-                  class="ma-2"
-                  color="#00b786"
-                  label
-                  variant="flat"
+                <router-link
+                  :to="'/validators/' + item.op_address"
+                  class="linkFormat box"
                 >
-                  Active
-                </v-chip>
-                <v-chip
-                  v-else
-                  class="ma-2"
-                  color="red"
-                  label
-                  variant="flat"
-                >
-                  Inactive
-                </v-chip> 
-                <v-avatar>
-                  <v-img
-                    :src="'https://raw.githubusercontent.com/cosmostation/chainlist/main/chain/bitcanna/moniker/'+item.op_address+'.png'" 
-                    :alt="item.name" 
-                  /> 
-                </v-avatar>
-                <span class="ml-8"><h3>{{ item.name }}</h3></span> 
-              </router-link>
-            </template>
-            <template #item.crate="{ item }">
-              <h3>{{ item.crate }}%</h3>
-            </template>  
-            <template #item.votingPower="{ item }">
-              <h3><span>{{ item.votingPower }}%</span></h3>
-            </template>
+                  <v-chip
+                    v-if="item.status === 3"
+                    class="ma-2"
+                    color="#00b786"
+                    label
+                    variant="flat"
+                  >
+                    Active
+                  </v-chip>
+                  <v-chip
+                    v-else
+                    class="ma-2"
+                    color="red"
+                    label
+                    variant="flat"
+                  >
+                    Inactive
+                  </v-chip> 
+                  <v-avatar>
+                    <v-img
+                      :src="'https://raw.githubusercontent.com/cosmostation/chainlist/main/chain/bitcanna/moniker/'+item.op_address+'.png'" 
+                      :alt="item.name" 
+                    /> 
+                  </v-avatar>
+                  <span class="ml-8"><h3>{{ item.name }}</h3></span> 
+                </router-link>
+              </template>
+              <template #item.crate="{ item }">
+                <h3>{{ item.crate }}%</h3>
+              </template>  
+              <template #item.votingPower="{ item }">
+                <h3><span>{{ item.votingPower }}%</span></h3>
+              </template>
                     
-            <template #item.validatorApr="{ item }">
-              <h3><span>{{ item.validatorApr }}%</span></h3>
-            </template>
-          </v-data-table>
+              <template #item.validatorApr="{ item }">
+                <h3><span>{{ item.validatorApr }}%</span></h3>
+              </template>
+            </v-data-table>
+          </div>
         </div>
-      </div>
-    </v-col>
-    <v-dialog
-      v-model="dialog"
-      max-width="600" 
-    >
-      <v-card color="#161819">
-        <v-card-title class="text-h5">
-          Delegate
-        </v-card-title>
+      </v-col>
+      <v-dialog
+        v-model="dialog"
+        max-width="600" 
+      >
+        <v-card color="#161819">
+          <v-card-title class="text-h5">
+            Delegate
+          </v-card-title>
 
-        <v-card-text class="mt-6">
-          <div 
-            class="fill-height d-flex"
-          >
-            <v-avatar>
-              <v-img
-                :src="'https://raw.githubusercontent.com/cosmostation/chainlist/main/chain/bitcanna/moniker/'+selectedValidator.op_address+'.png'" 
-                :alt="selectedValidator.validatorName" 
-              /> 
-            </v-avatar>
-            <span class="text-h6 mt-2 ml-8">{{ selectedValidator.name }}</span>
-          </div> 
-
-
-          <v-sheet
-            outlined
-            color="gray"
-            rounded
-            class="mt-4"
-          >
-            <v-card
-              color="#1C1D20"
-              class="pa-2"
-              outlined
-              tile 
+          <v-card-text class="mt-6">
+            <div 
+              class="fill-height d-flex"
             >
-              <v-row>
-                <v-col md="6">
-                  <v-list-item two-line>
-                    <v-list-item-content>        
-                      <v-list-item-subtitle class="mb-2 subtitle-1">
-                        Commission rate
-                      </v-list-item-subtitle>
-                      <v-list-item-title class="text-h6 subtitle-2">
-                        {{ selectedValidator.crate }}%
-                      </v-list-item-title>
-                    </v-list-item-content>
-                  </v-list-item>
-                </v-col>
-                <v-col md="6">
-                  <v-list-item two-line>
-                    <v-list-item-content>        
-                      <v-list-item-subtitle class="mb-2 subtitle-1">
-                        Voting Power
-                      </v-list-item-subtitle>
-                      <v-list-item-title class="text-h6">
-                        {{ selectedValidator.votingPower }}%
-                      </v-list-item-title>
-                    </v-list-item-content>
-                  </v-list-item>
-                </v-col>
-              </v-row>
-            </v-card>
-          </v-sheet>  
+              <v-avatar>
+                <v-img
+                  :src="'https://raw.githubusercontent.com/cosmostation/chainlist/main/chain/bitcanna/moniker/'+selectedValidator.op_address+'.png'" 
+                  :alt="selectedValidator.validatorName" 
+                /> 
+              </v-avatar>
+              <span class="text-h6 mt-2 ml-8">{{ selectedValidator.name }}</span>
+            </div> 
 
-          <DelegateModal
-            v-if="logged"
-            :chain-id-props="cosmosConfig[chainId].coinLookup.addressPrefix"
-            :address-to="selectedValidator.op_address"
-            :validator-name="validatorDetails.description?.moniker" 
-          />
-          <v-btn 
-            class="mt-4"
-            :to="`/validators/${selectedValidator.op_address}`"
-            block
-            x-large
-          >
-            View profile
-          </v-btn>
-        </v-card-text>
 
-        <v-card-actions> 
-          <v-spacer />
-        </v-card-actions>
-      </v-card>
-    </v-dialog>     
-  </v-row>
-</div>
+            <v-sheet
+              outlined
+              color="gray"
+              rounded
+              class="mt-4"
+            >
+              <v-card
+                color="#1C1D20"
+                class="pa-2"
+                outlined
+                tile 
+              >
+                <v-row>
+                  <v-col md="6">
+                    <v-list-item two-line>
+                      <v-list-item-content>        
+                        <v-list-item-subtitle class="mb-2 subtitle-1">
+                          Commission rate
+                        </v-list-item-subtitle>
+                        <v-list-item-title class="text-h6 subtitle-2">
+                          {{ selectedValidator.crate }}%
+                        </v-list-item-title>
+                      </v-list-item-content>
+                    </v-list-item>
+                  </v-col>
+                  <v-col md="6">
+                    <v-list-item two-line>
+                      <v-list-item-content>        
+                        <v-list-item-subtitle class="mb-2 subtitle-1">
+                          Voting Power
+                        </v-list-item-subtitle>
+                        <v-list-item-title class="text-h6">
+                          {{ selectedValidator.votingPower }}%
+                        </v-list-item-title>
+                      </v-list-item-content>
+                    </v-list-item>
+                  </v-col>
+                </v-row>
+              </v-card>
+            </v-sheet>  
+
+            <DelegateModal
+              v-if="logged"
+              :chain-id-props="cosmosConfig[chainId].coinLookup.addressPrefix"
+              :address-to="selectedValidator.op_address"
+              :validator-name="validatorDetails.description?.moniker" 
+            />
+            <v-btn 
+              class="mt-4"
+              :to="`/validators/${selectedValidator.op_address}`"
+              block
+              x-large
+            >
+              View profile
+            </v-btn>
+          </v-card-text>
+
+          <v-card-actions> 
+            <v-spacer />
+          </v-card-actions>
+        </v-card>
+      </v-dialog>     
+    </v-row>
+  </div>
 </template>
 
 <script>
@@ -180,6 +178,13 @@ import cosmosConfig from "~/cosmos.config";
 export default {
   name: "Validators",
   props: ["getStatus"],
+  setup() {
+    const store = useAppStore()
+
+    return {
+      store
+    }
+  },
   data() {
     return {
       dialog: false,
@@ -207,13 +212,6 @@ export default {
       cosmosConfig: cosmosConfig,
     };
   },
-  setup() {
-    const store = useAppStore()
-
-    return {
-      store
-    }
-  },
   computed: {
     /* ...mapState("data", [
       "chainId", 
@@ -228,9 +226,6 @@ export default {
   watch: {
     getStatus: function (val) {
       if (val === "active") {
-        const result = this.store.allValidators.filter(
-          (val) => val.status === 3
-        );
         this.finalValidators = this.store.allValidators;
       } else {
         this.finalValidators = this.store.allValidatorsOffline;
