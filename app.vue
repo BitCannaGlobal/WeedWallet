@@ -218,6 +218,21 @@ export default {
       await this.store.getDelegations()
       await this.store.getBlockNow()
     }, 5000);
+
+    window.addEventListener("keplr_keystorechange", async () => {
+      await this.store.keplrConnect()
+      await this.store.getPriceNow()
+      await this.store.getApr()
+      await this.store.getBankModule()
+      await this.store.getStakingModule()
+      await this.store.getDistribModule()
+      await this.store.getFeeGrantModule()
+      await this.store.getWalletAmount()
+      await this.store.getGovModule()
+      await this.store.getDelegations()
+      await this.store.getBlockNow() 
+    });
+    
   },
   methods: {
     logoutNow() {
