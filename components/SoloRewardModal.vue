@@ -39,18 +39,18 @@
             </v-avatar>
           </template>
 
-          <v-toolbar-title class="text-h6">
+          <v-toolbar-title carmenBold>
             <span
               v-if="step2"
-              class="text-h5"
+              class="carmenBold"
             >Check transaction </span>
             <span
               v-if="step3"
-              class="text-h5"
+              class="carmenBold"
             >Wait from keplr</span>
             <span
               v-if="step4"
-              class="text-h5"
+              class="carmenBold"
             >Transaction send!</span>
           </v-toolbar-title>
 

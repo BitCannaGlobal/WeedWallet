@@ -165,7 +165,7 @@
             </v-avatar>
           </template>
 
-          <v-toolbar-title class="text-h6">
+          <v-toolbar-title carmenBold>
             Send tokens
           </v-toolbar-title>
 
@@ -365,7 +365,7 @@
             </v-avatar>
           </template>
 
-          <v-toolbar-title class="text-h6">
+          <v-toolbar-title carmenBold>
             Get rewards
           </v-toolbar-title>
 
@@ -461,7 +461,7 @@
             </v-avatar>
           </template>
 
-          <v-toolbar-title class="text-h6">
+          <v-toolbar-title carmenBold>
             Grant Fee Allowance
           </v-toolbar-title>
 
@@ -553,7 +553,7 @@
             </v-avatar>
           </template>
 
-          <v-toolbar-title class="text-h6">
+          <v-toolbar-title carmenBold>
             Remove Authz
           </v-toolbar-title>
 
@@ -643,7 +643,7 @@
             </v-avatar>
           </template>
 
-          <v-toolbar-title class="text-h6">
+          <v-toolbar-title carmenBold>
             Remove Fee Allowance
           </v-toolbar-title>
 
@@ -720,7 +720,7 @@
             </v-avatar>
           </template>
 
-          <v-toolbar-title class="text-h6">
+          <v-toolbar-title carmenBold>
             Vote
           </v-toolbar-title>
 
@@ -813,7 +813,7 @@
             </v-avatar>
           </template>
 
-          <v-toolbar-title class="text-h6">
+          <v-toolbar-title carmenBold>
             Delegate
           </v-toolbar-title>
 
@@ -961,7 +961,7 @@
             </v-avatar>
           </template>
 
-          <v-toolbar-title class="text-h6">
+          <v-toolbar-title carmenBold>
             Add authz
           </v-toolbar-title>
 
@@ -1047,7 +1047,7 @@
             </v-avatar>
           </template>
 
-          <v-toolbar-title class="text-h6">
+          <v-toolbar-title carmenBold>
             Change your withdraw address
           </v-toolbar-title>
 

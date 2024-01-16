@@ -404,7 +404,7 @@
             </v-avatar>
           </template>
 
-          <v-toolbar-title class="text-h6">
+          <v-toolbar-title carmenBold>
             <v-tabs
               v-model="tab" 
               class="ma-4"

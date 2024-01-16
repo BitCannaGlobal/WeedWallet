@@ -248,9 +248,9 @@
                   ></v-img>
                 </v-avatar>
             </template>
-        <v-toolbar-title class="text-h6">
+        <v-toolbar-title carmenBold>
             <span 
-              class="text-h5"
+              class="carmenBold"
             >Proposal #{{selectedProposal.id}}</span> 
             </v-toolbar-title>
 
@@ -571,7 +571,7 @@
           </v-sheet> 
           </v-sheet> 
 
-          <h3 class="mt-4 ml-1 mb-2">
+          <h3 class="mt-4 ml-1 mb-2 carmenBold">
               Memo (Optional)
             </h3>
             <v-text-field
