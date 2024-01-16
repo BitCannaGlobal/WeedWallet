@@ -41,22 +41,22 @@
             </v-avatar>
           </template>
 
-          <v-toolbar-title class="text-h6">
+          <v-toolbar-title>
             <span
               v-if="step1"
-              class="text-h5"
+              class="carmenBold"
             >Send transaction</span>
             <span
               v-if="step2"
-              class="text-h5"
+              class="carmenBold"
             >Check transaction </span>
             <span
               v-if="step3"
-              class="text-h5"
+              class="carmenBold"
             >Wait from keplr</span>
             <span
               v-if="step4"
-              class="text-h5"
+              class="carmenBold"
             >Transaction send!</span>
           </v-toolbar-title>
 
@@ -227,7 +227,7 @@
                 </v-simple-table> -->
               </v-card>
             </v-sheet>      
-            <h3 class="mt-4 ml-1 mb-2">
+            <h3 class="mt-4 ml-1 mb-2 carmenBold">
               Memo (Optional)
             </h3>
             <v-text-field

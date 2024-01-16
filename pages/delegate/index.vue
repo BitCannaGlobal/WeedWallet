@@ -25,7 +25,7 @@
  
       <v-row justify="space-around">
         <v-col>
-          <span class="text-h5">My validators</span>
+          <span class="carmenBold">My validators</span>
           <v-table
             theme="dark"
             class="table rounded"
@@ -149,7 +149,7 @@
         justify="space-around"
       >
         <v-col>
-          <span class="text-h5">All validators</span>
+          <span class="carmenBold">All validators</span>
           <v-card class="accent">
             <template #append>
               <v-switch

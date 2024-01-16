@@ -87,7 +87,7 @@
                   :get-all-delegation="delegations"
                 />
               </v-card-title>
-              <v-card-text class="text-h5">
+              <v-card-text class="carmenBold">
                 <v-simple-table class="accent">
                   <template #default>
                     <thead>

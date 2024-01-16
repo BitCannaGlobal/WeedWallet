@@ -87,7 +87,7 @@
         max-width="600" 
       >
         <v-card color="#161819">
-          <v-card-title class="text-h5">
+          <v-card-title class="carmenBold">
             Delegate
           </v-card-title>
 

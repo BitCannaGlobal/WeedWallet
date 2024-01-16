@@ -658,7 +658,7 @@
       max-width="400"
     >
       <v-card>
-        <v-card-title class="text-h5">
+        <v-card-title class="carmenBold">
           Receive
           <v-spacer />
           <v-icon
