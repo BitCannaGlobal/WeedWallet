@@ -39,7 +39,7 @@
             </v-avatar>
           </template>
 
-          <v-toolbar-title carmenBold>
+          <v-toolbar-title>
             <span
               v-if="step2"
               class="carmenBold"

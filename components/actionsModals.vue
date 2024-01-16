@@ -165,7 +165,7 @@
             </v-avatar>
           </template>
 
-          <v-toolbar-title carmenBold>
+          <v-toolbar-title>
             Send tokens
           </v-toolbar-title>
 
@@ -365,7 +365,7 @@
             </v-avatar>
           </template>
 
-          <v-toolbar-title carmenBold>
+          <v-toolbar-title>
             Get rewards
           </v-toolbar-title>
 
@@ -461,7 +461,7 @@
             </v-avatar>
           </template>
 
-          <v-toolbar-title carmenBold>
+          <v-toolbar-title>
             Grant Fee Allowance
           </v-toolbar-title>
 
