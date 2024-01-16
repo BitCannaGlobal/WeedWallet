@@ -553,7 +553,7 @@
             </v-avatar>
           </template>
 
-          <v-toolbar-title carmenBold>
+          <v-toolbar-title class="carmenBold">
             Remove Authz
           </v-toolbar-title>
 
@@ -643,7 +643,7 @@
             </v-avatar>
           </template>
 
-          <v-toolbar-title carmenBold>
+          <v-toolbar-title class="carmenBold">
             Remove Fee Allowance
           </v-toolbar-title>
 
@@ -720,7 +720,7 @@
             </v-avatar>
           </template>
 
-          <v-toolbar-title carmenBold>
+          <v-toolbar-title class="carmenBold">
             Vote
           </v-toolbar-title>
 
@@ -813,7 +813,7 @@
             </v-avatar>
           </template>
 
-          <v-toolbar-title carmenBold>
+          <v-toolbar-title class="carmenBold">
             Delegate
           </v-toolbar-title>
 
@@ -961,7 +961,7 @@
             </v-avatar>
           </template>
 
-          <v-toolbar-title carmenBold>
+          <v-toolbar-title class="carmenBold">
             Add authz
           </v-toolbar-title>
 
@@ -1047,7 +1047,7 @@
             </v-avatar>
           </template>
 
-          <v-toolbar-title carmenBold>
+          <v-toolbar-title class="carmenBold">
             Change your withdraw address
           </v-toolbar-title>
 
