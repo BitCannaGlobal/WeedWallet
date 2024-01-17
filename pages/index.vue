@@ -325,11 +325,11 @@
                         color="#0FB786"
                       >
                         Stake
-                      </v-btn> -->
+                      </v-btn> --> 
                     <DelegateHomeModal
                       v-if="store.logged"
                       :chain-id-props="cosmosConfig[store.chainSelected].coinLookup.addressPrefix"
-                      :balances="store.spendableBalances"
+                      :amount-available="store.spendableBalances"
                     />                      
                   </span>
                 </v-col>
@@ -509,6 +509,7 @@ import axios from "axios"
 import dayjs from "dayjs"
 import QRCodeVue3 from "qrcode-vue3"
 import useClipboard from '~/composables/useClipboard'
+ 
 import { reverse, sortBy, orderBy, uniqWith, groupBy } from "lodash"
 
 
@@ -533,7 +534,7 @@ const categories = [
 
 export default {
   components: {
-    QRCodeVue3
+    QRCodeVue3 
   },
   layout: "blog",
   setup() {
