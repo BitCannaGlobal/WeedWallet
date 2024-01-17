@@ -633,7 +633,10 @@
         </v-form> 
 
 
-        <v-row v-if="step3">
+          <v-row
+            v-if="step3"
+            class="carmenBold"
+          >
             <v-col
               cols="12"
               align="center"
@@ -649,7 +652,9 @@
               <h4>Your transaction is waiting to get approved on the blockchain.</h4>
             </v-col>
           </v-row>
-          <v-row v-if="step4">
+          <v-row v-if="step4"
+            class="carmenBold"
+            >
             <v-col
               cols="12"
               align="center"
