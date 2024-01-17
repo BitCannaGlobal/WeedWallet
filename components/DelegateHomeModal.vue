@@ -463,7 +463,7 @@ export default {
           (element) => element[0] === "/cosmos.staking.v1beta1.MsgDelegate"
         );
 
-        const convertAmount = Math.round(this.amount * 1000000);
+        const convertAmount = Math.round(this.amountFinal * 1000000);
         const amount = {
           denom: cosmosConfig[this.store.chainSelected].coinLookup.chainDenom,
           amount: convertAmount.toString(),
