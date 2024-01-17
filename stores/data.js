@@ -48,6 +48,7 @@ export const useAppStore = defineStore('app', {
     validatorDelegations: '',
     validatorUnDelegations: '',
     myAddressBook: [],
+    dataLoaded: false,
   }),
   actions: {
     async refresh() {
@@ -64,6 +65,7 @@ export const useAppStore = defineStore('app', {
       await this.getGovModule()
       await this.getDelegations()
       await this.getAddressBook()
+      this.dataLoaded = true
     },
     setChainId(chainId) {
       this.chainSelected = chainId

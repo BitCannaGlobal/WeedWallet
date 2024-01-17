@@ -244,7 +244,7 @@
                     max-width="32"
                     max-height="32"
                     :src="cosmosConfig[store.chainSelected].coinLookup.icon"
-                    alt="Bitcanna"
+                    alt="BitCanna"
                   ></v-img>
                 </v-avatar>
             </template>
@@ -258,7 +258,7 @@
               <v-btn icon="mdi-close" @click="dialog = false"></v-btn>
             </template>
           </v-toolbar> 
-        <v-card-text class="mt-6">
+        <v-card-text class="mt-6 carmenLight" >
 
           <v-form
             v-if="step1"
@@ -633,7 +633,10 @@
         </v-form> 
 
 
-        <v-row v-if="step3">
+          <v-row
+            v-if="step3"
+            class="carmenBold"
+          >
             <v-col
               cols="12"
               align="center"
@@ -649,7 +652,9 @@
               <h4>Your transaction is waiting to get approved on the blockchain.</h4>
             </v-col>
           </v-row>
-          <v-row v-if="step4">
+          <v-row v-if="step4"
+            class="carmenBold"
+            >
             <v-col
               cols="12"
               align="center"

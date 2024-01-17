@@ -5,7 +5,7 @@
       min-width="200"
       class="mt-8 white--text"
       color="#0FB786"
-      @click="dialog = true"
+      @click="openDialog()"
     >
       <v-icon class="mr-2">
         mdi-cube-send
@@ -67,7 +67,7 @@
           > 
             <v-row>
               <v-col cols="12">
-                <span class="text-left carmenBold">Available: {{ amount }} BCNA</span>
+                <span class="text-left carmenBold">Available: {{ amountAvailable }} BCNA</span>
                 <br><br> 
                 <h3 class="mt-1 ml-1 carmenBold">
                   Amount to delegate*
@@ -237,7 +237,10 @@
           </v-row> -->
           </v-form>
 
-          <v-row v-if="step3">
+          <v-row
+            v-if="step3"
+            class="carmenBold"
+          >
             <v-col
               cols="12"
               align="center"
@@ -253,7 +256,10 @@
               <h4>Your transaction is waiting to get approved on the blockchain.</h4>
             </v-col>
           </v-row>
-          <v-row v-if="step4">
+          <v-row
+            v-if="step4"
+            class="carmenBold"
+          >
             <v-col
               cols="12"
               align="center"
@@ -329,7 +335,7 @@ function countPlaces(num) {
 export default {
   props: [
     "chainIdProps",
-    "balances",
+    "amountAvailable",
   ],
   setup() {
     const store = useAppStore()
@@ -360,15 +366,15 @@ export default {
           'valoper"',
       // v => bech32Validation(v) || 'Bad address (not bech32) ' + bech32Validation(v),
     ],
-    amount: instance.balances,
+    amount: instance.amountAvailable,
     amountFinal: "",
     amountRules: [
       (v) => !!v || "Amount is required",
       (v) => !isNaN(v) || "Amount must be number",
       (v) =>
-        v <= instance.balances ||
+        v <= instance.amountAvailable ||
         "Amount must be above delegated amount (" +
-          instance.balances +
+          instance.amountAvailable +
           ")",
       (v) => countPlaces(v) < 7 || "Bad decimal",
     ],
@@ -397,29 +403,34 @@ export default {
       }
     },
   },
-  async mounted() {
-    
-    //await this.store.getStakingModule()
-    const selectValidatorList = [];
-    for (const i of this.store.allValidators) {
-      selectValidatorList.push({
-        'name': i.name,
-        'address': i.op_address,
-      });
-    }  
-    
-    this.validatorList = selectValidatorList;
-    this.validatorListSearch = this.validatorList;
+ 
+  created() {
+ 
+
   },  
   methods: {
+    openDialog() {
+      this.dialog = true;
+      //await this.store.getStakingModule()
+      const selectValidatorList = [];
+      for (const i of this.store.allValidators) {
+        selectValidatorList.push({
+          'name': i.name,
+          'address': i.op_address,
+        });
+      }  
+      
+      this.validatorList = selectValidatorList;
+      this.validatorListSearch = this.validatorList; 
+    },
     getMax() {
-      this.amountFinal = this.amount;
+      this.amountFinal = this.amountAvailable;
     },
     getHalf() {
-      this.amountFinal = (this.amount / 2).toFixed(6);
+      this.amountFinal = (this.amountAvailable / 2).toFixed(6);
     },
     getQuarter() {
-      this.amountFinal = (this.amount / 4).toFixed(6);
+      this.amountFinal = (this.amountAvailable / 4).toFixed(6);
     },
     searchVal() {
       if (!this.searchTerm) {

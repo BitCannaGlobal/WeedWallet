@@ -306,7 +306,9 @@ export default {
 } 
 .carmenBold {
     font-family: 'CarmenBold';
-
+}
+.carmenLight {
+    font-family: 'CarmenLight';
 } 
 
 .tile {
