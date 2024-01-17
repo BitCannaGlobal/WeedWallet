@@ -282,7 +282,8 @@
               <v-row class="mt-2">
                   <v-col md="6">
                     Voting period start<br />
-                    <span v-if="selectedProposal.voting_start_time">{{ formatDate(selectedProposal?.voting_start_time) }}</span><br /><br />
+                    <span v-if="selectedProposal.voting_start_time">{{ formatDate(selectedProposal?.voting_start_time) }}</span>
+                    <span v-else><v-chip color="green">At the end deposit period</v-chip></span><br /><br />
                     <v-sheet
                       class="mb-2"
                       outlined
@@ -380,7 +381,7 @@
                   </v-col>
                   <v-col md="6">
                     Voting period end<br />
-                    <span v-if="selectedProposal.deposit_end_time">{{ formatDate(selectedProposal?.deposit_end_time) }}</span><br /><br /> 
+                    <span v-if="selectedProposal.deposit_end_time"><v-chip color="green">{{ formatDate(selectedProposal?.deposit_end_time) }}</v-chip></span><br /><br /> 
                     <v-sheet
                       class="mb-2"
                       outlined
