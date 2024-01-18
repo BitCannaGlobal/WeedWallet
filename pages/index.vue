@@ -12,12 +12,13 @@
         >{{ store.nameWallet }}'s portfolio</h1> -->
  
         <v-list-item
-          class="background"
+          :class="windowWidth > 1755 ? 'background' : 'background fill-height d-flex flex-column'"  
           :prepend-avatar="store.loggedType + '.svg'" 
         >
           <h1>{{ store.nameWallet }}'s portfolio</h1>
         </v-list-item> 
       </v-col>
+      <!-- {{ windowHeight }}, {{ windowWidth }} -->
       <v-row>
         <v-col
           class="fill-height d-flex flex-column justify-center align-center"
@@ -218,10 +219,10 @@
             </v-card-text>
           </v-card>
 
-          <v-col class="mt-6 "> 
+          <v-col class="mt-6 fill-height d-flex flex-column "> 
             <h1
               class="ml-7"
-              style="text-align:left; float:left;"
+    
             >
               Transactions
             </h1>
@@ -285,6 +286,7 @@
           </template>
         </v-col>
         <v-divider
+          v-if="windowWidth > 1755"
           class="mx-4"
           vertical
         />
@@ -552,6 +554,8 @@ export default {
     walletDistribution: false,
     dialogReceive: false,
     tab: null,
+    windowHeight: '',
+    windowWidth: '',
 
   }),
   computed: {
@@ -580,7 +584,13 @@ export default {
   
   watch: {},
   async mounted() {
- 
+    this.windowHeight = window.innerHeight
+    this.windowWidth = window.innerWidth;
+
+    window.addEventListener('resize', () => {
+      this.windowHeight = window.innerHeight
+      this.windowWidth = window.innerWidth;
+    })
     const resultSender = await axios(
         cosmosConfig[this.store.chainSelected].apiURL +
           "/cosmos/tx/v1beta1/txs?events=message.sender=%27" +

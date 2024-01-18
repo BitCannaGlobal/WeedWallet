@@ -18,7 +18,7 @@
         <div>
           <v-list>
             <v-list-item
-              prepend-avatar="https://res.cloudinary.com/stargaze/image/upload/w_700/yzsrwjxcsjzx17acr90i.jpg"
+              prepend-avatar="https://i.stargaze-apis.com/MUMaEP0cKU3C7oWFkYz3G46HMlFxn4pwLdPB7MARdxM/f:jpg/resize:fit:700:::/dpr:2/plain/ipfs://bafybeia45l2eflxa4xx7ii6mhekyhh5xnucudj5tzp2upzcoeqfl4uzdr4/images/4513.png"
               :title="store.nameWallet" 
             />
           </v-list>
