@@ -24,14 +24,14 @@
         :coin-icon="cosmosConfig[store.chainSelected].coinLookup.icon" 
       />
  
-      <v-btn
+      <!-- <v-btn
         large                          
         class="mt-2"
         color="#333333"
         @click.stop="dialog = true"
       >
         Receive
-      </v-btn>
+      </v-btn> -->
     </v-row>
     <v-divider class="mb-6" /> 
     <template v-for="group in groupedEvents()">

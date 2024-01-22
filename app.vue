@@ -126,8 +126,7 @@
         class="ml-3"
         color="#00b786"
         variant="outlined"
-        label 
-        @click="copyAddr(store.addrWallet)"
+        label
       >
         {{ cosmosConfig[store.chainSelected].chainId }}
       </v-chip>
