@@ -222,7 +222,6 @@
           <v-col class="mt-6 fill-height d-flex flex-column "> 
             <h1
               class="ml-7"
-    
             >
               Transactions
             </h1>
