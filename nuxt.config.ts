@@ -3,7 +3,7 @@ export default defineNuxtConfig({
     pageTransition: { name: 'page', mode: 'out-in' }
   },
   devtools: {
-    enabled: true
+    enabled: false
   },
   modules: [
     '@pinia/nuxt',
@@ -16,18 +16,14 @@ export default defineNuxtConfig({
     '@mdi/font/css/materialdesignicons.min.css'
   ],
   build: {
-    transpile: ['vuetify'],
+    transpile: ['vuetify', 'qrcode-vue3', 'nuxt-storage', 'lodash'],
   },
   vite: {
-    /* server: {
-      hmr: {
-        protocol: "wss",
-        clientPort: 443,
-        path: "hmr/",
-      },
-    }, */
     define: {
       'process.env.DEBUG': false,
     },
   },
+  devServer: {
+    port: 42022
+  }
 })

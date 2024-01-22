@@ -11,7 +11,7 @@
               <v-card-title class="headline">
                 <v-col class="mt-2">
                   <h4 class="icon">
-                    <img src="icon/wallet.png">
+                    <img src="https://wallet.bitcanna.io/icon/wallet.png">
                     &ensp; Wallet value
                   </h4>
                 </v-col>
@@ -27,7 +27,7 @@
               <v-card-title class="headline">
                 <v-col class="mt-2">
                   <h4 class="icon">
-                    <img src="icon/validator.png">
+                    <img src="https://wallet.bitcanna.io/icon/validator.png">
                     &ensp; Validators
                   </h4>
                 </v-col>
@@ -42,7 +42,7 @@
               <v-card-title class="headline">
                 <v-col class="mt-2">
                   <h4 class="icon">
-                    <img src="icon/tokens.png">
+                    <img src="https://wallet.bitcanna.io/icon/tokens.png">
                     &ensp; Total Bonded
                   </h4>
                 </v-col>
@@ -298,10 +298,10 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+//import { mapState } from "vuex";
 
 import cosmosConfig from "~/cosmos.config";
-import { notifWaiting, notifError, notifSuccess } from "~/libs/notifications";
+//import { notifWaiting, notifError, notifSuccess } from "~/libs/notifications";
 import {
   assertIsDeliverTxSuccess,
   SigningStargateClient,
@@ -341,7 +341,7 @@ export default {
     ],
   }),
   computed: {
-    ...mapState("keplr", [
+    /* ...mapState("keplr", [
       `accounts`,
       `initialized`,
       `error`,
@@ -360,7 +360,7 @@ export default {
       "totalWalletPrice",
       "allUnbonding",
       "allRedelegate",
-    ]),
+    ]), */
   },
   watch: {
     orderVal: function (val) {  
@@ -402,7 +402,7 @@ export default {
           gas: "200000",
         };
 
-        const returnWaiting = notifWaiting(this.$toast);
+        //const returnWaiting = notifWaiting(this.$toast);
         try {
           const result = await client.withdrawRewards(
             accounts[0].address,
@@ -412,7 +412,7 @@ export default {
           );
           assertIsDeliverTxSuccess(result);
           this.$toast.dismiss(returnWaiting);
-          notifSuccess(this.$toast, result.transactionHash);
+          //notifSuccess(this.$toast, result.transactionHash);
           await this.$store.dispatch(
             "data/getDelegations",
             accounts[0].address
@@ -421,7 +421,7 @@ export default {
           console.error(error);
 
           this.$toast.dismiss(returnWaiting);
-          notifError(this.$toast, error);
+          //notifError(this.$toast, error);
         }
       })();
     },

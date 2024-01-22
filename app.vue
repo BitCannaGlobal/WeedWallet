@@ -263,39 +263,39 @@ export default {
 
 @font-face {
     font-family: CarmenBold;
-    src: url("~/fonts/Carmen Sans Bold.otf") format("opentype");
+    src: url("./fonts/Carmen Sans Bold.otf") format("opentype");
 }
 @font-face {
     font-family: CarmenExtraBold;
-    src: url("~/fonts/Carmen Sans ExtraBold.otf") format("opentype");
+    src: url("./fonts/Carmen Sans ExtraBold.otf") format("opentype");
 }
 @font-face {
     font-family: CarmenHeavy;
-    src: url("~/fonts/Carmen Sans Heavy.otf") format("opentype");
+    src: url("./fonts/Carmen Sans Heavy.otf") format("opentype");
 }
 @font-face {
     font-family: CarmenLight;
-    src: url("~/fonts/Carmen Sans Light.otf") format("opentype");
+    src: url("./fonts/Carmen Sans Light.otf") format("opentype");
 }
 @font-face {
     font-family: CarmenMedium;
-    src: url("~/fonts/Carmen Sans Medium.otf") format("opentype");
+    src: url("./fonts/Carmen Sans Medium.otf") format("opentype");
 }
 @font-face {
     font-family: CarmenRegular;
-    src: url("~/fonts/Carmen Sans Regular.otf") format("opentype");
+    src: url("./fonts/Carmen Sans Regular.otf") format("opentype");
 }
 @font-face {
     font-family: CarmenSemiBold;
-    src: url("~/fonts/Carmen Sans SemiBold.otf") format("opentype");
+    src: url("./fonts/Carmen Sans SemiBold.otf") format("opentype");
 }
 @font-face {
     font-family: CarmenThin;
-    src: url("~/fonts/Carmen Sans Thin.otf") format("opentype");
+    src: url("./fonts/Carmen Sans Thin.otf") format("opentype");
 }
 @font-face {
     font-family: CarmenUltraLight;
-    src: url("~/fonts/Carmen Sans UltraLight.otf") format("opentype");
+    src: url("./fonts/Carmen Sans UltraLight.otf") format("opentype");
 }
 .body,
 .v-navigation-drawer,

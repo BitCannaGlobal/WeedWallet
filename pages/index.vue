@@ -80,7 +80,7 @@
                     height="160"
                   >
                     <img
-                      src="BCNA-LOGO-C.svg"
+                      src="https://wallet.bitcanna.io/BCNA-LOGO-C.svg"
                       alt="bcna"
                       height="40"
                       width="40"
@@ -301,7 +301,7 @@
             <v-card-title class="headline">
               <v-col class="mt-2">
                 <h4 class="icon">
-                  <img src="icon-stake.png">
+                  <img src="https://wallet.bitcanna.io/icon-stake.png">
                 </h4>
               </v-col>
             </v-card-title>
@@ -346,7 +346,7 @@
             <v-card-title class="headline">
               <v-col class="mt-2">
                 <h4 class="icon">
-                  <img src="icon-reward.png">
+                  <img src="https://wallet.bitcanna.io/icon-reward.png">
                 </h4>
               </v-col>
             </v-card-title>
