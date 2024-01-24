@@ -123,7 +123,7 @@
       </v-row> 
 
 
-        <h3 class="mt-4 mb-2">Past proposals</h3>
+        <h3 class="mt-4 mb-2">All proposals</h3>
  
 
 
