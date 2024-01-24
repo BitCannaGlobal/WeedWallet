@@ -113,11 +113,7 @@
                     " 
                   />                      
                     </div>
-                    <div v-else>
-                      No votes cast
-                      </div>
  
-
 
             </v-card-text>
             </v-card>          
@@ -141,7 +137,7 @@
           
         >
  
-        <div v-if="item.status !== 'PROPOSAL_STATUS_VOTING_PERIOD'">
+        <div >
 
             
             <v-card

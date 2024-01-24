@@ -85,7 +85,7 @@
               >
                 Cosmostation Connect
               </v-col>
-              <v-col
+              <!-- <v-col
                 v-if="selection === 1"
                 cols="3"
                 class="d-flex justify-right align-right"
@@ -95,7 +95,7 @@
                   color="red"
                   icon="mdi-close-outline"
                 />
-              </v-col>
+              </v-col> -->
             </v-row>
           </v-card>
           <v-card
@@ -119,7 +119,7 @@
               >
                 Leap wallet
               </v-col>
-              <v-col
+              <!-- <v-col
                 v-if="selection === 1"
                 cols="3"
                 class="d-flex justify-right align-right"
@@ -129,7 +129,7 @@
                   color="red"
                   icon="mdi-close-outline"
                 />
-              </v-col>
+              </v-col> -->
             </v-row>
           </v-card>
           <v-card-actions />
