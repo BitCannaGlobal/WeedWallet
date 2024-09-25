@@ -592,7 +592,7 @@ export default {
     })
     const resultSender = await axios(
         cosmosConfig[this.store.chainSelected].apiURL +
-          "/cosmos/tx/v1beta1/txs?events=message.sender=%27" +
+          "/cosmos/tx/v1beta1/txs?query=message.sender=%27" +
           this.store.addrWallet +
           "%27&limit=" +
           cosmosConfig[this.store.chainSelected].maxTxSenderHome +
@@ -600,7 +600,7 @@ export default {
       );
       const resultRecipient = await axios(
         cosmosConfig[this.store.chainSelected].apiURL +
-          "/cosmos/tx/v1beta1/txs?events=transfer.recipient=%27" +
+          "/cosmos/tx/v1beta1/txs?query=transfer.recipient=%27" +
           this.store.addrWallet +
           "%27&limit=" +
           cosmosConfig[this.store.chainSelected].maxTxRecipientHome +
