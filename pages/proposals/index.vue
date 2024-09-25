@@ -840,13 +840,13 @@ export default {
   allProposals.data.proposals.forEach((item) => {
     // Fix markdown syntax and handle new structure safely
     if (item.messages.length > 0) {
-      // Verificar si content existe
+      // Check if "content" exists (prior to v0.50)
       const content = item.messages[0].content;
 
-      // Si content existe y tiene un title, asignarlo, si no usar el item.title
+      // If "content" exist and it has a "title", assign it, if not use "item.title" (introduced in v0.47) 
       item.title = content && content.title ? content.title : item.title;
 
-      // Si content existe y tiene description, procesarla, si no usar item.summary
+      // If "content" exist and it has a "description", fix the format, if not, use "item.summary" as value.
       if (content && content.description) {
         item.summary = content.description.replace(/\\n/g, "\n ");
         item.summary = item.summary.replace(/\\u0026/g, "&");
@@ -857,7 +857,7 @@ export default {
 
       console.log(item.summary);
     } else {
-      // Si no hay mensajes, asegurar que item.summary se formatea correctamente
+      // As default process "item.summary" to format it
       item.summary = item.summary.replace(/\\n/g, "\n");
       item.summary = item.summary.replace(/\\u0026/g, "&");
     }
