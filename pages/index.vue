@@ -590,14 +590,9 @@ export default {
       this.windowHeight = window.innerHeight
       this.windowWidth = window.innerWidth;
     })
-    let finalVar = 'query' // SDK v0.50 LCD Query for /txs
-      if(this.sdkVersion.substring(0,5) === 'v0.47') {
-        finalVar = 'events'
-      }
-
     const resultSender = await axios(
         cosmosConfig[this.store.chainSelected].apiURL +
-          "/cosmos/tx/v1beta1/txs?"+finalVar+"=message.sender=%27" +
+          "/cosmos/tx/v1beta1/txs?query=message.sender=%27" +
           this.store.addrWallet +
           "%27&limit=" +
           cosmosConfig[this.store.chainSelected].maxTxSenderHome +
@@ -605,7 +600,7 @@ export default {
       );
       const resultRecipient = await axios(
         cosmosConfig[this.store.chainSelected].apiURL +
-          "/cosmos/tx/v1beta1/txs?"+finalVar+"=transfer.recipient=%27" +
+          "/cosmos/tx/v1beta1/txs?query=transfer.recipient=%27" +
           this.store.addrWallet +
           "%27&limit=" +
           cosmosConfig[this.store.chainSelected].maxTxRecipientHome +
