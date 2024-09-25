@@ -829,43 +829,54 @@ export default {
     },    
   },
   async mounted() {
+  // List of proposals from the blockchain
+  const allProposals = await axios(
+    cosmosConfig[this.store.chainSelected].apiURL + `/cosmos/gov/v1/proposals`
+  );
 
+  const setFinalPropos = [];
+  console.log(allProposals.data.proposals);
 
+  allProposals.data.proposals.forEach((item) => {
+    // Fix markdown syntax and handle new structure safely
+    if (item.messages.length > 0) {
+      // Verificar si content existe
+      const content = item.messages[0].content;
 
-    // List of proposal from the blockchain
-    const allProposals = await axios(
-      cosmosConfig[this.store.chainSelected].apiURL + `/cosmos/gov/v1/proposals`
-    );
+      // Si content existe y tiene un title, asignarlo, si no usar el item.title
+      item.title = content && content.title ? content.title : item.title;
 
-    const setFinalPropos = [];
-    console.log(allProposals.data.proposals)
-    allProposals.data.proposals.forEach((item) => {
-      // Fix markdown syntax
-      if(item.messages.length > 0) {        
-        item.title = item.messages[0].content.title
-        item.summary = item.messages[0].content.description.replace(/\\n/g, "\n ")        
-        item.summary = item.summary.replace(/\\u0026/g, "&")
-        console.log(item.summary)
+      // Si content existe y tiene description, procesarla, si no usar item.summary
+      if (content && content.description) {
+        item.summary = content.description.replace(/\\n/g, "\n ");
+        item.summary = item.summary.replace(/\\u0026/g, "&");
       } else {
-        item.summary = item.summary.replace(/\\n/g, "\n")
-        item.summary = item.summary.replace(/\\u0026/g, "&")
+        item.summary = item.summary ? item.summary.replace(/\\n/g, "\n") : "";
+        item.summary = item.summary.replace(/\\u0026/g, "&");
       }
-      //item.content.description = item.content.description.replace(/\\n/g, "\n")
-      //item.content.description = item.content.description.replace(/\\u0026/g, "&")
-      setFinalPropos.push(item);
-    });
-    const setFinalPropsActive = [];
-    allProposals.data.proposals.forEach((item) => {
-      if (item.status === "PROPOSAL_STATUS_VOTING_PERIOD")
-        setFinalPropsActive.push(item);
-    });
-    this.proposalsActive = setFinalPropsActive.reverse();
-    this.proposals = setFinalPropos.reverse();
 
-    //await this.$store.dispatch("data/getProposalParamsDeposit");
-    //await this.$store.dispatch("data/getProposalParamsVoting");
-    
-  },
+      console.log(item.summary);
+    } else {
+      // Si no hay mensajes, asegurar que item.summary se formatea correctamente
+      item.summary = item.summary.replace(/\\n/g, "\n");
+      item.summary = item.summary.replace(/\\u0026/g, "&");
+    }
+
+    setFinalPropos.push(item);
+  });
+
+  const setFinalPropsActive = [];
+  allProposals.data.proposals.forEach((item) => {
+    if (item.status === "PROPOSAL_STATUS_VOTING_PERIOD")
+      setFinalPropsActive.push(item);
+  });
+  this.proposalsActive = setFinalPropsActive.reverse();
+  this.proposals = setFinalPropos.reverse();
+
+  // await this.$store.dispatch("data/getProposalParamsDeposit");
+  // await this.$store.dispatch("data/getProposalParamsVoting");
+},
+
   methods: {
     async validate(proposal) {
       //if (this.$refs.form.validate() === true) {
