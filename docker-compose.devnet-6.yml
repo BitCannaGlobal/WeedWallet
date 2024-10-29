@@ -1,8 +1,0 @@
-version: '3'
-services:
-  app:
-    image: bernalraul/webwallet:latest
-    volumes:
-      - ./cosmos.config.devnet-6.js:/app/cosmos.config.js
-    ports:
-      - "3000:3000"

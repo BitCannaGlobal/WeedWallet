@@ -1,0 +1,35 @@
+#docker-compose --profile bitcanna-1 up -d
+#docker-compose --profile devnet-1 up -d
+#docker-compose --profile devnet-6 up -d
+version: '3.9'
+services:
+  app:
+    image: bernalraul/webwallet:latest
+    volumes:
+      - ./cosmos.config.bitcanna-1.js:/app/cosmos.config.js
+    ports:
+      - "3000:3000"
+    profiles:
+      - bitcanna-1
+
+  app-devnet-1:
+    image: bernalraul/webwallet:latest
+    container_name: webwallet_devnet-1
+    profiles:
+      - devnet-1
+    volumes:
+      - ./cosmos.config.devnet-1.js:/app/cosmos.config.js
+    ports:
+      - "3000:3000"
+    command: ["sh", "-c", "yarn build && yarn preview --host 0.0.0.0"]
+
+  app-devnet-6:
+    image: bernalraul/webwallet:latest
+    container_name: webwallet_devnet-6
+    profiles:
+      - devnet-6
+    volumes:
+      - ./cosmos.config.devnet-6.js:/app/cosmos.config.js
+    ports:
+      - "3000:3000"
+    command: ["sh", "-c", "yarn build && yarn preview --host 0.0.0.0"]
