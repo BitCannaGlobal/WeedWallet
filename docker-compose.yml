@@ -9,7 +9,7 @@ services:
     volumes:
       - ./cosmos.config.bitcanna-1.js:/app/cosmos.config.js
     ports:
-      - "3000:3000"
+      - "4200:3000"
     profiles:
       - bitcanna-1
 
