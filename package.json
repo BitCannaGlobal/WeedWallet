@@ -23,8 +23,8 @@
   },
   "dependencies": {
     "@amcharts/amcharts5": "^5.5.4",
-    "@cosmjs/stargate": "^0.31.1",
-    "@cosmjs/tendermint-rpc": "^0.31.1",
+    "@cosmjs/stargate": "^0.32.4",
+    "@cosmjs/tendermint-rpc": "^0.32.4",
     "@cosmostation/cosmos-client": "^0.0.5",
     "@mdi/font": "^7.3.67",
     "@pinia/nuxt": "^0.4.11",

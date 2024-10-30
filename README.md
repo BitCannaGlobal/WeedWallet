@@ -131,4 +131,77 @@ Distributed under the Apache License 2.0. See [LICENSE](https://github.com/BitCa
 
 * **atmon3r** - *Full dev of BitCanna* - [Github](https://github.com/atmoner) 
 
- 
+# Instructions with Docker-composer
+Docker-composer allows you to run the three different configurations for each chain (bitcanna-1, devnet-1 & devnet-6) using the same Docker Image. Alternatively you can run a simple Docker Image to raise a MainNET Wallet.
+
+## Bitcanna-1 MainNET 
+
+### Docker-compose
+```sh
+docker-compose --profile bitcanna-1 up -d
+```
+
+### Run Docker Hub image
+Alternatively you can run a simple Docker Image to raise a MainNET Wallet.
+
+```sh
+docker run -d -p 4200:4200 --name wallet-mainnet bernalraul/weedwallet:mainnet
+```
+
+#### Logs check:
+- `docker container  logs wallet-mainnet`
+
+#### Stop and remove data
+- `docker-compose --profile bitcanna-1 down`
+
+#### Create the systemd file:
+As the container has always the same name, we can start & stop & restart it
+```bash
+cat <<'EOF' >>wallet-mainnet.service
+[Unit]
+Description=wallet-mainnet container  
+Requires=docker.service  
+After=docker.service
+
+[Service]
+Restart=always  
+ExecStart=/usr/bin/docker start -a wallet-mainnet 
+ExecStop=/usr/bin/docker stop -t 2 wallet-mainnet
+
+[Install]
+WantedBy=default.target
+EOF
+```
+
+## BitCanna Devnet-1 (same for Devnet-6 replacing by that name)
+It is the same Image but the App is rebuilt with DEVNET-1 config. Only with Docker-composer
+
+### Docker-compose
+```sh
+docker-compose --profile devnet-1 up -d
+```
+
+#### Logs check:
+- `docker container  logs wallet-devnet`
+
+#### Stop and remove data
+- `docker-compose --profile devnet-1 down`
+
+#### Create the systemd file:
+As the container has always the same name, we can start & stop & restart it
+```bash
+cat <<'EOF' >>wallet-devnet-1.service
+[Unit]
+Description=wallet-devnet-1 container  
+Requires=docker.service  
+After=docker.service
+
+[Service]
+Restart=always  
+ExecStart=/usr/bin/docker start -a wallet-devnet-1 
+ExecStop=/usr/bin/docker stop -t 2 wallet-devnet-1
+
+[Install]
+WantedBy=default.target
+EOF
+```
