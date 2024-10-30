@@ -1,7 +1,5 @@
 <br/>
 <p align="center">
-  <img src="https://pbs.twimg.com/profile_banners/602625556/1649007099/1500x500" alt="Logo">
-
   <h3 align="center">WeedWallet</h3>
 
   <p align="center">
@@ -145,7 +143,7 @@ docker-compose --profile bitcanna-1 up -d
 Alternatively you can run a simple Docker Image to raise a MainNET Wallet.
 
 ```sh
-docker run -d -p 4200:4200 --name wallet-mainnet bernalraul/weedwallet:mainnet
+docker run -d -p 3000:3000 --name wallet-mainnet bernalraul/weedwallet:mainnet
 ```
 
 #### Logs check:
