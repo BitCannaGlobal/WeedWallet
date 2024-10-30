@@ -151,7 +151,7 @@ docker run -d -p 4200:4200 --name wallet-mainnet bernalraul/weedwallet:mainnet
 #### Logs check:
 - `docker container  logs wallet-mainnet`
 
-#### Stop and remove data
+#### Stop and remove data
 - `docker-compose --profile bitcanna-1 down`
 
 #### Create the systemd file:
@@ -184,7 +184,7 @@ docker-compose --profile devnet-1 up -d
 #### Logs check:
 - `docker container  logs wallet-devnet`
 
-#### Stop and remove data
+#### Stop and remove data
 - `docker-compose --profile devnet-1 down`
 
 #### Create the systemd file:
