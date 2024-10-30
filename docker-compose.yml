@@ -15,7 +15,7 @@ services:
 
   app-devnet-1:
     image: bernalraul/webwallet:latest
-    container_name: wallet_devnet-1
+    container_name: wallet-devnet-1
     profiles:
       - devnet-1
     volumes:
@@ -26,7 +26,7 @@ services:
 
   app-devnet-6:
     image: bernalraul/webwallet:latest
-    container_name: wallet_devnet-6
+    container_name: wallet-devnet-6
     profiles:
       - devnet-6
     volumes:
