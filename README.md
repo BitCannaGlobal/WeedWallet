@@ -143,7 +143,7 @@ docker-compose --profile bitcanna-1 up -d
 Alternatively you can run a simple Docker Image to raise a MainNET Wallet.
 
 ```sh
-docker run -d -p 4200:3000 --name wallet-mainnet bernalraul/weedwallet:mainnet
+docker run -d -p 4200:3000 --name wallet-mainnet bernalraul/webwallet:mainnet
 ```
 
 #### Logs check:
