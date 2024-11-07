@@ -139,6 +139,15 @@ Docker-composer allows you to run the three different configurations for each ch
 docker-compose --profile bitcanna-1 up -d
 ```
 
+> For to UPDATE:
+```sh
+cd WeedWallet
+git pull
+docker-compose pull app
+docker-compose --profile bitcanna-1 down
+docker-compose --profile bitcanna-1 up -d
+```
+
 ### Run Docker Hub image
 Alternatively you can run a simple Docker Image to raise a MainNET Wallet.
 
@@ -173,7 +182,15 @@ EOF
 
 ## BitCanna Devnet-1 (same for Devnet-6 replacing by that name)
 It is the same Image but the App is rebuilt with DEVNET-1 config. Only with Docker-composer
-> FOR TO UPDATE: You should STOP the service wallet-devnet-1 & remove the container & pull the new image 
+> FOR TO UPDATE: You should pull the new image and restart the Docker-composer
+```sh
+cd WeedWallet
+git pull
+docker-compose pull app-devnet-1
+docker-compose --profile devnet-1 down
+docker-compose --profile devnet-1 up -d
+```
+
 
 ### Docker-compose
 ```sh
