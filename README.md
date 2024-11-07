@@ -173,6 +173,7 @@ EOF
 
 ## BitCanna Devnet-1 (same for Devnet-6 replacing by that name)
 It is the same Image but the App is rebuilt with DEVNET-1 config. Only with Docker-composer
+> FOR TO UPDATE: You should STOP the service wallet-devnet-1 & remove the container & pull the new image 
 
 ### Docker-compose
 ```sh
