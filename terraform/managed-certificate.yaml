@@ -1,0 +1,7 @@
+apiVersion: networking.gke.io/v1
+kind: ManagedCertificate
+metadata:
+  name: gke-wallet-cert
+spec:
+  domains:
+    - gke-wallet.bitcanna.io

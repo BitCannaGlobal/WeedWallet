@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: webwallet-ingress
+  annotations:
+    networking.gke.io/managed-certificates: "gke-wallet-cert"
+    kubernetes.io/ingress.class: "gce"
+spec:
+  rules:
+  - host: gke-wallet.bitcanna.io
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: webwallet-vite-app-loadbalancer
+            port:
+              number: 443
