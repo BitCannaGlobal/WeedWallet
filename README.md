@@ -1,3 +1,6 @@
+# Warning ⚠️ Project is officially discontinued 😢
+- Read the announcement made on 24th Dec 2024 at: https://www.bitcanna.io
+
 <br/>
 <p align="center">
   <h3 align="center">WeedWallet</h3>
